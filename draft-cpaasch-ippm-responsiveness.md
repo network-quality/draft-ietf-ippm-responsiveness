@@ -50,6 +50,15 @@ author:
 
 
 informative:
+  Bufferbloat:
+    author:
+     - ins: J. Gettys
+     - ins: K. Nichols
+    title: "Bufferbloat: Dark Buffers in the Internet"
+    seriesinfo: Communications of the ACM, Volume 55, Number 1 (2012)
+  RFC8289:
+  RFC8033:
+
 
 --- abstract
 
@@ -79,7 +88,8 @@ a more intuitive way for the users to understand the notion of bufferbloat.
 # Introduction
 
 For many years, bufferbloat has been known as an unfortunately common issue in
-todays networks. Solutions like FQ-codel or PIE have been standardized and are
+todays networks {{Bufferbloat}}. Solutions like FQ-codel {{RFC8289}} or PIE
+{{RFC8033}} have been standardized and are
 to some extend widely implemented. Nevertheless, users still suffer from bufferbloat.
 
 THe way bufferbloat impacts the user-experience is very subtle. Whenever a network
