@@ -72,12 +72,12 @@ movie.
 The reason for this problem is not the lack of technical solutions, but
 rather a lack of awareness of the problem-space, and a lack of tooling to
 accurately measure the problem. We believe that exposing the problem of
-bufferbloat to the end-user by measuring the end-users experience at a high
+bufferbloat to the end-user by measuring the end-users' experience at a high
 level will help to create the necessary awareness.
 
 This document is a first attempt at specifying
 a measurement methodology to evaluate bufferbloat the way common users are
-experiencing it today. Using today’s most frequently used protocols and
+experiencing it today, using today's most frequently used protocols and
 mechanisms to accurately measure the user-experience. We also provide a way to
 express the bufferbloat as a measure of "Round-trips per minute" (RPM) to have
 a more intuitive way for the users to understand the notion of bufferbloat.
@@ -92,11 +92,11 @@ todays networks {{Bufferbloat}}. Solutions like FQ-codel {{RFC8289}} or PIE
 {{RFC8033}} have been standardized and are
 to some extend widely implemented. Nevertheless, users still suffer from bufferbloat.
 
-THe way bufferbloat impacts the user-experience is very subtle. Whenever a network
+The way bufferbloat impacts the user-experience is very subtle. Whenever a network
 is actively being used at its full capacity, buffers are filling up and create
 latency for the traffic. These moments of a full buffer may be very brief during
-a medium-sized file-transfer like an email-attachment. They create short-lived bursts
-of latency-spikes that users may experience, for example through a tiny lag
+a medium-sized file-transfer, like an email-attachment. They create short-lived bursts
+of latency-spikes that users may experience. An example of this is lag occuring
 during a video-conference.
 
 While on one side, bufferbloat disrupts the user-experience, its short-lived nature
@@ -111,7 +111,7 @@ their set of metrics. It will also allow to raise the awareness to the problem a
 shift the focus away from purely quantifying network quality through throughput
 and idle latency.
 
-In this document we describe a methodology for measuring bufferbloat and its impact on
+In this document, we describe a methodology for measuring bufferbloat and its impact on
 the user-experience. We create the term "Responsiveness under working conditions"
 to make it more user-accessible. We focus on using protocols that are most commonly
 used in end-user use-cases, as performance enhancing proxies and traffic classification
@@ -145,8 +145,8 @@ local outage will not have a global effect. The cost of such resiliency is the
 fact that the routing is constantly changing. Daily fluctuations in the demand
 for the traffic make the bottlenecks ebb and flow. Because of that, measuring
 the responsiveness during the peak hours is likely to encounter a different
-bottleneck queue compared to off-peak measurement. It seems that it’s best to
-avoid extending the duration of the test beyond what’s needed.
+bottleneck queue compared to off-peak measurement. It seems that it's best to
+avoid extending the duration of the test beyond what's needed.
 
 The problem space around the bufferbloat is huge. Traditionally, one thinks of
 bufferbloat happening on the routers and switches of the Internet. Thus, simply
@@ -156,13 +156,13 @@ of bufferbloat. Data sitting in TCP sockets or waiting in the application to be
 scheduled for sending causes artificial latency, which affects user-experience
 the same way the "traditional" bufferbloat does.
 
-Finally, measuring bufferbloat requires to fill the buffers of the bottleneck
+Finally, measuring bufferbloat requires us to fill the buffers of the bottleneck
 and when buffer occupancy is at its peak, the latency measurement needs to be
 done. Achieving this in a reliable and reproducible way is not easy. First, one
 needs to ensure that buffers are actually full for a sustained period of time
 to allow for repeated latency measurements in this particular state. Filling of
 the buffers should happen with standard transport layer traffic - typical for
-the end-user’s use of the network - and thus is subject to the transport’s
+the end-user's use of the network - and thus is subject to the transport's
 congestion control, implying rate-reduction which reduces the buffering in the
 network. The amount of bufferbloat is thus constantly fluctuating and a
 reliable measurement requires to overcome these fluctuations.
@@ -173,7 +173,7 @@ There are many different ways on how one can measure bufferbloat. The focus in t
 
 The focus on end-user experience means a number of things:
 
-1. Today’s user-facing Internet traffic is primarily using HTTP/2 over TLS.
+1. Today's user-facing Internet traffic is primarily using HTTP/2 over TLS.
    Thus, the measurement should use that protocol.
 
    As a side-note: other types of traffic are gaining in popularity (HTTP/3)
@@ -183,7 +183,7 @@ The focus on end-user experience means a number of things:
 2. The Internet is marked by the deployment of countless middleboxes like
    transparent TCP proxies or traffic prioritization for certain types of
    traffic. The measurement methodology should allow us to explore all of these
-   as they affect the user-experience. This means, each stage of a user’s
+   as they affect the user-experience. This means, each stage of a user's
    interaction with the Internet (DNS-request, TCP-handshake, TLS-handshake,
    and request/response) needs to be evaluated.
 3. User-friendliness of the result means that it should be expressed in a
@@ -315,7 +315,7 @@ In detail, the steps of the algorithm are the following
   * Compute "instantaneous aggregate" goodput which is the number of bytes received within the last second.
   * Compute moving average as the last 4 "instantaneous aggregate goodput" measurements
   * If moving average > "previous" moving average + 5%:
-    * We did not yet reach saturation, but if we haven’t added more flows for 4 seconds, add 4 more flows to the mix.
+    * We did not yet reach saturation, but if we haven't added more flows for 4 seconds, add 4 more flows to the mix.
   * Else, we reached saturation for the current flow-count.
     * If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
     * Else, add more flows
@@ -324,13 +324,13 @@ Note: It may be tempting to steer the algorithm through an initial base-RTT
 measurement and adjust the intervals as a function of the RTT. However,
 experiments have shown that this makes the saturation-detection extremely
 unstable in low-RTT environments. When the "unloaded" RTT is in the
-single-digit milli-second range, while under load the network’s RTT increases
+single-digit milli-second range, while under load the network's RTT increases
 to more than a hundred milliseconds, the intervals become much too low to
 accurately drive the algorithm.
 
 ## Measuring Responsiveness
 
-Once the network is in consistent working conditions, the network’s
+Once the network is in consistent working conditions, the network's
 responsiveness can be measured. As the focus of our responsiveness metric is to
 evaluate a real user-experience we focus on measuring the different stages of a
 separate network transaction as well as measuring on the load-bearing
@@ -364,9 +364,9 @@ full speed.
 ### Aggregating Round-trips per Minute
 
 The above described method will produce 5 sets of measurement results,
-namely:DNS-handshake, TCP-handshake, TLS handshake, HTTP/2 request/response on
+namely: DNS-handshake, TCP-handshake, TLS handshake, HTTP/2 request/response on
 separate connections, HTTP/2 request/response on load-bearing connections. Each
-of these sets of numbers focuses on a specific aspect of a user’s interaction
+of these sets of numbers focuses on a specific aspect of a user's interaction
 with the network. In order to expose a single "Responsiveness" number to the
 user the weighting among these sets needs to be decided. In our first iteration
 we give an equal weight to each of these measurements.
@@ -377,7 +377,7 @@ Latency measuring in units of seconds however is "the lower the better". Thus,
 converting the latency measurement to a frequency allows using the familiar
 notion of "The higher the better". The term frequency has a very technical
 connotation. What we are effectively measuring is the number of round-trips
-from the user’s device to the server endpoint that can be done within a unit of
+from the user's device to the server endpoint that can be done within a unit of
 time. This leads to the notion of Round-trips per Minute. It has the advantage
 that the range of values is within a reasonable 50 to 3000 Round-trips per
 Minute. It can also be abbreviated to "RPM" which is a wink to the "revolutions
@@ -396,7 +396,7 @@ itself.
 
 # Protocol Specification
 
-By using standard protocols that are most commonly used by end-users no new
+By using standard protocols that are most commonly used by end-users, no new
 protocol needs to be specified. However, both client and servers need
 capabilities to execute this kind of measurement as well as a standard to flow
 to provision the client with the necessary information.
@@ -418,7 +418,7 @@ Given those capabilities, the server is expected to provide 4 URLs/responses:
    node's name in the "test_endpoint" field. It's preferred that pinning of
    some sort is available. This is to ensure the measurement is against the
    same paths and not switching hosts during a test run (ie moving from near
-   POP A to near POP B) Sample content of this json would be:
+   POP A to near POP B) Sample content of this JSON would be:
 
    ~~~
    {
@@ -441,7 +441,7 @@ This needs to serve a status code of 200 and a body size of at least 8GB. The bo
 4. An "upload" URL/response:
 This needs to handle a POST request with an arbitrary body size. Nothing needs to be done with the payload, it should be discarded.
 
-Given those 4 services provided by the server, the client can bootstrap the responsiveness measurement by querying the json configuration. Upon which it has the URLs for creating the load-bearing connections in the upstream and downstream direction as well as the small object for the latency measurements.
+Given those 4 services provided by the server, the client can bootstrap the responsiveness measurement by querying the JSON configuration. Upon which it has the URLs for creating the load-bearing connections in the upstream and downstream direction as well as the small object for the latency measurements.
 
 # Security Considerations
 
