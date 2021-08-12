@@ -65,7 +65,7 @@ informative:
 Bufferbloat has been a long-standing problem on the Internet with more than a
 decade of work on standardizing technical solutions, implementations and
 testing. However, to this date, bufferbloat is still a very common problem for
-the end-users. Everyone “knows” that it is “normal” for a video conference to
+the end-users. Everyone "knows" that it is "normal" for a video conference to
 have problems when somebody else on the same home-network is watching a 4K
 movie.
 
@@ -79,7 +79,7 @@ This document is a first attempt at specifying
 a measurement methodology to evaluate bufferbloat the way common users are
 experiencing it today. Using today’s most frequently used protocols and
 mechanisms to accurately measure the user-experience. We also provide a way to
-express the bufferbloat as a measure of “Round-trips per minute” (RPM) to have
+express the bufferbloat as a measure of "Round-trips per minute" (RPM) to have
 a more intuitive way for the users to understand the notion of bufferbloat.
 
 
@@ -134,7 +134,7 @@ Other factors are the protocols being used. TCP and UDP traffic may take a
 largely different path on the Internet and be subject to entirely different QoS
 constraints. Again, bufferbloat measured on UDP vs TCP may be entirely
 different.  Another aspect is the queuing configuration on the bottleneck. It
-may be that fair-queuing is configured which may “hide” queuing latency that
+may be that fair-queuing is configured which may "hide" queuing latency that
 affects other flows.
 
 The Internet is not just diverse; it is changing all the time. Since its
@@ -154,7 +154,7 @@ measuring bufferbloat at the transport layer would be sufficient. However, the
 networking stacks of the clients and servers can also experience huge amounts
 of bufferbloat. Data sitting in TCP sockets or waiting in the application to be
 scheduled for sending causes artificial latency, which affects user-experience
-the same way the “traditional” bufferbloat does.
+the same way the "traditional" bufferbloat does.
 
 Finally, measuring bufferbloat requires to fill the buffers of the bottleneck
 and when buffer occupancy is at its peak, the latency measurement needs to be
@@ -187,7 +187,7 @@ The focus on end-user experience means a number of things:
    interaction with the Internet (DNS-request, TCP-handshake, TLS-handshake,
    and request/response) needs to be evaluated.
 3. User-friendliness of the result means that it should be expressed in a
-   non-technical way to the user. Users commonly look for a single “score” of
+   non-technical way to the user. Users commonly look for a single "score" of
    their performance. This enables the goal of raising awareness to a large
    user-base on the problem of bufferbloat.
 4. Finally, in order for this measurement to be user-friendly to a wide
@@ -219,7 +219,7 @@ bulk data-transfers in either downstream or upstream direction. Similar to
 conventional speed-test applications that also create a varying number of
 streams to measure throughput. Working-conditions does the same.  It also
 requires a way to detect when the network is in a persistent working condition,
-called “saturation”. This can be achieved by monitoring the instantaneous
+called "saturation". This can be achieved by monitoring the instantaneous
 goodput over time. When the goodput stops increasing, it means that a
 saturation has been reached and that responsiveness can be measured.
 
@@ -265,7 +265,7 @@ traditional TCP window-size constraints of 4MB are often not sufficient to fill
 the pipe. Additionally, traditional loss-based TCP congestion control
 algorithms aggressively reacts to packet-loss by reducing the congestion
 window. This reaction will reduce the queuing in the network, and thus
-“artificially” make the bufferbloat appear lesser.
+"artificially" make the bufferbloat appear lesser.
 
 The goal of the measurement is to keep the network as busy as possible in a
 sustained and persistent way. Thus, using multiple TCP connections is needed
@@ -276,7 +276,7 @@ needed.
 
 It is best to detect when saturation has been reached so that the measurement
 of responsiveness can start with the confidence that the network is
-sufficiently saturated. For this, we first need to define what “saturation”
+sufficiently saturated. For this, we first need to define what "saturation"
 means. Saturation means not only that the load-bearing connections are
 utilizing all the capacity, but also that the buffers are completely filled.
 Thus, this depends highly on the congestion control that is being deployed on
@@ -285,7 +285,7 @@ throughput without causing bufferbloat. (because the bandwidth-detection
 portion of BBR is effectively seeking the bottleneck capacity)
 
 It is advised to rather use loss-based congestion controls like Cubic to
-“reliably” ensure that the buffers are filled.
+"reliably" ensure that the buffers are filled.
 
 An indication of saturation is when the observed goodput is no more increasing
 even as connections are being added to the pool of load-generating connections.
@@ -297,7 +297,7 @@ a congestion or even a full buffer of the bottleneck link.
 The following is a proposal for an algorithm to reach saturation of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
 files. The algorithm is the same for upload and download and thus we will use
-the same term “load-bearing connection” for either of them.
+the same term "load-bearing connection" for either of them.
 
 The algorithm takes into account that throughput gradually increases as TCP
 connections go through their TCP slow-start phase. Throughput-increase
@@ -312,9 +312,9 @@ In detail, the steps of the algorithm are the following
 
 * Create 4 load-bearing connections
 * At each 1-second interval:
-  * Compute “instantaneous aggregate” goodput which is the number of bytes received within the last second.
-  * Compute moving average as the last 4 “instantaneous aggregate goodput” measurements
-  * If moving average > “previous” moving average + 5%:
+  * Compute "instantaneous aggregate" goodput which is the number of bytes received within the last second.
+  * Compute moving average as the last 4 "instantaneous aggregate goodput" measurements
+  * If moving average > "previous" moving average + 5%:
     * We did not yet reach saturation, but if we haven’t added more flows for 4 seconds, add 4 more flows to the mix.
   * Else, we reached saturation for the current flow-count.
     * If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
@@ -323,7 +323,7 @@ In detail, the steps of the algorithm are the following
 Note: It may be tempting to steer the algorithm through an initial base-RTT
 measurement and adjust the intervals as a function of the RTT. However,
 experiments have shown that this makes the saturation-detection extremely
-unstable in low-RTT environments. When the “unloaded” RTT is in the
+unstable in low-RTT environments. When the "unloaded" RTT is in the
 single-digit milli-second range, while under load the network’s RTT increases
 to more than a hundred milliseconds, the intervals become much too low to
 accurately drive the algorithm.
@@ -367,23 +367,23 @@ The above described method will produce 5 sets of measurement results,
 namely:DNS-handshake, TCP-handshake, TLS handshake, HTTP/2 request/response on
 separate connections, HTTP/2 request/response on load-bearing connections. Each
 of these sets of numbers focuses on a specific aspect of a user’s interaction
-with the network. In order to expose a single “Responsiveness” number to the
+with the network. In order to expose a single "Responsiveness" number to the
 user the weighting among these sets needs to be decided. In our first iteration
 we give an equal weight to each of these measurements.
 
 Finally, the resulting latency needs to be exposed to the users. Users have
-been trained to accept metrics that have a notion of “The higher the better”.
-Latency measuring in units of seconds however is “the lower the better”. Thus,
+been trained to accept metrics that have a notion of "The higher the better".
+Latency measuring in units of seconds however is "the lower the better". Thus,
 converting the latency measurement to a frequency allows using the familiar
-notion of “The higher the better”. The term frequency has a very technical
+notion of "The higher the better". The term frequency has a very technical
 connotation. What we are effectively measuring is the number of round-trips
 from the user’s device to the server endpoint that can be done within a unit of
 time. This leads to the notion of Round-trips per Minute. It has the advantage
 that the range of values is within a reasonable 50 to 3000 Round-trips per
-Minute. It can also be abbreviated to “RPM” which is a wink to the “revolutions
-per minute” that we are used to in cars.
+Minute. It can also be abbreviated to "RPM" which is a wink to the "revolutions
+per minute" that we are used to in cars.
 
-Thus, our unit of measure is “Round-trip per Minute” (RPM) that expresses
+Thus, our unit of measure is "Round-trip per Minute" (RPM) that expresses
 responsiveness under working conditions.
 
 ### Statistical Confidence
