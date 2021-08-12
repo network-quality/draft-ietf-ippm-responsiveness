@@ -66,7 +66,7 @@ accurately measure the problem. We believe that exposing the problem of
 bufferbloat to the end-user by measuring the end-users experience at a high
 level will help to create the necessary awareness.
 
-In this document we specify
+This document is a first attempt at specifying
 a measurement methodology to evaluate bufferbloat the way common users are
 experiencing it today. Using today’s most frequently used protocols and
 mechanisms to accurately measure the user-experience. We also provide a way to
@@ -78,47 +78,37 @@ a more intuitive way for the users to understand the notion of bufferbloat.
 
 # Introduction
 
-In recent years, throughput and idle latency became the most common ways to
-measure the performance of Internet connections. While these metrics are useful
-to compare particular aspects of connectivity, they are misleading when it
-comes to measuring the connectivity from the point of view of the typical
-Internet user.
+For many years, bufferbloat has been known as an unfortunately common issue in
+todays networks. Solutions like FQ-codel or PIE have been standardized and are
+to some extend widely implemented. Nevertheless, users still suffer from bufferbloat.
 
-Firstly, the throughput has evolved from being the key performance indicator to
-being a logistical indicator - either the throughput is sufficient for the
-needs of the particular user, or it isn’t. In the recent years, users started
-seeing more available throughput than they need. In such a situation, further
-increasing the available throughput does not improve the experience of a user.
+THe way bufferbloat impacts the user-experience is very subtle. Whenever a network
+is actively being used at its full capacity, buffers are filling up and create
+latency for the traffic. These moments of a full buffer may be very brief during
+a medium-sized file-transfer like an email-attachment. They create short-lived bursts
+of latency-spikes that users may experience, for example through a tiny lag
+during a video-conference.
 
-Secondly, the idle latency is a useful indicator for the latency floor. For
-example, if a user wants to join an online video game, and the idle latency is
-so high that a smooth experience won’t be possible, the player can decide to
-join a different game. Unfortunately, the opposite is not true - low idle
-latency does not imply a satisfactory experience once the game has begun.
+While on one side, bufferbloat disrupts the user-experience, its short-lived nature
+makes it hard to narrow down the problem and make the user sensible to it.
+Lack of well-known measurement tools and popular measurement platforms add to
+the "obscure" nature of the bufferbloat problem.
 
-It is very common that the idle latency is significantly lower than the latency
-under typical working conditions. We posit that latency under working
-conditions is a significantly better indicator of performance than either
-throughput, or the idle latency. We use the term “responsiveness” to describe
-the latency under working conditions, to explicitly differentiate it from the
-idle latency.
+We believe that it is necessary to create a standardized way for measuring the
+extend of bufferbloat in a network and express it to the user in a user-friendly way.
+This should help existing measurement tools to add a bufferbloat measurement to
+their set of metrics. It will also allow to raise the awareness to the problem and
+shift the focus away from purely quantifying network quality through throughput
+and idle latency.
 
-Unfortunately, at the moment the users are not able to make decisions based on
-the responsiveness. There’s no single standard way to measure the
-responsiveness, and because of that users are left with the throughput / idle
-latency.
-
-As a result, the internet connections are measured in terms of throughput
-alone. This has led to situations where the equipment is being narrowly
-optimized for throughput, while neglecting phenomena which worsen the
-responsiveness, such as bufferbloat.
-
-The term bufferbloat describes a situation where some queues (typically one) on
-the connection path are full most of the time. In many cases, this can be
-avoided by deploying modern queue management disciplines. Yet, in a situation
-where throughput is perceived to be the single performance indicator, the
-modern queue management is replaced with a simple FIFO, which is cheaper. A
-high throughput device that uses a FIFO is prone to bufferbloat.
+In this document we describe a methodology for measuring bufferbloat and its impact on
+the user-experience. We create the term "Responsiveness under working conditions"
+to make it more user-accessible. We focus on using protocols that are most commonly
+used in end-user use-cases, as performance enhancing proxies and traffic classification
+for those protocols is very common. It is thus very important to use those protocols
+for the measurements to avoid focusing on use-cases that are not actually affecting the end-user.
+Finally, we propose to use "round-trips per minute" as a metric to express the
+extend of bufferbloat.
 
 # Measuring is hard
 
@@ -310,15 +300,15 @@ saturation has been reached and - more importantly - is stable.
 
 In detail, the steps of the algorithm are the following
 
-1. Create 4 load-bearing connections
-2. At each 1-second interval:
-   2.1 Compute “instantaneous aggregate” goodput which is the number of bytes received within the last second.
-   2.2 Compute moving average as the last 4 “instantaneous aggregate goodput” measurements
-   2.3 If moving average > “previous” moving average + 5%:
-       2.3.1 We did not yet reach saturation, but if we haven’t added more flows for 4 seconds, add 4 more flows to the mix.
-   2.4 Else, we reached saturation for the current flow-count.
-       2.4.1 If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
-       2.4.2 Else, add more flows
+* Create 4 load-bearing connections
+* At each 1-second interval:
+  * Compute “instantaneous aggregate” goodput which is the number of bytes received within the last second.
+  * Compute moving average as the last 4 “instantaneous aggregate goodput” measurements
+  * If moving average > “previous” moving average + 5%:
+    * We did not yet reach saturation, but if we haven’t added more flows for 4 seconds, add 4 more flows to the mix.
+  * Else, we reached saturation for the current flow-count.
+    * If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
+    * Else, add more flows
 
 Note: It may be tempting to steer the algorithm through an initial base-RTT
 measurement and adjust the intervals as a function of the RTT. However,
@@ -410,18 +400,27 @@ provide content upon a GET-request.
 
 Given those capabilities, the server is expected to provide 4 URLs/responses:
 
-1. A config URL/response:
-This is the configuration file/format used by the client. It's a simple JSON file format that points the client at the various URLs mentioned below. All of the fields are required except "test_endpoint". If the service-procier can pin all of the requests for a test run to a specific node in the service (for a particular run), they can specify that node's name in the "test_endpoint" field. It's preferred that pinning of some sort is available. This is to ensure the measurement is against the same paths and not switching hosts during a test run (ie moving from near POP A to near POP B)
-Sample content of this json would be:
-{
-  "version": 1,
-  "urls": {
-    "small_https_download_url": "https://example.apple.com/api/v1/small",
-    "large_https_download_url": "https://example.apple.com/api/v1/large",
-    "https_upload_url": "https://example.apple.com/api/v1/upload"
-  },
-  "test_endpoint": "hostname123.cdnprovider.com"
-}
+1. A config URL/response: This is the configuration file/format used by the
+   client. It's a simple JSON file format that points the client at the various
+   URLs mentioned below. All of the fields are required except "test_endpoint".
+   If the service-procier can pin all of the requests for a test run to a
+   specific node in the service (for a particular run), they can specify that
+   node's name in the "test_endpoint" field. It's preferred that pinning of
+   some sort is available. This is to ensure the measurement is against the
+   same paths and not switching hosts during a test run (ie moving from near
+   POP A to near POP B) Sample content of this json would be:
+
+   ~~~
+   {
+     "version": 1,
+     "urls": {
+       "small_https_download_url": "https://example.apple.com/api/v1/small",
+       "large_https_download_url": "https://example.apple.com/api/v1/large",
+       "https_upload_url": "https://example.apple.com/api/v1/upload"
+     },
+     "test_endpoint": "hostname123.cdnprovider.com"
+   }
+   ~~~
 
 2. A "small" URL/response:
 This needs to serve a status code of 200 and 1 byte in the body. The actual body content is irrelevant.
