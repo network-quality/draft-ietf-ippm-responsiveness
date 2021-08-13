@@ -64,108 +64,114 @@ informative:
 
 Bufferbloat has been a long-standing problem on the Internet with more than a
 decade of work on standardizing technical solutions, implementations and
-testing. However, to this date, bufferbloat is still a very common problem for
-the end-users. Everyone "knows" that it is "normal" for a video conference to
+tests. However, to this date, bufferbloat is still a very common problem for
+the end-users. 
+
+Everyone "knows" that it is "normal" for a video conference to
 have problems when somebody else on the same home-network is watching a 4K
 movie.
+However, there is no technical reason for this to be the case.
+In fact, fair queueing solutions (fq_codel, cake, PIE) have solved the problem for thousands of end-users.
 
-The reason for this problem is not the lack of technical solutions, but
-rather a lack of awareness of the problem-space, and a lack of tooling to
-accurately measure the problem. We believe that exposing the problem of
-bufferbloat to the end-user by measuring the end-users' experience at a high
-level will help to create the necessary awareness.
+Bufferbloat exists, not from a lack of technical solutions, but
+rather a lack of awareness of the problem and a lack of tooling to
+accurately measure the problem. We believe that by creating a tool that matches,
+at a high level, the end-user's experience will help to create the necessary awareness,
+and result in a demand for products that solve the problem.
 
-This document is a first attempt at specifying
-a measurement methodology to evaluate bufferbloat the way common users are
-experiencing it today, using today's most frequently used protocols and
-mechanisms to accurately measure the user-experience. We also provide a way to
-express the bufferbloat as a measure of "Round-trips per minute" (RPM) to have
-a more intuitive way for the users to understand the notion of bufferbloat.
+This document specifies a methodology for measuring bufferbloat 
+in a way that simulates the usual "user experience" today. 
+It uses common protocols and
+mechanisms to accurately measure this experience. We also provide a way to
+express the bufferbloat as a measure of "Round-trips Per Minute" (RPM) to have
+a more intuitive way to talk about the notion of bufferbloat.
 
 
 --- middle
 
 # Introduction
 
-For many years, bufferbloat has been known as an unfortunately common issue in
-todays networks {{Bufferbloat}}. Solutions like FQ-codel {{RFC8289}} or PIE
+For many years, bufferbloat has been known as an unfortunate, but common issue in
+today's networks {{Bufferbloat}}. Solutions like fq_codel {{RFC8289}} or PIE
 {{RFC8033}} have been standardized and are
-to some extend widely implemented. Nevertheless, users still suffer from bufferbloat.
+to some extent widely implemented. Nevertheless, users still suffer from bufferbloat.
 
-The way bufferbloat impacts the user-experience is very subtle. Whenever a network
-is actively being used at its full capacity, buffers are filling up and create
-latency for the traffic. These moments of a full buffer may be very brief during
+Bufferbloat's impact on the user-experience is very subtle. Whenever a network
+is actively being used at its full capacity, buffers fill up and create
+latency for the traffic. These moments of full buffers may be very brief, caused by 
 a medium-sized file-transfer, like an email-attachment. They create short-lived bursts
-of latency-spikes that users may experience. An example of this is lag occuring
-during a video-conference.
+of latency-spikes. An example of this is lag occuring
+during a video-conference, where a connection is shown as unstable.
 
-While on one side, bufferbloat disrupts the user-experience, its short-lived nature
-makes it hard to narrow down the problem and make the user sensible to it.
-Lack of well-known measurement tools and popular measurement platforms add to
-the "obscure" nature of the bufferbloat problem.
+Since bufferbloat can cause short-lived disruptions of the user experience, 
+it is hard to narrow down the cause and make the user aware of it.
+Popular measurement platforms that focus on speed and idle latency only obscure the bufferbloat problem.
 
-We believe that it is necessary to create a standardized way for measuring the
-extend of bufferbloat in a network and express it to the user in a user-friendly way.
-This should help existing measurement tools to add a bufferbloat measurement to
-their set of metrics. It will also allow to raise the awareness to the problem and
-shift the focus away from purely quantifying network quality through throughput
-and idle latency.
+Finally, it is important to remember that buffers only fill behind the slowest “bottleneck” link of the network.
+The “bottleneck node” is one where the queueing occurs during heavy traffic.
 
-In this document, we describe a methodology for measuring bufferbloat and its impact on
-the user-experience. We create the term "Responsiveness under working conditions"
-to make it more user-accessible. We focus on using protocols that are most commonly
-used in end-user use-cases, as performance enhancing proxies and traffic classification
-for those protocols is very common. It is thus very important to use those protocols
-for the measurements to avoid focusing on use-cases that are not actually affecting the end-user.
-Finally, we propose to use "round-trips per minute" as a metric to express the
-extend of bufferbloat.
+We believe that it is necessary to create a standardized way for measuring the extent of bufferbloat
+in a network and express it in a comprehensible way.
+Existing network measurement tools could add a responsiveness measurement to their set of metrics.
+It will also raise the awareness to the problem and shift the focus away from simply quantifying
+network quality with the two “standard: measures: throughput and idle latency.
+
+In this document, we describe a methodology for measuring bufferbloat and its impact on the user experience.
+We create the term "Responsiveness under working conditions" to make it more user-accessible.
+We focus on using protocols that are commonly used so that performance enhancing proxies and
+traffic classification affect the measurement in the same way.
+It is thus very important to use those protocols for the measurements to avoid focusing
+on use cases that are not actually affecting the end-user.
+Finally, we propose to use "round-trips per minute" as a metric to express the extend of bufferbloat.
 
 # Measuring is hard
 
 There are several challenges around measuring bufferbloat accurately on the
-Internet. These challenges are due to different factors. Namely the diverse and
-dynamic nature of the Internet, the large problem space, and the
-reproducibility of the measurement.
+Internet.
+These challenges include the diverse nature of the traffic,
+the dynamic nature of the Internet, the large problem space, and the
+difficulty of reproducing the measurements.
 
 It is well-known that transparent TCP proxies are widely deployed on port 443
 and/or port 80, while less common on other ports. Thus, choice of the
 port-number to measure bufferbloat has a significant influence on the result.
 Other factors are the protocols being used. TCP and UDP traffic may take a
-largely different path on the Internet and be subject to entirely different QoS
-constraints. Again, bufferbloat measured on UDP vs TCP may be entirely
-different.  Another aspect is the queuing configuration on the bottleneck. It
-may be that fair-queuing is configured which may "hide" queuing latency that
+largely different path on the Internet and be subject to entirely different Quality of Service (QoS)
+constraints.
+The measured latency for UDP vs TCP traffic may be entirely different.
+Another aspect is the queuing configuration on the bottleneck node.
+It may be that fair-queuing configured at the bottleneck can "hide" queuing latency that
 affects other flows.
 
-The Internet is not just diverse; it is changing all the time. Since its
+Internet paths are changing all the time. Since its
 inception as a network that can adapt to major outages, the Internet has
 demonstrated exceptional ability to survive disruptions. At any given moment,
 the Internet routing is changing to rebalance the traffic, so that a particular
-local outage will not have a global effect. The cost of such resiliency is the
+local outage does not have a global effect. The cost of such resiliency is the
 fact that the routing is constantly changing. Daily fluctuations in the demand
 for the traffic make the bottlenecks ebb and flow. Because of that, measuring
 the responsiveness during the peak hours is likely to encounter a different
-bottleneck queue compared to off-peak measurement. It seems that it's best to
-avoid extending the duration of the test beyond what's needed.
+bottleneck queue compared to an off-peak measurement.
+To remove the variability of routing changes, it's best to keep the test duration relatively short.
 
-The problem space around the bufferbloat is huge. Traditionally, one thinks of
-bufferbloat happening on the routers and switches of the Internet. Thus, simply
-measuring bufferbloat at the transport layer would be sufficient. However, the
-networking stacks of the clients and servers can also experience huge amounts
-of bufferbloat. Data sitting in TCP sockets or waiting in the application to be
-scheduled for sending causes artificial latency, which affects user-experience
-the same way the "traditional" bufferbloat does.
+The problem space around the bufferbloat is huge.
+Traditionally, one thinks of bufferbloat happening on the routers and switches of the Internet.
+Thus, simply measuring bufferbloat at the transport layer would be sufficient.
+However, the networking stacks of the clients and servers can also experience huge amounts of bufferbloat.  Data sitting in TCP sockets or waiting in the application to be scheduled for sending
+causes artificial latency, which affects user experience the same way the "traditional" bufferbloat does.
 
-Finally, measuring bufferbloat requires us to fill the buffers of the bottleneck
-and when buffer occupancy is at its peak, the latency measurement needs to be
-done. Achieving this in a reliable and reproducible way is not easy. First, one
-needs to ensure that buffers are actually full for a sustained period of time
-to allow for repeated latency measurements in this particular state. Filling of
-the buffers should happen with standard transport layer traffic - typical for
-the end-user's use of the network - and thus is subject to the transport's
-congestion control, implying rate-reduction which reduces the buffering in the
-network. The amount of bufferbloat is thus constantly fluctuating and a
-reliable measurement requires to overcome these fluctuations.
+Finally, the measurement process must fill the buffers of the bottleneck
+and measure the latency when buffer occupancy is at its peak.
+Achieving this in a reliable and reproducible way is not easy.
+First, the test must ensure that buffers are actually full for a sustained
+period of time to allow for repeated latency measurements in this particular state.
+The test must fill buffers with standard transport layer traffic -
+typical for the end-user's use of the network,
+and that is subject to the transport's congestion control that might reduce the traffic’s rate
+and thus its buffering in the network.
+The amount of bufferbloat is thus constantly fluctuating:
+a reliable measurement technique must overcome these fluctuations.
+
 
 # Goals
 
