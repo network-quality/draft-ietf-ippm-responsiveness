@@ -8,9 +8,11 @@
   "license": "MIT",
   "devDependencies": {
     "markdownlint-cli": "^0.28.1",
-    "markdownlint-cli2": "^0.2.0"
+    "markdownlint-cli2": "^0.2.0",
+    "spellchecker-cli": "^4.8.0"
   },
   "scripts": {
-    "lint": "(echo Linting... && markdownlint-cli2  '*.md' && echo Lint passed.) || (echo Lint failed! Please review and fix errors. && exit 1)"
+    "lint": "(echo Linting... && markdownlint-cli2  '*.md' && echo Lint passed.) || (echo Lint failed! Please review and fix errors. && exit 1)",
+    "spellcheck": "(spellchecker --plugins spell indefinite-article repeated-words syntax-urls --dictionaries dictionary/dictionary.txt --files '*.md'  && echo Spellcheck passed.) || (echo Spellcheck failed! Please review and fix errors/add words to dictionary as needed. && exit 1)"
   }
 }
