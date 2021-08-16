@@ -1,0 +1,13 @@
+{
+	"default": true,
+	"line_length": false,
+	"no-alt-text": false,
+	"no-inline-html": false,
+	"header-increment": false,
+	"no-duplicate-header": false,
+	"fenced-code-language": false,
+	"MD003": { "style": "atx" },
+	"MD046": { "style": "fenced" },
+	"no-emphasis-as-heading": false,
+	"single-title": false,
+}

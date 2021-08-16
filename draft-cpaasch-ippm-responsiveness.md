@@ -48,7 +48,6 @@ author:
     country: United States of America
     email: oesh@apple.com
 
-
 informative:
   Bufferbloat:
     author:
@@ -59,13 +58,12 @@ informative:
   RFC8289:
   RFC8033:
 
-
 --- abstract
 
 Bufferbloat has been a long-standing problem on the Internet with more than a
 decade of work on standardizing technical solutions, implementations, and
 tests. However, bufferbloat remains a very common problem for
-the end-users. 
+the end-users.
 
 Everyone "knows" that it is "normal" for a video conference to
 have problems when somebody else on the same home-network is watching a 4K
@@ -79,13 +77,12 @@ accurately measure the problem. We believe that by creating a tool that matches,
 at a high level, the end-user's experience will help to create the necessary awareness,
 and result in a demand for products that solve the problem.
 
-This document specifies a methodology for measuring bufferbloat 
-in a way that simulates the usual "user experience" today. 
+This document specifies a methodology for measuring bufferbloat
+in a way that simulates the usual "user experience" today.
 It uses common protocols and
 mechanisms to accurately measure this experience. We also provide a way to
 express the bufferbloat as a measure of "Round-trips Per Minute" (RPM) to have
 a more intuitive way to talk about the notion of bufferbloat.
-
 
 --- middle
 
@@ -98,12 +95,12 @@ to some extent widely implemented. Nevertheless, users still suffer from bufferb
 
 Bufferbloat's impact on the user-experience is very subtle. Whenever a network
 is actively being used at its full capacity, buffers fill up and create
-latency for the traffic. These moments of full buffers may be very brief, caused by 
+latency for the traffic. These moments of full buffers may be very brief, caused by
 a medium-sized file-transfer, like an email-attachment. They create short-lived bursts
 of latency-spikes. An example of this is lag occuring
 during a video-conference, where a connection is shown as unstable.
 
-Since bufferbloat can cause short-lived disruptions of the user experience, 
+Since bufferbloat can cause short-lived disruptions of the user experience,
 it is hard to narrow down the cause and make the user aware of it.
 Popular measurement platforms that focus on speed and idle latency only obscure the bufferbloat problem.
 
@@ -142,7 +139,7 @@ There are many different ways to measure bufferbloat. The focus in this document
 
 The focus on end-user experience means a number of things:
 
-1.  Today's user-facing Internet traffic is primarily using HTTP/2 over TLS.
+1. Today's user-facing Internet traffic is primarily using HTTP/2 over TLS.
    Thus, the measurement should use that protocol.
 
     As a side-note: other types of traffic are gaining in popularity (HTTP/3)
@@ -150,16 +147,16 @@ and/or are already being used widely (RTP).
 Due to traffic prioritization and QoS rules on the Internet, each of these may experience
 completely different path-characteristics and should also be measured separately.
 
-2.  The Internet is marked by the deployment of countless middleboxes like transparent TCP proxies or traffic prioritization for certain types of traffic.
+2. The Internet is marked by the deployment of countless middleboxes like transparent TCP proxies or traffic prioritization for certain types of traffic.
 The measurement methodology should explore/exploit all of these as they affect the user- experience.
 This means, each stage of a user's interaction with the Internet
 (DNS-request, TCP-handshake, TLS-handshake, and request/response) needs to be evaluated.
 
-3.  User-friendliness of the result means that it should be expressed in a non-technical way to the user.
+3. User-friendliness of the result means that it should be expressed in a non-technical way to the user.
 Users commonly look for a single "score" of their performance.
 This enables the goal of raising awareness to a large user-base on the problem of bufferbloat.
 
-4.  Finally, in order to be useful to a wide audience, such a measurement should finish within a short time-frame.
+4. Finally, in order to be useful to a wide audience, such a measurement should finish within a short time-frame.
 Our target is 20 seconds.
 
 # Measuring Responsiveness Under Working Conditions
@@ -169,7 +166,6 @@ conditions is predicated by the ability to reliably put the network in a state
 that represents those conditions. Once the network has reached the
 required state, its responsiveness can be measured. The following explains how
 the former and the latter are achieved.
-
 
 ## Working Conditions
 
@@ -194,8 +190,8 @@ saturation has been reached and that responsiveness can be measured.
 
 Desired properties of the "working condition actuation"
 
-* Should not waste traffic, since the user may be paying for it
-* Should finish within a short time-frame to avoid impacting other users on the
+- Should not waste traffic, since the user may be paying for it
+- Should finish within a short time-frame to avoid impacting other users on the
   same network, and to avoid experiencing varying conditions
 
 ### Parallel vs Sequential Uplink and Downlink
@@ -220,9 +216,9 @@ parallel measurement provides 20 seconds of testing in both directions.
 
 However, a number caveats come with measuring in parallel:
 
-* Half-duplex links may not permit simultaneous uplink and downlink traffic.
+- Half-duplex links may not permit simultaneous uplink and downlink traffic.
 This means the test might not saturate both directions at once.
-* Debuggability of the results becomes more obscure:
+- Debuggability of the results becomes more obscure:
 During parallel measurement it is impossible to differentiate whether the measured latency
 happens in the uplink or the downlink direction.
 
@@ -244,7 +240,7 @@ needed.
 
 ### Reaching saturation
 
-When saturation has been reached, the measurement of responsiveness can begin. 
+When saturation has been reached, the measurement of responsiveness can begin.
 For this, we first need to define what "saturation"
 means. Saturation means not only that the load-bearing connections are
 utilizing all the capacity, but also that the buffers in the bottleneck are completely filled.
@@ -280,15 +276,15 @@ the workig condition is stable.
 
 The steps of the algorithm are:
 
-* Create 4 load-bearing connections
-* At each 1-second interval:
-  * Compute "instantaneous aggregate" goodput which is the number of bytes transferred within the last second.
-  * Compute a moving average of the last 4 "instantaneous aggregate goodput" measurements
-  * If moving average > "previous" moving average + 5%:
-    * We did not yet reach saturation. If we haven't added more flows within the last 4 seconds, add 4 more flows
-  * Else, we reached saturation for the current flow-count.
-    * If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
-    * Else, add more flows
+- Create 4 load-bearing connections
+- At each 1-second interval:
+  - Compute "instantaneous aggregate" goodput which is the number of bytes transferred within the last second.
+  - Compute a moving average of the last 4 "instantaneous aggregate goodput" measurements
+  - If moving average > "previous" moving average + 5%:
+    - We did not yet reach saturation. If we haven't added more flows within the last 4 seconds, add 4 more flows
+  - Else, we reached saturation for the current flow-count.
+    - If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
+    - Else, add more flows
 
 Note: It is tempting to envision an initial base-RTT
 measurement and adjust the intervals as a function of that RTT. However,
@@ -311,10 +307,10 @@ The approach measures:
 
 1. How the network handles new connections and their different stages
    (DNS-request, TCP-handshake, TLS-handshake, HTTP/2 request/response) while
-   being under working conditions. 
+   being under working conditions.
 2. How the network and the client/server networking stack handles the latency
-   on the load-bearing connections themselves. 
-   
+   on the load-bearing connections themselves.
+
 To measure the former, we send a DNS-request, establish a TCP-connection on
 port 443, establish a TLS-context using TLS1.3 and send an HTTP2 GET request
 for an object of a one-byte object. This measurement must be repeated
@@ -323,10 +319,9 @@ latency measurement that can then be factored into the responsiveness
 computation.
 
 To measure the latter, the load-bearing connections multiplex an HTTP/2 GET
-request for a 1-byte object to get the end-to-end latency on the 
+request for a 1-byte object to get the end-to-end latency on the
 connections that are using the network at full speed.
 *(What does it mean to multiplex a connection?)*
-
 
 ### Aggregating Round-trips per Minute
 
@@ -340,7 +335,7 @@ we give an equal weight to each of these measurements.
 
 Finally, the resulting responsiveness needs to be displayed. Users are comfortable with metrics that have a notion of "The higher the better".
 However, a "good latency" (measured in seconds/milliseconds) is a low number. Thus,
-converting the latency measurement to a frequency keeps with the familiar notion of "bigger is better". 
+converting the latency measurement to a frequency keeps with the familiar notion of "bigger is better".
 
 The term "frequency" used here has a very technical connotation.
 What we are effectively measuring is the number of round-trips
@@ -391,7 +386,6 @@ The server must handle a POST request with an arbitrary body size. The server sh
 
 4. A configuration URL that returns a JSON file with the information the client uses to run the test (sample below). All the fields are required except "test\_endpoint". Sample JSON:
 
-
    ~~~
    {
      "version": 1,
@@ -403,7 +397,6 @@ The server must handle a POST request with an arbitrary body size. The server sh
      "test_endpoint": "hostname123.cdnprovider.com"
    }
    ~~~
-
 
 If the “test\_endpoint” field is present, it is an indication that the Service provider/content distribution network (CDN) is able to “pin” all of the requests for a particular test run to a specific server. The client should look up the test_endpoint name and use the resulting address as the host for all the other URLs. A CDN should supply a test\_endpoint so that measurements use the same server/follow the same paths to avoid switching servers during a test run.
 
