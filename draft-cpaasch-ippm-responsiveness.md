@@ -97,7 +97,7 @@ Bufferbloat's impact on the user-experience is very subtle. Whenever a network
 is actively being used at its full capacity, buffers fill up and create
 latency for the traffic. These moments of full buffers may be very brief, caused by
 a medium-sized file-transfer, like an email-attachment. They create short-lived bursts
-of latency-spikes. An example of this is lag occuring
+of latency-spikes. An example of this is lag occurring
 during a video-conference, where a connection is shown as unstable.
 
 Since bufferbloat can cause short-lived disruptions of the user experience,
@@ -119,7 +119,7 @@ We focus on using protocols that are commonly used so that performance enhancing
 traffic classification affect the measurement in the same way.
 It is thus very important to use those protocols for the measurements to avoid focusing
 on use cases that are not actually affecting the end-user.
-Finally, we propose to use "round-trips per minute" as a metric to express the extend of bufferbloat.
+Finally, we propose to use "round-trips per minute" as a metric to express the extent of bufferbloat.
 
 # Measuring is hard
 
@@ -225,7 +225,7 @@ happens in the uplink or the downlink direction.
 ### From single-flow to multi-flow
 
 As described in RFC 6349, a single TCP connection may not be sufficient to
-saturate a path between a client and a server. On a high-BDP network,
+saturate a path between a client and a server. On a high BDP network,
 traditional TCP window-size constraints of 4MB are often not sufficient to fill
 the pipe. Additionally, traditional loss-based TCP congestion control
 algorithms aggressively reacts to packet-loss by reducing the congestion
@@ -245,7 +245,7 @@ For this, we first need to define what "saturation"
 means. Saturation means not only that the load-bearing connections are
 utilizing all the capacity, but also that the buffers in the bottleneck are completely filled.
 This depends highly on the congestion control that is being deployed on
-the sender-side. Congestion control algorithms like BBR may reach high
+the sender side. Congestion control algorithms like BBR may reach high
 throughput without causing bufferbloat. (because the bandwidth-detection
 portion of BBR is effectively seeking the bottleneck capacity)
 
@@ -254,7 +254,7 @@ to reliably ensure that the buffers are filled.
 
 An indication of saturation is when the observed goodput is no more increasing
 even as connections are being added to the pool of load-generating connections.
-An additional indication is the presence of packet-loss or ECN-marks signaling
+An additional indication is the presence of packet-loss or ECN marks signaling
 a congestion or even a full buffer of the bottleneck link.
 
 ### Final "Working Conditions" Algorithm
@@ -265,14 +265,14 @@ files. The algorithm is the same for upload and download and thus we use
 the same term "load-bearing connection" for each.
 
 The algorithm notes that throughput gradually increases as TCP
-connections go through their TCP slow-start phase. Throughput-increase
-eventually stalls for a constant number of TCP-connections - usually due to
+connections go through their TCP slow-start phase. Throughput increase
+eventually stalls for a constant number of TCP connections - usually due to
 receive-window limitations. At that point, the only means to further increase
 throughput is by adding more TCP connections to the pool of load-bearing
 connections.
 If new connections leave the throughput the same,
 saturation has been reached and - more importantly -
-the workig condition is stable.
+the working condition is stable.
 
 The steps of the algorithm are:
 
@@ -286,12 +286,12 @@ The steps of the algorithm are:
     - If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
     - Else, add more flows
 
-Note: It is tempting to envision an initial base-RTT
+Note: It is tempting to envision an initial base RTT
 measurement and adjust the intervals as a function of that RTT. However,
 experiments have shown that this makes the saturation-detection extremely
-unstable in low-RTT environments.
+unstable in low RTT environments.
 In the situation where the "unloaded" RTT is in the
-single-digit milli-second range, yet the network's RTT increases under load
+single-digit millisecond range, yet the network's RTT increases under load
 to more than a hundred milliseconds, the intervals become much too low to
 accurately drive the algorithm.
 
@@ -311,8 +311,8 @@ The approach measures:
 2. How the network and the client/server networking stack handles the latency
    on the load-bearing connections themselves.
 
-To measure the former, we send a DNS-request, establish a TCP-connection on
-port 443, establish a TLS-context using TLS1.3 and send an HTTP2 GET request
+To measure the former, we send a DNS request, establish a TCP connection on
+port 443, establish a TLS context using TLS1.3 and send an HTTP2 GET request
 for an object of a one-byte object. This measurement must be repeated
 multiple times for accuracy. Each of these stages gives a single
 latency measurement that can then be factored into the responsiveness
@@ -326,7 +326,7 @@ connections that are using the network at full speed.
 ### Aggregating Round-trips per Minute
 
 The method above produces sets of 5 measurements,
-namely: DNS-handshake, TCP-handshake, TLS handshake, HTTP/2 request/response on
+namely: DNS handshake, TCP handshake, TLS handshake, HTTP/2 request/response on
 separate (idle) connections, HTTP/2 request/response on load-bearing connections. Each
 of these sets of numbers focuses on a specific aspect of a user's interaction
 with the network. In order to expose a single "Responsiveness" number to the
@@ -360,7 +360,7 @@ This is an open area for investigation. *(true?)*
 
 # Protocol Specification
 
-The IPRPM measurement uses standart protocols commonly used by end-users; no new
+The RPM measurement uses standard protocols commonly used by end-users; no new
 protocol is defined. However, both client and servers need
 capabilities to execute this kind of measurement as well as a standard to flow
 to provision the client with the necessary information. *(I don't know what the previous sentence means)*
@@ -369,7 +369,7 @@ Both the client and the server must support HTTP/2 over TLS 1.3.
 The client must be able to send a GET-request and a POST.
 The server needs the ability to respond to both of these
 HTTP commands.
-Further, the server endpoint must be accessible through a hostnamethat can be resolved through DNS.
+Further, the server endpoint must be accessible through a hostname that can be resolved through DNS.
 Finally, the server must have the ability to
 provide content upon a GET-request.
 
