@@ -1,11 +1,13 @@
 ---
 title: Responsiveness under Working Conditions
 abbrev: Responsiveness under Working Conditions
-docname: draft-cpaasch-ippm-responsiveness
+docname: draft-cpaasch-ippm-responsiveness-00
 date:
 category: exp
 
 ipr: trust200902
+area: Transport
+workgroup: IP Performance Measurement
 keyword: Internet-Draft
 
 stand_alone: yes
