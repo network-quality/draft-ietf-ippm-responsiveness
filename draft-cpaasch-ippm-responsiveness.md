@@ -104,14 +104,14 @@ Since bufferbloat can cause short-lived disruptions of the user experience,
 it is hard to narrow down the cause and make the user aware of it.
 Popular measurement platforms that focus on speed and idle latency only obscure the bufferbloat problem.
 
-Finally, it is important to remember that buffers only fill behind the slowest “bottleneck” link of the network.
-The “bottleneck node” is one where the queueing occurs during heavy traffic.
+Finally, it is important to remember that buffers only fill behind the slowest "bottleneck" link of the network.
+The "bottleneck node" is one where the queueing occurs during heavy traffic.
 
 We believe that it is necessary to create a standardized way for measuring the extent of bufferbloat
 in a network and express it in a comprehensible way.
 Existing network measurement tools could add a responsiveness measurement to their set of metrics.
 It will also raise the awareness to the problem and shift the focus away from simply quantifying
-network quality with the two “standard: measures: throughput and idle latency.
+network quality with the two "standard: measures: throughput and idle latency.
 
 In this document, we describe a methodology for measuring bufferbloat and its impact on the user experience.
 We create the term "Responsiveness under working conditions" to make it more user-accessible.
@@ -131,7 +131,7 @@ Internet paths are changing all the time.  Since its inception as a network that
 
 The problem space around the bufferbloat is huge.  Traditionally, one thinks of bufferbloat happening on the routers and switches of the Internet.  Thus, simply measuring bufferbloat at the transport layer would be sufficient.  However, the networking stacks of the clients and servers can also experience huge amounts of bufferbloat.  Data sitting in TCP sockets or waiting in the application to be scheduled for sending causes artificial latency, which affects user experience the same way the "traditional" bufferbloat does.
 
-Finally, the measurement process must fill the buffers of the bottleneck and measure the latency when buffer occupancy is at its peak. Achieving this in a reliable and reproducible way is not easy.  First, the test must ensure that buffers are actually full for a sustained period of time to allow for repeated latency measurements in this particular state.  The test must fill buffers with standard transport layer traffic - typical for the end-user's use of the network, and that is subject to the transport's congestion control that might reduce the traffic’s rate and thus its buffering in the network.  The amount of bufferbloat is thus constantly fluctuating: a reliable measurement technique must overcome these fluctuations.
+Finally, the measurement process must fill the buffers of the bottleneck and measure the latency when buffer occupancy is at its peak. Achieving this in a reliable and reproducible way is not easy.  First, the test must ensure that buffers are actually full for a sustained period of time to allow for repeated latency measurements in this particular state.  The test must fill buffers with standard transport layer traffic - typical for the end-user's use of the network, and that is subject to the transport's congestion control that might reduce the traffic's rate and thus its buffering in the network.  The amount of bufferbloat is thus constantly fluctuating: a reliable measurement technique must overcome these fluctuations.
 
 # Goals
 
@@ -398,7 +398,7 @@ The server must handle a POST request with an arbitrary body size. The server sh
    }
    ~~~
 
-If the “test\_endpoint” field is present, it is an indication that the Service provider/content distribution network (CDN) is able to “pin” all of the requests for a particular test run to a specific server. The client should look up the test_endpoint name and use the resulting address as the host for all the other URLs. A CDN should supply a test\_endpoint so that measurements use the same server/follow the same paths to avoid switching servers during a test run.
+If the "test\_endpoint" field is present, it is an indication that the Service provider/content distribution network (CDN) is able to "pin" all of the requests for a particular test run to a specific server. The client should look up the test_endpoint name and use the resulting address as the host for all the other URLs. A CDN should supply a test\_endpoint so that measurements use the same server/follow the same paths to avoid switching servers during a test run.
 
 The client begins the responsiveness measurement by querying for the JSON configuration.  This supplies the URLs for creating the load-bearing connections in the upstream and downstream direction as well as the small object for the latency measurements.
 
