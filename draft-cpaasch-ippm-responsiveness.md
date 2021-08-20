@@ -412,4 +412,6 @@ TBD
 
 # Acknowledgments
 
-TBD
+Dave Täht
+Rich Brown
+Somebody Else
