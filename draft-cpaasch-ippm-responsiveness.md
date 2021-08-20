@@ -61,16 +61,15 @@ informative:
 --- abstract
 
 Bufferbloat has been a long-standing problem on the Internet with more than a
-decade of work on standardizing technical solutions, implementations, and
-tests.
-However, bufferbloat remains a very common problem for
-the end-users.
+decade of work on standardizing technical solutions, implementations, and tests.
+However, bufferbloat remains a very common problem for the end-users.
 
 Everyone "knows" that it is "normal" for a video conference to
 have problems when somebody else on the same home-network is watching a 4K
 movie.
 However, there is no technical reason for this to be the case.
-In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem for tens of thousands of end-users.
+In fact, various queue management solutions (fq_codel, cake, PIE) have solved
+the problem for tens of thousands of end-users.
 
 Bufferbloat exists, not from a lack of technical solutions, but
 rather a lack of awareness of the problem and a lack of tooling to
@@ -82,7 +81,8 @@ and result in a demand for products that solve the problem.
 This document specifies a methodology for measuring bufferbloat
 in a way that simulates the usual "user experience" today.
 It uses common protocols and mechanisms to accurately measure this experience.
-We also provide a way to express the bufferbloat as a measure of "Round-trips Per Minute" (RPM) to have
+We also provide a way to express the bufferbloat as a measure of
+"Round-trips Per Minute" (RPM) to have
 a more intuitive way to talk about the notion of bufferbloat.
 
 --- middle
@@ -91,38 +91,47 @@ a more intuitive way to talk about the notion of bufferbloat.
 
 For many years, bufferbloat has been known as an unfortunate, but common issue in
 today's networks {{Bufferbloat}}.
-Solutions like fq_codel {{RFC8289}} or PIE {{RFC8033}} have been standardized and are
+Solutions like fq_codel {{RFC8289}} or PIE {{RFC8033}} have been standardized
+and are
 to some extent widely implemented.
 Nevertheless, users still suffer from bufferbloat.
 
 Bufferbloat's impact on the user-experience is very subtle.
-Whenever a network is actively being used at its full capacity, buffers fill up and create
-latency for the traffic.
-These moments of full buffers may be very brief, caused by a medium-sized file-transfer,
-like an email-attachment.
+Whenever a network is actively being used at its full capacity, buffers
+fill up and create latency for the traffic.
+These moments of full buffers may be very brief, caused by a medium-sized
+file transfer, like an email-attachment.
 They create short-lived bursts of latency-spikes.
-An example of this is lag occurring during a video-conference, where a connection is shown as unstable.
+An example of this is lag occurring during a video-conference,
+where a connection is shown as unstable.
 
 Since bufferbloat can cause short-lived disruptions of the user experience,
 it is hard to narrow down the cause and make the user aware of it.
-Popular measurement platforms that focus on speed and idle latency only obscure the bufferbloat problem.
+Popular measurement platforms that focus on speed and idle latency only
+obscure the bufferbloat problem.
 
-Finally, it is important to remember that buffers only fill behind the slowest "bottleneck" link of the network.
+Finally, it is important to remember that buffers only fill behind the
+slowest "bottleneck" link of the network.
 The "bottleneck node" is one where the queueing occurs during heavy traffic.
 
-We believe that it is necessary to create a standardized way for measuring the extent of bufferbloat
-in a network and express it in a comprehensible way.
-Existing network measurement tools could add a responsiveness measurement to their set of metrics.
-It will also raise the awareness to the problem and shift the focus away from simply quantifying
-network quality with the two "standard: measures: throughput and idle latency.
+We believe that it is necessary to create a standardized way for measuring
+the extent of bufferbloat in a network and express it in a comprehensible way.
+Existing network measurement tools could add a responsiveness measurement to
+their set of metrics.
+It will also raise the awareness to the problem and shift the focus away
+from simply quantifying network quality with the two "standard measures":
+throughput and idle latency.
 
-In this document, we describe a methodology for measuring bufferbloat and its impact on the user experience.
-We create the term "Responsiveness under working conditions" to make it more user-accessible.
-We focus on using protocols that are commonly used so that performance enhancing proxies and
-traffic classification affect the measurement in the same way.
-It is thus very important to use those protocols for the measurements to avoid focusing
-on use cases that are not actually affecting the end-user.
-Finally, we propose to use "round-trips per minute" as a metric to express the extent of bufferbloat.
+In this document, we describe a methodology for measuring bufferbloat
+and its impact on the user experience.
+We create the term "Responsiveness under working conditions" to make it
+more user-accessible.
+We focus on using protocols that are commonly used so that performance
+enhancing proxies and traffic classification affect the measurement in the same way.
+It is thus very important to use those protocols for the measurements to
+avoid focusing on use cases that are not actually affecting the end-user.
+Finally, we propose to use "round-trips per minute" as a metric to
+express the extent of bufferbloat.
 
 # Measuring is hard
 
@@ -132,40 +141,56 @@ the dynamic nature of the Internet,
 the large problem space,
 and the difficulty of reproducing measurements.
 
-It is well-known that transparent TCP proxies are widely deployed on port 443 and/or port 80, while less common on other ports.
-Thus, choice of the port-number to measure bufferbloat has a significant influence on the result.
+It is well-known that transparent TCP proxies are widely deployed on
+port 443 and/or port 80, while less common on other ports.
+Thus, choice of the port-number to measure bufferbloat has a significant
+influence on the result.
 Other factors are the protocols being used.
-TCP and UDP traffic may take a largely different path on the Internet and be subject to entirely different Quality of Service (QoS) constraints.
+TCP and UDP traffic may take a largely different path on the Internet and
+be subject to entirely different Quality of Service (QoS) constraints.
 Furthermore, the measured bufferbloat for UDP vs TCP traffic may be entirely different.
 Another aspect is the queuing configuration on the bottleneck node.
-It may be that fair-queuing configured at the bottleneck link can "hide" queuing latency that affects other flows.
+It may be that fair-queuing configured at the bottleneck link can "hide"
+queuing latency that affects other flows.
 
 Internet paths are changing all the time.
-Since its inception as a network that can adapt to major outages, the Internet has demonstrated exceptional ability to survive disruptions.
-At any given moment, the Internet routing is changing to rebalance the traffic, so that a particular local outage does not have a global effect.
+Since its inception as a network that can adapt to major outages,
+the Internet has demonstrated exceptional ability to survive disruptions.
+At any given moment, the Internet routing is changing to rebalance the traffic,
+so that a particular local outage does not have a global effect.
 The cost of such resiliency is the fact that the routing is constantly changing.
 Daily fluctuations in the demand for the traffic make the bottlenecks ebb and flow.
 Because of that, measuring the responsiveness during the peak hours is likely to
 encounter a different bottleneck queue compared to an off-peak measurement.
-To remove the variability of routing changes, it's best to keep the test duration relatively short.
+To remove the variability of routing changes,
+it's best to keep the test duration relatively short.
 
 The problem space around the bufferbloat is huge.
 Traditionally, one thinks of bufferbloat happening on the routers and switches of the Internet.
 Thus, simply measuring bufferbloat at the transport layer would be sufficient.
-However, the networking stacks of the clients and servers can also experience huge amounts of bufferbloat.
-Data sitting in TCP sockets or waiting in the application to be scheduled for sending causes artificial latency,
+However, the networking stacks of the clients and servers can also
+experience huge amounts of bufferbloat.
+Data sitting in TCP sockets or waiting in the application to be scheduled
+for sending causes artificial latency,
 which affects user experience the same way the "traditional" bufferbloat does.
 
-Finally, the measurement process must fill the buffers of the bottleneck and measure the latency when buffer occupancy is at its peak.
+Finally, the measurement process must fill the buffers of the bottleneck and
+measure the latency when buffer occupancy is at its peak.
 Achieving this in a reliable and reproducible way is not easy.
-First, the test must ensure that buffers are actually full for a sustained period of time to allow for repeated latency measurements in this particular state.
-The test must fill buffers with standard transport layer traffic - typical for the end-user's use of the network, and that is subject to the transport's congestion control that might reduce the traffic's rate and thus its buffering in the network.
-The amount of bufferbloat is thus constantly fluctuating: a reliable measurement technique must overcome these fluctuations.
+First, the test must ensure that buffers are actually full for a sustained
+period of time to allow for repeated latency measurements in this particular state.
+The test must fill buffers with standard transport layer traffic - typical
+for the end-user's use of the network, and that is subject to the transport's
+congestion control that might reduce the traffic's rate and
+thus its buffering in the network.
+The amount of bufferbloat is thus constantly fluctuating:
+a reliable measurement technique must overcome these fluctuations.
 
 # Goals
 
 There are many different ways to measure bufferbloat.
-The focus in this document is to capture how bufferbloat affects the User experience and to provide this as a measurement tool for non- expert users.
+The focus in this document is to capture how bufferbloat affects the
+user experience and to provide this as a measurement tool for non- expert users.
 
 The focus on end-user experience means a number of things:
 
@@ -177,16 +202,21 @@ and/or are already being used widely (RTP).
 Due to traffic prioritization and QoS rules on the Internet, each of these may experience
 completely different path-characteristics and should also be measured separately.
 
-2. The Internet is marked by the deployment of countless middleboxes like transparent TCP proxies or traffic prioritization for certain types of traffic.
-The measurement methodology should explore/exploit all of these as they affect the user- experience.
-This means, each stage of a user's interaction with the Internet
-(DNS-request, TCP-handshake, TLS-handshake, and request/response) needs to be evaluated.
+2. The Internet is marked by the deployment of countless middleboxes like
+transparent TCP proxies or traffic prioritization for certain types of traffic.
+The measurement methodology should explore/exploit all of these as they affect
+the user experience.
+This means, each stage of a user's interaction with the Internet (DNS-request,
+TCP-handshake, TLS-handshake, and request/response) needs to be evaluated.
 
-3. User-friendliness of the result means that it should be expressed in a non-technical way to the user.
+3. User-friendliness of the result means that it should be expressed in a
+non-technical way to the user.
 Users commonly look for a single "score" of their performance.
-This enables the goal of raising awareness to a large user-base on the problem of bufferbloat.
+This enables the goal of raising awareness to a large user-base on the
+problem of bufferbloat.
 
-4. Finally, in order to be useful to a wide audience, such a measurement should finish within a short time-frame.
+4. Finally, in order to be useful to a wide audience, such a measurement
+5. should finish within a short time-frame.
 Our target is 20 seconds.
 
 # Measuring Responsiveness Under Working Conditions
@@ -217,11 +247,9 @@ bulk data-transfers in either downstream or upstream direction.
 Just as
 conventional speed-test applications create a varying number of
 streams to measure throughput, getting to working conditions is the same.
-It also
-requires a way to detect when the network is in a persistent working condition,
-also called "saturation".
-This can be achieved by monitoring the instantaneous
-goodput over time.
+It also requires a way to detect when the network is in a
+persistent working condition, also called "saturation".
+This can be achieved by monitoring the instantaneous goodput over time.
 When the goodput stops increasing, it means that a
 saturation has been reached and that responsiveness can be measured.
 
@@ -259,19 +287,17 @@ However, a number caveats come with measuring in parallel:
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
 This means the test might not saturate both directions at once.
 - Debuggability of the results becomes more obscure:
-During parallel measurement it is impossible to differentiate whether the measured latency
-happens in the uplink or the downlink direction.
+During parallel measurement it is impossible to differentiate whether
+the measured latency happens in the uplink or the downlink direction.
 
 ### From single-flow to multi-flow
 
 As described in RFC 6349, a single TCP connection may not be sufficient to
 saturate a path between a client and a server.
-On a high BDP network,
-traditional TCP window-size constraints of 4MB are often not sufficient to fill
-the pipe.
-Additionally, traditional loss-based TCP congestion control
-algorithms aggressively reacts to packet-loss by reducing the congestion
-window.
+On a high BDP network, traditional TCP window-size constraints of 4MB
+are often not sufficient to fill the pipe.
+Additionally, traditional loss-based TCP congestion control algorithms
+aggressively reacts to packet-loss by reducing the congestion window.
 This reaction reduces the queuing in the network, and thus
 artificially decreases the measured bufferbloat.
 
@@ -290,13 +316,12 @@ Saturation means not only that the load-bearing connections are
 utilizing all the capacity, but also that the buffers in the bottleneck are completely filled.
 This depends highly on the congestion control that is being deployed on
 the sender side.
-Congestion control algorithms like BBR may reach high
-throughput without causing bufferbloat.
-(because the bandwidth-detection
-portion of BBR is effectively seeking the bottleneck capacity)
+Congestion control algorithms like BBR may reach high throughput without
+causing bufferbloat because the bandwidth-detection
+portion of BBR is effectively seeking the bottleneck capacity.
 
-It is advised instead to use loss-based congestion controls like Cubic in both client and server
-to reliably ensure that the buffers are filled.
+It is advised instead to use loss-based congestion controls like Cubic in
+both client and server to reliably ensure that the buffers are filled.
 
 An indication of saturation is when the observed goodput is no more increasing
 even as connections are being added to the pool of load-generating connections.
@@ -327,13 +352,15 @@ The steps of the algorithm are:
 
 - Create 4 load-bearing connections
 - At each 1-second interval:
-  - Compute "instantaneous aggregate" goodput which is the number of bytes transferred within the last second.
+  - Compute "instantaneous aggregate" goodput which is the number of bytes
+  transferred within the last second.
   - Compute a moving average of the last 4 "instantaneous aggregate goodput" measurements
   - If moving average > "previous" moving average + 5%:
     - We did not yet reach saturation.
 If we haven't added more flows within the last 4 seconds, add 4 more flows
   - Else, we reached saturation for the current flow-count.
-    - If we added flows and for 4 seconds the moving average throughput did not change: We reached stable saturation
+    - If we added flows and for 4 seconds the moving average throughput
+    did not change: We reached stable saturation
     - Else, add more flows
 
 Note: It is tempting to envision an initial base RTT
@@ -357,12 +384,11 @@ connections themselves.
 
 The approach measures:
 
-1.
-How the network handles new connections and their different stages
+1. How the network handles new connections and their different stages
    (DNS-request, TCP-handshake, TLS-handshake, HTTP/2 request/response) while
    being under working conditions.
-2.
-How the network and the client/server networking stack handles the latency
+
+2. How the network and the client/server networking stack handles the latency
    on the load-bearing connections themselves.
 
 To measure the former, we send a DNS request, establish a TCP connection on
@@ -395,17 +421,15 @@ we give an equal weight to each of these measurements.
 Finally, the resulting responsiveness needs to be displayed.
 Users are comfortable with metrics that have a notion of "The higher the better".
 However, a "good latency" (measured in seconds/milliseconds) is a low number.
-Thus,
-converting the latency measurement to a frequency keeps with the familiar notion of "bigger is better".
+Thus, converting the latency measurement to a frequency keeps
+with the familiar notion of "bigger is better".
 
 The term "frequency" used here has a very technical connotation.
-What we are effectively measuring is the number of round-trips
-from the user's device to the server endpoint that can be done within a unit of
-time.
+What we are effectively measuring is the number of round-trips from the
+user's device to the server endpoint that can be done within a unit of time.
 This leads to the notion of Round-trips per Minute.
-It has the advantage
-that the expected range of values is between 50 to 3000 Round-trips Per
-Minute.
+It has the advantage that the expected range of values is between
+50 to 3000 Round-trips Per Minute.
 It can also be abbreviated to "RPM" which is a wink to the "revolutions
 per minute" that we are used to in cars.
 
@@ -416,20 +440,18 @@ responsiveness under working conditions.
 
 It remains an open question as to how many repetitions of the above described
 latency measurements a tool would need to execute to gain statistical confidence.
-One could imagine a
-computation of the variance and confidence interval that would drive the number
-of measurements and balance the accuracy with the speed of the measurement
-itself.
+One could imagine a computation of the variance and confidence interval
+that would drive the number of measurements and balance the accuracy
+with the speed of the measurement itself.
 
 This is an open area for investigation.
-*(true?)*
 
 # Protocol Specification
 
 The RPM measurement uses standard protocols commonly used by end-users; no new
 protocol is defined.
-However, both client and servers need
-capabilities to execute this kind of measurement as well as a standard to flow
+However, both client and servers need capabilities to execute this kind of
+measurement as well as a standard to flow
 to provision the client with the necessary information.
 *(I don't know what the previous sentence means)*
 
@@ -437,7 +459,8 @@ Both the client and the server must support HTTP/2 over TLS 1.3.
 The client must be able to send a GET-request and a POST.
 The server needs the ability to respond to both of these
 HTTP commands.
-Further, the server endpoint must be accessible through a hostname that can be resolved through DNS.
+Further, the server endpoint must be accessible through a hostname
+that can be resolved through DNS.
 Finally, the server must have the ability to
 provide content upon a GET-request.
 
@@ -473,12 +496,18 @@ Sample JSON:
    }
    ~~~
 
-If the "test\_endpoint" field is present, it is an indication that the Service provider/content distribution network (CDN) is able to "pin" all of the requests for a particular test run to a specific server.
-The client should look up the test_endpoint name and use the resulting address as the host for all the other URLs.
-A CDN should supply a test\_endpoint so that measurements use the same server/follow the same paths to avoid switching servers during a test run.
+If the "test\_endpoint" field is present, it is an indication that the
+Service provider/content distribution network (CDN) is able to "pin" all of
+the requests for a particular test run to a specific server.
+The client should look up the test_endpoint name and use the resulting
+address as the host for all the other URLs.
+A CDN should supply a test\_endpoint so that measurements use the same
+server/follow the same paths to avoid switching servers during a test run.
 
 The client begins the responsiveness measurement by querying for the JSON configuration.
-This supplies the URLs for creating the load-bearing connections in the upstream and downstream direction as well as the small object for the latency measurements.
+This supplies the URLs for creating the load-bearing connections in
+the upstream and downstream direction as well as the small object
+for the latency measurements.
 
 # Security Considerations
 
