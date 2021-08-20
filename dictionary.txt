@@ -51,3 +51,5 @@ markdownlint's
 Täht
 BDP
 hostname
+Paasch
+Christoph
