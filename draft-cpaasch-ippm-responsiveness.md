@@ -136,7 +136,7 @@ it's only a tenth of a second!").
 Instead, we create the term "Responsiveness under working conditions"
 to make it clear that we are measuring all, not just idle, conditions,
 and use "round-trips per minute" as the metric.
-The measurements range from 50 (poor) to 3,000 (excellent),
+The values range from 50 (poor) to 3,000 (excellent),
 with the added advantage that "bigger is better."
 Finally, we abbreviate the measurement to "RPM", a wink to the
 "revolutions per minute" that we use for cars.
@@ -176,17 +176,17 @@ the same way as "traditional" bufferbloat.
 Finally, it is important to note that queueing only happens behind
 a slow "bottleneck" link in the network,
 and only occurs when sufficient traffic is present.
-The measurement process must ensure that buffers are actually full
+The RPM Test must ensure that buffers are actually full
 for a sustained period, and only then make repeated latency
 measurements in this particular state.
 
 # Goals
 
-The algorithm described here defines a measurement that serves as a good
-representation of the user experience. This means:
+The algorithm described here defines an RPM Test that serves as a good
+proxy for user experience. This means:
 
 1. Today's Internet traffic primarily uses HTTP/2 over TLS.
-   Thus, the measurement should use that protocol.
+   Thus, the algorithm should use that protocol.
 
    As a side note: other types of traffic are gaining in popularity (HTTP/3)
 and/or are already being used widely (RTP).
@@ -274,7 +274,7 @@ However, a number caveats come with measuring in parallel:
 This means the test might not saturate both directions at once.
 - Debuggability of the results becomes harder:
 During parallel measurement it is impossible to differentiate whether
-the measured latency happens in the uplink or the downlink direction.
+the observed latency happens in the uplink or the downlink direction.
 - Consequently, the test should have an option for sequential testing.
 
 ### Reaching saturation
@@ -388,7 +388,7 @@ This fine-grained data is useful, but not necessary for creating a useful metric
 
 To create a single "Responsiveness" (e.g., RPM) number,
 this first iteration of the algorithm gives
-an equal weight to each of these measurements.
+an equal weight to each of these values.
 That is, it sums the five time values for each probe,
 and divides by the total number of probes to compute
 an average probe duration.
