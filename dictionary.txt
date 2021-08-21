@@ -24,6 +24,9 @@ TLS
 QoS
 middleboxes
 DNS-request
+msec
+counterintuitive
+
 goodput
 uplink
 downlink
@@ -53,3 +56,10 @@ BDP
 hostname
 Paasch
 Christoph
+videoconference
+Taht
+CeroWrt
+testbed
+Javascript
+DSLReports
+networkQuality
