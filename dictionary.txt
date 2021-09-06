@@ -63,3 +63,8 @@ testbed
 Javascript
 DSLReports
 networkQuality
+reproducibility
+HTTPS
+100msec
+DSL
+mbps

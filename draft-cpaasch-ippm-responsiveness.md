@@ -366,8 +366,6 @@ all during working conditions.
    send and receive a one-byte object with a HTTP2 GET request.
    It repeats these steps multiple times for accuracy.
 
-   *(How many times? How frequently?)*
-
 2. The responsiveness of the network and the client/server networking stacks
 for the load bearing connections themselves.
 
@@ -375,16 +373,12 @@ for the load bearing connections themselves.
 request for a one-byte object to get the end-to-end latency on the
 connections that are using the network at full speed.
 
-   *(What does it mean to "multiplex a connection"? How do you measure it?)*
-
 ### Aggregating the Measurements
 
 The algorithm produces sets of 5 times for each probe, namely:
 DNS handshake, TCP handshake, TLS handshake, HTTP/2 request/response on
 separate (idle) connections, HTTP/2 request/response on load bearing connections.
 This fine-grained data is useful, but not necessary for creating a useful metric.
-
-*(Am I right? Is this all that's necessary? If not expand on the required computations)*
 
 To create a single "Responsiveness" (e.g., RPM) number,
 this first iteration of the algorithm gives
@@ -411,7 +405,7 @@ the command-line betterspeedtest.sh (4)
 
 # RPM Test Server API
 
-The RPM measurement uses standard protocol;
+The RPM measurement uses standard protocols:
 no new protocol is defined.
 
 Both the client and the server MUST support HTTP/2 over TLS 1.3.
@@ -423,6 +417,8 @@ that can be resolved through DNS.
 The server MUST have the ability to provide content upon a GET request.
 Both client and server SHOULD use loss-based congestion controls
 like Cubic.
+The server MUST use a packet scheduling algorithm that minimizes internal queueing
+to avoid affecting the client's measurement.
 
 The server MUST respond to 4 URLs:
 
@@ -434,13 +430,16 @@ The actual body content is irrelevant.
 The server must respond with a status code of 200 and a body size of at least 8GB.
 The body can be bigger, and may need to grow as network speeds increases over time.
 The actual body content is irrelevant.
-The client will probably never completely download the object, but will instead close the connection after reaching working condition and making its measurements.
+The client will probably never completely download the object,
+but will instead close the connection after reaching working condition
+and making its measurements.
 
 3. An "upload" URL/response:
 The server must handle a POST request with an arbitrary body size.
 The server should discard the payload.
 
-4. A configuration URL that returns a JSON object with the information the client uses to run the test (sample below).
+4. A configuration URL that returns a JSON object with the information
+the client uses to run the test (sample below).
 All the fields are required except "test\_endpoint".
 Sample JSON:
 
@@ -473,8 +472,8 @@ for the latency measurements.
 
 The RPM Test has been implemented in the following settings:
 
-- macOS 15 - `/usr/bin/networkQuality` Describe its output?
-- iOS ?? - In the network thing :-)
+- macOS 15
+- iOS
 - Python?
 - Javascript?
 
@@ -488,12 +487,11 @@ TBD
 
 # Acknowledgments
 
-- Dave Taht - Godfather of Bufferbloat research, Creator of CeroWrt, the testbed for testing fq_codel and solving Bufferbloat
+- Dave Taht - Godfather of Bufferbloat research, Creator of CeroWrt,
+the testbed for testing fq_codel and solving Bufferbloat
 - Rich Brown - Editorial pass over this I-D
 
-# Other thoughts/questions
-
-I'm not sure where to incorporate these thoughts...
+# References
 
 - (1) [Bufferbloat definition:](https://www.bufferbloat.net/projects/)
 - (2) [DSLReports Speed Test:](http://DSLReports.com/speedtest)
