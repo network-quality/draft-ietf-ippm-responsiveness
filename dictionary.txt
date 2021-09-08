@@ -1,5 +1,7 @@
 docname
 draft-cpaasch-ippm-responsiveness
+draft-cpaasch-ippm-responsiveness-00
+workgroup
 trust200902
 toc
 symrefs

@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Responsiveness under Working Conditions</title>
+<meta content="Christoph Paasch" name="author">
+<meta content="Randall Meyer" name="author">
+<meta content="Stuart Cheshire" name="author">
+<meta content="Omer Shapira" name="author">
+<meta content="
+       For many years, a lack of responsiveness, variously called
+ lag ,  latency , or  bufferbloat,  has been recognized
+as an unfortunate, but common symptom in today's networks.
+Even after a decade of work on standardizing technical solutions,
+it remains a common problem for the end users. 
+       Everyone &quot;knows&quot; that it is &quot;normal&quot; for a video conference to
+have problems when somebody else at home is
+watching a 4K movie or uploading photos from their phone.
+However, there is no technical reason for this to be the case.
+In fact, various queue management solutions (fq_codel, cake, PIE)
+have solved the problem for tens of thousands of people. 
+       Our networks remain unresponsive, not from a lack of technical solutions,
+but rather a lack of awareness of the problem.
+We believe that creating a tool whose measurement matches people's
+every day experience will create the necessary awareness,
+and result in a demand for products that solve the problem. 
+       This document specifies the &quot;RPM Test&quot; for measuring responsiveness.
+It uses common protocols and mechanisms to measure user
+experience especially when the network is fully loaded
+(&quot;responsiveness under working conditions&quot;.)
+The measurement is expressed as &quot;Round-trips Per Minute&quot; (RPM)
+and should be included with throughput (up and down) and
+idle latency as critical indicators of network quality. 
+    " name="description">
+<meta content="xml2rfc 3.9.1" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-cpaasch-ippm-responsiveness-00" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.9.1
+    Python 3.7.4
+    appdirs 1.4.4
+    ConfigArgParse 1.5.2
+    google-i18n-address 2.5.0
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.6.3
+    pycountry 20.7.3
+    pyflakes 2.3.1
+    PyYAML 5.4.1
+    requests 2.25.1
+    setuptools 40.8.0
+    six 1.12.0
+-->
+<link href="draft-cpaasch-ippm-responsiveness.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necssary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre, code {
+  background-color: #f9f9f9;
+  font-family: 'Roboto Mono', monospace;
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The follwing is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre, code {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+pre.sourcecode,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact informatio look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background sligthtly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: avoid-page;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottim margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the comact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div:first-child > pre.sourcecode,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
+</head>
+<body>
+<script src="metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">Responsiveness under Working Conditions</td>
+<td class="right">September 2021</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Paasch, et al.</td>
+<td class="center">Expires 11 March 2022</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">IP Performance Measurement</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-cpaasch-ippm-responsiveness-00</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2021-09-07" class="published">7 September 2021</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Experimental</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2022-03-11">11 March 2022</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">C. Paasch</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">R. Meyer</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Cheshire</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">O. Shapira</div>
+<div class="org">Apple Inc.</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Responsiveness under Working Conditions</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">For many years, a lack of responsiveness, variously called
+<em>lag</em>, <em>latency</em>, or <em>bufferbloat,</em> has been recognized
+as an unfortunate, but common symptom in today's networks.
+Even after a decade of work on standardizing technical solutions,
+it remains a common problem for the end users.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Everyone "knows" that it is "normal" for a video conference to
+have problems when somebody else at home is
+watching a 4K movie or uploading photos from their phone.
+However, there is no technical reason for this to be the case.
+In fact, various queue management solutions (fq_codel, cake, PIE)
+have solved the problem for tens of thousands of people.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">Our networks remain unresponsive, not from a lack of technical solutions,
+but rather a lack of awareness of the problem.
+We believe that creating a tool whose measurement matches people's
+every day experience will create the necessary awareness,
+and result in a demand for products that solve the problem.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-4">This document specifies the "RPM Test" for measuring responsiveness.
+It uses common protocols and mechanisms to measure user
+experience especially when the network is fully loaded
+("responsiveness under working conditions".)
+The measurement is expressed as "Round-trips Per Minute" (RPM)
+and should be included with throughput (up and down) and
+idle latency as critical indicators of network quality.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 11 March 2022.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2021 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Simplified BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Simplified BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="ulEmpty ulBare toc compact">
+<li class="ulEmpty ulBare toc compact" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+<ul class="ulEmpty toc ulBare compact">
+<li class="ulEmpty toc ulBare compact" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-design-constraints" class="xref">Design Constraints</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-goals" class="xref">Goals</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-measuring-responsiveness-un" class="xref">Measuring Responsiveness Under Working Conditions</a></p>
+<ul class="ulEmpty toc ulBare compact">
+<li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-working-conditions" class="xref">Working Conditions</a></p>
+<ul class="ulEmpty toc ulBare compact">
+<li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.1.2.1">
+                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="xref">4.1.1</a>.  <a href="#name-from-single-flow-to-multi-f" class="xref">From single-flow to multi-flow</a></p>
+</li>
+                  <li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.1.2.2">
+                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="xref">4.1.2</a>.  <a href="#name-parallel-vs-sequential-upli" class="xref">Parallel vs Sequential Uplink and Downlink</a></p>
+</li>
+                  <li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.1.2.3">
+                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="xref">4.1.3</a>.  <a href="#name-reaching-saturation" class="xref">Reaching saturation</a></p>
+</li>
+                  <li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.1.2.4">
+                    <p id="section-toc.1-1.4.2.1.2.4.1"><a href="#section-4.1.4" class="xref">4.1.4</a>.  <a href="#name-final-working-conditions-al" class="xref">Final "Working Conditions" Algorithm</a></p>
+</li>
+                </ul>
+</li>
+              <li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-measuring-responsiveness" class="xref">Measuring Responsiveness</a></p>
+<ul class="ulEmpty toc ulBare compact">
+<li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="xref">4.2.1</a>.  <a href="#name-aggregating-the-measurement" class="xref">Aggregating the Measurements</a></p>
+</li>
+                  <li class="ulEmpty toc ulBare compact" id="section-toc.1-1.4.2.2.2.2">
+                    <p id="section-toc.1-1.4.2.2.2.2.1"><a href="#section-4.2.2" class="xref">4.2.2</a>.  <a href="#name-statistical-confidence" class="xref">Statistical Confidence</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-rpm-test-server-api" class="xref">RPM Test Server API</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-reference-implementations" class="xref">Reference Implementations</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-references" class="xref">References</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-informative-references" class="xref">Informative References</a></p>
+</li>
+          <li class="ulEmpty ulBare toc compact" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">For many years, a lack of responsiveness, variously called
+<em>lag</em>, <em>latency</em>, or <em>bufferbloat,</em> has been recognized
+as an unfortunate, but common symptom in today's networks <span>[<a href="#Bufferbloat" class="xref">Bufferbloat</a>]</span>.
+Solutions like fq_codel <span>[<a href="#RFC8289" class="xref">RFC8289</a>]</span> or PIE <span>[<a href="#RFC8033" class="xref">RFC8033</a>]</span> have been standardized
+and are to some extent widely implemented.
+Nevertheless, people still suffer from bufferbloat.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Although significant, the impact on user experience can be transitory -
+that is, its effect is not always present.
+Whenever a network is actively being used at its full capacity,
+buffers can fill up and create latency for traffic.
+The duration of those full buffers may be brief:
+a medium-sized file transfer, like an email attachment
+or uploading photos,
+can create bursts of latency spikes.
+An example of this is lag occurring during a videoconference,
+where a connection is briefly shown as unstable.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">These short-lived disruptions make it hard to narrow down the cause.
+We believe that it is necessary to create a standardized way to
+measure and express responsiveness.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Existing network measurement tools could incorporate a
+responsiveness measurement into their set of metrics.
+Doing so would also raise the awareness of the problem and
+make the standard "network quality measures" of
+throughput, idle latency, and responsiveness.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<div id="terminology">
+<section id="section-1.1">
+        <h3 id="name-terminology">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.1-1">A word about the term "bufferbloat" - the undesirable latency
+that comes from a router or other network equipment
+buffering too much data. (1)
+This document uses the term as a general description of bad latency,
+using more precise wording where warranted.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">"Latency" is a poor measure of responsiveness,
+since it can be hard for the general public to understand.
+The units are unfamiliar ("what <em>is</em> a millisecond?") and
+counterintuitive ("100 msec - that sounds good -
+it's only a tenth of a second!").<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">Instead, we create the term "Responsiveness under working conditions"
+to make it clear that we are measuring all, not just idle, conditions,
+and use "round-trips per minute" as the metric.
+The values range from 50 (poor) to 3,000 (excellent),
+with the added advantage that "bigger is better."
+Finally, we abbreviate the measurement to "RPM", a wink to the
+"revolutions per minute" that we use for cars.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">This document defines an algorithm for the "RPM Test"
+that explicitly measures responsiveness under working conditions.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="design-constraints">
+<section id="section-2">
+      <h2 id="name-design-constraints">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-design-constraints" class="section-name selfRef">Design Constraints</a>
+      </h2>
+<p id="section-2-1">There are many challenges around measurements on the Internet.
+They include the dynamic nature of the Internet,
+the diverse nature of the traffic,
+the large number of devices that affect traffic,
+and the difficulty of attaining appropriate measurement conditions.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Internet paths are changing all the time.
+Daily fluctuations in the demand make the bottlenecks ebb and flow.
+To minimize the variability of routing changes,
+it's best to keep the test duration relatively short.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">TCP and UDP traffic, or traffic on ports 80 and 443, may take
+significantly different paths on the Internet and
+be subject to entirely different Quality of Service (QoS) treatment.
+A good test will use standard transport layer traffic - typical
+for people's use of the network -
+that is subject to the transport's congestion control that might
+reduce the traffic's rate and thus its buffering in the network.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">Traditionally, one thinks of bufferbloat happening on the
+routers and switches of the Internet.
+However, the networking stacks of the clients and servers can
+have huge buffers.
+Data sitting in TCP sockets or waiting for the application
+to send or read causes artificial latency, and affects user experience
+the same way as "traditional" bufferbloat.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">Finally, it is important to note that queueing only happens behind
+a slow "bottleneck" link in the network,
+and only occurs when sufficient traffic is present.
+The RPM Test must ensure that buffers are actually full
+for a sustained period, and only then make repeated latency
+measurements in this particular state.<a href="#section-2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="goals">
+<section id="section-3">
+      <h2 id="name-goals">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-goals" class="section-name selfRef">Goals</a>
+      </h2>
+<p id="section-3-1">The algorithm described here defines an RPM Test that serves as a good
+proxy for user experience. This means:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-2">
+<li id="section-3-2.1">
+          <p id="section-3-2.1.1">Today's Internet traffic primarily uses HTTP/2 over TLS.
+Thus, the algorithm should use that protocol.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-3-2.1.2">
+As a side note: other types of traffic are gaining in popularity (HTTP/3)
+and/or are already being used widely (RTP).
+Traffic prioritization and QoS rules on the Internet may
+subject traffic to completely different paths:<a href="#section-3-2.1.2" class="pilcrow">¶</a></p>
+<p id="section-3-2.1.3">
+these could also be measured separately.<a href="#section-3-2.1.3" class="pilcrow">¶</a></p>
+</li>
+        <li id="section-3-2.2">The Internet is marked by the deployment of countless middleboxes like
+transparent TCP proxies or traffic prioritization for certain types of traffic.
+The RPM Test must take into account their effect on
+DNS-request, TCP-handshake, TLS-handshake, and request/response.<a href="#section-3-2.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-3-2.3">The test result should be expressed in an intuitive, nontechnical form.
+People commonly look for a single "score" of their performance.<a href="#section-3-2.3" class="pilcrow">¶</a>
+</li>
+        <li id="section-3-2.4">Finally, to be useful to a wide audience, the measurement
+should finish within a short time frame.
+Our target is 20 seconds.<a href="#section-3-2.4" class="pilcrow">¶</a>
+</li>
+      </ol>
+</section>
+</div>
+<div id="measuring-responsiveness-under-working-conditions">
+<section id="section-4">
+      <h2 id="name-measuring-responsiveness-un">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-measuring-responsiveness-un" class="section-name selfRef">Measuring Responsiveness Under Working Conditions</a>
+      </h2>
+<p id="section-4-1">To make an accurate measurement,
+the algorithm must reliably put the network in a state
+that represents those "working conditions".
+Once the network has reached that state,
+the algorithm can measure its responsiveness.
+The following explains how
+the former and the latter are achieved.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="working-conditions">
+<section id="section-4.1">
+        <h3 id="name-working-conditions">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-working-conditions" class="section-name selfRef">Working Conditions</a>
+        </h3>
+<p id="section-4.1-1">For the purpose of this methodology, typical "working conditions" represent a
+state of the network in which the bottleneck node is experiencing ingress and
+egress flows similar to those created by humans in the typical
+day-to-day pattern.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">While a single HTTP transaction might briefly put a network into
+working conditions, making reliable measurements
+requires maintaining the state over sufficient time.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">The algorithm must also detect when the network is in a
+persistent working condition, also called "saturation".<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">Desired properties of "working condition":<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1-5.1">Should not waste traffic, since the person may be paying for it<a href="#section-4.1-5.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.1-5.2">Should finish within a short time to
+avoid impacting other people on the same network,
+to avoid varying network conditions,
+and not try the person's patience.<a href="#section-4.1-5.2" class="pilcrow">¶</a>
+</li>
+        </ul>
+<div id="from-single-flow-to-multi-flow">
+<section id="section-4.1.1">
+          <h4 id="name-from-single-flow-to-multi-f">
+<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-from-single-flow-to-multi-f" class="section-name selfRef">From single-flow to multi-flow</a>
+          </h4>
+<p id="section-4.1.1-1">A single TCP connection may not be sufficient to saturate a path.
+For example, the 4MB constraints on TCP window size constraints
+may not fill the pipe.
+Additionally, traditional loss-based TCP congestion control algorithms
+react aggressively to packet loss by reducing the congestion window.
+This reaction (intended by the protocol design) decreases the
+queueing within the network, making it hard to reach saturation.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-2">The goal of the RPM Test is to keep the network as busy as possible
+in a sustained and persistent way.
+It uses multiple TCP connections and gradually adds more TCP flows
+until saturation is reached.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="parallel-vs-sequential-uplink-and-downlink">
+<section id="section-4.1.2">
+          <h4 id="name-parallel-vs-sequential-upli">
+<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-parallel-vs-sequential-upli" class="section-name selfRef">Parallel vs Sequential Uplink and Downlink</a>
+          </h4>
+<p id="section-4.1.2-1">Poor responsiveness can be caused by queues in either (or both)
+the upstream and the downstream direction.
+Furthermore, both paths may differ significantly due to access link
+conditions (e.g., 5G downstream and LTE upstream) or the routing changes
+within the ISPs.
+To measure responsiveness under working conditions,
+the algorithm must saturate both directions.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.2-2">Measuring in parallel achieves more data samples for a given duration.
+Given the desired test duration of 20 seconds,
+sequential uplink and downlink tests would only yield half the data.
+The RPM Test specifies parallel, concurrent measurements.<a href="#section-4.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.2-3">However, a number caveats come with measuring in parallel:<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.2-4.1">Half-duplex links may not permit simultaneous uplink and downlink traffic.
+This means the test might not saturate both directions at once.<a href="#section-4.1.2-4.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.2-4.2">Debuggability of the results becomes harder:
+During parallel measurement it is impossible to differentiate whether
+the observed latency happens in the uplink or the downlink direction.<a href="#section-4.1.2-4.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.2-4.3">Consequently, the test should have an option for sequential testing.<a href="#section-4.1.2-4.3" class="pilcrow">¶</a>
+</li>
+          </ul>
+</section>
+</div>
+<div id="reaching-saturation">
+<section id="section-4.1.3">
+          <h4 id="name-reaching-saturation">
+<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-reaching-saturation" class="section-name selfRef">Reaching saturation</a>
+          </h4>
+<p id="section-4.1.3-1">The RPM Test gradually increases the number of TCP connections
+and measures "goodput" - the sum of actual data transferred
+across all connections in a unit of time.
+When the goodput stops increasing, it means that saturation has been
+reached.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-2">Saturation has two criteria:
+a) the load bearing connections are utilizing all the
+capacity of the bottleneck,
+b) the buffers in the bottleneck are completely filled.<a href="#section-4.1.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-3">The algorithm notes that throughput gradually increases until TCP
+connections complete their TCP slow-start phase.
+At that point, throughput eventually stalls
+usually due to receive window limitations.
+The only means to further increase throughput is by
+adding more TCP connections to the pool of load bearing connections.
+If new connections leave the throughput the same,
+saturation has been reached and - more importantly -
+the working condition is stable.<a href="#section-4.1.3-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-4">Filling buffers at the bottleneck depends on the congestion control
+deployed on the sender side.
+Congestion control algorithms like BBR may reach high throughput
+without causing queueing because the bandwidth detection
+portion of BBR effectively seeks the bottleneck capacity.<a href="#section-4.1.3-4" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-5">RPM Test clients and servers should use loss-based congestion controls
+like Cubic to fill queues reliably.<a href="#section-4.1.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-6">The RPM Test detects saturation when the observed goodput is not increasing
+even as connections are being added,
+or it detects packet loss or ECN marks signaling
+congestion or a full buffer of the bottleneck link.<a href="#section-4.1.3-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="final-working-conditions-algorithm">
+<section id="section-4.1.4">
+          <h4 id="name-final-working-conditions-al">
+<a href="#section-4.1.4" class="section-number selfRef">4.1.4. </a><a href="#name-final-working-conditions-al" class="section-name selfRef">Final "Working Conditions" Algorithm</a>
+          </h4>
+<p id="section-4.1.4-1">The following algorithm reaches working conditions (saturation) of a network
+by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
+files.
+The algorithm is the same for upload and download and uses
+the same term "load bearing connection" for each.<a href="#section-4.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.4-2">The steps of the algorithm are:<a href="#section-4.1.4-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-3.1">Create 4 load bearing connections<a href="#section-4.1.4-3.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.4-3.2">
+              <p id="section-4.1.4-3.2.1">At each 1 second interval:<a href="#section-4.1.4-3.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-3.2.2.1">Compute "instantaneous aggregate" goodput which is the number of bytes
+transferred within the last second.<a href="#section-4.1.4-3.2.2.1" class="pilcrow">¶</a>
+</li>
+                <li class="normal" id="section-4.1.4-3.2.2.2">Compute a moving average of the last 4 "instantaneous aggregate goodput" measurements<a href="#section-4.1.4-3.2.2.2" class="pilcrow">¶</a>
+</li>
+                <li class="normal" id="section-4.1.4-3.2.2.3">
+                  <p id="section-4.1.4-3.2.2.3.1">If moving average &gt; "previous" moving average + 5%:<a href="#section-4.1.4-3.2.2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-3.2.2.3.2.1">Network did not yet reach saturation.
+If no flows added within the last 4 seconds, add 4 more flows<a href="#section-4.1.4-3.2.2.3.2.1" class="pilcrow">¶</a>
+</li>
+                  </ul>
+</li>
+                <li class="normal" id="section-4.1.4-3.2.2.4">
+                  <p id="section-4.1.4-3.2.2.4.1">Else, network reached saturation for the current flow count.<a href="#section-4.1.4-3.2.2.4.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-3.2.2.4.2.1">If new flows added and for 4 seconds the moving average throughput
+did not change: network reached stable saturation<a href="#section-4.1.4-3.2.2.4.2.1" class="pilcrow">¶</a>
+</li>
+                    <li class="normal" id="section-4.1.4-3.2.2.4.2.2">Else, add four more flows<a href="#section-4.1.4-3.2.2.4.2.2" class="pilcrow">¶</a>
+</li>
+                  </ul>
+</li>
+              </ul>
+</li>
+          </ul>
+<p id="section-4.1.4-4">Note: It is tempting to envision an initial base RTT
+measurement and adjust the intervals as a function of that RTT.
+However,
+experiments have shown that this makes the saturation detection extremely
+unstable in low RTT environments.
+In the situation where the "unloaded" RTT is in the
+single-digit millisecond range, yet the network's RTT increases under load
+to more than a hundred milliseconds, the intervals become much too low to
+accurately drive the algorithm.<a href="#section-4.1.4-4" class="pilcrow">¶</a></p>
+<p id="section-4.1.4-5"><em>(I'm not sure what this last caveat re: low RTT means in practice)</em><a href="#section-4.1.4-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="measuring-responsiveness">
+<section id="section-4.2">
+        <h3 id="name-measuring-responsiveness">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-measuring-responsiveness" class="section-name selfRef">Measuring Responsiveness</a>
+        </h3>
+<p id="section-4.2-1">Once the network is in a consistent working conditions,
+the RPM Test must "probe" the network multiple times
+to measure its responsiveness.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">Each RPM Test probe measures:<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2-3">
+<li id="section-4.2-3.1">
+            <p id="section-4.2-3.1.1">The responsiveness of the different steps to create a new connection,
+all during working conditions.<a href="#section-4.2-3.1.1" class="pilcrow">¶</a></p>
+<p id="section-4.2-3.1.2">
+To do this, the test measures the time needed to make a DNS request,
+establish a TCP connection on port 443,
+establish a TLS context using TLS1.3, and
+send and receive a one-byte object with a HTTP2 GET request.
+It repeats these steps multiple times for accuracy.<a href="#section-4.2-3.1.2" class="pilcrow">¶</a></p>
+</li>
+          <li id="section-4.2-3.2">
+            <p id="section-4.2-3.2.1">The responsiveness of the network and the client/server networking stacks
+for the load bearing connections themselves.<a href="#section-4.2-3.2.1" class="pilcrow">¶</a></p>
+<p id="section-4.2-3.2.2">
+To do this, the load bearing connections multiplex an HTTP/2 GET
+request for a one-byte object to get the end-to-end latency on the
+connections that are using the network at full speed.<a href="#section-4.2-3.2.2" class="pilcrow">¶</a></p>
+</li>
+        </ol>
+<div id="aggregating-the-measurements">
+<section id="section-4.2.1">
+          <h4 id="name-aggregating-the-measurement">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-aggregating-the-measurement" class="section-name selfRef">Aggregating the Measurements</a>
+          </h4>
+<p id="section-4.2.1-1">The algorithm produces sets of 5 times for each probe, namely:
+DNS handshake, TCP handshake, TLS handshake, HTTP/2 request/response on
+separate (idle) connections, HTTP/2 request/response on load bearing connections.
+This fine-grained data is useful, but not necessary for creating a useful metric.<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.2.1-2">To create a single "Responsiveness" (e.g., RPM) number,
+this first iteration of the algorithm gives
+an equal weight to each of these values.
+That is, it sums the five time values for each probe,
+and divides by the total number of probes to compute
+an average probe duration.
+The reciprocal of this, normalized to 60 seconds,
+gives the Round-trips Per Minute (RPM).<a href="#section-4.2.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="statistical-confidence">
+<section id="section-4.2.2">
+          <h4 id="name-statistical-confidence">
+<a href="#section-4.2.2" class="section-number selfRef">4.2.2. </a><a href="#name-statistical-confidence" class="section-name selfRef">Statistical Confidence</a>
+          </h4>
+<p id="section-4.2.2-1">The number of probes necessary for statistical confidence
+is an open question.
+One could imagine a computation of the variance and confidence interval
+that would drive the number of measurements and balance the accuracy
+with the speed of the measurement itself.<a href="#section-4.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2.2-2">It is also an open topic to compare the RPM Test to
+other standard measurement tools such as
+DSLReports Speed Test (2)
+the Waveform Bufferbloat test (3);
+the command-line betterspeedtest.sh (4)<a href="#section-4.2.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="rpm-test-server-api">
+<section id="section-5">
+      <h2 id="name-rpm-test-server-api">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-rpm-test-server-api" class="section-name selfRef">RPM Test Server API</a>
+      </h2>
+<p id="section-5-1">The RPM measurement uses standard protocols:
+no new protocol is defined.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">Both the client and the server MUST support HTTP/2 over TLS 1.3.
+The client MUST be able to send a GET request and a POST.
+The server MUST be able to respond to both of these
+HTTP commands.
+Further, the server endpoint MUST be accessible through a hostname
+that can be resolved through DNS.
+The server MUST have the ability to provide content upon a GET request.
+Both client and server SHOULD use loss-based congestion controls
+like Cubic.
+The server MUST use a packet scheduling algorithm that minimizes internal queueing
+to avoid affecting the client's measurement.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<p id="section-5-3">The server MUST respond to 4 URLs:<a href="#section-5-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-5-4">
+<li id="section-5-4.1">A "small" URL/response:
+The server must respond with a status code of 200 and 1 byte in the body.
+The actual body content is irrelevant.<a href="#section-5-4.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-5-4.2">A "large" URL/response:
+The server must respond with a status code of 200 and a body size of at least 8GB.
+The body can be bigger, and may need to grow as network speeds increases over time.
+The actual body content is irrelevant.
+The client will probably never completely download the object,
+but will instead close the connection after reaching working condition
+and making its measurements.<a href="#section-5-4.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-5-4.3">An "upload" URL/response:
+The server must handle a POST request with an arbitrary body size.
+The server should discard the payload.<a href="#section-5-4.3" class="pilcrow">¶</a>
+</li>
+        <li id="section-5-4.4">
+          <p id="section-5-4.4.1">A configuration URL that returns a JSON object with the information
+the client uses to run the test (sample below).
+All the fields are required except "test_endpoint".
+Sample JSON:<a href="#section-5-4.4.1" class="pilcrow">¶</a></p>
+<div class="artwork art-text alignLeft" id="section-5-4.4.2">
+<pre>
+{
+  "version": 1,
+  "urls": {
+    "small_https_download_url": "https://example.apple.com/api/v1/small",
+    "large_https_download_url": "https://example.apple.com/api/v1/large",
+    "https_upload_url": "https://example.apple.com/api/v1/upload"
+  },
+  "test_endpoint": "hostname123.cdnprovider.com"
+}
+</pre><a href="#section-5-4.4.2" class="pilcrow">¶</a>
+</div>
+</li>
+      </ol>
+<p id="section-5-5">If the "test_endpoint" field is present, it is an indication that the
+Service provider/content distribution network (CDN) is able to "pin" all of
+the requests for a particular test run to a specific server.
+The client should look up the test_endpoint name and use the resulting
+address as the host for all the other URLs.
+A CDN should supply a test_endpoint so that measurements use the same
+server/follow the same paths to avoid switching servers during a test run.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-6">The client begins the responsiveness measurement by querying for the JSON configuration.
+This supplies the URLs for creating the load bearing connections in
+the upstream and downstream direction as well as the small object
+for the latency measurements.<a href="#section-5-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="reference-implementations">
+<section id="section-6">
+      <h2 id="name-reference-implementations">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-reference-implementations" class="section-name selfRef">Reference Implementations</a>
+      </h2>
+<p id="section-6-1">The RPM Test has been implemented in the following settings:<a href="#section-6-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-2.1">macOS 15<a href="#section-6-2.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-6-2.2">iOS<a href="#section-6-2.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-6-2.3">Python?<a href="#section-6-2.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-6-2.4">Javascript?<a href="#section-6-2.4" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-7">
+      <h2 id="name-security-considerations">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-7-1">TBD<a href="#section-7-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-8">
+      <h2 id="name-iana-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-8-1">TBD<a href="#section-8-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="section-9">
+      <h2 id="name-acknowledgments">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<ul class="normal">
+<li class="normal" id="section-9-1.1">Dave Taht - Godfather of Bufferbloat research, Creator of CeroWrt,
+the testbed for testing fq_codel and solving Bufferbloat<a href="#section-9-1.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-9-1.2">Rich Brown - Editorial pass over this I-D<a href="#section-9-1.2" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<div id="references">
+<section id="section-10">
+      <h2 id="name-references">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<ul class="normal">
+<li class="normal" id="section-10-1.1">(1) <a href="https://www.bufferbloat.net/projects/">Bufferbloat definition:</a><a href="#section-10-1.1" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-10-1.2">(2) <a href="http://DSLReports.com/speedtest">DSLReports Speed Test:</a><a href="#section-10-1.2" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-10-1.3">(3) <a href="https://www.waveform.com/tools/bufferbloat">Waveform Bufferbloat Test;</a><a href="#section-10-1.3" class="pilcrow">¶</a>
+</li>
+        <li class="normal" id="section-10-1.4">(4) <a href="https://github.com/richb-hanover/OpenWrtScripts/blob/master/betterspeedtest.sh">betterspeedtest.sh</a><a href="#section-10-1.4" class="pilcrow">¶</a>
+</li>
+      </ul>
+</section>
+</div>
+<section id="section-11">
+      <h2 id="name-informative-references">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+      </h2>
+<dl class="references">
+<dt id="Bufferbloat">[Bufferbloat]</dt>
+      <dd>
+<span class="refAuthor">Gettys, J.</span> and <span class="refAuthor">K. Nichols</span>, <span class="refTitle">"Bufferbloat: Dark Buffers in the Internet"</span>, <span class="seriesInfo">Communications of the ACM, Volume 55, Number 1 (2012) </span>, <span>n.d.</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8033">[RFC8033]</dt>
+      <dd>
+<span class="refAuthor">Pan, R.</span>, <span class="refAuthor">Natarajan, P.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">G. White</span>, <span class="refTitle">"Proportional Integral Controller Enhanced (PIE): A Lightweight Control Scheme to Address the Bufferbloat Problem"</span>, <span class="seriesInfo">RFC 8033</span>, <span class="seriesInfo">DOI 10.17487/RFC8033</span>, <time datetime="2017-02" class="refDate">February 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8033">https://www.rfc-editor.org/info/rfc8033</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8289">[RFC8289]</dt>
+    <dd>
+<span class="refAuthor">Nichols, K.</span>, <span class="refAuthor">Jacobson, V.</span>, <span class="refAuthor">McGregor, A., Ed.</span>, and <span class="refAuthor">J. Iyengar, Ed.</span>, <span class="refTitle">"Controlled Delay Active Queue Management"</span>, <span class="seriesInfo">RFC 8289</span>, <span class="seriesInfo">DOI 10.17487/RFC8289</span>, <time datetime="2018-01" class="refDate">January 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8289">https://www.rfc-editor.org/info/rfc8289</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="authors-addresses">
+<section id="appendix-A">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Christoph Paasch</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cpaasch@apple.com" class="email">cpaasch@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Randall Meyer</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:rrm@apple.com" class="email">rrm@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Stuart Cheshire</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cheshire@apple.com" class="email">cheshire@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Omer Shapira</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:oesh@apple.com" class="email">oesh@apple.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
