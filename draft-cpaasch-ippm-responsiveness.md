@@ -63,7 +63,7 @@ informative:
 --- abstract
 
 For many years, a lack of responsiveness, variously called
-*lag*, *latency*, or *bufferbloat,* has been recognized
+lag, latency, or bufferbloat, has been recognized
 as an unfortunate, but common symptom in today's networks.
 Even after a decade of work on standardizing technical solutions,
 it remains a common problem for the end users.
@@ -94,7 +94,7 @@ idle latency as critical indicators of network quality.
 # Introduction
 
 For many years, a lack of responsiveness, variously called
-*lag*, *latency*, or *bufferbloat,* has been recognized
+lag, latency, or bufferbloat, has been recognized
 as an unfortunate, but common symptom in today's networks {{Bufferbloat}}.
 Solutions like fq_codel {{RFC8289}} or PIE {{RFC8033}} have been standardized
 and are to some extent widely implemented.
@@ -125,13 +125,13 @@ throughput, idle latency, and responsiveness.
 
 A word about the term "bufferbloat" - the undesirable latency
 that comes from a router or other network equipment
-buffering too much data. (1)
+buffering too much data.
 This document uses the term as a general description of bad latency,
 using more precise wording where warranted.
 
 "Latency" is a poor measure of responsiveness,
 since it can be hard for the general public to understand.
-The units are unfamiliar ("what *is* a millisecond?") and
+The units are unfamiliar ("what is a millisecond?") and
 counterintuitive ("100 msec - that sounds good -
 it's only a tenth of a second!").
 
@@ -349,8 +349,6 @@ single-digit millisecond range, yet the network's RTT increases under load
 to more than a hundred milliseconds, the intervals become much too low to
 accurately drive the algorithm.
 
-*(I'm not sure what this last caveat re: low RTT means in practice)*
-
 ## Measuring Responsiveness
 
 Once the network is in a consistent working conditions,
@@ -399,12 +397,6 @@ One could imagine a computation of the variance and confidence interval
 that would drive the number of measurements and balance the accuracy
 with the speed of the measurement itself.
 
-It is also an open topic to compare the RPM Test to
-other standard measurement tools such as
-DSLReports Speed Test (2)
-the Waveform Bufferbloat test (3);
-the command-line betterspeedtest.sh (4)
-
 # RPM Test Server API
 
 The RPM measurement uses standard protocols:
@@ -442,42 +434,23 @@ The server should discard the payload.
 
 4. A configuration URL that returns a JSON object with the information
 the client uses to run the test (sample below).
-All the fields are required except "test\_endpoint".
 Sample JSON:
 
    ~~~
    {
      "version": 1,
      "urls": {
-       "small_https_download_url": "https://example.apple.com/api/v1/small",
-       "large_https_download_url": "https://example.apple.com/api/v1/large",
-       "https_upload_url": "https://example.apple.com/api/v1/upload"
-     },
-     "test_endpoint": "hostname123.cdnprovider.com"
+       "small_https_download_url": "https://networkquality.example.com/api/v1/small",
+       "large_https_download_url": "https://networkquality.example.com/api/v1/large",
+       "https_upload_url": "https://networkquality.example.com/api/v1/upload"
+     }
    }
    ~~~
-
-If the "test\_endpoint" field is present, it is an indication that the
-Service provider/content distribution network (CDN) is able to "pin" all of
-the requests for a particular test run to a specific server.
-The client should look up the test_endpoint name and use the resulting
-address as the host for all the other URLs.
-A CDN should supply a test\_endpoint so that measurements use the same
-server/follow the same paths to avoid switching servers during a test run.
 
 The client begins the responsiveness measurement by querying for the JSON configuration.
 This supplies the URLs for creating the load bearing connections in
 the upstream and downstream direction as well as the small object
 for the latency measurements.
-
-# Reference Implementations
-
-The RPM Test has been implemented in the following settings:
-
-- macOS 15
-- iOS
-- Python?
-- Javascript?
 
 # Security Considerations
 
@@ -489,13 +462,5 @@ TBD
 
 # Acknowledgments
 
-- Dave Taht - Godfather of Bufferbloat research, Creator of CeroWrt,
-the testbed for testing fq_codel and solving Bufferbloat
-- Rich Brown - Editorial pass over this I-D
+We would like to thank Rich Brown for his editorial pass over this I-D.
 
-# References
-
-- (1) [Bufferbloat definition:](https://www.bufferbloat.net/projects/)
-- (2) [DSLReports Speed Test:](http://DSLReports.com/speedtest)
-- (3) [Waveform Bufferbloat Test;](https://www.waveform.com/tools/bufferbloat)
-- (4) [betterspeedtest.sh](https://github.com/richb-hanover/OpenWrtScripts/blob/master/betterspeedtest.sh)

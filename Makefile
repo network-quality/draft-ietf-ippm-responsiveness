@@ -4,6 +4,8 @@ kramdown-rfc2629 ?= kramdown-rfc2629
 drafts := draft-cpaasch-ippm-responsiveness.txt draft-cpaasch-ippm-responsiveness.html draft-cpaasch-ippm-responsiveness.pdf
 xml := $(drafts:.txt=.xml)
 
+all: $(drafts)
+
 %.txt: %.md
 	@echo "processing .md"
 	$(kramdown-rfc2629) $< > $(patsubst %.txt,%.xml, $@)
@@ -27,5 +29,3 @@ test:
 	spellchecker --plugins spell indefinite-article repeated-words syntax-urls --dictionaries dictionary.txt --files '*.md'  
 	@echo "linting the Markdown"
 	markdownlint -c .markdownlint.jsonc *.md
-
-all: $(drafts)
