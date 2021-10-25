@@ -1,9 +1,9 @@
 %!PS-Adobe-3.0
 %%BoundingBox: 24 24 571 818
 %%Title: Enscript Output
-%%For: Richard E. Brown
+%%For: Christoph Paasch
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Tue Sep  7 21:14:22 2021
+%%CreationDate: Mon Oct 25 15:45:29 2021
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -441,25 +441,25 @@ _S
 5 715 M
 (Intended status: Experimental                                S. Cheshire) s
 5 704 M
-(Expires: 11 March 2022                                        O. Shapira) s
+(Expires: April 28, 2022                                       O. Shapira) s
 5 693 M
 (                                                              Apple Inc.) s
 5 682 M
-(                                                        7 September 2021) s
+(                                                        October 25, 2021) s
 5 649 M
 (                Responsiveness under Working Conditions) s
 5 638 M
-(                  draft-cpaasch-ippm-responsiveness-00) s
+(                  draft-cpaasch-ippm-responsiveness-01) s
 5 616 M
 (Abstract) s
 5 594 M
-(   For many years, a lack of responsiveness, variously called _lag_,) s
+(   For many years, a lack of responsiveness, variously called lag,) s
 5 583 M
-(   _latency_, or _bufferbloat,_ has been recognized as an unfortunate,) s
+(   latency, or bufferbloat, has been recognized as an unfortunate, but) s
 5 572 M
-(   but common symptom in today's networks.  Even after a decade of work) s
+(   common symptom in today's networks.  Even after a decade of work on) s
 5 561 M
-(   on standardizing technical solutions, it remains a common problem for) s
+(   standardizing technical solutions, it remains a common problem for) s
 5 550 M
 (   the end users.) s
 5 528 M
@@ -511,7 +511,7 @@ _S
 5 220 M
 (   Drafts is at https://datatracker.ietf.org/drafts/current/.) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 1]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 1]) s
 _R
 S
 %%Page: (2) 2
@@ -526,7 +526,7 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
 (   Internet-Drafts are draft documents valid for a maximum of six months) s
 5 726 M
@@ -536,7 +536,7 @@ _S
 5 704 M
 (   material or to cite them other than as "work in progress.") s
 5 682 M
-(   This Internet-Draft will expire on 11 March 2022.) s
+(   This Internet-Draft will expire on April 28, 2022.) s
 5 660 M
 (Copyright Notice) s
 5 638 M
@@ -546,65 +546,63 @@ _S
 5 605 M
 (   This document is subject to BCP 78 and the IETF Trust's Legal) s
 5 594 M
-(   Provisions Relating to IETF Documents \(https://trustee.ietf.org/) s
+(   Provisions Relating to IETF Documents) s
 5 583 M
-(   license-info\) in effect on the date of publication of this document.) s
+(   \(https://trustee.ietf.org/license-info\) in effect on the date of) s
 5 572 M
-(   Please review these documents carefully, as they describe your rights) s
+(   publication of this document.  Please review these documents) s
 5 561 M
-(   and restrictions with respect to this document.  Code Components) s
+(   carefully, as they describe your rights and restrictions with respect) s
 5 550 M
-(   extracted from this document must include Simplified BSD License text) s
+(   to this document.  Code Components extracted from this document must) s
 5 539 M
-(   as described in Section 4.e of the Trust Legal Provisions and are) s
+(   include Simplified BSD License text as described in Section 4.e of) s
 5 528 M
-(   provided without warranty as described in the Simplified BSD License.) s
-5 506 M
+(   the Trust Legal Provisions and are provided without warranty as) s
+5 517 M
+(   described in the Simplified BSD License.) s
+5 495 M
 (Table of Contents) s
-5 484 M
-(   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3) s
 5 473 M
-(     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3) s
+(   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3) s
 5 462 M
-(   2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4) s
+(     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3) s
 5 451 M
-(   3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4) s
+(   2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4) s
 5 440 M
-(   4.  Measuring Responsiveness Under Working Conditions . . . . . .   5) s
+(   3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4) s
 5 429 M
-(     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   5) s
+(   4.  Measuring Responsiveness Under Working Conditions . . . . . .   5) s
 5 418 M
-(       4.1.1.  From single-flow to multi-flow  . . . . . . . . . . .   6) s
+(     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   5) s
 5 407 M
-(       4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   6) s
+(       4.1.1.  From single-flow to multi-flow  . . . . . . . . . . .   6) s
 5 396 M
-(       4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   6) s
+(       4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   6) s
 5 385 M
-(       4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   7) s
+(       4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   6) s
 5 374 M
-(     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   8) s
+(       4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   7) s
 5 363 M
-(       4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .   9) s
+(     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   8) s
 5 352 M
-(       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .   9) s
+(       4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .   8) s
 5 341 M
-(   5.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .   9) s
+(       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .   9) s
 5 330 M
-(   6.  Reference Implementations . . . . . . . . . . . . . . . . . .  10) s
+(   5.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .   9) s
 5 319 M
-(   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  11) s
+(   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  10) s
 5 308 M
-(   8.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11) s
+(   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10) s
 5 297 M
-(   9.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  11) s
+(   8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  10) s
 5 286 M
-(   10. References  . . . . . . . . . . . . . . . . . . . . . . . . .  11) s
+(   9.  Informative References  . . . . . . . . . . . . . . . . . . .  10) s
 5 275 M
-(   11. Informative References  . . . . . . . . . . . . . . . . . . .  11) s
-5 264 M
-(   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12) s
+(   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 2]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 2]) s
 _R
 S
 %%Page: (3) 3
@@ -619,17 +617,17 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
 (1.  Introduction) s
 5 715 M
-(   For many years, a lack of responsiveness, variously called _lag_,) s
+(   For many years, a lack of responsiveness, variously called lag,) s
 5 704 M
-(   _latency_, or _bufferbloat,_ has been recognized as an unfortunate,) s
+(   latency, or bufferbloat, has been recognized as an unfortunate, but) s
 5 693 M
-(   but common symptom in today's networks [Bufferbloat].  Solutions like) s
+(   common symptom in today's networks [Bufferbloat].  Solutions like) s
 5 682 M
-(   fq_codel [RFC8289] or PIE [RFC8033] have been standardized and are to) s
+(   fq_codel [RFC8290] or PIE [RFC8033] have been standardized and are to) s
 5 671 M
 (   some extent widely implemented.  Nevertheless, people still suffer) s
 5 660 M
@@ -671,7 +669,7 @@ _S
 5 407 M
 (   comes from a router or other network equipment buffering too much) s
 5 396 M
-(   data. \(1\) This document uses the term as a general description of bad) s
+(   data.  This document uses the term as a general description of bad) s
 5 385 M
 (   latency, using more precise wording where warranted.) s
 5 363 M
@@ -679,7 +677,7 @@ _S
 5 352 M
 (   for the general public to understand.  The units are unfamiliar) s
 5 341 M
-(   \("what _is_ a millisecond?"\) and counterintuitive \("100 msec - that) s
+(   \("what is a millisecond?"\) and counterintuitive \("100 msec - that) s
 5 330 M
 (   sounds good - it's only a tenth of a second!"\).) s
 5 308 M
@@ -697,7 +695,7 @@ _S
 5 242 M
 (   use for cars.) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 3]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 3]) s
 _R
 S
 %%Page: (4) 4
@@ -712,7 +710,7 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
 (   This document defines an algorithm for the "RPM Test" that explicitly) s
 5 726 M
@@ -790,7 +788,7 @@ _S
 5 220 M
 (       to completely different paths:) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 4]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 4]) s
 _R
 S
 %%Page: (5) 5
@@ -805,7 +803,7 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
 (       these could also be measured separately.) s
 5 715 M
@@ -815,63 +813,61 @@ _S
 5 693 M
 (       certain types of traffic.  The RPM Test must take into account) s
 5 682 M
-(       their effect on DNS-request, TCP-handshake, TLS-handshake, and) s
+(       their effect on DNS-request [RFC1035], TCP-handshake [RFC0793],) s
 5 671 M
-(       request/response.) s
+(       TLS-handshake, and request/response.) s
 5 649 M
 (   3.  The test result should be expressed in an intuitive, nontechnical) s
 5 638 M
-(       form.  People commonly look for a single "score" of their) s
-5 627 M
-(       performance.) s
-5 605 M
+(       form.) s
+5 616 M
 (   4.  Finally, to be useful to a wide audience, the measurement should) s
-5 594 M
+5 605 M
 (       finish within a short time frame.  Our target is 20 seconds.) s
-5 572 M
+5 583 M
 (4.  Measuring Responsiveness Under Working Conditions) s
-5 550 M
+5 561 M
 (   To make an accurate measurement, the algorithm must reliably put the) s
-5 539 M
+5 550 M
 (   network in a state that represents those "working conditions".  Once) s
-5 528 M
+5 539 M
 (   the network has reached that state, the algorithm can measure its) s
-5 517 M
+5 528 M
 (   responsiveness.  The following explains how the former and the latter) s
-5 506 M
+5 517 M
 (   are achieved.) s
-5 484 M
+5 495 M
 (4.1.  Working Conditions) s
-5 462 M
+5 473 M
 (   For the purpose of this methodology, typical "working conditions") s
-5 451 M
+5 462 M
 (   represent a state of the network in which the bottleneck node is) s
-5 440 M
+5 451 M
 (   experiencing ingress and egress flows similar to those created by) s
-5 429 M
+5 440 M
 (   humans in the typical day-to-day pattern.) s
-5 407 M
+5 418 M
 (   While a single HTTP transaction might briefly put a network into) s
-5 396 M
+5 407 M
 (   working conditions, making reliable measurements requires maintaining) s
-5 385 M
+5 396 M
 (   the state over sufficient time.) s
-5 363 M
+5 374 M
 (   The algorithm must also detect when the network is in a persistent) s
-5 352 M
+5 363 M
 (   working condition, also called "saturation".) s
-5 330 M
+5 341 M
 (   Desired properties of "working condition":) s
-5 308 M
-(   *  Should not waste traffic, since the person may be paying for it) s
+5 319 M
+(   o  Should not waste traffic, since the person may be paying for it) s
+5 297 M
+(   o  Should finish within a short time to avoid impacting other people) s
 5 286 M
-(   *  Should finish within a short time to avoid impacting other people) s
-5 275 M
 (      on the same network, to avoid varying network conditions, and not) s
-5 264 M
+5 275 M
 (      try the person's patience.) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 5]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 5]) s
 _R
 S
 %%Page: (6) 6
@@ -886,7 +882,7 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
 (4.1.1.  From single-flow to multi-flow) s
 5 715 M
@@ -932,21 +928,21 @@ _S
 5 451 M
 (   Test specifies parallel, concurrent measurements.) s
 5 429 M
-(   However, a number caveats come with measuring in parallel:) s
+(   However, a number of caveats come with measuring in parallel:) s
 5 407 M
-(   *  Half-duplex links may not permit simultaneous uplink and downlink) s
+(   o  Half-duplex links may not permit simultaneous uplink and downlink) s
 5 396 M
 (      traffic.  This means the test might not saturate both directions) s
 5 385 M
 (      at once.) s
 5 363 M
-(   *  Debuggability of the results becomes harder: During parallel) s
+(   o  Debuggability of the results becomes harder: During parallel) s
 5 352 M
 (      measurement it is impossible to differentiate whether the observed) s
 5 341 M
 (      latency happens in the uplink or the downlink direction.) s
 5 319 M
-(   *  Consequently, the test should have an option for sequential) s
+(   o  Consequently, the test should have an option for sequential) s
 5 308 M
 (      testing.) s
 5 286 M
@@ -960,7 +956,7 @@ _S
 5 231 M
 (   means that saturation has been reached.) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 6]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 6]) s
 _R
 S
 %%Page: (7) 7
@@ -975,7 +971,7 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
 (   Saturation has two criteria: a\) the load bearing connections are) s
 5 726 M
@@ -1031,21 +1027,21 @@ _S
 5 374 M
 (   The steps of the algorithm are:) s
 5 352 M
-(   *  Create 4 load bearing connections) s
+(   o  Create 4 load bearing connections) s
 5 330 M
-(   *  At each 1 second interval:) s
+(   o  At each 1 second interval:) s
 5 308 M
-(      -  Compute "instantaneous aggregate" goodput which is the number) s
+(      *  Compute "instantaneous aggregate" goodput which is the number) s
 5 297 M
 (         of bytes transferred within the last second.) s
 5 275 M
-(      -  Compute a moving average of the last 4 "instantaneous aggregate) s
+(      *  Compute a moving average of the last 4 "instantaneous aggregate) s
 5 264 M
 (         goodput" measurements) s
 5 242 M
-(      -  If moving average > "previous" moving average + 5%:) s
+(      *  If moving average > "previous" moving average + 5%:) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 7]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 7]) s
 _R
 S
 %%Page: (8) 8
@@ -1060,19 +1056,19 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
-(         o  Network did not yet reach saturation.  If no flows added) s
+(         +  Network did not yet reach saturation.  If no flows added) s
 5 726 M
 (            within the last 4 seconds, add 4 more flows) s
 5 704 M
-(      -  Else, network reached saturation for the current flow count.) s
+(      *  Else, network reached saturation for the current flow count.) s
 5 682 M
-(         o  If new flows added and for 4 seconds the moving average) s
+(         +  If new flows added and for 4 seconds the moving average) s
 5 671 M
 (            throughput did not change: network reached stable saturation) s
 5 649 M
-(         o  Else, add four more flows) s
+(         +  Else, add four more flows) s
 5 627 M
 (   Note: It is tempting to envision an initial base RTT measurement and) s
 5 616 M
@@ -1090,43 +1086,49 @@ _S
 5 550 M
 (   the algorithm.) s
 5 528 M
-(   _\(I'm not sure what this last caveat re: low RTT means in practice\)_) s
-5 506 M
 (4.2.  Measuring Responsiveness) s
-5 484 M
+5 506 M
 (   Once the network is in a consistent working conditions, the RPM Test) s
-5 473 M
+5 495 M
 (   must "probe" the network multiple times to measure its) s
-5 462 M
+5 484 M
 (   responsiveness.) s
-5 440 M
+5 462 M
 (   Each RPM Test probe measures:) s
-5 418 M
+5 440 M
 (   1.  The responsiveness of the different steps to create a new) s
-5 407 M
+5 429 M
 (       connection, all during working conditions.) s
-5 385 M
+5 407 M
 (       To do this, the test measures the time needed to make a DNS) s
-5 374 M
+5 396 M
 (       request, establish a TCP connection on port 443, establish a TLS) s
+5 385 M
+(       context using TLS1.3 [RFC8446], and send and receive a one-byte) s
+5 374 M
+(       object with a HTTP/2 GET request.  It repeats these steps) s
 5 363 M
-(       context using TLS1.3, and send and receive a one-byte object with) s
-5 352 M
-(       a HTTP2 GET request.  It repeats these steps multiple times for) s
+(       multiple times for accuracy.) s
 5 341 M
-(       accuracy.) s
-5 319 M
 (   2.  The responsiveness of the network and the client/server) s
-5 308 M
+5 330 M
 (       networking stacks for the load bearing connections themselves.) s
-5 286 M
+5 308 M
 (       To do this, the load bearing connections multiplex an HTTP/2 GET) s
-5 275 M
+5 297 M
 (       request for a one-byte object to get the end-to-end latency on) s
-5 264 M
+5 286 M
 (       the connections that are using the network at full speed.) s
+5 264 M
+(4.2.1.  Aggregating the Measurements) s
+5 242 M
+(   The algorithm produces sets of 5 times for each probe, namely: DNS) s
+5 231 M
+(   handshake, TCP handshake, TLS handshake, HTTP/2 request/response on) s
+5 220 M
+(   separate \(idle\) connections, HTTP/2 request/response on load bearing) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 8]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 8]) s
 _R
 S
 %%Page: (9) 9
@@ -1141,81 +1143,81 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
-(4.2.1.  Aggregating the Measurements) s
-5 715 M
-(   The algorithm produces sets of 5 times for each probe, namely: DNS) s
-5 704 M
-(   handshake, TCP handshake, TLS handshake, HTTP/2 request/response on) s
-5 693 M
-(   separate \(idle\) connections, HTTP/2 request/response on load bearing) s
-5 682 M
 (   connections.  This fine-grained data is useful, but not necessary for) s
-5 671 M
+5 726 M
 (   creating a useful metric.) s
-5 649 M
+5 704 M
 (   To create a single "Responsiveness" \(e.g., RPM\) number, this first) s
-5 638 M
+5 693 M
 (   iteration of the algorithm gives an equal weight to each of these) s
-5 627 M
+5 682 M
 (   values.  That is, it sums the five time values for each probe, and) s
-5 616 M
+5 671 M
 (   divides by the total number of probes to compute an average probe) s
-5 605 M
+5 660 M
 (   duration.  The reciprocal of this, normalized to 60 seconds, gives) s
-5 594 M
+5 649 M
 (   the Round-trips Per Minute \(RPM\).) s
-5 572 M
+5 627 M
 (4.2.2.  Statistical Confidence) s
-5 550 M
+5 605 M
 (   The number of probes necessary for statistical confidence is an open) s
-5 539 M
+5 594 M
 (   question.  One could imagine a computation of the variance and) s
-5 528 M
+5 583 M
 (   confidence interval that would drive the number of measurements and) s
-5 517 M
+5 572 M
 (   balance the accuracy with the speed of the measurement itself.) s
-5 495 M
-(   It is also an open topic to compare the RPM Test to other standard) s
-5 484 M
-(   measurement tools such as DSLReports Speed Test \(2\) the Waveform) s
-5 473 M
-(   Bufferbloat test \(3\); the command-line betterspeedtest.sh \(4\)) s
-5 451 M
+5 550 M
 (5.  RPM Test Server API) s
-5 429 M
+5 528 M
 (   The RPM measurement uses standard protocols: no new protocol is) s
-5 418 M
+5 517 M
 (   defined.) s
-5 396 M
+5 495 M
 (   Both the client and the server MUST support HTTP/2 over TLS 1.3.  The) s
-5 385 M
+5 484 M
 (   client MUST be able to send a GET request and a POST.  The server) s
-5 374 M
+5 473 M
 (   MUST be able to respond to both of these HTTP commands.  Further, the) s
-5 363 M
+5 462 M
 (   server endpoint MUST be accessible through a hostname that can be) s
-5 352 M
+5 451 M
 (   resolved through DNS.  The server MUST have the ability to provide) s
-5 341 M
+5 440 M
 (   content upon a GET request.  Both client and server SHOULD use loss-) s
-5 330 M
+5 429 M
 (   based congestion controls like Cubic.  The server MUST use a packet) s
-5 319 M
+5 418 M
 (   scheduling algorithm that minimizes internal queueing to avoid) s
-5 308 M
+5 407 M
 (   affecting the client's measurement.) s
-5 286 M
+5 385 M
 (   The server MUST respond to 4 URLs:) s
+5 363 M
+(   1.  A "small" URL/response: The server must respond with a status) s
+5 352 M
+(       code of 200 and 1 byte in the body.  The actual body content is) s
+5 341 M
+(       irrelevant.) s
+5 319 M
+(   2.  A "large" URL/response: The server must respond with a status) s
+5 308 M
+(       code of 200 and a body size of at least 8GB.  The body can be) s
+5 297 M
+(       bigger, and may need to grow as network speeds increases over) s
+5 286 M
+(       time.  The actual body content is irrelevant.  The client will) s
+5 275 M
+(       probably never completely download the object, but will instead) s
 5 264 M
-(1.  A "small" URL/response: The server must respond with a status) s
+(       close the connection after reaching working condition and making) s
 5 253 M
-(    code of 200 and 1 byte in the body.  The actual body content is) s
-5 242 M
-(    irrelevant.) s
+(       its measurements.) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                 [Page 9]) s
+(Paasch, et al.           Expires April 28, 2022                 [Page 9]) s
 _R
 S
 %%Page: (10) 10
@@ -1230,85 +1232,77 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
-(2.  A "large" URL/response: The server must respond with a status) s
+(   3.  An "upload" URL/response: The server must handle a POST request) s
 5 726 M
-(    code of 200 and a body size of at least 8GB.  The body can be) s
+(       with an arbitrary body size.  The server should discard the) s
 5 715 M
-(    bigger, and may need to grow as network speeds increases over) s
-5 704 M
-(    time.  The actual body content is irrelevant.  The client will) s
+(       payload.) s
 5 693 M
-(    probably never completely download the object, but will instead) s
+(   4.  A configuration URL that returns a JSON [RFC8259] object with the) s
 5 682 M
-(    close the connection after reaching working condition and making) s
+(       information the client uses to run the test \(sample below\).) s
 5 671 M
-(    its measurements.) s
-5 649 M
-(3.  An "upload" URL/response: The server must handle a POST request) s
-5 638 M
-(    with an arbitrary body size.  The server should discard the) s
+(       Sample JSON:) s
 5 627 M
-(    payload.) s
-5 605 M
-(4.  A configuration URL that returns a JSON object with the) s
-5 594 M
-(    information the client uses to run the test \(sample below\).  All) s
-5 583 M
-(    the fields are required except "test_endpoint".  Sample JSON:) s
-5 561 M
 ({) s
-5 550 M
+5 616 M
 (  "version": 1,) s
-5 539 M
+5 605 M
 (  "urls": {) s
-5 528 M
-(    "small_https_download_url": "https://example.apple.com/api/v1/small",) s
-5 517 M
-(    "large_https_download_url": "https://example.apple.com/api/v1/large",) s
-5 506 M
-(    "https_upload_url": "https://example.apple.com/api/v1/upload") s
-5 495 M
-(  },) s
-5 484 M
-(  "test_endpoint": "hostname123.cdnprovider.com") s
-5 473 M
+5 594 M
+(    "small_https_download_url": "https://networkquality.example.com/api/v1/small",) s
+5 583 M
+(    "large_https_download_url": "https://networkquality.example.com/api/v1/large",) s
+5 572 M
+(    "https_upload_url": "https://networkquality.example.com/api/v1/upload") s
+5 561 M
+(  }) s
+5 550 M
 (}) s
-5 451 M
-(   If the "test_endpoint" field is present, it is an indication that the) s
-5 440 M
-(   Service provider/content distribution network \(CDN\) is able to "pin") s
-5 429 M
-(   all of the requests for a particular test run to a specific server.) s
-5 418 M
-(   The client should look up the test_endpoint name and use the) s
-5 407 M
-(   resulting address as the host for all the other URLs.  A CDN should) s
-5 396 M
-(   supply a test_endpoint so that measurements use the same server/) s
-5 385 M
-(   follow the same paths to avoid switching servers during a test run.) s
-5 363 M
+5 528 M
 (   The client begins the responsiveness measurement by querying for the) s
-5 352 M
+5 517 M
 (   JSON configuration.  This supplies the URLs for creating the load) s
-5 341 M
+5 506 M
 (   bearing connections in the upstream and downstream direction as well) s
-5 330 M
+5 495 M
 (   as the small object for the latency measurements.) s
-5 308 M
-(6.  Reference Implementations) s
+5 473 M
+(6.  Security Considerations) s
+5 451 M
+(   TBD) s
+5 429 M
+(7.  IANA Considerations) s
+5 407 M
+(   TBD) s
+5 385 M
+(8.  Acknowledgments) s
+5 363 M
+(   We would like to thank Rich Brown for his editorial pass over this) s
+5 352 M
+(   I-D.  We also thank Erik Auerswald for his constructive feedback on) s
+5 341 M
+(   the I-D.) s
+5 319 M
+(9.  Informative References) s
+5 297 M
+(   [Bufferbloat]) s
 5 286 M
-(   The RPM Test has been implemented in the following settings:) s
+(              Gettys, J. and K. Nichols, "Bufferbloat: Dark Buffers in) s
+5 275 M
+(              the Internet", Communications of the ACM, Volume 55,) s
 5 264 M
-(   *  macOS 15) s
+(              Number 1 \(2012\) , n.d..) s
 5 242 M
-(   *  iOS) s
+(   [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7,) s
+5 231 M
+(              RFC 793, DOI 10.17487/RFC0793, September 1981,) s
 5 220 M
-(   *  Python?) s
+(              <https://www.rfc-editor.org/info/rfc793>.) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                [Page 10]) s
+(Paasch, et al.           Expires April 28, 2022                [Page 10]) s
 _R
 S
 %%Page: (11) 11
@@ -1323,71 +1317,75 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
-(   *  Javascript?) s
+(   [RFC1035]  Mockapetris, P., "Domain names - implementation and) s
+5 726 M
+(              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,) s
 5 715 M
-(7.  Security Considerations) s
+(              November 1987, <https://www.rfc-editor.org/info/rfc1035>.) s
 5 693 M
-(   TBD) s
-5 671 M
-(8.  IANA Considerations) s
-5 649 M
-(   TBD) s
-5 627 M
-(9.  Acknowledgments) s
-5 605 M
-(   *  Dave Taht - Godfather of Bufferbloat research, Creator of CeroWrt,) s
-5 594 M
-(      the testbed for testing fq_codel and solving Bufferbloat) s
-5 572 M
-(   *  Rich Brown - Editorial pass over this I-D) s
-5 550 M
-(10.  References) s
-5 528 M
-(   *  \(1\) Bufferbloat definition: \(https://www.bufferbloat.net/) s
-5 517 M
-(      projects/\)) s
-5 495 M
-(   *  \(2\) DSLReports Speed Test: \(http://DSLReports.com/speedtest\)) s
-5 473 M
-(   *  \(3\) Waveform Bufferbloat Test; \(https://www.waveform.com/tools/) s
-5 462 M
-(      bufferbloat\)) s
-5 440 M
-(   *  \(4\) betterspeedtest.sh \(https://github.com/richb-) s
-5 429 M
-(      hanover/OpenWrtScripts/blob/master/betterspeedtest.sh\)) s
-5 407 M
-(11.  Informative References) s
-5 385 M
-(   [Bufferbloat]) s
-5 374 M
-(              Gettys, J. and K. Nichols, "Bufferbloat: Dark Buffers in) s
-5 363 M
-(              the Internet", Communications of the ACM, Volume 55,) s
-5 352 M
-(              Number 1 \(2012\) , n.d..) s
-5 330 M
 (   [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,) s
-5 319 M
+5 682 M
 (              "Proportional Integral Controller Enhanced \(PIE\): A) s
-5 308 M
+5 671 M
 (              Lightweight Control Scheme to Address the Bufferbloat) s
-5 297 M
+5 660 M
 (              Problem", RFC 8033, DOI 10.17487/RFC8033, February 2017,) s
-5 286 M
+5 649 M
 (              <https://www.rfc-editor.org/info/rfc8033>.) s
-5 264 M
-(   [RFC8289]  Nichols, K., Jacobson, V., McGregor, A., Ed., and J.) s
-5 253 M
-(              Iyengar, Ed., "Controlled Delay Active Queue Management",) s
-5 242 M
-(              RFC 8289, DOI 10.17487/RFC8289, January 2018,) s
-5 231 M
-(              <https://www.rfc-editor.org/info/rfc8289>.) s
+5 627 M
+(   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation \(JSON\) Data) s
+5 616 M
+(              Interchange Format", STD 90, RFC 8259,) s
+5 605 M
+(              DOI 10.17487/RFC8259, December 2017,) s
+5 594 M
+(              <https://www.rfc-editor.org/info/rfc8259>.) s
+5 572 M
+(   [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,) s
+5 561 M
+(              J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler) s
+5 550 M
+(              and Active Queue Management Algorithm", RFC 8290,) s
+5 539 M
+(              DOI 10.17487/RFC8290, January 2018,) s
+5 528 M
+(              <https://www.rfc-editor.org/info/rfc8290>.) s
+5 506 M
+(   [RFC8446]  Rescorla, E., "The Transport Layer Security \(TLS\) Protocol) s
+5 495 M
+(              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,) s
+5 484 M
+(              <https://www.rfc-editor.org/info/rfc8446>.) s
+5 462 M
+(Authors' Addresses) s
+5 440 M
+(   Christoph Paasch) s
+5 429 M
+(   Apple Inc.) s
+5 418 M
+(   One Apple Park Way) s
+5 407 M
+(   Cupertino, California 95014) s
+5 396 M
+(   United States of America) s
+5 374 M
+(   Email: cpaasch@apple.com) s
+5 341 M
+(   Randall Meyer) s
+5 330 M
+(   Apple Inc.) s
+5 319 M
+(   One Apple Park Way) s
+5 308 M
+(   Cupertino, California 95014) s
+5 297 M
+(   United States of America) s
+5 275 M
+(   Email: rrm@apple.com) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                [Page 11]) s
+(Paasch, et al.           Expires April 28, 2022                [Page 11]) s
 _R
 S
 %%Page: (12) 12
@@ -1402,59 +1400,33 @@ _S
 /user_footer_p false def
 %%EndPageSetup
 5 770 M
-(Internet-Draft   Responsiveness under Working Conditions  September 2021) s
+(Internet-Draft   Responsiveness under Working Conditions    October 2021) s
 5 737 M
-(Authors' Addresses) s
-5 715 M
-(   Christoph Paasch) s
-5 704 M
-(   Apple Inc.) s
-5 693 M
-(   One Apple Park Way) s
-5 682 M
-(   Cupertino, California 95014,) s
-5 671 M
-(   United States of America) s
-5 649 M
-(   Email: cpaasch@apple.com) s
-5 616 M
-(   Randall Meyer) s
-5 605 M
-(   Apple Inc.) s
-5 594 M
-(   One Apple Park Way) s
-5 583 M
-(   Cupertino, California 95014,) s
-5 572 M
-(   United States of America) s
-5 550 M
-(   Email: rrm@apple.com) s
-5 517 M
 (   Stuart Cheshire) s
-5 506 M
+5 726 M
 (   Apple Inc.) s
-5 495 M
+5 715 M
 (   One Apple Park Way) s
-5 484 M
-(   Cupertino, California 95014,) s
-5 473 M
+5 704 M
+(   Cupertino, California 95014) s
+5 693 M
 (   United States of America) s
-5 451 M
+5 671 M
 (   Email: cheshire@apple.com) s
-5 418 M
+5 638 M
 (   Omer Shapira) s
-5 407 M
+5 627 M
 (   Apple Inc.) s
-5 396 M
+5 616 M
 (   One Apple Park Way) s
-5 385 M
-(   Cupertino, California 95014,) s
-5 374 M
+5 605 M
+(   Cupertino, California 95014) s
+5 594 M
 (   United States of America) s
-5 352 M
+5 572 M
 (   Email: oesh@apple.com) s
 5 176 M
-(Paasch, et al.            Expires 11 March 2022                [Page 12]) s
+(Paasch, et al.           Expires April 28, 2022                [Page 12]) s
 _R
 S
 %%Trailer

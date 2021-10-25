@@ -1,7 +1,7 @@
 ---
 title: Responsiveness under Working Conditions
 abbrev: Responsiveness under Working Conditions
-docname: draft-cpaasch-ippm-responsiveness-00
+docname: draft-cpaasch-ippm-responsiveness-01
 date:
 category: exp
 
@@ -57,8 +57,12 @@ informative:
      - ins: K. Nichols
     title: "Bufferbloat: Dark Buffers in the Internet"
     seriesinfo: Communications of the ACM, Volume 55, Number 1 (2012)
-  RFC8289:
+  RFC0793:
+  RFC1035:
+  RFC8290:
   RFC8033:
+  RFC8259:
+  RFC8446:
 
 --- abstract
 
@@ -96,7 +100,7 @@ idle latency as critical indicators of network quality.
 For many years, a lack of responsiveness, variously called
 lag, latency, or bufferbloat, has been recognized
 as an unfortunate, but common symptom in today's networks {{Bufferbloat}}.
-Solutions like fq_codel {{RFC8289}} or PIE {{RFC8033}} have been standardized
+Solutions like fq_codel {{RFC8290}} or PIE {{RFC8033}} have been standardized
 and are to some extent widely implemented.
 Nevertheless, people still suffer from bufferbloat.
 
@@ -199,10 +203,9 @@ these could also be measured separately.
 2. The Internet is marked by the deployment of countless middleboxes like
 transparent TCP proxies or traffic prioritization for certain types of traffic.
 The RPM Test must take into account their effect on
-DNS-request, TCP-handshake, TLS-handshake, and request/response.
+DNS-request {{RFC1035}}, TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
 
 3. The test result should be expressed in an intuitive, nontechnical form.
-People commonly look for a single "score" of their performance.
 
 4. Finally, to be useful to a wide audience, the measurement
 should finish within a short time frame.
@@ -237,8 +240,7 @@ Desired properties of "working condition":
 - Should not waste traffic, since the person may be paying for it
 - Should finish within a short time to
 avoid impacting other people on the same network,
-to avoid varying network conditions,
-and not try the person's patience.
+to avoid varying network conditions, and not try the person's patience.
 
 ### From single-flow to multi-flow
 
@@ -270,7 +272,7 @@ Given the desired test duration of 20 seconds,
 sequential uplink and downlink tests would only yield half the data.
 The RPM Test specifies parallel, concurrent measurements.
 
-However, a number caveats come with measuring in parallel:
+However, a number of caveats come with measuring in parallel:
 
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
 This means the test might not saturate both directions at once.
@@ -362,8 +364,8 @@ all during working conditions.
 
    To do this, the test measures the time needed to make a DNS request,
    establish a TCP connection on port 443,
-   establish a TLS context using TLS1.3, and
-   send and receive a one-byte object with a HTTP2 GET request.
+   establish a TLS context using TLS1.3 {{RFC8446}}, and
+   send and receive a one-byte object with a HTTP/2 GET request.
    It repeats these steps multiple times for accuracy.
 
 2. The responsiveness of the network and the client/server networking stacks
@@ -432,7 +434,7 @@ and making its measurements.
 The server must handle a POST request with an arbitrary body size.
 The server should discard the payload.
 
-4. A configuration URL that returns a JSON object with the information
+4. A configuration URL that returns a JSON {{RFC8259}} object with the information
 the client uses to run the test (sample below).
 Sample JSON:
 
@@ -463,4 +465,5 @@ TBD
 # Acknowledgments
 
 We would like to thank Rich Brown for his editorial pass over this I-D.
+We also thank Erik Auerswald for his constructive feedback on the I-D.
 
