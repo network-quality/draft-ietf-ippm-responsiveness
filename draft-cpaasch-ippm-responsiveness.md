@@ -341,7 +341,7 @@ If no flows added within the last 4 seconds, add 4 more flows
     did not change: network reached stable saturation
     - Else, add four more flows
 
-Note: It is tempting to envision an initial base RTT
+Note: It is tempting to envision an initial base round-trip time (RTT)
 measurement and adjust the intervals as a function of that RTT.
 However,
 experiments have shown that this makes the saturation detection extremely
