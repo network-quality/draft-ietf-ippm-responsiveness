@@ -237,7 +237,7 @@ persistent working condition, also called "saturation".
 
 Desired properties of "working condition":
 
-- Should not waste traffic, since the person may be paying for it
+- Should not waste traffic, because the person may be paying for it.
 - Should finish within a short time to
 avoid impacting other people on the same network,
 to avoid varying network conditions, and not try the person's patience.

@@ -395,14 +395,14 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.8.5 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.40.0 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Paasch, C., Meyer, R., Cheshire, S., and O. Shapira" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-cpaasch-ippm-responsiveness-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2021-10-25" />
-  <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
-  <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
+  <meta name="dct.issued" scheme="ISO8601" content="2021-11-26" />
+  <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users. Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem for tens of thousands of people. Our networks remain unresponsive, not from a lack of technical solutions, but rather a lack of awareness of the problem.  We believe that creating a tool whose measurement matches people&#8217;s every day experience will create the necessary awareness, and result in a demand for products that solve the problem. This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience especially when the network is fully loaded (&#8220;responsiveness under working conditions&#8221;.) The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality. " />
+  <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users. Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem for tens of thousands of people. Our networks remain unresponsive, not from a lack of technical solutions, but rather a lack of awareness of the problem.  We believe that creating a tool whose measurement matches people&#8217;s every day experience will create the necessary awareness, and result in a demand for products that solve the problem. This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience especially when the network is fully loaded (&#8220;responsiveness under working conditions&#8221;.) The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality. " />
 
 </head>
 
@@ -424,7 +424,7 @@
 <td class="right">S. Cheshire</td>
 </tr>
 <tr>
-<td class="left">Expires: April 28, 2022</td>
+<td class="left">Expires: May 30, 2022</td>
 <td class="right">O. Shapira</td>
 </tr>
 <tr>
@@ -433,7 +433,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">October 25, 2021</td>
+<td class="right">November 26, 2021</td>
 </tr>
 
     	
@@ -452,7 +452,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 28, 2022.</p>
+<p>This Internet-Draft will expire on May 30, 2022.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2021 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -552,7 +552,7 @@
 <p></p>
 
 <ul>
-<li>Should not waste traffic, since the person may be paying for it</li>
+<li>Should not waste traffic, because the person may be paying for it.</li>
 <li>Should finish within a short time to avoid impacting other people on the same network, to avoid varying network conditions, and not try the person&#8217;s patience.</li>
 </ul>
 <h1 id="rfc.section.4.1.1">
@@ -604,7 +604,7 @@
 </ul>
 </li>
 </ul>
-<p id="rfc.section.4.1.4.p.4">Note: It is tempting to envision an initial base RTT measurement and adjust the intervals as a function of that RTT.  However, experiments have shown that this makes the saturation detection extremely unstable in low RTT environments.  In the situation where the &#8220;unloaded&#8221; RTT is in the single-digit millisecond range, yet the network&#8217;s RTT increases under load to more than a hundred milliseconds, the intervals become much too low to accurately drive the algorithm.</p>
+<p id="rfc.section.4.1.4.p.4">Note: It is tempting to envision an initial base round-trip time (RTT) measurement and adjust the intervals as a function of that RTT.  However, experiments have shown that this makes the saturation detection extremely unstable in low RTT environments.  In the situation where the &#8220;unloaded&#8221; RTT is in the single-digit millisecond range, yet the network&#8217;s RTT increases under load to more than a hundred milliseconds, the intervals become much too low to accurately drive the algorithm.</p>
 <h1 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#measuring-responsiveness" id="measuring-responsiveness">Measuring Responsiveness</a>
 </h1>
