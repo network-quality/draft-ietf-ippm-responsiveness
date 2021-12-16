@@ -1,31 +1,35 @@
 xml2rfc ?= xml2rfc
 kramdown-rfc2629 ?= kramdown-rfc2629
 
-drafts := draft-cpaasch-ippm-responsiveness.txt draft-cpaasch-ippm-responsiveness.html draft-cpaasch-ippm-responsiveness.pdf
+drafts := draft-cpaasch-ippm-responsiveness.xml draft-cpaasch-ippm-responsiveness.txt draft-cpaasch-ippm-responsiveness.html draft-cpaasch-ippm-responsiveness.pdf
 xml := $(drafts:.txt=.xml)
 
 all: $(drafts)
 
-%.txt: %.md
-	@echo "processing .md"
-	$(kramdown-rfc2629) $< > $(patsubst %.txt,%.xml, $@)
-	$(xml2rfc) $(patsubst %.txt,%.xml, $@) > $@
+
+%.xml: %.md
+	@echo "Converting MD to XML"
+	$(kramdown-rfc2629) $< > $@
 
 %.txt: %.xml
-	@echo "creating .txt"
-	$(xml2rfc) $< $@
+	@echo "Converting XML to TXT"
+	$(xml2rfc) $< > $@
 
 %.html: %.xml
-	@echo "creating .html"
+	@echo "Converting XML to HTML"
 	$(xml2rfc) --html $<  > $@
 
 %.pdf: %.txt
-	@echo "creating PDF"
+	@echo "Converting TXT to PDF"
 	enscript -B -o $(patsubst %.txt,%.ps,$<) $<
 	ps2pdf $(patsubst %.txt,%.ps,$<)
 
-test:
-	@echo "spell checking"
+test: all
+	@echo "Spell checking"
 	spellchecker --plugins spell indefinite-article repeated-words syntax-urls --dictionaries dictionary.txt --files '*.md'  
 	@echo "linting the Markdown"
 	markdownlint -c .markdownlint.jsonc *.md
+
+clean:
+	@echo "Cleaning"
+	rm -rf $(drafts) *.ps
