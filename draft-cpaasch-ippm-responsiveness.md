@@ -142,8 +142,10 @@ it's only a tenth of a second!").
 Instead, we create the term "Responsiveness under working conditions"
 to make it clear that we are measuring all, not just idle, conditions,
 and use "round-trips per minute" as the metric.
-The values range from 50 (poor) to 3,000 (excellent),
-with the added advantage that "bigger is better."
+The advantage of round-trips per minute are two-fold: First, it allows for a metric
+that is "the higher the better". This kind of metric is often more intuitive for end-users.
+Second, the range of the values tends to be around the 4-digit integer range which
+is also a value easy to compare and read, again allowing for a more intuitive use.
 Finally, we abbreviate the measurement to "RPM", a wink to the
 "revolutions per minute" that we use for cars.
 

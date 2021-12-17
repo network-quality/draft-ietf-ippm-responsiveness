@@ -5,9 +5,9 @@
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
 Intended status: Experimental                                S. Cheshire
-Expires: May 30, 2022                                         O. Shapira
+Expires: June 20, 2022                                        O. Shapira
                                                               Apple Inc.
-                                                       November 26, 2021
+                                                       December 17, 2021
 
 
                 Responsiveness under Working Conditions
@@ -25,8 +25,7 @@ Abstract
    problems when somebody else at home is watching a 4K movie or
    uploading photos from their phone.  However, there is no technical
    reason for this to be the case.  In fact, various queue management
-   solutions (fq_codel, cake, PIE) have solved the problem for tens of
-   thousands of people.
+   solutions (fq_codel, cake, PIE) have solved the problem.
 
    Our networks remain unresponsive, not from a lack of technical
    solutions, but rather a lack of awareness of the problem.  We believe
@@ -53,9 +52,10 @@ Status of This Memo
 
 
 
-Paasch, et al.            Expires May 30, 2022                  [Page 1]
+
+Paasch, et al.            Expires June 20, 2022                 [Page 1]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,7 +63,7 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 30, 2022.
+   This Internet-Draft will expire on June 20, 2022.
 
 Copyright Notice
 
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Paasch, et al.            Expires May 30, 2022                  [Page 2]
+Paasch, et al.            Expires June 20, 2022                 [Page 2]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
 1.  Introduction
@@ -156,19 +156,22 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
    Instead, we create the term "Responsiveness under working conditions"
    to make it clear that we are measuring all, not just idle,
    conditions, and use "round-trips per minute" as the metric.  The
-   values range from 50 (poor) to 3,000 (excellent), with the added
-   advantage that "bigger is better."  Finally, we abbreviate the
-   measurement to "RPM", a wink to the "revolutions per minute" that we
-   use for cars.
+   advantage of round-trips per minute are two-fold: First, it allows
+   for a metric that is "the higher the better".  This kind of metric is
+   often more intuitive for end-users.  Second, the range of the values
+   tends to be around the 4-digit integer range which is also a value
+   easy to compare and read, again allowing for a more intuitive use.
 
 
 
 
-
-Paasch, et al.            Expires May 30, 2022                  [Page 3]
+Paasch, et al.            Expires June 20, 2022                 [Page 3]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
+
+   Finally, we abbreviate the measurement to "RPM", a wink to the
+   "revolutions per minute" that we use for cars.
 
    This document defines an algorithm for the "RPM Test" that explicitly
    measures responsiveness under working conditions.
@@ -214,18 +217,19 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
    1.  Today's Internet traffic primarily uses HTTP/2 over TLS.  Thus,
        the algorithm should use that protocol.
 
+
+
+
+
+Paasch, et al.            Expires June 20, 2022                 [Page 4]
+
+Internet-Draft   Responsiveness under Working Conditions   December 2021
+
+
        As a side note: other types of traffic are gaining in popularity
        (HTTP/3) and/or are already being used widely (RTP).  Traffic
        prioritization and QoS rules on the Internet may subject traffic
        to completely different paths:
-
-
-
-Paasch, et al.            Expires May 30, 2022                  [Page 4]
-
-Internet-Draft   Responsiveness under Working Conditions   November 2021
-
-
        these could also be measured separately.
 
    2.  The Internet is marked by the deployment of countless middleboxes
@@ -273,13 +277,9 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
 
 
 
-
-
-
-
-Paasch, et al.            Expires May 30, 2022                  [Page 5]
+Paasch, et al.            Expires June 20, 2022                 [Page 5]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
 4.1.1.  From single-flow to multi-flow
@@ -333,9 +333,9 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
 
 
 
-Paasch, et al.            Expires May 30, 2022                  [Page 6]
+Paasch, et al.            Expires June 20, 2022                 [Page 6]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
    Saturation has two criteria: a) the load bearing connections are
@@ -389,9 +389,9 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
 
 
 
-Paasch, et al.            Expires May 30, 2022                  [Page 7]
+Paasch, et al.            Expires June 20, 2022                 [Page 7]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
          +  Network did not yet reach saturation.  If no flows added
@@ -445,9 +445,9 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
 
 
 
-Paasch, et al.            Expires May 30, 2022                  [Page 8]
+Paasch, et al.            Expires June 20, 2022                 [Page 8]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
    connections.  This fine-grained data is useful, but not necessary for
@@ -501,9 +501,9 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
 
 
 
-Paasch, et al.            Expires May 30, 2022                  [Page 9]
+Paasch, et al.            Expires June 20, 2022                 [Page 9]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
    3.  An "upload" URL/response: The server must handle a POST request
@@ -557,9 +557,9 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
 
 
 
-Paasch, et al.            Expires May 30, 2022                 [Page 10]
+Paasch, et al.            Expires June 20, 2022                [Page 10]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
@@ -613,9 +613,9 @@ Authors' Addresses
 
 
 
-Paasch, et al.            Expires May 30, 2022                 [Page 11]
+Paasch, et al.            Expires June 20, 2022                [Page 11]
 
-Internet-Draft   Responsiveness under Working Conditions   November 2021
+Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
    Stuart Cheshire
@@ -669,4 +669,4 @@ Internet-Draft   Responsiveness under Working Conditions   November 2021
 
 
 
-Paasch, et al.            Expires May 30, 2022                 [Page 12]
+Paasch, et al.            Expires June 20, 2022                [Page 12]

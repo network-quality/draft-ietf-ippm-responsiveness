@@ -1,15 +1,16 @@
 %!PS-Adobe-3.0
-%%BoundingBox: 18 36 594 756
+%%BoundingBox: 24 24 571 818
 %%Title: Enscript Output
-%%Creator: GNU Enscript 1.6.5.90
-%%CreationDate: Fri Nov 26 10:43:55 2021
+%%For: Christoph Paasch
+%%Creator: GNU Enscript 1.6.6
+%%CreationDate: Fri Dec 17 14:44:13 2021
 %%Orientation: Portrait
 %%Pages: (atend)
-%%DocumentMedia: Letter 612 792 0 () ()
+%%DocumentMedia: A4 595 842 0 () ()
 %%DocumentNeededResources: (atend)
 %%EndComments
 %%BeginProlog
-%%BeginResource: procset Enscript-Prolog 1.6.5 90
+%%BeginResource: procset Enscript-Prolog 1.6 6
 %
 % Procedures.
 %
@@ -323,7 +324,7 @@
   /gs_languagelevel 1 def
 } ifelse
 %%EndResource
-%%BeginResource: procset Enscript-Encoding-88591 1.6.5 90
+%%BeginResource: procset Enscript-Encoding-88591 1.6 6
 /encoding_vector [
 /.notdef      	/.notdef      	/.notdef      	/.notdef      	
 /.notdef      	/.notdef      	/.notdef      	/.notdef      	
@@ -405,27 +406,27 @@
 % Pagedevice definitions:
 gs_languagelevel 1 gt {
   <<
-    /PageSize [612 792] 
+    /PageSize [595 842] 
   >> setpagedevice
 } if
-/d_page_w 576 def
-/d_page_h 720 def
+/d_page_w 547 def
+/d_page_h 794 def
 /d_header_x 0 def
-/d_header_y 720 def
-/d_header_w 576 def
+/d_header_y 794 def
+/d_header_w 547 def
 /d_header_h 0 def
 /d_footer_x 0 def
 /d_footer_y 0 def
-/d_footer_w 576 def
+/d_footer_w 547 def
 /d_footer_h 0 def
-/d_output_w 576 def
-/d_output_h 720 def
+/d_output_w 547 def
+/d_output_h 794 def
 /cols 1 def
 %%EndSetup
 %%Page: (1) 1
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 1 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -433,90 +434,88 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 663 M
+5 737 M
 (IP Performance Measurement                                     C. Paasch) s
-5 652 M
+5 726 M
 (Internet-Draft                                                  R. Meyer) s
-5 641 M
+5 715 M
 (Intended status: Experimental                                S. Cheshire) s
-5 630 M
-(Expires: May 30, 2022                                         O. Shapira) s
-5 619 M
+5 704 M
+(Expires: June 20, 2022                                        O. Shapira) s
+5 693 M
 (                                                              Apple Inc.) s
-5 608 M
-(                                                       November 26, 2021) s
-5 575 M
+5 682 M
+(                                                       December 17, 2021) s
+5 649 M
 (                Responsiveness under Working Conditions) s
-5 564 M
+5 638 M
 (                  draft-cpaasch-ippm-responsiveness-01) s
-5 542 M
+5 616 M
 (Abstract) s
-5 520 M
+5 594 M
 (   For many years, a lack of responsiveness, variously called lag,) s
-5 509 M
+5 583 M
 (   latency, or bufferbloat, has been recognized as an unfortunate, but) s
-5 498 M
+5 572 M
 (   common symptom in today's networks.  Even after a decade of work on) s
-5 487 M
+5 561 M
 (   standardizing technical solutions, it remains a common problem for) s
-5 476 M
+5 550 M
 (   the end users.) s
-5 454 M
+5 528 M
 (   Everyone "knows" that it is "normal" for a video conference to have) s
-5 443 M
+5 517 M
 (   problems when somebody else at home is watching a 4K movie or) s
-5 432 M
+5 506 M
 (   uploading photos from their phone.  However, there is no technical) s
-5 421 M
+5 495 M
 (   reason for this to be the case.  In fact, various queue management) s
-5 410 M
-(   solutions \(fq_codel, cake, PIE\) have solved the problem for tens of) s
-5 399 M
-(   thousands of people.) s
-5 377 M
+5 484 M
+(   solutions \(fq_codel, cake, PIE\) have solved the problem.) s
+5 462 M
 (   Our networks remain unresponsive, not from a lack of technical) s
-5 366 M
+5 451 M
 (   solutions, but rather a lack of awareness of the problem.  We believe) s
-5 355 M
+5 440 M
 (   that creating a tool whose measurement matches people's every day) s
-5 344 M
+5 429 M
 (   experience will create the necessary awareness, and result in a) s
-5 333 M
+5 418 M
 (   demand for products that solve the problem.) s
-5 311 M
+5 396 M
 (   This document specifies the "RPM Test" for measuring responsiveness.) s
-5 300 M
+5 385 M
 (   It uses common protocols and mechanisms to measure user experience) s
-5 289 M
+5 374 M
 (   especially when the network is fully loaded \("responsiveness under) s
-5 278 M
+5 363 M
 (   working conditions".\)  The measurement is expressed as "Round-trips) s
-5 267 M
+5 352 M
 (   Per Minute" \(RPM\) and should be included with throughput \(up and) s
-5 256 M
+5 341 M
 (   down\) and idle latency as critical indicators of network quality.) s
-5 234 M
+5 319 M
 (Status of This Memo) s
-5 212 M
+5 297 M
 (   This Internet-Draft is submitted in full conformance with the) s
-5 201 M
+5 286 M
 (   provisions of BCP 78 and BCP 79.) s
-5 179 M
+5 264 M
 (   Internet-Drafts are working documents of the Internet Engineering) s
-5 168 M
+5 253 M
 (   Task Force \(IETF\).  Note that other groups may also distribute) s
-5 157 M
+5 242 M
 (   working documents as Internet-Drafts.  The list of current Internet-) s
-5 146 M
+5 231 M
 (   Drafts is at https://datatracker.ietf.org/drafts/current/.) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 1]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 1]) s
 _R
 S
 %%Page: (2) 2
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 2 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -524,90 +523,90 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (   Internet-Drafts are draft documents valid for a maximum of six months) s
-5 652 M
+5 726 M
 (   and may be updated, replaced, or obsoleted by other documents at any) s
-5 641 M
+5 715 M
 (   time.  It is inappropriate to use Internet-Drafts as reference) s
-5 630 M
+5 704 M
 (   material or to cite them other than as "work in progress.") s
-5 608 M
-(   This Internet-Draft will expire on May 30, 2022.) s
-5 586 M
+5 682 M
+(   This Internet-Draft will expire on June 20, 2022.) s
+5 660 M
 (Copyright Notice) s
-5 564 M
+5 638 M
 (   Copyright \(c\) 2021 IETF Trust and the persons identified as the) s
-5 553 M
+5 627 M
 (   document authors.  All rights reserved.) s
-5 531 M
+5 605 M
 (   This document is subject to BCP 78 and the IETF Trust's Legal) s
-5 520 M
+5 594 M
 (   Provisions Relating to IETF Documents) s
-5 509 M
+5 583 M
 (   \(https://trustee.ietf.org/license-info\) in effect on the date of) s
-5 498 M
+5 572 M
 (   publication of this document.  Please review these documents) s
-5 487 M
+5 561 M
 (   carefully, as they describe your rights and restrictions with respect) s
-5 476 M
+5 550 M
 (   to this document.  Code Components extracted from this document must) s
-5 465 M
+5 539 M
 (   include Simplified BSD License text as described in Section 4.e of) s
-5 454 M
+5 528 M
 (   the Trust Legal Provisions and are provided without warranty as) s
-5 443 M
+5 517 M
 (   described in the Simplified BSD License.) s
-5 421 M
+5 495 M
 (Table of Contents) s
-5 399 M
+5 473 M
 (   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3) s
-5 388 M
+5 462 M
 (     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3) s
-5 377 M
+5 451 M
 (   2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4) s
-5 366 M
+5 440 M
 (   3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4) s
-5 355 M
+5 429 M
 (   4.  Measuring Responsiveness Under Working Conditions . . . . . .   5) s
-5 344 M
+5 418 M
 (     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   5) s
-5 333 M
+5 407 M
 (       4.1.1.  From single-flow to multi-flow  . . . . . . . . . . .   6) s
-5 322 M
+5 396 M
 (       4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   6) s
-5 311 M
+5 385 M
 (       4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   6) s
-5 300 M
+5 374 M
 (       4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   7) s
-5 289 M
+5 363 M
 (     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   8) s
-5 278 M
+5 352 M
 (       4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .   8) s
-5 267 M
+5 341 M
 (       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .   9) s
-5 256 M
+5 330 M
 (   5.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .   9) s
-5 245 M
+5 319 M
 (   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  10) s
-5 234 M
+5 308 M
 (   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10) s
-5 223 M
+5 297 M
 (   8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  10) s
-5 212 M
+5 286 M
 (   9.  Informative References  . . . . . . . . . . . . . . . . . . .  10) s
-5 201 M
+5 275 M
 (   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 2]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 2]) s
 _R
 S
 %%Page: (3) 3
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 3 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -615,92 +614,94 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (1.  Introduction) s
-5 641 M
+5 715 M
 (   For many years, a lack of responsiveness, variously called lag,) s
-5 630 M
+5 704 M
 (   latency, or bufferbloat, has been recognized as an unfortunate, but) s
-5 619 M
+5 693 M
 (   common symptom in today's networks [Bufferbloat].  Solutions like) s
-5 608 M
+5 682 M
 (   fq_codel [RFC8290] or PIE [RFC8033] have been standardized and are to) s
-5 597 M
+5 671 M
 (   some extent widely implemented.  Nevertheless, people still suffer) s
-5 586 M
+5 660 M
 (   from bufferbloat.) s
-5 564 M
+5 638 M
 (   Although significant, the impact on user experience can be transitory) s
-5 553 M
+5 627 M
 (   - that is, its effect is not always present.  Whenever a network is) s
-5 542 M
+5 616 M
 (   actively being used at its full capacity, buffers can fill up and) s
-5 531 M
+5 605 M
 (   create latency for traffic.  The duration of those full buffers may) s
-5 520 M
+5 594 M
 (   be brief: a medium-sized file transfer, like an email attachment or) s
-5 509 M
+5 583 M
 (   uploading photos, can create bursts of latency spikes.  An example of) s
-5 498 M
+5 572 M
 (   this is lag occurring during a videoconference, where a connection is) s
-5 487 M
+5 561 M
 (   briefly shown as unstable.) s
-5 465 M
+5 539 M
 (   These short-lived disruptions make it hard to narrow down the cause.) s
-5 454 M
+5 528 M
 (   We believe that it is necessary to create a standardized way to) s
-5 443 M
+5 517 M
 (   measure and express responsiveness.) s
-5 421 M
+5 495 M
 (   Existing network measurement tools could incorporate a responsiveness) s
-5 410 M
+5 484 M
 (   measurement into their set of metrics.  Doing so would also raise the) s
-5 399 M
+5 473 M
 (   awareness of the problem and make the standard "network quality) s
-5 388 M
+5 462 M
 (   measures" of throughput, idle latency, and responsiveness.) s
-5 366 M
+5 440 M
 (1.1.  Terminology) s
-5 344 M
+5 418 M
 (   A word about the term "bufferbloat" - the undesirable latency that) s
-5 333 M
+5 407 M
 (   comes from a router or other network equipment buffering too much) s
-5 322 M
+5 396 M
 (   data.  This document uses the term as a general description of bad) s
-5 311 M
+5 385 M
 (   latency, using more precise wording where warranted.) s
-5 289 M
+5 363 M
 (   "Latency" is a poor measure of responsiveness, since it can be hard) s
-5 278 M
+5 352 M
 (   for the general public to understand.  The units are unfamiliar) s
-5 267 M
+5 341 M
 (   \("what is a millisecond?"\) and counterintuitive \("100 msec - that) s
-5 256 M
+5 330 M
 (   sounds good - it's only a tenth of a second!"\).) s
-5 234 M
+5 308 M
 (   Instead, we create the term "Responsiveness under working conditions") s
-5 223 M
+5 297 M
 (   to make it clear that we are measuring all, not just idle,) s
-5 212 M
+5 286 M
 (   conditions, and use "round-trips per minute" as the metric.  The) s
-5 201 M
-(   values range from 50 \(poor\) to 3,000 \(excellent\), with the added) s
-5 190 M
-(   advantage that "bigger is better."  Finally, we abbreviate the) s
-5 179 M
-(   measurement to "RPM", a wink to the "revolutions per minute" that we) s
-5 168 M
-(   use for cars.) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 3]) s
+5 275 M
+(   advantage of round-trips per minute are two-fold: First, it allows) s
+5 264 M
+(   for a metric that is "the higher the better".  This kind of metric is) s
+5 253 M
+(   often more intuitive for end-users.  Second, the range of the values) s
+5 242 M
+(   tends to be around the 4-digit integer range which is also a value) s
+5 231 M
+(   easy to compare and read, again allowing for a more intuitive use.) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 3]) s
 _R
 S
 %%Page: (4) 4
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 4 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -708,92 +709,88 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
+(   Finally, we abbreviate the measurement to "RPM", a wink to the) s
+5 726 M
+(   "revolutions per minute" that we use for cars.) s
+5 704 M
 (   This document defines an algorithm for the "RPM Test" that explicitly) s
-5 652 M
+5 693 M
 (   measures responsiveness under working conditions.) s
-5 630 M
+5 671 M
 (2.  Design Constraints) s
-5 608 M
+5 649 M
 (   There are many challenges around measurements on the Internet.  They) s
-5 597 M
+5 638 M
 (   include the dynamic nature of the Internet, the diverse nature of the) s
-5 586 M
+5 627 M
 (   traffic, the large number of devices that affect traffic, and the) s
-5 575 M
+5 616 M
 (   difficulty of attaining appropriate measurement conditions.) s
-5 553 M
+5 594 M
 (   Internet paths are changing all the time.  Daily fluctuations in the) s
-5 542 M
+5 583 M
 (   demand make the bottlenecks ebb and flow.  To minimize the) s
-5 531 M
+5 572 M
 (   variability of routing changes, it's best to keep the test duration) s
-5 520 M
+5 561 M
 (   relatively short.) s
-5 498 M
+5 539 M
 (   TCP and UDP traffic, or traffic on ports 80 and 443, may take) s
-5 487 M
+5 528 M
 (   significantly different paths on the Internet and be subject to) s
-5 476 M
+5 517 M
 (   entirely different Quality of Service \(QoS\) treatment.  A good test) s
-5 465 M
+5 506 M
 (   will use standard transport layer traffic - typical for people's use) s
-5 454 M
+5 495 M
 (   of the network - that is subject to the transport's congestion) s
-5 443 M
+5 484 M
 (   control that might reduce the traffic's rate and thus its buffering) s
-5 432 M
+5 473 M
 (   in the network.) s
-5 410 M
+5 451 M
 (   Traditionally, one thinks of bufferbloat happening on the routers and) s
-5 399 M
+5 440 M
 (   switches of the Internet.  However, the networking stacks of the) s
-5 388 M
+5 429 M
 (   clients and servers can have huge buffers.  Data sitting in TCP) s
-5 377 M
+5 418 M
 (   sockets or waiting for the application to send or read causes) s
-5 366 M
+5 407 M
 (   artificial latency, and affects user experience the same way as) s
-5 355 M
+5 396 M
 (   "traditional" bufferbloat.) s
-5 333 M
+5 374 M
 (   Finally, it is important to note that queueing only happens behind a) s
-5 322 M
+5 363 M
 (   slow "bottleneck" link in the network, and only occurs when) s
-5 311 M
+5 352 M
 (   sufficient traffic is present.  The RPM Test must ensure that buffers) s
-5 300 M
+5 341 M
 (   are actually full for a sustained period, and only then make repeated) s
-5 289 M
+5 330 M
 (   latency measurements in this particular state.) s
-5 267 M
+5 308 M
 (3.  Goals) s
-5 245 M
+5 286 M
 (   The algorithm described here defines an RPM Test that serves as a) s
-5 234 M
+5 275 M
 (   good proxy for user experience.  This means:) s
-5 212 M
+5 253 M
 (   1.  Today's Internet traffic primarily uses HTTP/2 over TLS.  Thus,) s
-5 201 M
+5 242 M
 (       the algorithm should use that protocol.) s
-5 179 M
-(       As a side note: other types of traffic are gaining in popularity) s
-5 168 M
-(       \(HTTP/3\) and/or are already being used widely \(RTP\).  Traffic) s
-5 157 M
-(       prioritization and QoS rules on the Internet may subject traffic) s
-5 146 M
-(       to completely different paths:) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 4]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 4]) s
 _R
 S
 %%Page: (5) 5
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 5 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -801,78 +798,86 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
+(       As a side note: other types of traffic are gaining in popularity) s
+5 726 M
+(       \(HTTP/3\) and/or are already being used widely \(RTP\).  Traffic) s
+5 715 M
+(       prioritization and QoS rules on the Internet may subject traffic) s
+5 704 M
+(       to completely different paths:) s
+5 693 M
 (       these could also be measured separately.) s
-5 641 M
+5 671 M
 (   2.  The Internet is marked by the deployment of countless middleboxes) s
-5 630 M
+5 660 M
 (       like transparent TCP proxies or traffic prioritization for) s
-5 619 M
+5 649 M
 (       certain types of traffic.  The RPM Test must take into account) s
-5 608 M
+5 638 M
 (       their effect on DNS-request [RFC1035], TCP-handshake [RFC0793],) s
-5 597 M
+5 627 M
 (       TLS-handshake, and request/response.) s
-5 575 M
+5 605 M
 (   3.  The test result should be expressed in an intuitive, nontechnical) s
-5 564 M
+5 594 M
 (       form.) s
-5 542 M
+5 572 M
 (   4.  Finally, to be useful to a wide audience, the measurement should) s
-5 531 M
+5 561 M
 (       finish within a short time frame.  Our target is 20 seconds.) s
-5 509 M
+5 539 M
 (4.  Measuring Responsiveness Under Working Conditions) s
-5 487 M
+5 517 M
 (   To make an accurate measurement, the algorithm must reliably put the) s
-5 476 M
+5 506 M
 (   network in a state that represents those "working conditions".  Once) s
-5 465 M
+5 495 M
 (   the network has reached that state, the algorithm can measure its) s
-5 454 M
+5 484 M
 (   responsiveness.  The following explains how the former and the latter) s
-5 443 M
+5 473 M
 (   are achieved.) s
-5 421 M
+5 451 M
 (4.1.  Working Conditions) s
-5 399 M
+5 429 M
 (   For the purpose of this methodology, typical "working conditions") s
-5 388 M
+5 418 M
 (   represent a state of the network in which the bottleneck node is) s
-5 377 M
+5 407 M
 (   experiencing ingress and egress flows similar to those created by) s
-5 366 M
+5 396 M
 (   humans in the typical day-to-day pattern.) s
-5 344 M
+5 374 M
 (   While a single HTTP transaction might briefly put a network into) s
-5 333 M
+5 363 M
 (   working conditions, making reliable measurements requires maintaining) s
-5 322 M
+5 352 M
 (   the state over sufficient time.) s
-5 300 M
+5 330 M
 (   The algorithm must also detect when the network is in a persistent) s
-5 289 M
+5 319 M
 (   working condition, also called "saturation".) s
-5 267 M
+5 297 M
 (   Desired properties of "working condition":) s
-5 245 M
+5 275 M
 (   o  Should not waste traffic, because the person may be paying for it.) s
-5 223 M
+5 253 M
 (   o  Should finish within a short time to avoid impacting other people) s
-5 212 M
+5 242 M
 (      on the same network, to avoid varying network conditions, and not) s
-5 201 M
+5 231 M
 (      try the person's patience.) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 5]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 5]) s
 _R
 S
 %%Page: (6) 6
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 6 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -880,88 +885,88 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (4.1.1.  From single-flow to multi-flow) s
-5 641 M
+5 715 M
 (   A single TCP connection may not be sufficient to saturate a path.) s
-5 630 M
+5 704 M
 (   For example, the 4MB constraints on TCP window size constraints may) s
-5 619 M
+5 693 M
 (   not fill the pipe.  Additionally, traditional loss-based TCP) s
-5 608 M
+5 682 M
 (   congestion control algorithms react aggressively to packet loss by) s
-5 597 M
+5 671 M
 (   reducing the congestion window.  This reaction \(intended by the) s
-5 586 M
+5 660 M
 (   protocol design\) decreases the queueing within the network, making it) s
-5 575 M
+5 649 M
 (   hard to reach saturation.) s
-5 553 M
+5 627 M
 (   The goal of the RPM Test is to keep the network as busy as possible) s
-5 542 M
+5 616 M
 (   in a sustained and persistent way.  It uses multiple TCP connections) s
-5 531 M
+5 605 M
 (   and gradually adds more TCP flows until saturation is reached.) s
-5 509 M
+5 583 M
 (4.1.2.  Parallel vs Sequential Uplink and Downlink) s
-5 487 M
+5 561 M
 (   Poor responsiveness can be caused by queues in either \(or both\) the) s
-5 476 M
+5 550 M
 (   upstream and the downstream direction.  Furthermore, both paths may) s
-5 465 M
+5 539 M
 (   differ significantly due to access link conditions \(e.g., 5G) s
-5 454 M
+5 528 M
 (   downstream and LTE upstream\) or the routing changes within the ISPs.) s
-5 443 M
+5 517 M
 (   To measure responsiveness under working conditions, the algorithm) s
-5 432 M
+5 506 M
 (   must saturate both directions.) s
-5 410 M
+5 484 M
 (   Measuring in parallel achieves more data samples for a given) s
-5 399 M
+5 473 M
 (   duration.  Given the desired test duration of 20 seconds, sequential) s
-5 388 M
+5 462 M
 (   uplink and downlink tests would only yield half the data.  The RPM) s
-5 377 M
+5 451 M
 (   Test specifies parallel, concurrent measurements.) s
-5 355 M
+5 429 M
 (   However, a number of caveats come with measuring in parallel:) s
-5 333 M
+5 407 M
 (   o  Half-duplex links may not permit simultaneous uplink and downlink) s
-5 322 M
+5 396 M
 (      traffic.  This means the test might not saturate both directions) s
-5 311 M
+5 385 M
 (      at once.) s
-5 289 M
+5 363 M
 (   o  Debuggability of the results becomes harder: During parallel) s
-5 278 M
+5 352 M
 (      measurement it is impossible to differentiate whether the observed) s
-5 267 M
+5 341 M
 (      latency happens in the uplink or the downlink direction.) s
-5 245 M
+5 319 M
 (   o  Consequently, the test should have an option for sequential) s
-5 234 M
+5 308 M
 (      testing.) s
-5 212 M
+5 286 M
 (4.1.3.  Reaching saturation) s
-5 190 M
+5 264 M
 (   The RPM Test gradually increases the number of TCP connections and) s
-5 179 M
+5 253 M
 (   measures "goodput" - the sum of actual data transferred across all) s
-5 168 M
+5 242 M
 (   connections in a unit of time.  When the goodput stops increasing, it) s
-5 157 M
+5 231 M
 (   means that saturation has been reached.) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 6]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 6]) s
 _R
 S
 %%Page: (7) 7
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 7 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -969,84 +974,84 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (   Saturation has two criteria: a\) the load bearing connections are) s
-5 652 M
+5 726 M
 (   utilizing all the capacity of the bottleneck, b\) the buffers in the) s
-5 641 M
+5 715 M
 (   bottleneck are completely filled.) s
-5 619 M
+5 693 M
 (   The algorithm notes that throughput gradually increases until TCP) s
-5 608 M
+5 682 M
 (   connections complete their TCP slow-start phase.  At that point,) s
-5 597 M
+5 671 M
 (   throughput eventually stalls usually due to receive window) s
-5 586 M
+5 660 M
 (   limitations.  The only means to further increase throughput is by) s
-5 575 M
+5 649 M
 (   adding more TCP connections to the pool of load bearing connections.) s
-5 564 M
+5 638 M
 (   If new connections leave the throughput the same, saturation has been) s
-5 553 M
+5 627 M
 (   reached and - more importantly - the working condition is stable.) s
-5 531 M
+5 605 M
 (   Filling buffers at the bottleneck depends on the congestion control) s
-5 520 M
+5 594 M
 (   deployed on the sender side.  Congestion control algorithms like BBR) s
-5 509 M
+5 583 M
 (   may reach high throughput without causing queueing because the) s
-5 498 M
+5 572 M
 (   bandwidth detection portion of BBR effectively seeks the bottleneck) s
-5 487 M
+5 561 M
 (   capacity.) s
-5 465 M
+5 539 M
 (   RPM Test clients and servers should use loss-based congestion) s
-5 454 M
+5 528 M
 (   controls like Cubic to fill queues reliably.) s
-5 432 M
+5 506 M
 (   The RPM Test detects saturation when the observed goodput is not) s
-5 421 M
+5 495 M
 (   increasing even as connections are being added, or it detects packet) s
-5 410 M
+5 484 M
 (   loss or ECN marks signaling congestion or a full buffer of the) s
-5 399 M
+5 473 M
 (   bottleneck link.) s
-5 377 M
+5 451 M
 (4.1.4.  Final "Working Conditions" Algorithm) s
-5 355 M
+5 429 M
 (   The following algorithm reaches working conditions \(saturation\) of a) s
-5 344 M
+5 418 M
 (   network by using HTTP/2 upload \(POST\) or download \(GET\) requests of) s
-5 333 M
+5 407 M
 (   infinitely large files.  The algorithm is the same for upload and) s
-5 322 M
+5 396 M
 (   download and uses the same term "load bearing connection" for each.) s
-5 300 M
+5 374 M
 (   The steps of the algorithm are:) s
-5 278 M
+5 352 M
 (   o  Create 4 load bearing connections) s
-5 256 M
+5 330 M
 (   o  At each 1 second interval:) s
-5 234 M
+5 308 M
 (      *  Compute "instantaneous aggregate" goodput which is the number) s
-5 223 M
+5 297 M
 (         of bytes transferred within the last second.) s
-5 201 M
+5 275 M
 (      *  Compute a moving average of the last 4 "instantaneous aggregate) s
-5 190 M
+5 264 M
 (         goodput" measurements) s
-5 168 M
+5 242 M
 (      *  If moving average > "previous" moving average + 5%:) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 7]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 7]) s
 _R
 S
 %%Page: (8) 8
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 8 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -1054,86 +1059,86 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (         +  Network did not yet reach saturation.  If no flows added) s
-5 652 M
+5 726 M
 (            within the last 4 seconds, add 4 more flows) s
-5 630 M
+5 704 M
 (      *  Else, network reached saturation for the current flow count.) s
-5 608 M
+5 682 M
 (         +  If new flows added and for 4 seconds the moving average) s
-5 597 M
+5 671 M
 (            throughput did not change: network reached stable saturation) s
-5 575 M
+5 649 M
 (         +  Else, add four more flows) s
-5 553 M
+5 627 M
 (   Note: It is tempting to envision an initial base round-trip time) s
-5 542 M
+5 616 M
 (   \(RTT\) measurement and adjust the intervals as a function of that RTT.) s
-5 531 M
+5 605 M
 (   However, experiments have shown that this makes the saturation) s
-5 520 M
+5 594 M
 (   detection extremely unstable in low RTT environments.  In the) s
-5 509 M
+5 583 M
 (   situation where the "unloaded" RTT is in the single-digit millisecond) s
-5 498 M
+5 572 M
 (   range, yet the network's RTT increases under load to more than a) s
-5 487 M
+5 561 M
 (   hundred milliseconds, the intervals become much too low to accurately) s
-5 476 M
+5 550 M
 (   drive the algorithm.) s
-5 454 M
+5 528 M
 (4.2.  Measuring Responsiveness) s
-5 432 M
+5 506 M
 (   Once the network is in a consistent working conditions, the RPM Test) s
-5 421 M
+5 495 M
 (   must "probe" the network multiple times to measure its) s
-5 410 M
+5 484 M
 (   responsiveness.) s
-5 388 M
+5 462 M
 (   Each RPM Test probe measures:) s
-5 366 M
+5 440 M
 (   1.  The responsiveness of the different steps to create a new) s
-5 355 M
+5 429 M
 (       connection, all during working conditions.) s
-5 333 M
+5 407 M
 (       To do this, the test measures the time needed to make a DNS) s
-5 322 M
+5 396 M
 (       request, establish a TCP connection on port 443, establish a TLS) s
-5 311 M
+5 385 M
 (       context using TLS1.3 [RFC8446], and send and receive a one-byte) s
-5 300 M
+5 374 M
 (       object with a HTTP/2 GET request.  It repeats these steps) s
-5 289 M
+5 363 M
 (       multiple times for accuracy.) s
-5 267 M
+5 341 M
 (   2.  The responsiveness of the network and the client/server) s
-5 256 M
+5 330 M
 (       networking stacks for the load bearing connections themselves.) s
-5 234 M
+5 308 M
 (       To do this, the load bearing connections multiplex an HTTP/2 GET) s
-5 223 M
+5 297 M
 (       request for a one-byte object to get the end-to-end latency on) s
-5 212 M
+5 286 M
 (       the connections that are using the network at full speed.) s
-5 190 M
+5 264 M
 (4.2.1.  Aggregating the Measurements) s
-5 168 M
+5 242 M
 (   The algorithm produces sets of 5 times for each probe, namely: DNS) s
-5 157 M
+5 231 M
 (   handshake, TCP handshake, TLS handshake, HTTP/2 request/response on) s
-5 146 M
+5 220 M
 (   separate \(idle\) connections, HTTP/2 request/response on load bearing) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 8]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 8]) s
 _R
 S
 %%Page: (9) 9
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 9 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -1141,88 +1146,88 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (   connections.  This fine-grained data is useful, but not necessary for) s
-5 652 M
+5 726 M
 (   creating a useful metric.) s
-5 630 M
+5 704 M
 (   To create a single "Responsiveness" \(e.g., RPM\) number, this first) s
-5 619 M
+5 693 M
 (   iteration of the algorithm gives an equal weight to each of these) s
-5 608 M
+5 682 M
 (   values.  That is, it sums the five time values for each probe, and) s
-5 597 M
+5 671 M
 (   divides by the total number of probes to compute an average probe) s
-5 586 M
+5 660 M
 (   duration.  The reciprocal of this, normalized to 60 seconds, gives) s
-5 575 M
+5 649 M
 (   the Round-trips Per Minute \(RPM\).) s
-5 553 M
+5 627 M
 (4.2.2.  Statistical Confidence) s
-5 531 M
+5 605 M
 (   The number of probes necessary for statistical confidence is an open) s
-5 520 M
+5 594 M
 (   question.  One could imagine a computation of the variance and) s
-5 509 M
+5 583 M
 (   confidence interval that would drive the number of measurements and) s
-5 498 M
+5 572 M
 (   balance the accuracy with the speed of the measurement itself.) s
-5 476 M
+5 550 M
 (5.  RPM Test Server API) s
-5 454 M
+5 528 M
 (   The RPM measurement uses standard protocols: no new protocol is) s
-5 443 M
+5 517 M
 (   defined.) s
-5 421 M
+5 495 M
 (   Both the client and the server MUST support HTTP/2 over TLS 1.3.  The) s
-5 410 M
+5 484 M
 (   client MUST be able to send a GET request and a POST.  The server) s
-5 399 M
+5 473 M
 (   MUST be able to respond to both of these HTTP commands.  Further, the) s
-5 388 M
+5 462 M
 (   server endpoint MUST be accessible through a hostname that can be) s
-5 377 M
+5 451 M
 (   resolved through DNS.  The server MUST have the ability to provide) s
-5 366 M
+5 440 M
 (   content upon a GET request.  Both client and server SHOULD use loss-) s
-5 355 M
+5 429 M
 (   based congestion controls like Cubic.  The server MUST use a packet) s
-5 344 M
+5 418 M
 (   scheduling algorithm that minimizes internal queueing to avoid) s
-5 333 M
+5 407 M
 (   affecting the client's measurement.) s
-5 311 M
+5 385 M
 (   The server MUST respond to 4 URLs:) s
-5 289 M
+5 363 M
 (   1.  A "small" URL/response: The server must respond with a status) s
-5 278 M
+5 352 M
 (       code of 200 and 1 byte in the body.  The actual body content is) s
-5 267 M
+5 341 M
 (       irrelevant.) s
-5 245 M
+5 319 M
 (   2.  A "large" URL/response: The server must respond with a status) s
-5 234 M
+5 308 M
 (       code of 200 and a body size of at least 8GB.  The body can be) s
-5 223 M
+5 297 M
 (       bigger, and may need to grow as network speeds increases over) s
-5 212 M
+5 286 M
 (       time.  The actual body content is irrelevant.  The client will) s
-5 201 M
+5 275 M
 (       probably never completely download the object, but will instead) s
-5 190 M
+5 264 M
 (       close the connection after reaching working condition and making) s
-5 179 M
+5 253 M
 (       its measurements.) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                  [Page 9]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                 [Page 9]) s
 _R
 S
 %%Page: (10) 10
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 10 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -1230,84 +1235,84 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (   3.  An "upload" URL/response: The server must handle a POST request) s
-5 652 M
+5 726 M
 (       with an arbitrary body size.  The server should discard the) s
-5 641 M
+5 715 M
 (       payload.) s
-5 619 M
+5 693 M
 (   4.  A configuration URL that returns a JSON [RFC8259] object with the) s
-5 608 M
+5 682 M
 (       information the client uses to run the test \(sample below\).) s
-5 597 M
+5 671 M
 (       Sample JSON:) s
-5 553 M
+5 627 M
 ({) s
-5 542 M
+5 616 M
 (  "version": 1,) s
-5 531 M
+5 605 M
 (  "urls": {) s
-5 520 M
+5 594 M
 (    "small_https_download_url": "https://networkquality.example.com/api/v1/small",) s
-5 509 M
+5 583 M
 (    "large_https_download_url": "https://networkquality.example.com/api/v1/large",) s
-5 498 M
+5 572 M
 (    "https_upload_url": "https://networkquality.example.com/api/v1/upload") s
-5 487 M
+5 561 M
 (  }) s
-5 476 M
+5 550 M
 (}) s
-5 454 M
+5 528 M
 (   The client begins the responsiveness measurement by querying for the) s
-5 443 M
+5 517 M
 (   JSON configuration.  This supplies the URLs for creating the load) s
-5 432 M
+5 506 M
 (   bearing connections in the upstream and downstream direction as well) s
-5 421 M
+5 495 M
 (   as the small object for the latency measurements.) s
-5 399 M
+5 473 M
 (6.  Security Considerations) s
-5 377 M
+5 451 M
 (   TBD) s
-5 355 M
+5 429 M
 (7.  IANA Considerations) s
-5 333 M
+5 407 M
 (   TBD) s
-5 311 M
+5 385 M
 (8.  Acknowledgments) s
-5 289 M
+5 363 M
 (   We would like to thank Rich Brown for his editorial pass over this) s
-5 278 M
+5 352 M
 (   I-D.  We also thank Erik Auerswald for his constructive feedback on) s
-5 267 M
+5 341 M
 (   the I-D.) s
-5 245 M
+5 319 M
 (9.  Informative References) s
-5 223 M
+5 297 M
 (   [Bufferbloat]) s
-5 212 M
+5 286 M
 (              Gettys, J. and K. Nichols, "Bufferbloat: Dark Buffers in) s
-5 201 M
+5 275 M
 (              the Internet", Communications of the ACM, Volume 55,) s
-5 190 M
+5 264 M
 (              Number 1 \(2012\) , n.d..) s
-5 168 M
+5 242 M
 (   [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7,) s
-5 157 M
+5 231 M
 (              RFC 793, DOI 10.17487/RFC0793, September 1981,) s
-5 146 M
+5 220 M
 (              <https://www.rfc-editor.org/info/rfc793>.) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                 [Page 10]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                [Page 10]) s
 _R
 S
 %%Page: (11) 11
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 11 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -1315,82 +1320,82 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (   [RFC1035]  Mockapetris, P., "Domain names - implementation and) s
-5 652 M
+5 726 M
 (              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,) s
-5 641 M
+5 715 M
 (              November 1987, <https://www.rfc-editor.org/info/rfc1035>.) s
-5 619 M
+5 693 M
 (   [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,) s
-5 608 M
+5 682 M
 (              "Proportional Integral Controller Enhanced \(PIE\): A) s
-5 597 M
+5 671 M
 (              Lightweight Control Scheme to Address the Bufferbloat) s
-5 586 M
+5 660 M
 (              Problem", RFC 8033, DOI 10.17487/RFC8033, February 2017,) s
-5 575 M
+5 649 M
 (              <https://www.rfc-editor.org/info/rfc8033>.) s
-5 553 M
+5 627 M
 (   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation \(JSON\) Data) s
-5 542 M
+5 616 M
 (              Interchange Format", STD 90, RFC 8259,) s
-5 531 M
+5 605 M
 (              DOI 10.17487/RFC8259, December 2017,) s
-5 520 M
+5 594 M
 (              <https://www.rfc-editor.org/info/rfc8259>.) s
-5 498 M
+5 572 M
 (   [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,) s
-5 487 M
+5 561 M
 (              J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler) s
-5 476 M
+5 550 M
 (              and Active Queue Management Algorithm", RFC 8290,) s
-5 465 M
+5 539 M
 (              DOI 10.17487/RFC8290, January 2018,) s
-5 454 M
+5 528 M
 (              <https://www.rfc-editor.org/info/rfc8290>.) s
-5 432 M
+5 506 M
 (   [RFC8446]  Rescorla, E., "The Transport Layer Security \(TLS\) Protocol) s
-5 421 M
+5 495 M
 (              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,) s
-5 410 M
+5 484 M
 (              <https://www.rfc-editor.org/info/rfc8446>.) s
-5 388 M
+5 462 M
 (Authors' Addresses) s
-5 366 M
+5 440 M
 (   Christoph Paasch) s
-5 355 M
+5 429 M
 (   Apple Inc.) s
-5 344 M
+5 418 M
 (   One Apple Park Way) s
-5 333 M
+5 407 M
 (   Cupertino, California 95014) s
-5 322 M
+5 396 M
 (   United States of America) s
-5 300 M
+5 374 M
 (   Email: cpaasch@apple.com) s
-5 267 M
+5 341 M
 (   Randall Meyer) s
-5 256 M
+5 330 M
 (   Apple Inc.) s
-5 245 M
+5 319 M
 (   One Apple Park Way) s
-5 234 M
+5 308 M
 (   Cupertino, California 95014) s
-5 223 M
+5 297 M
 (   United States of America) s
-5 201 M
+5 275 M
 (   Email: rrm@apple.com) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                 [Page 11]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                [Page 11]) s
 _R
 S
 %%Page: (12) 12
 %%BeginPageSetup
 _S
-18 36 translate
+24 24 translate
 /pagenum 12 def
 /fname (draft-cpaasch-ippm-responsiveness.txt) def
 /fdir (.) def
@@ -1398,34 +1403,34 @@ _S
 /user_header_p false def
 /user_footer_p false def
 %%EndPageSetup
-5 696 M
-(Internet-Draft   Responsiveness under Working Conditions   November 2021) s
-5 663 M
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   December 2021) s
+5 737 M
 (   Stuart Cheshire) s
-5 652 M
+5 726 M
 (   Apple Inc.) s
-5 641 M
+5 715 M
 (   One Apple Park Way) s
-5 630 M
+5 704 M
 (   Cupertino, California 95014) s
-5 619 M
+5 693 M
 (   United States of America) s
-5 597 M
+5 671 M
 (   Email: cheshire@apple.com) s
-5 564 M
+5 638 M
 (   Omer Shapira) s
-5 553 M
+5 627 M
 (   Apple Inc.) s
-5 542 M
+5 616 M
 (   One Apple Park Way) s
-5 531 M
+5 605 M
 (   Cupertino, California 95014) s
-5 520 M
+5 594 M
 (   United States of America) s
-5 498 M
+5 572 M
 (   Email: oesh@apple.com) s
-5 102 M
-(Paasch, et al.            Expires May 30, 2022                 [Page 12]) s
+5 176 M
+(Paasch, et al.            Expires June 20, 2022                [Page 12]) s
 _R
 S
 %%Trailer

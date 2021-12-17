@@ -395,14 +395,14 @@
 <link href="#rfc.authors" rel="Chapter">
 
 
-  <meta name="generator" content="xml2rfc version 2.40.0 - https://tools.ietf.org/tools/xml2rfc" />
+  <meta name="generator" content="xml2rfc version 2.8.5 - https://tools.ietf.org/tools/xml2rfc" />
   <link rel="schema.dct" href="http://purl.org/dc/terms/" />
 
   <meta name="dct.creator" content="Paasch, C., Meyer, R., Cheshire, S., and O. Shapira" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-cpaasch-ippm-responsiveness-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2021-11-26" />
-  <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users. Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem for tens of thousands of people. Our networks remain unresponsive, not from a lack of technical solutions, but rather a lack of awareness of the problem.  We believe that creating a tool whose measurement matches people&#8217;s every day experience will create the necessary awareness, and result in a demand for products that solve the problem. This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience especially when the network is fully loaded (&#8220;responsiveness under working conditions&#8221;.) The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality. " />
-  <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users. Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem for tens of thousands of people. Our networks remain unresponsive, not from a lack of technical solutions, but rather a lack of awareness of the problem.  We believe that creating a tool whose measurement matches people&#8217;s every day experience will create the necessary awareness, and result in a demand for products that solve the problem. This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience especially when the network is fully loaded (&#8220;responsiveness under working conditions&#8221;.) The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality. " />
+  <meta name="dct.issued" scheme="ISO8601" content="2021-12-17" />
+  <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
+  <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
 
 </head>
 
@@ -424,7 +424,7 @@
 <td class="right">S. Cheshire</td>
 </tr>
 <tr>
-<td class="left">Expires: May 30, 2022</td>
+<td class="left">Expires: June 20, 2022</td>
 <td class="right">O. Shapira</td>
 </tr>
 <tr>
@@ -433,7 +433,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">November 26, 2021</td>
+<td class="right">December 17, 2021</td>
 </tr>
 
     	
@@ -445,14 +445,14 @@
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
 <p>For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users.</p>
-<p>Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem for tens of thousands of people.</p>
+<p>Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem.</p>
 <p>Our networks remain unresponsive, not from a lack of technical solutions, but rather a lack of awareness of the problem.  We believe that creating a tool whose measurement matches people&#8217;s every day experience will create the necessary awareness, and result in a demand for products that solve the problem.</p>
 <p>This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience especially when the network is fully loaded (&#8220;responsiveness under working conditions&#8221;.) The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on May 30, 2022.</p>
+<p>This Internet-Draft will expire on June 20, 2022.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2021 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -516,7 +516,7 @@
 </h1>
 <p id="rfc.section.1.1.p.1">A word about the term &#8220;bufferbloat&#8221; - the undesirable latency that comes from a router or other network equipment buffering too much data.  This document uses the term as a general description of bad latency, using more precise wording where warranted.</p>
 <p id="rfc.section.1.1.p.2">&#8220;Latency&#8221; is a poor measure of responsiveness, since it can be hard for the general public to understand.  The units are unfamiliar (&#8220;what is a millisecond?&#8221;) and counterintuitive (&#8220;100 msec - that sounds good - it&#8217;s only a tenth of a second!&#8221;).</p>
-<p id="rfc.section.1.1.p.3">Instead, we create the term &#8220;Responsiveness under working conditions&#8221; to make it clear that we are measuring all, not just idle, conditions, and use &#8220;round-trips per minute&#8221; as the metric.  The values range from 50 (poor) to 3,000 (excellent), with the added advantage that &#8220;bigger is better.&#8221; Finally, we abbreviate the measurement to &#8220;RPM&#8221;, a wink to the &#8220;revolutions per minute&#8221; that we use for cars.</p>
+<p id="rfc.section.1.1.p.3">Instead, we create the term &#8220;Responsiveness under working conditions&#8221; to make it clear that we are measuring all, not just idle, conditions, and use &#8220;round-trips per minute&#8221; as the metric.  The advantage of round-trips per minute are two-fold: First, it allows for a metric that is &#8220;the higher the better&#8221;. This kind of metric is often more intuitive for end-users.  Second, the range of the values tends to be around the 4-digit integer range which is also a value easy to compare and read, again allowing for a more intuitive use.  Finally, we abbreviate the measurement to &#8220;RPM&#8221;, a wink to the &#8220;revolutions per minute&#8221; that we use for cars.</p>
 <p id="rfc.section.1.1.p.4">This document defines an algorithm for the &#8220;RPM Test&#8221; that explicitly measures responsiveness under working conditions.</p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#design-constraints" id="design-constraints">Design Constraints</a>
