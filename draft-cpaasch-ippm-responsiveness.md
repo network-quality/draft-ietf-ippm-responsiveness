@@ -77,7 +77,7 @@ have problems when somebody else at home is
 watching a 4K movie or uploading photos from their phone.
 However, there is no technical reason for this to be the case.
 In fact, various queue management solutions (fq_codel, cake, PIE)
-have solved the problem for tens of thousands of people.
+have solved the problem.
 
 Our networks remain unresponsive, not from a lack of technical solutions,
 but rather a lack of awareness of the problem.
