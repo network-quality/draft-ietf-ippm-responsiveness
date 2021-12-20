@@ -400,7 +400,7 @@
 
   <meta name="dct.creator" content="Paasch, C., Meyer, R., Cheshire, S., and O. Shapira" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-cpaasch-ippm-responsiveness-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2021-12-17" />
+  <meta name="dct.issued" scheme="ISO8601" content="2021-12-20" />
   <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
   <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
 
@@ -424,7 +424,7 @@
 <td class="right">S. Cheshire</td>
 </tr>
 <tr>
-<td class="left">Expires: June 20, 2022</td>
+<td class="left">Expires: June 23, 2022</td>
 <td class="right">O. Shapira</td>
 </tr>
 <tr>
@@ -433,7 +433,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">December 17, 2021</td>
+<td class="right">December 20, 2021</td>
 </tr>
 
     	
@@ -452,7 +452,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on June 20, 2022.</p>
+<p>This Internet-Draft will expire on June 23, 2022.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2021 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -533,7 +533,7 @@
 <p></p>
 
 <ol>
-<li>Today&#8217;s Internet traffic primarily uses HTTP/2 over TLS.  Thus, the algorithm should use that protocol.  <br><br> As a side note: other types of traffic are gaining in popularity (HTTP/3) and/or are already being used widely (RTP).  Traffic prioritization and QoS rules on the Internet may subject traffic to completely different paths:<br> these could also be measured separately.</li>
+<li>Today&#8217;s Internet traffic primarily uses HTTP/2 over TLS.  Thus, the algorithm should use that protocol.  <br><br> As a side note: other types of traffic are gaining in popularity (HTTP/3) and/or are already being used widely (RTP).  Traffic prioritization and QoS rules on the Internet may subject traffic to completely different paths: these could also be measured separately.</li>
 <li>The Internet is marked by the deployment of countless middleboxes like transparent TCP proxies or traffic prioritization for certain types of traffic.  The RPM Test must take into account their effect on DNS-request <a href="#RFC1035" class="xref">[RFC1035]</a>, TCP-handshake <a href="#RFC0793" class="xref">[RFC0793]</a>, TLS-handshake, and request/response.</li>
 <li>The test result should be expressed in an intuitive, nontechnical form.</li>
 <li>Finally, to be useful to a wide audience, the measurement should finish within a short time frame.  Our target is 20 seconds.</li>
@@ -604,7 +604,8 @@
 </ul>
 </li>
 </ul>
-<p id="rfc.section.4.1.4.p.4">Note: It is tempting to envision an initial base round-trip time (RTT) measurement and adjust the intervals as a function of that RTT.  However, experiments have shown that this makes the saturation detection extremely unstable in low RTT environments.  In the situation where the &#8220;unloaded&#8221; RTT is in the single-digit millisecond range, yet the network&#8217;s RTT increases under load to more than a hundred milliseconds, the intervals become much too low to accurately drive the algorithm.</p>
+<p id="rfc.section.4.1.4.p.4">In <a href="#goals" class="xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within 20 seconds. It is left to the implementation what to do when saturation is not reached within that time-frame. For example, an implementation might gather a provisional responsiveness measurement or let the test run for longer.</p>
+<p id="rfc.section.4.1.4.p.5">Note: It is tempting to envision an initial base round-trip time (RTT) measurement and adjust the intervals as a function of that RTT.  However, experiments have shown that this makes the saturation detection extremely unstable in low RTT environments.  In the situation where the &#8220;unloaded&#8221; RTT is in the single-digit millisecond range, yet the network&#8217;s RTT increases under load to more than a hundred milliseconds, the intervals become much too low to accurately drive the algorithm.</p>
 <h1 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#measuring-responsiveness" id="measuring-responsiveness">Measuring Responsiveness</a>
 </h1>
@@ -661,7 +662,7 @@
 <h1 id="rfc.section.8">
 <a href="#rfc.section.8">8.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
 </h1>
-<p id="rfc.section.8.p.1">We would like to thank Rich Brown for his editorial pass over this I-D.  We also thank Erik Auerswald for his constructive feedback on the I-D.</p>
+<p id="rfc.section.8.p.1">We would like to thank Rich Brown for his editorial pass over this I-D.  We also thank Erik Auerswald and Will Hawkins for their constructive feedback on the I-D.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">9.</a> Informative References</h1>
 <table><tbody>
