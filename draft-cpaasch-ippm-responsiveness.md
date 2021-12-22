@@ -328,21 +328,34 @@ by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
 files.
 The algorithm is the same for upload and download and uses
 the same term "load-generating connection" for each.
+The actions of the algorithm take place at regular intervals. For the current draft
+the interval is defined as one (1) second.
 
-The steps of the algorithm are:
+Where
 
-- Create 4 load-generating connections
-- At each 1 second interval:
-  - Compute "instantaneous aggregate" goodput which is the number of bytes
-  transferred within the last second.
-  - Compute a moving average of the last 4 "instantaneous aggregate goodput" measurements
-  - If moving average > "previous" moving average + 5%:
-    - Network did not yet reach saturation.
-If no flows added within the last 4 seconds, add 4 more flows
-  - Else, network reached saturation for the current flow count.
-    - If new flows added and for 4 seconds the moving average throughput
-    did not change: network reached stable saturation
-    - Else, add four more flows
+- i: The index of the current interval. i is initialized to 0 when the algorithm begins and
+  increases by one for each interval.
+- instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
+  interval p. If p is less than 0, the number of total bytes of data transferred within the
+  interval is considered to be 0.
+- moving average aggregate goodput at interval p: The average of the number of total bytes of data
+  transferred in the instantaneous average aggregate goodput at intervals p - x, for all 0&le;x&lt;4.
+- moving average stability during the period between intervals b and e: Whether or not the differences between the moving average aggregate goodput at interval x and
+  the moving average aggregate goodput at interval x+1 (for all b&le;x&lt;e) is less than 5%.
+
+the steps of the algorithm are:
+
+- Create four (4) load-generating connections.
+- At each interval:
+  - Compute the instantaneous aggregate goodput at interval i.
+  - Compute the moving average aggregate goodput at interval i.
+  - If the moving average aggregate goodput at interval i is more than a 5% increase over
+    the moving average aggregate goodput at interval i - 1, the network has not yet reached saturation.
+    - If no load-generating connections have been added within the last four (4) intervals, add four (4) more load-generating connections.
+  - Else, the network has reached saturation with the existing load-generating connections. The current state is a candidate for stable saturation.
+    - If a) there have been load-generating connections added in the past four (4) intervals and b) there has been moving average stability during the period between intervals i-4 and i,
+      then the network has reached stable saturation and the algorithm terminates.
+    - Otherwise, add four (4) more load-generating connections.
 
 In {{goals}}, it is mentioned that one of the goals is that the test finishes within
 20 seconds. It is left to the implementation what to do when saturation is not reached
