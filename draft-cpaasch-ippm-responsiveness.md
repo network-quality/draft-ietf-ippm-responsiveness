@@ -199,7 +199,7 @@ proxy for user experience. This means:
    As a side note: other types of traffic are gaining in popularity (HTTP/3)
 and/or are already being used widely (RTP).
 Traffic prioritization and QoS rules on the Internet may
-subject traffic to completely different paths:  
+subject traffic to completely different paths:
 these could also be measured separately.
 
 2. The Internet is marked by the deployment of countless middleboxes like
@@ -343,6 +343,11 @@ If no flows added within the last 4 seconds, add 4 more flows
     did not change: network reached stable saturation
     - Else, add four more flows
 
+In {{goals}}, it is mentioned that one of the goals is that the test finishes within
+20 seconds. It is left to the implementation what to do when saturation is not reached
+within that time-frame. For example, an implementation might gather a provisional
+responsiveness measurement or let the test run for longer.
+
 Note: It is tempting to envision an initial base round-trip time (RTT)
 measurement and adjust the intervals as a function of that RTT.
 However,
@@ -467,5 +472,5 @@ TBD
 # Acknowledgments
 
 We would like to thank Rich Brown for his editorial pass over this I-D.
-We also thank Erik Auerswald for his constructive feedback on the I-D.
+We also thank Erik Auerswald and Will Hawkins for their constructive feedback on the I-D.
 
