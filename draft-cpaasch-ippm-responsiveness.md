@@ -292,7 +292,7 @@ When the goodput stops increasing, it means that saturation has been
 reached.
 
 Saturation has two criteria:
-a) the load bearing connections are utilizing all the
+a) the load-generating connections are utilizing all the
 capacity of the bottleneck,
 b) the buffers in the bottleneck are completely filled.
 
@@ -301,7 +301,7 @@ connections complete their TCP slow-start phase.
 At that point, throughput eventually stalls
 usually due to receive window limitations.
 The only means to further increase throughput is by
-adding more TCP connections to the pool of load bearing connections.
+adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
 saturation has been reached and - more importantly -
 the working condition is stable.
@@ -326,11 +326,11 @@ The following algorithm reaches working conditions (saturation) of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
 files.
 The algorithm is the same for upload and download and uses
-the same term "load bearing connection" for each.
+the same term "load-generating connection" for each.
 
 The steps of the algorithm are:
 
-- Create 4 load bearing connections
+- Create 4 load-generating connections
 - At each 1 second interval:
   - Compute "instantaneous aggregate" goodput which is the number of bytes
   transferred within the last second.
@@ -376,9 +376,9 @@ all during working conditions.
    It repeats these steps multiple times for accuracy.
 
 2. The responsiveness of the network and the client/server networking stacks
-for the load bearing connections themselves.
+for the load-generating connections themselves.
 
-   To do this, the load bearing connections multiplex an HTTP/2 GET
+   To do this, the load-generating connections multiplex an HTTP/2 GET
 request for a one-byte object to get the end-to-end latency on the
 connections that are using the network at full speed.
 
@@ -386,7 +386,7 @@ connections that are using the network at full speed.
 
 The algorithm produces sets of 5 times for each probe, namely:
 DNS handshake, TCP handshake, TLS handshake, HTTP/2 request/response on
-separate (idle) connections, HTTP/2 request/response on load bearing connections.
+separate (idle) connections, HTTP/2 request/response on load-generating connections.
 This fine-grained data is useful, but not necessary for creating a useful metric.
 
 To create a single "Responsiveness" (e.g., RPM) number,
@@ -457,7 +457,7 @@ Sample JSON:
    ~~~
 
 The client begins the responsiveness measurement by querying for the JSON configuration.
-This supplies the URLs for creating the load bearing connections in
+This supplies the URLs for creating the load-generating connections in
 the upstream and downstream direction as well as the small object
 for the latency measurements.
 
