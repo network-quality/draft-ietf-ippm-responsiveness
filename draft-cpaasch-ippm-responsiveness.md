@@ -269,19 +269,20 @@ within the ISPs.
 To measure responsiveness under working conditions,
 the algorithm must saturate both directions.
 
-Measuring in parallel achieves more data samples for a given duration.
-Given the desired test duration of 20 seconds,
-sequential uplink and downlink tests would only yield half the data.
-The RPM Test specifies parallel, concurrent measurements.
+One approach could be to measure responsiveness in the uplink and downlink
+in parallel. It would allow for a shorter test run-time.
 
 However, a number of caveats come with measuring in parallel:
 
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
-This means the test might not saturate both directions at once.
+This means the test might not saturate both directions at once and thus not expose
+all the potential sources of low responsiveness.
 - Debuggability of the results becomes harder:
 During parallel measurement it is impossible to differentiate whether
 the observed latency happens in the uplink or the downlink direction.
-- Consequently, the test should have an option for sequential testing.
+
+Thus, we recommend testing uplink and downlink sequentially. Parallel testing
+is considered a future extension.
 
 ### Reaching saturation
 
