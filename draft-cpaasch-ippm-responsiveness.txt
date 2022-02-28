@@ -5,9 +5,9 @@
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
 Intended status: Experimental                                S. Cheshire
-Expires: June 23, 2022                                        O. Shapira
+Expires: 29 August 2022                                       O. Shapira
                                                               Apple Inc.
-                                                       December 20, 2021
+                                                        25 February 2022
 
 
                 Responsiveness under Working Conditions
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Paasch, et al.            Expires June 23, 2022                 [Page 1]
+Paasch, et al.           Expires 29 August 2022                 [Page 1]
 
-Internet-Draft   Responsiveness under Working Conditions   December 2021
+Internet-Draft   Responsiveness under Working Conditions   February 2022
 
 
    Internet-Drafts are draft documents valid for a maximum of six months
@@ -63,44 +63,43 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 23, 2022.
+   This Internet-Draft will expire on 29 August 2022.
 
 Copyright Notice
 
-   Copyright (c) 2021 IETF Trust and the persons identified as the
+   Copyright (c) 2022 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents
-   (https://trustee.ietf.org/license-info) in effect on the date of
-   publication of this document.  Please review these documents
-   carefully, as they describe your rights and restrictions with respect
-   to this document.  Code Components extracted from this document must
-   include Simplified BSD License text as described in Section 4.e of
-   the Trust Legal Provisions and are provided without warranty as
-   described in the Simplified BSD License.
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
 
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
      1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4
-   3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   5
    4.  Measuring Responsiveness Under Working Conditions . . . . . .   5
      4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   5
        4.1.1.  From single-flow to multi-flow  . . . . . . . . . . .   6
        4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   6
-       4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   6
+       4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   7
        4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   7
-     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   8
+     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   9
        4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .   9
-       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .   9
-   5.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .   9
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  10
-   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  10
-   8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  10
-   9.  Informative References  . . . . . . . . . . . . . . . . . . .  10
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  11
+       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .  10
+   5.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  10
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . .  11
+   7.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  11
+   8.  Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  11
+   9.  Informative References  . . . . . . . . . . . . . . . . . . .  11
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  12
 
 
 
@@ -109,9 +108,10 @@ Table of Contents
 
 
 
-Paasch, et al.            Expires June 23, 2022                 [Page 2]
+
+Paasch, et al.           Expires 29 August 2022                 [Page 2]
 
-Internet-Draft   Responsiveness under Working Conditions   December 2021
+Internet-Draft   Responsiveness under Working Conditions   February 2022
 
 
 1.  Introduction
@@ -153,6 +153,23 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    ("what is a millisecond?") and counterintuitive ("100 msec - that
    sounds good - it's only a tenth of a second!").
 
+
+
+
+
+
+
+
+
+
+
+
+
+Paasch, et al.           Expires 29 August 2022                 [Page 3]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
+
    Instead, we create the term "Responsiveness under working conditions"
    to make it clear that we are measuring all, not just idle,
    conditions, and use "round-trips per minute" as the metric.  The
@@ -161,15 +178,6 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    often more intuitive for end-users.  Second, the range of the values
    tends to be around the 4-digit integer range which is also a value
    easy to compare and read, again allowing for a more intuitive use.
-
-
-
-
-Paasch, et al.            Expires June 23, 2022                 [Page 3]
-
-Internet-Draft   Responsiveness under Working Conditions   December 2021
-
-
    Finally, we abbreviate the measurement to "RPM", a wink to the
    "revolutions per minute" that we use for cars.
 
@@ -209,6 +217,15 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    are actually full for a sustained period, and only then make repeated
    latency measurements in this particular state.
 
+
+
+
+
+Paasch, et al.           Expires 29 August 2022                 [Page 4]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
+
 3.  Goals
 
    The algorithm described here defines an RPM Test that serves as a
@@ -216,15 +233,6 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
 
    1.  Today's Internet traffic primarily uses HTTP/2 over TLS.  Thus,
        the algorithm should use that protocol.
-
-
-
-
-
-Paasch, et al.            Expires June 23, 2022                 [Page 4]
-
-Internet-Draft   Responsiveness under Working Conditions   December 2021
-
 
        As a side note: other types of traffic are gaining in popularity
        (HTTP/3) and/or are already being used widely (RTP).  Traffic
@@ -266,21 +274,21 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    The algorithm must also detect when the network is in a persistent
    working condition, also called "saturation".
 
+
+
+
+Paasch, et al.           Expires 29 August 2022                 [Page 5]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
+
    Desired properties of "working condition":
 
-   o  Should not waste traffic, because the person may be paying for it.
+   *  Should not waste traffic, because the person may be paying for it.
 
-   o  Should finish within a short time to avoid impacting other people
+   *  Should finish within a short time to avoid impacting other people
       on the same network, to avoid varying network conditions, and not
       try the person's patience.
-
-
-
-
-Paasch, et al.            Expires June 23, 2022                 [Page 5]
-
-Internet-Draft   Responsiveness under Working Conditions   December 2021
-
 
 4.1.1.  From single-flow to multi-flow
 
@@ -305,23 +313,30 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    To measure responsiveness under working conditions, the algorithm
    must saturate both directions.
 
-   Measuring in parallel achieves more data samples for a given
-   duration.  Given the desired test duration of 20 seconds, sequential
-   uplink and downlink tests would only yield half the data.  The RPM
-   Test specifies parallel, concurrent measurements.
+   One approach could be to measure responsiveness in the uplink and
+   downlink in parallel.  It would allow for a shorter test run-time.
 
    However, a number of caveats come with measuring in parallel:
 
-   o  Half-duplex links may not permit simultaneous uplink and downlink
+   *  Half-duplex links may not permit simultaneous uplink and downlink
       traffic.  This means the test might not saturate both directions
-      at once.
+      at once and thus not expose all the potential sources of low
+      responsiveness.
 
-   o  Debuggability of the results becomes harder: During parallel
+   *  Debuggability of the results becomes harder: During parallel
       measurement it is impossible to differentiate whether the observed
       latency happens in the uplink or the downlink direction.
 
-   o  Consequently, the test should have an option for sequential
-      testing.
+   Thus, we recommend testing uplink and downlink sequentially.
+   Parallel testing is considered a future extension.
+
+
+
+
+Paasch, et al.           Expires 29 August 2022                 [Page 6]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
 
 4.1.3.  Reaching saturation
 
@@ -330,15 +345,7 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    connections in a unit of time.  When the goodput stops increasing, it
    means that saturation has been reached.
 
-
-
-
-Paasch, et al.            Expires June 23, 2022                 [Page 6]
-
-Internet-Draft   Responsiveness under Working Conditions   December 2021
-
-
-   Saturation has two criteria: a) the load bearing connections are
+   Saturation has two criteria: a) the load-generating connections are
    utilizing all the capacity of the bottleneck, b) the buffers in the
    bottleneck are completely filled.
 
@@ -346,9 +353,10 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    connections complete their TCP slow-start phase.  At that point,
    throughput eventually stalls usually due to receive window
    limitations.  The only means to further increase throughput is by
-   adding more TCP connections to the pool of load bearing connections.
-   If new connections leave the throughput the same, saturation has been
-   reached and - more importantly - the working condition is stable.
+   adding more TCP connections to the pool of load-generating
+   connections.  If new connections leave the throughput the same,
+   saturation has been reached and - more importantly - the working
+   condition is stable.
 
    Filling buffers at the bottleneck depends on the congestion control
    deployed on the sender side.  Congestion control algorithms like BBR
@@ -369,40 +377,78 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    The following algorithm reaches working conditions (saturation) of a
    network by using HTTP/2 upload (POST) or download (GET) requests of
    infinitely large files.  The algorithm is the same for upload and
-   download and uses the same term "load bearing connection" for each.
+   download and uses the same term "load-generating connection" for
+   each.  The actions of the algorithm take place at regular intervals.
+   For the current draft the interval is defined as one (1) second.
 
-   The steps of the algorithm are:
+   Where
 
-   o  Create 4 load bearing connections
-
-   o  At each 1 second interval:
-
-      *  Compute "instantaneous aggregate" goodput which is the number
-         of bytes transferred within the last second.
-
-      *  Compute a moving average of the last 4 "instantaneous aggregate
-         goodput" measurements
-
-      *  If moving average > "previous" moving average + 5%:
+   *  i: The index of the current interval. i is initialized to 0 when
+      the algorithm begins and increases by one for each interval.
 
 
 
 
-
-Paasch, et al.            Expires June 23, 2022                 [Page 7]
+Paasch, et al.           Expires 29 August 2022                 [Page 7]
 
-Internet-Draft   Responsiveness under Working Conditions   December 2021
+Internet-Draft   Responsiveness under Working Conditions   February 2022
 
 
-         +  Network did not yet reach saturation.  If no flows added
-            within the last 4 seconds, add 4 more flows
+   *  instantaneous aggregate goodput at interval p: The number of total
+      bytes of data transferred within interval p.  If p is less than 0,
+      the number of total bytes of data transferred within the interval
+      is considered to be 0.
 
-      *  Else, network reached saturation for the current flow count.
+   *  moving average aggregate goodput at interval p: The average of the
+      number of total bytes of data transferred in the instantaneous
+      average aggregate goodput at intervals p - x, for all 0<=x<4.
 
-         +  If new flows added and for 4 seconds the moving average
-            throughput did not change: network reached stable saturation
+   *  moving average stability during the period between intervals b and
+      e: Whether or not the differences between the moving average
+      aggregate goodput at interval x and the moving average aggregate
+      goodput at interval x+1 (for all b<=x<e) is less than 5%.
 
-         +  Else, add four more flows
+   the steps of the algorithm are:
+
+   *  Create four (4) load-generating connections.
+
+   *  At each interval:
+
+      -  Compute the instantaneous aggregate goodput at interval i.
+
+      -  Compute the moving average aggregate goodput at interval i.
+
+      -  If the moving average aggregate goodput at interval i is more
+         than a 5% increase over the moving average aggregate goodput at
+         interval i - 1, the network has not yet reached saturation.
+
+         o  If no load-generating connections have been added within the
+            last four (4) intervals, add four (4) more load-generating
+            connections.
+
+      -  Else, the network has reached saturation with the existing
+         load-generating connections.  The current state is a candidate
+         for stable saturation.
+
+         o  If a) there have been load-generating connections added in
+            the past four (4) intervals and b) there has been moving
+            average stability during the period between intervals i-4
+            and i, then the network has reached stable saturation and
+            the algorithm terminates.
+
+         o  Otherwise, add four (4) more load-generating connections.
+
+
+
+
+
+
+
+
+Paasch, et al.           Expires 29 August 2022                 [Page 8]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
 
    In Section 3, it is mentioned that one of the goals is that the test
    finishes within 20 seconds.  It is left to the implementation what to
@@ -437,26 +483,28 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
        multiple times for accuracy.
 
    2.  The responsiveness of the network and the client/server
-       networking stacks for the load bearing connections themselves.
+       networking stacks for the load-generating connections themselves.
 
-       To do this, the load bearing connections multiplex an HTTP/2 GET
-       request for a one-byte object to get the end-to-end latency on
-       the connections that are using the network at full speed.
-
-
-
-Paasch, et al.            Expires June 23, 2022                 [Page 8]
-
-Internet-Draft   Responsiveness under Working Conditions   December 2021
-
+       To do this, the load-generating connections multiplex an HTTP/2
+       GET request for a one-byte object to get the end-to-end latency
+       on the connections that are using the network at full speed.
 
 4.2.1.  Aggregating the Measurements
 
    The algorithm produces sets of 5 times for each probe, namely: DNS
    handshake, TCP handshake, TLS handshake, HTTP/2 request/response on
-   separate (idle) connections, HTTP/2 request/response on load bearing
-   connections.  This fine-grained data is useful, but not necessary for
-   creating a useful metric.
+   separate (idle) connections, HTTP/2 request/response on load-
+   generating connections.  This fine-grained data is useful, but not
+   necessary for creating a useful metric.
+
+
+
+
+
+Paasch, et al.           Expires 29 August 2022                 [Page 9]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
 
    To create a single "Responsiveness" (e.g., RPM) number, this first
    iteration of the algorithm gives an equal weight to each of these
@@ -489,35 +537,34 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
 
    The server MUST respond to 4 URLs:
 
-   1.  A "small" URL/response: The server must respond with a status
-       code of 200 and 1 byte in the body.  The actual body content is
-       irrelevant.
+1.  A "small" URL/response: The server must respond with a status
+    code of 200 and 1 byte in the body.  The actual body content is
+    irrelevant.
 
-   2.  A "large" URL/response: The server must respond with a status
-       code of 200 and a body size of at least 8GB.  The body can be
-       bigger, and may need to grow as network speeds increases over
-       time.  The actual body content is irrelevant.  The client will
-       probably never completely download the object, but will instead
+2.  A "large" URL/response: The server must respond with a status
+    code of 200 and a body size of at least 8GB.  The body can be
+    bigger, and may need to grow as network speeds increases over
+    time.  The actual body content is irrelevant.  The client will
+    probably never completely download the object, but will instead
+    close the connection after reaching working condition and making
+    its measurements.
+
+3.  An "upload" URL/response: The server must handle a POST request
+    with an arbitrary body size.  The server should discard the
+    payload.
 
 
 
-Paasch, et al.            Expires June 23, 2022                 [Page 9]
+
+
+Paasch, et al.           Expires 29 August 2022                [Page 10]
 
-Internet-Draft   Responsiveness under Working Conditions   December 2021
+Internet-Draft   Responsiveness under Working Conditions   February 2022
 
 
-       close the connection after reaching working condition and making
-       its measurements.
-
-   3.  An "upload" URL/response: The server must handle a POST request
-       with an arbitrary body size.  The server should discard the
-       payload.
-
-   4.  A configuration URL that returns a JSON [RFC8259] object with the
-       information the client uses to run the test (sample below).
-       Sample JSON:
-
-
+4.  A configuration URL that returns a JSON [RFC8259] object with the
+    information the client uses to run the test (sample below).
+    Sample JSON:
 
 {
   "version": 1,
@@ -529,9 +576,9 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
 }
 
    The client begins the responsiveness measurement by querying for the
-   JSON configuration.  This supplies the URLs for creating the load
-   bearing connections in the upstream and downstream direction as well
-   as the small object for the latency measurements.
+   JSON configuration.  This supplies the URLs for creating the load-
+   generating connections in the upstream and downstream direction as
+   well as the small object for the latency measurements.
 
 6.  Security Considerations
 
@@ -554,14 +601,6 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
               the Internet", Communications of the ACM, Volume 55,
               Number 1 (2012) , n.d..
 
-
-
-
-Paasch, et al.            Expires June 23, 2022                [Page 10]
-
-Internet-Draft   Responsiveness under Working Conditions   December 2021
-
-
    [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7,
               RFC 793, DOI 10.17487/RFC0793, September 1981,
               <https://www.rfc-editor.org/info/rfc793>.
@@ -569,6 +608,15 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
+
+
+
+
+
+Paasch, et al.           Expires 29 August 2022                [Page 11]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
 
    [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,
               "Proportional Integral Controller Enhanced (PIE): A
@@ -596,7 +644,7 @@ Authors' Addresses
    Christoph Paasch
    Apple Inc.
    One Apple Park Way
-   Cupertino, California 95014
+   Cupertino, California 95014,
    United States of America
 
    Email: cpaasch@apple.com
@@ -605,32 +653,31 @@ Authors' Addresses
    Randall Meyer
    Apple Inc.
    One Apple Park Way
-   Cupertino, California 95014
+   Cupertino, California 95014,
    United States of America
 
    Email: rrm@apple.com
 
 
-
-
-Paasch, et al.            Expires June 23, 2022                [Page 11]
-
-Internet-Draft   Responsiveness under Working Conditions   December 2021
-
-
    Stuart Cheshire
    Apple Inc.
    One Apple Park Way
-   Cupertino, California 95014
+   Cupertino, California 95014,
    United States of America
 
    Email: cheshire@apple.com
 
 
+
+Paasch, et al.           Expires 29 August 2022                [Page 12]
+
+Internet-Draft   Responsiveness under Working Conditions   February 2022
+
+
    Omer Shapira
    Apple Inc.
    One Apple Park Way
-   Cupertino, California 95014
+   Cupertino, California 95014,
    United States of America
 
    Email: oesh@apple.com
@@ -669,4 +716,13 @@ Internet-Draft   Responsiveness under Working Conditions   December 2021
 
 
 
-Paasch, et al.            Expires June 23, 2022                [Page 12]
+
+
+
+
+
+
+
+
+
+Paasch, et al.           Expires 29 August 2022                [Page 13]
