@@ -50,6 +50,15 @@ author:
     country: United States of America
     email: oesh@apple.com
 
+  -
+    ins: M. Mathis
+    name: Matt Mathis
+    org: Google, Inc
+    street: 1600 Amphitheatre Parkway
+    city: Mountain View, CA  94043
+    country: United States of America
+    email: mattmathis@google.com
+
 informative:
   Bufferbloat:
     author:
@@ -57,6 +66,11 @@ informative:
      - ins: K. Nichols
     title: "Bufferbloat: Dark Buffers in the Internet"
     seriesinfo: Communications of the ACM, Volume 55, Number 1 (2012)
+  draft-ietf-tcpm-rfc793bis:
+    author:
+     - ins: W. Eddy
+    title: "Transmission Control Protocol (TCP) Specification"
+    seriesinfo: Internet Engineering Task Force
   RFC0793:
   RFC1035:
   RFC8290:
@@ -419,6 +433,96 @@ is an open question.
 One could imagine a computation of the variance and confidence interval
 that would drive the number of measurements and balance the accuracy
 with the speed of the measurement itself.
+
+# Interpreting responsiveness results
+
+The described methodology uses a high-level approach to measure responsiveness.
+By executing the test with regular HTTP requests a number of elements come into
+play that will influence the result. Contrary to more traditional measurement methods
+the responsiveness metric is not only influenced by the properties of the
+network but can significantly be influenced by the properties of the client
+and the server implementations. This section describes how the different
+elements influence responsiveness and how a user may differentiate them
+when debugging a network.
+
+## Elements influencing responsiveness
+
+Due to the HTTP-centric approach of the measurement methodology a number of
+factors come into play that influence the results. Namely, the client-side
+networking stack (from the top of the HTTP-layer all the way down to the physical layer),
+the network (including potential transparent HTTP "accelerators"), and the server-side
+networking stack. The following outlines how each of these contributes to the responsiveness.
+
+### Client side influence
+
+As the driver of the measurement, the client-side networking stack can have a
+large influence on the result. The biggest influence of the client comes
+when measuring the responsiveness in the uplink direction. Load-generation will
+cause queue-buildup in the transport layer as well as the HTTP layer. Additionally,
+if the network's bottleneck is on the first hop, queue-buildup will happen at the
+layers below the transport stack (e.g., NIC firmware).
+
+Each of these queue build-ups may cause latency and thus low responsiveness.
+A well-designed networking stack would ensure that queue-buildup in the TCP layer
+layer is kept at a bare minimum with solutions like TCP_NOTSENT_LOWAT {{draft-ietf-tcpm-rfc793bis}}.
+At the HTTP/2 layer it is important that the load-generating data is not interfering
+with the latency-measuring probes. For example, the different streams should not
+be stacked one after the other but rather be allowed to be multiplexed for
+optimal latency. The queue-buildup at these layers would only influence latency
+on the probes that are sent on the load-generating connections.
+
+Below the transport layer many places have a potential queue build-up. It is
+important to keep these queues at reasonable sizes or that they implement techniques
+like FQ-Codel. Depending on the techniques used at these layers, the queue build-up
+can influence latency on probes sent on load-generating connections as well as
+separate connections. If flow-queuing is used at these layers, the impact on
+separate connections will be negligible.
+
+### Network influence
+
+The network obviously is a large driver for the responsiveness result.
+Propagation delay from the client to the server as well as queuing in the
+bottleneck node will cause latency. Beyond these traditional sources of latency,
+other factors may influence the results as well. Many networks deploy transparent
+TCP Proxies, firewalls doing deep packet-inspection, HTTP "accelerators",...
+As the methodology relies on the use of HTTP/2, the responsiveness metric will
+be influenced by such devices as well.
+
+The network will influence both kinds of latency probes that the responsiveness
+tests sends out. Depending on the network's use of Smart Queue Management and whether
+this includes flow-queuing or not, the latency probes on the load-generating
+connections may be influenced differently than the probes on the separate
+connections.
+
+### Server side influence
+
+Finally, the server-side introduces the same kind of influence on the responsiveness
+as the client-side. With the difference that the responsiveness will be impacted
+during the downlink load generation.
+
+## Root-causing Responsiveness
+
+Once an RPM result has been generated one might be tempted to try to localize
+the source of a potential low responsiveness. The responsiveness measurement
+is however aimed at providing a quick, top-level view of the responsiveness
+under working conditions the way end-users experience it.
+Localizing the source of low responsiveness involves however a set of different
+tools and methodologies.
+
+Nevertheless, the responsiveness test allows to gain some insight into what the
+source of the latency is. The previous section described the elements that influence
+the responsiveness. From there it became apparent that the latency measured
+on the load-generating connections and the latency measured on separate connections
+may be different due to the different elements.
+
+For example, if the latency measured on separate connections is much less than the
+latency measured on the load-generating connections, it is possible to narrow
+down the source of the additional latency on the load-generating connections.
+As long as the other elements of the network don't do flow-queueing, the additional
+latency must come from the queue build-up at the HTTP and TCP layer.
+This is because all other bottlenecks in the network that may cause a queue build-up
+will be affecting the load-generating connections as well as the separate latency
+probing connections in the same way.
 
 # RPM Test Server API
 
