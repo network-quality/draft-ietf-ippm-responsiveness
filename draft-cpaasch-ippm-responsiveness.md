@@ -101,8 +101,7 @@ and result in a demand for products that solve the problem.
 
 This document specifies the "RPM Test" for measuring responsiveness.
 It uses common protocols and mechanisms to measure user
-experience especially when the network is fully loaded
-("responsiveness under working conditions".)
+experience especially when the network is under working conditions.
 The measurement is expressed as "Round-trips Per Minute" (RPM)
 and should be included with throughput (up and down) and
 idle latency as critical indicators of network quality.
@@ -239,36 +238,40 @@ the former and the latter are achieved.
 
 ## Working Conditions
 
-For the purpose of this methodology, typical "working conditions" represent a
-state of the network in which the bottleneck node is experiencing ingress and
-egress flows similar to those created by humans in the typical
-day-to-day pattern.
+There are many different ways to define the state of "working conditions" to
+measure responsiveness. There is no one true answer to this question. It is a
+tradeoff between using realistic traffic patterns and pushing the network to
+its limits.
 
-While a single HTTP transaction might briefly put a network into
-working conditions, making reliable measurements
-requires maintaining the state over sufficient time.
+In this document we aim to generate a realistic traffic pattern by
+using standard HTTP transactions but exploring the worst-case scenario by creating
+multiple of these transactions and using very large data objects in these HTTP
+transactions.
 
-The algorithm must also detect when the network is in a
-persistent working condition, also called "saturation".
+This allows to create a stable state of working conditions during which the
+network is used at its nearly full capacity, without generating DoS-like traffic
+patterns (e.g., UDP flooding).
+When reaching these stable conditions (called "saturation") the latency on the
+network is stable enough to allow to measure the responsiveness during that time.
+Thus, the algorithm must detect when the network is reaching this point of saturation
+to trigger the latency probes.
 
-Desired properties of "working condition":
+Finally, as end-user usage of the network evolves to newer protocols and congestion
+control algorithms, it is important that the working conditions also can evolve
+to continuously represent a realistic traffic pattern.
 
-- Should not waste traffic, because the person may be paying for it.
-- Should finish within a short time to
-avoid impacting other people on the same network,
-to avoid varying network conditions, and not try the person's patience.
 
 ### From single-flow to multi-flow
 
-A single TCP connection may not be sufficient to saturate a path.
+A single TCP connection may not be sufficient to reach the capacity of a path.
 For example, the 4MB constraints on TCP window size constraints
 may not fill the pipe.
 Additionally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
 This reaction (intended by the protocol design) decreases the
-queueing within the network, making it hard to reach saturation.
+queueing within the network, making it hard to reach the path's capacity.
 
-The goal of the RPM Test is to keep the network as busy as possible
+The goal of the RPM Test is to keep the network in working conditions
 in a sustained and persistent way.
 It uses multiple TCP connections and gradually adds more TCP flows
 until saturation is reached.
@@ -281,7 +284,7 @@ Furthermore, both paths may differ significantly due to access link
 conditions (e.g., 5G downstream and LTE upstream) or the routing changes
 within the ISPs.
 To measure responsiveness under working conditions,
-the algorithm must saturate both directions.
+the algorithm must explore both directions.
 
 One approach could be to measure responsiveness in the uplink and downlink
 in parallel. It would allow for a shorter test run-time.
@@ -289,7 +292,7 @@ in parallel. It would allow for a shorter test run-time.
 However, a number of caveats come with measuring in parallel:
 
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
-This means the test might not saturate both directions at once and thus not expose
+This means the test might not reach the path's capacity in both directions at once and thus not expose
 all the potential sources of low responsiveness.
 - Debuggability of the results becomes harder:
 During parallel measurement it is impossible to differentiate whether
@@ -303,13 +306,9 @@ is considered a future extension.
 The RPM Test gradually increases the number of TCP connections
 and measures "goodput" - the sum of actual data transferred
 across all connections in a unit of time.
-When the goodput stops increasing, it means that saturation has been
-reached.
-
-Saturation has two criteria:
-a) the load-generating connections are utilizing all the
-capacity of the bottleneck,
-b) the buffers in the bottleneck are completely filled.
+When the goodput stops increasing, it means that the network is used at its full capacity, meaning the path is saturated.
+At this point we are creating the worst-case scenario within the limits of the
+realistic traffic pattern.
 
 The algorithm notes that throughput gradually increases until TCP
 connections complete their TCP slow-start phase.
@@ -321,23 +320,9 @@ If new connections leave the throughput the same,
 saturation has been reached and - more importantly -
 the working condition is stable.
 
-Filling buffers at the bottleneck depends on the congestion control
-deployed on the sender side.
-Congestion control algorithms like BBR may reach high throughput
-without causing queueing because the bandwidth detection
-portion of BBR effectively seeks the bottleneck capacity.
-
-RPM Test clients and servers should use loss-based congestion controls
-like Cubic to fill queues reliably.
-
-The RPM Test detects saturation when the observed goodput is not increasing
-even as connections are being added,
-or it detects packet loss or ECN marks signaling
-congestion or a full buffer of the bottleneck link.
-
 ### Final "Working Conditions" Algorithm
 
-The following algorithm reaches working conditions (saturation) of a network
+The following algorithm reaches working conditions of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
 files.
 The algorithm is the same for upload and download and uses
@@ -366,7 +351,7 @@ the steps of the algorithm are:
   - If the moving average aggregate goodput at interval i is more than a 5% increase over
     the moving average aggregate goodput at interval i - 1, the network has not yet reached saturation.
     - If no load-generating connections have been added within the last four (4) intervals, add four (4) more load-generating connections.
-  - Else, the network has reached saturation with the existing load-generating connections. The current state is a candidate for stable saturation.
+  - Else, the network has reached saturation with the existing load-generating connections. The current state is a candidate for stable working conditions.
     - If a) there have been load-generating connections added in the past four (4) intervals and b) there has been moving average stability during the period between intervals i-4 and i,
       then the network has reached stable saturation and the algorithm terminates.
     - Otherwise, add four (4) more load-generating connections.

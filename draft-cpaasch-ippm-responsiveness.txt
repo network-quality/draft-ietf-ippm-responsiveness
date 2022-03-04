@@ -37,10 +37,10 @@ Abstract
 
    This document specifies the "RPM Test" for measuring responsiveness.
    It uses common protocols and mechanisms to measure user experience
-   especially when the network is fully loaded ("responsiveness under
-   working conditions".)  The measurement is expressed as "Round-trips
-   Per Minute" (RPM) and should be included with throughput (up and
-   down) and idle latency as critical indicators of network quality.
+   especially when the network is under working conditions.  The
+   measurement is expressed as "Round-trips Per Minute" (RPM) and should
+   be included with throughput (up and down) and idle latency as
+   critical indicators of network quality.
 
 Status of This Memo
 
@@ -95,13 +95,13 @@ Table of Contents
        4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   6
        4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   7
        4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   7
-     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   9
+     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   8
        4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .   9
-       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .  10
-   5.  Interpreting responsiveness results . . . . . . . . . . . . .  10
+       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .   9
+   5.  Interpreting responsiveness results . . . . . . . . . . . . .   9
      5.1.  Elements influencing responsiveness . . . . . . . . . . .  10
        5.1.1.  Client side influence . . . . . . . . . . . . . . . .  10
-       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  11
+       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  10
        5.1.3.  Server side influence . . . . . . . . . . . . . . . .  11
      5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  11
    6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  12
@@ -257,23 +257,23 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
 
 4.1.  Working Conditions
 
-   For the purpose of this methodology, typical "working conditions"
-   represent a state of the network in which the bottleneck node is
-   experiencing ingress and egress flows similar to those created by
-   humans in the typical day-to-day pattern.
+   There are many different ways to define the state of "working
+   conditions" to measure responsiveness.  There is no one true answer
+   to this question.  It is a tradeoff between using realistic traffic
+   patterns and pushing the network to its limits.
 
-   While a single HTTP transaction might briefly put a network into
-   working conditions, making reliable measurements requires maintaining
-   the state over sufficient time.
+   In this document we aim to generate a realistic traffic pattern by
+   using standard HTTP transactions but exploring the worst-case
+   scenario by creating multiple of these transactions and using very
+   large data objects in these HTTP transactions.
 
-   The algorithm must also detect when the network is in a persistent
-   working condition, also called "saturation".
-
-   Desired properties of "working condition":
-
-   o  Should not waste traffic, because the person may be paying for it.
-
-
+   This allows to create a stable state of working conditions during
+   which the network is used at its nearly full capacity, without
+   generating DoS-like traffic patterns (e.g., UDP flooding).  When
+   reaching these stable conditions (called "saturation") the latency on
+   the network is stable enough to allow to measure the responsiveness
+   during that time.  Thus, the algorithm must detect when the network
+   is reaching this point of saturation to trigger the latency probes.
 
 
 
@@ -282,21 +282,22 @@ Paasch, et al.          Expires September 5, 2022               [Page 5]
 Internet-Draft   Responsiveness under Working Conditions      March 2022
 
 
-   o  Should finish within a short time to avoid impacting other people
-      on the same network, to avoid varying network conditions, and not
-      try the person's patience.
+   Finally, as end-user usage of the network evolves to newer protocols
+   and congestion control algorithms, it is important that the working
+   conditions also can evolve to continuously represent a realistic
+   traffic pattern.
 
 4.1.1.  From single-flow to multi-flow
 
-   A single TCP connection may not be sufficient to saturate a path.
-   For example, the 4MB constraints on TCP window size constraints may
-   not fill the pipe.  Additionally, traditional loss-based TCP
-   congestion control algorithms react aggressively to packet loss by
-   reducing the congestion window.  This reaction (intended by the
-   protocol design) decreases the queueing within the network, making it
-   hard to reach saturation.
+   A single TCP connection may not be sufficient to reach the capacity
+   of a path.  For example, the 4MB constraints on TCP window size
+   constraints may not fill the pipe.  Additionally, traditional loss-
+   based TCP congestion control algorithms react aggressively to packet
+   loss by reducing the congestion window.  This reaction (intended by
+   the protocol design) decreases the queueing within the network,
+   making it hard to reach the path's capacity.
 
-   The goal of the RPM Test is to keep the network as busy as possible
+   The goal of the RPM Test is to keep the network in working conditions
    in a sustained and persistent way.  It uses multiple TCP connections
    and gradually adds more TCP flows until saturation is reached.
 
@@ -307,7 +308,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    differ significantly due to access link conditions (e.g., 5G
    downstream and LTE upstream) or the routing changes within the ISPs.
    To measure responsiveness under working conditions, the algorithm
-   must saturate both directions.
+   must explore both directions.
 
    One approach could be to measure responsiveness in the uplink and
    downlink in parallel.  It would allow for a shorter test run-time.
@@ -315,9 +316,9 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    However, a number of caveats come with measuring in parallel:
 
    o  Half-duplex links may not permit simultaneous uplink and downlink
-      traffic.  This means the test might not saturate both directions
-      at once and thus not expose all the potential sources of low
-      responsiveness.
+      traffic.  This means the test might not reach the path's capacity
+      in both directions at once and thus not expose all the potential
+      sources of low responsiveness.
 
    o  Debuggability of the results becomes harder: During parallel
       measurement it is impossible to differentiate whether the observed
@@ -325,7 +326,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
 
    Thus, we recommend testing uplink and downlink sequentially.
    Parallel testing is considered a future extension.
-
 
 
 
@@ -343,11 +343,9 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    The RPM Test gradually increases the number of TCP connections and
    measures "goodput" - the sum of actual data transferred across all
    connections in a unit of time.  When the goodput stops increasing, it
-   means that saturation has been reached.
-
-   Saturation has two criteria: a) the load-generating connections are
-   utilizing all the capacity of the bottleneck, b) the buffers in the
-   bottleneck are completely filled.
+   means that the network is used at its full capacity, meaning the path
+   is saturated.  At this point we are creating the worst-case scenario
+   within the limits of the realistic traffic pattern.
 
    The algorithm notes that throughput gradually increases until TCP
    connections complete their TCP slow-start phase.  At that point,
@@ -358,41 +356,19 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    saturation has been reached and - more importantly - the working
    condition is stable.
 
-   Filling buffers at the bottleneck depends on the congestion control
-   deployed on the sender side.  Congestion control algorithms like BBR
-   may reach high throughput without causing queueing because the
-   bandwidth detection portion of BBR effectively seeks the bottleneck
-   capacity.
-
-   RPM Test clients and servers should use loss-based congestion
-   controls like Cubic to fill queues reliably.
-
-   The RPM Test detects saturation when the observed goodput is not
-   increasing even as connections are being added, or it detects packet
-   loss or ECN marks signaling congestion or a full buffer of the
-   bottleneck link.
-
 4.1.4.  Final "Working Conditions" Algorithm
 
-   The following algorithm reaches working conditions (saturation) of a
-   network by using HTTP/2 upload (POST) or download (GET) requests of
-   infinitely large files.  The algorithm is the same for upload and
-   download and uses the same term "load-generating connection" for
-   each.  The actions of the algorithm take place at regular intervals.
-   For the current draft the interval is defined as one (1) second.
+   The following algorithm reaches working conditions of a network by
+   using HTTP/2 upload (POST) or download (GET) requests of infinitely
+   large files.  The algorithm is the same for upload and download and
+   uses the same term "load-generating connection" for each.  The
+   actions of the algorithm take place at regular intervals.  For the
+   current draft the interval is defined as one (1) second.
 
    Where
 
    o  i: The index of the current interval. i is initialized to 0 when
       the algorithm begins and increases by one for each interval.
-
-
-
-
-Paasch, et al.          Expires September 5, 2022               [Page 7]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
 
    o  instantaneous aggregate goodput at interval p: The number of total
       bytes of data transferred within interval p.  If p is less than 0,
@@ -409,6 +385,14 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
       goodput at interval x+1 (for all b<=x<e) is less than 5%.
 
    the steps of the algorithm are:
+
+
+
+
+Paasch, et al.          Expires September 5, 2022               [Page 7]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
 
    o  Create four (4) load-generating connections.
 
@@ -428,7 +412,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
 
       *  Else, the network has reached saturation with the existing
          load-generating connections.  The current state is a candidate
-         for stable saturation.
+         for stable working conditions.
 
          +  If a) there have been load-generating connections added in
             the past four (4) intervals and b) there has been moving
@@ -441,15 +425,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    In Section 3, it is mentioned that one of the goals is that the test
    finishes within 20 seconds.  It is left to the implementation what to
    do when saturation is not reached within that time-frame.  For
-
-
-
-
-Paasch, et al.          Expires September 5, 2022               [Page 8]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
-
    example, an implementation might gather a provisional responsiveness
    measurement or let the test run for longer.
 
@@ -467,6 +442,13 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    Once the network is in a consistent working conditions, the RPM Test
    must "probe" the network multiple times to measure its
    responsiveness.
+
+
+
+Paasch, et al.          Expires September 5, 2022               [Page 8]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
 
    Each RPM Test probe measures:
 
@@ -498,14 +480,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    iteration of the algorithm gives an equal weight to each of these
    values.  That is, it sums the five time values for each probe, and
    divides by the total number of probes to compute an average probe
-
-
-
-Paasch, et al.          Expires September 5, 2022               [Page 9]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
-
    duration.  The reciprocal of this, normalized to 60 seconds, gives
    the Round-trips Per Minute (RPM).
 
@@ -524,6 +498,14 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    Contrary to more traditional measurement methods the responsiveness
    metric is not only influenced by the properties of the network but
    can significantly be influenced by the properties of the client and
+
+
+
+Paasch, et al.          Expires September 5, 2022               [Page 9]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
+
    the server implementations.  This section describes how the different
    elements influence responsiveness and how a user may differentiate
    them when debugging a network.
@@ -554,14 +536,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    solutions like TCP_NOTSENT_LOWAT [draft-ietf-tcpm-rfc793bis].  At the
    HTTP/2 layer it is important that the load-generating data is not
    interfering with the latency-measuring probes.  For example, the
-
-
-
-Paasch, et al.          Expires September 5, 2022              [Page 10]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
-
    different streams should not be stacked one after the other but
    rather be allowed to be multiplexed for optimal latency.  The queue-
    buildup at these layers would only influence latency on the probes
@@ -580,6 +554,14 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    The network obviously is a large driver for the responsiveness
    result.  Propagation delay from the client to the server as well as
    queuing in the bottleneck node will cause latency.  Beyond these
+
+
+
+Paasch, et al.          Expires September 5, 2022              [Page 10]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
+
    traditional sources of latency, other factors may influence the
    results as well.  Many networks deploy transparent TCP Proxies,
    firewalls doing deep packet-inspection, HTTP "accelerators",... As
@@ -610,14 +592,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    Nevertheless, the responsiveness test allows to gain some insight
    into what the source of the latency is.  The previous section
    described the elements that influence the responsiveness.  From there
-
-
-
-Paasch, et al.          Expires September 5, 2022              [Page 11]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
-
    it became apparent that the latency measured on the load-generating
    connections and the latency measured on separate connections may be
    different due to the different elements.
@@ -631,6 +605,18 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    all other bottlenecks in the network that may cause a queue build-up
    will be affecting the load-generating connections as well as the
    separate latency probing connections in the same way.
+
+
+
+
+
+
+
+
+Paasch, et al.          Expires September 5, 2022              [Page 11]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
 
 6.  RPM Test Server API
 
@@ -665,15 +651,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
        with an arbitrary body size.  The server should discard the
        payload.
 
-
-
-
-
-Paasch, et al.          Expires September 5, 2022              [Page 12]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
-
    4.  A configuration URL that returns a JSON [RFC8259] object with the
        information the client uses to run the test (sample below).
        Sample JSON:
@@ -688,6 +665,14 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
     "https_upload_url": "https://networkquality.example.com/api/v1/upload"
   }
 }
+
+
+
+
+Paasch, et al.          Expires September 5, 2022              [Page 12]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
 
    The client begins the responsiveness measurement by querying for the
    JSON configuration.  This supplies the URLs for creating the load-
@@ -723,13 +708,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
               RFC 793, DOI 10.17487/RFC0793, September 1981,
               <https://www.rfc-editor.org/info/rfc793>.
 
-
-
-Paasch, et al.          Expires September 5, 2022              [Page 13]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
-
    [RFC1035]  Mockapetris, P., "Domain names - implementation and
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
@@ -744,6 +722,13 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
               Interchange Format", STD 90, RFC 8259,
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/info/rfc8259>.
+
+
+
+Paasch, et al.          Expires September 5, 2022              [Page 13]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
 
    [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,
               J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler
@@ -775,17 +760,6 @@ Authors' Addresses
    Email: rrm@apple.com
 
 
-
-
-
-
-
-
-Paasch, et al.          Expires September 5, 2022              [Page 14]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2022
-
-
    Stuart Cheshire
    Apple Inc.
    One Apple Park Way
@@ -804,6 +778,14 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    Email: oesh@apple.com
 
 
+
+
+
+Paasch, et al.          Expires September 5, 2022              [Page 14]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2022
+
+
    Matt Mathis
    Google, Inc
    1600 Amphitheatre Parkway
@@ -811,6 +793,24 @@ Internet-Draft   Responsiveness under Working Conditions      March 2022
    United States of America
 
    Email: mattmathis@google.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

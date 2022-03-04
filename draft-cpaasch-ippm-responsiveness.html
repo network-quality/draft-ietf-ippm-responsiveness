@@ -461,7 +461,7 @@
 <p>For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users.</p>
 <p>Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem.</p>
 <p>Our networks remain unresponsive, not from a lack of technical solutions, but rather a lack of awareness of the problem.  We believe that creating a tool whose measurement matches people&#8217;s every day experience will create the necessary awareness, and result in a demand for products that solve the problem.</p>
-<p>This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience especially when the network is fully loaded (&#8220;responsiveness under working conditions&#8221;.) The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality.</p>
+<p>This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience especially when the network is under working conditions.  The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
@@ -571,47 +571,37 @@
 <h1 id="rfc.section.4.1">
 <a href="#rfc.section.4.1">4.1.</a> <a href="#working-conditions" id="working-conditions">Working Conditions</a>
 </h1>
-<p id="rfc.section.4.1.p.1">For the purpose of this methodology, typical &#8220;working conditions&#8221; represent a state of the network in which the bottleneck node is experiencing ingress and egress flows similar to those created by humans in the typical day-to-day pattern.</p>
-<p id="rfc.section.4.1.p.2">While a single HTTP transaction might briefly put a network into working conditions, making reliable measurements requires maintaining the state over sufficient time.</p>
-<p id="rfc.section.4.1.p.3">The algorithm must also detect when the network is in a persistent working condition, also called &#8220;saturation&#8221;.</p>
-<p id="rfc.section.4.1.p.4">Desired properties of &#8220;working condition&#8221;:</p>
-<p></p>
-
-<ul>
-<li>Should not waste traffic, because the person may be paying for it.</li>
-<li>Should finish within a short time to avoid impacting other people on the same network, to avoid varying network conditions, and not try the person&#8217;s patience.</li>
-</ul>
+<p id="rfc.section.4.1.p.1">There are many different ways to define the state of &#8220;working conditions&#8221; to measure responsiveness. There is no one true answer to this question. It is a tradeoff between using realistic traffic patterns and pushing the network to its limits.</p>
+<p id="rfc.section.4.1.p.2">In this document we aim to generate a realistic traffic pattern by using standard HTTP transactions but exploring the worst-case scenario by creating multiple of these transactions and using very large data objects in these HTTP transactions.</p>
+<p id="rfc.section.4.1.p.3">This allows to create a stable state of working conditions during which the network is used at its nearly full capacity, without generating DoS-like traffic patterns (e.g., UDP flooding).  When reaching these stable conditions (called &#8220;saturation&#8221;) the latency on the network is stable enough to allow to measure the responsiveness during that time.  Thus, the algorithm must detect when the network is reaching this point of saturation to trigger the latency probes.</p>
+<p id="rfc.section.4.1.p.4">Finally, as end-user usage of the network evolves to newer protocols and congestion control algorithms, it is important that the working conditions also can evolve to continuously represent a realistic traffic pattern.</p>
 <h1 id="rfc.section.4.1.1">
 <a href="#rfc.section.4.1.1">4.1.1.</a> <a href="#from-single-flow-to-multi-flow" id="from-single-flow-to-multi-flow">From single-flow to multi-flow</a>
 </h1>
-<p id="rfc.section.4.1.1.p.1">A single TCP connection may not be sufficient to saturate a path.  For example, the 4MB constraints on TCP window size constraints may not fill the pipe.  Additionally, traditional loss-based TCP congestion control algorithms react aggressively to packet loss by reducing the congestion window.  This reaction (intended by the protocol design) decreases the queueing within the network, making it hard to reach saturation.</p>
-<p id="rfc.section.4.1.1.p.2">The goal of the RPM Test is to keep the network as busy as possible in a sustained and persistent way.  It uses multiple TCP connections and gradually adds more TCP flows until saturation is reached.</p>
+<p id="rfc.section.4.1.1.p.1">A single TCP connection may not be sufficient to reach the capacity of a path.  For example, the 4MB constraints on TCP window size constraints may not fill the pipe.  Additionally, traditional loss-based TCP congestion control algorithms react aggressively to packet loss by reducing the congestion window.  This reaction (intended by the protocol design) decreases the queueing within the network, making it hard to reach the path&#8217;s capacity.</p>
+<p id="rfc.section.4.1.1.p.2">The goal of the RPM Test is to keep the network in working conditions in a sustained and persistent way.  It uses multiple TCP connections and gradually adds more TCP flows until saturation is reached.</p>
 <h1 id="rfc.section.4.1.2">
 <a href="#rfc.section.4.1.2">4.1.2.</a> <a href="#parallel-vs-sequential-uplink-and-downlink" id="parallel-vs-sequential-uplink-and-downlink">Parallel vs Sequential Uplink and Downlink</a>
 </h1>
-<p id="rfc.section.4.1.2.p.1">Poor responsiveness can be caused by queues in either (or both) the upstream and the downstream direction.  Furthermore, both paths may differ significantly due to access link conditions (e.g., 5G downstream and LTE upstream) or the routing changes within the ISPs.  To measure responsiveness under working conditions, the algorithm must saturate both directions.</p>
+<p id="rfc.section.4.1.2.p.1">Poor responsiveness can be caused by queues in either (or both) the upstream and the downstream direction.  Furthermore, both paths may differ significantly due to access link conditions (e.g., 5G downstream and LTE upstream) or the routing changes within the ISPs.  To measure responsiveness under working conditions, the algorithm must explore both directions.</p>
 <p id="rfc.section.4.1.2.p.2">One approach could be to measure responsiveness in the uplink and downlink in parallel. It would allow for a shorter test run-time.</p>
 <p id="rfc.section.4.1.2.p.3">However, a number of caveats come with measuring in parallel:</p>
 <p></p>
 
 <ul>
-<li>Half-duplex links may not permit simultaneous uplink and downlink traffic.  This means the test might not saturate both directions at once and thus not expose all the potential sources of low responsiveness.</li>
+<li>Half-duplex links may not permit simultaneous uplink and downlink traffic.  This means the test might not reach the path&#8217;s capacity in both directions at once and thus not expose all the potential sources of low responsiveness.</li>
 <li>Debuggability of the results becomes harder: During parallel measurement it is impossible to differentiate whether the observed latency happens in the uplink or the downlink direction.</li>
 </ul>
 <p id="rfc.section.4.1.2.p.5">Thus, we recommend testing uplink and downlink sequentially. Parallel testing is considered a future extension.</p>
 <h1 id="rfc.section.4.1.3">
 <a href="#rfc.section.4.1.3">4.1.3.</a> <a href="#reaching-saturation" id="reaching-saturation">Reaching saturation</a>
 </h1>
-<p id="rfc.section.4.1.3.p.1">The RPM Test gradually increases the number of TCP connections and measures &#8220;goodput&#8221; - the sum of actual data transferred across all connections in a unit of time.  When the goodput stops increasing, it means that saturation has been reached.</p>
-<p id="rfc.section.4.1.3.p.2">Saturation has two criteria: a) the load-generating connections are utilizing all the capacity of the bottleneck, b) the buffers in the bottleneck are completely filled.</p>
-<p id="rfc.section.4.1.3.p.3">The algorithm notes that throughput gradually increases until TCP connections complete their TCP slow-start phase.  At that point, throughput eventually stalls usually due to receive window limitations.  The only means to further increase throughput is by adding more TCP connections to the pool of load-generating connections.  If new connections leave the throughput the same, saturation has been reached and - more importantly - the working condition is stable.</p>
-<p id="rfc.section.4.1.3.p.4">Filling buffers at the bottleneck depends on the congestion control deployed on the sender side.  Congestion control algorithms like BBR may reach high throughput without causing queueing because the bandwidth detection portion of BBR effectively seeks the bottleneck capacity.</p>
-<p id="rfc.section.4.1.3.p.5">RPM Test clients and servers should use loss-based congestion controls like Cubic to fill queues reliably.</p>
-<p id="rfc.section.4.1.3.p.6">The RPM Test detects saturation when the observed goodput is not increasing even as connections are being added, or it detects packet loss or ECN marks signaling congestion or a full buffer of the bottleneck link.</p>
+<p id="rfc.section.4.1.3.p.1">The RPM Test gradually increases the number of TCP connections and measures &#8220;goodput&#8221; - the sum of actual data transferred across all connections in a unit of time.  When the goodput stops increasing, it means that the network is used at its full capacity, meaning the path is saturated.  At this point we are creating the worst-case scenario within the limits of the realistic traffic pattern.</p>
+<p id="rfc.section.4.1.3.p.2">The algorithm notes that throughput gradually increases until TCP connections complete their TCP slow-start phase.  At that point, throughput eventually stalls usually due to receive window limitations.  The only means to further increase throughput is by adding more TCP connections to the pool of load-generating connections.  If new connections leave the throughput the same, saturation has been reached and - more importantly - the working condition is stable.</p>
 <h1 id="rfc.section.4.1.4">
 <a href="#rfc.section.4.1.4">4.1.4.</a> <a href="#final-working-conditions-algorithm" id="final-working-conditions-algorithm">Final &#8220;Working Conditions&#8221; Algorithm</a>
 </h1>
-<p id="rfc.section.4.1.4.p.1">The following algorithm reaches working conditions (saturation) of a network by using HTTP/2 upload (POST) or download (GET) requests of infinitely large files.  The algorithm is the same for upload and download and uses the same term &#8220;load-generating connection&#8221; for each.  The actions of the algorithm take place at regular intervals. For the current draft the interval is defined as one (1) second.</p>
+<p id="rfc.section.4.1.4.p.1">The following algorithm reaches working conditions of a network by using HTTP/2 upload (POST) or download (GET) requests of infinitely large files.  The algorithm is the same for upload and download and uses the same term &#8220;load-generating connection&#8221; for each.  The actions of the algorithm take place at regular intervals. For the current draft the interval is defined as one (1) second.</p>
 <p id="rfc.section.4.1.4.p.2">Where</p>
 <p></p>
 
@@ -631,7 +621,7 @@
 <li>Compute the moving average aggregate goodput at interval i.</li>
 <li>If the moving average aggregate goodput at interval i is more than a 5% increase over the moving average aggregate goodput at interval i - 1, the network has not yet reached saturation.  <ul><li>If no load-generating connections have been added within the last four (4) intervals, add four (4) more load-generating connections.</li></ul>
 </li>
-<li>Else, the network has reached saturation with the existing load-generating connections. The current state is a candidate for stable saturation.  <ul>
+<li>Else, the network has reached saturation with the existing load-generating connections. The current state is a candidate for stable working conditions.  <ul>
 <li>If a) there have been load-generating connections added in the past four (4) intervals and b) there has been moving average stability during the period between intervals i-4 and i, then the network has reached stable saturation and the algorithm terminates.</li>
 <li>Otherwise, add four (4) more load-generating connections.</li>
 </ul>
