@@ -1,7 +1,7 @@
 xml2rfc ?= xml2rfc
 kramdown-rfc2629 ?= kramdown-rfc2629
 
-drafts := draft-cpaasch-ippm-responsiveness.xml draft-cpaasch-ippm-responsiveness.txt draft-cpaasch-ippm-responsiveness.html draft-cpaasch-ippm-responsiveness.pdf
+drafts := draft-ietf-ippm-responsiveness.xml draft-ietf-ippm-responsiveness.txt draft-ietf-ippm-responsiveness.html draft-ietf-ippm-responsiveness.pdf
 xml := $(drafts:.txt=.xml)
 
 all: $(drafts)

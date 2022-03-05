@@ -1,4 +1,4 @@
-# About draft-cpaasch-ippm-responsiveness
+# About draft-ietf-ippm-responsiveness
 
 This repository contains the source document for the **Responsiveness under Working Conditions** Internet-Draft.
 That document describes a technique for measuring responsiveness in a network.

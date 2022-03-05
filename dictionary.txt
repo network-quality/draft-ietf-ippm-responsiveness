@@ -1,6 +1,6 @@
 docname
-draft-cpaasch-ippm-responsiveness
-draft-cpaasch-ippm-responsiveness-00
+draft-ietf-ippm-responsiveness
+draft-ietf-ippm-responsiveness-00
 workgroup
 trust200902
 toc
