@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: Christoph Paasch
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Wed Jul  6 14:24:21 2022
+%%CreationDate: Wed Jul  6 14:54:36 2022
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -1480,32 +1480,38 @@ _S
 5 506 M
 (       code of 200 and 1 byte in the body.  The actual body content is) s
 5 495 M
-(       irrelevant.) s
-5 473 M
-(   2.  A "large" URL/response: The server must respond with a status) s
+(       irrelevant.  The server SHOULD specify the content-type as) s
+5 484 M
+(       application/octet-stream.) s
 5 462 M
-(       code of 200 and a body size of at least 8GB.  The body can be) s
+(   2.  A "large" URL/response: The server must respond with a status) s
 5 451 M
-(       bigger, and may need to grow as network speeds increases over) s
+(       code of 200 and a body size of at least 8GB.  The server SHOULD) s
 5 440 M
-(       time.  The actual body content is irrelevant.  The client will) s
+(       specify the content-type as application/octet-stream.  The body) s
 5 429 M
-(       probably never completely download the object, but will instead) s
+(       can be bigger, and may need to grow as network speeds increases) s
 5 418 M
-(       close the connection after reaching working condition and making) s
+(       over time.  The actual body content is irrelevant.  The client) s
 5 407 M
-(       its measurements.) s
+(       will probably never completely download the object, but will) s
+5 396 M
+(       instead close the connection after reaching working condition and) s
 5 385 M
-(   3.  An "upload" URL/response: The server must handle a POST request) s
-5 374 M
-(       with an arbitrary body size.  The server should discard the) s
+(       making its measurements.) s
 5 363 M
-(       payload.) s
+(   3.  An "upload" URL/response: The server must handle a POST request) s
+5 352 M
+(       with an arbitrary body size.  The server should discard the) s
 5 341 M
-(   4.  A configuration URL that returns a JSON [RFC8259] object with the) s
-5 330 M
-(       information the client uses to run the test \(sample below\).) s
+(       payload.) s
 5 319 M
+(   4.  A configuration URL that returns a JSON [RFC8259] object with the) s
+5 308 M
+(       information the client uses to run the test \(sample below\).  The) s
+5 297 M
+(       server SHOULD specify the content-type as application/json.) s
+5 286 M
 (       Sample JSON:) s
 5 176 M
 (Paasch, et al.           Expires January 7, 2023               [Page 12]) s

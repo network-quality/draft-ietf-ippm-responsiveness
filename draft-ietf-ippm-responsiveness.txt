@@ -640,26 +640,26 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
    1.  A "small" URL/response: The server must respond with a status
        code of 200 and 1 byte in the body.  The actual body content is
-       irrelevant.
+       irrelevant.  The server SHOULD specify the content-type as
+       application/octet-stream.
 
    2.  A "large" URL/response: The server must respond with a status
-       code of 200 and a body size of at least 8GB.  The body can be
-       bigger, and may need to grow as network speeds increases over
-       time.  The actual body content is irrelevant.  The client will
-       probably never completely download the object, but will instead
-       close the connection after reaching working condition and making
-       its measurements.
+       code of 200 and a body size of at least 8GB.  The server SHOULD
+       specify the content-type as application/octet-stream.  The body
+       can be bigger, and may need to grow as network speeds increases
+       over time.  The actual body content is irrelevant.  The client
+       will probably never completely download the object, but will
+       instead close the connection after reaching working condition and
+       making its measurements.
 
    3.  An "upload" URL/response: The server must handle a POST request
        with an arbitrary body size.  The server should discard the
        payload.
 
    4.  A configuration URL that returns a JSON [RFC8259] object with the
-       information the client uses to run the test (sample below).
+       information the client uses to run the test (sample below).  The
+       server SHOULD specify the content-type as application/json.
        Sample JSON:
-
-
-
 
 
 

@@ -530,9 +530,11 @@ The server MUST respond to 4 URLs:
 1. A "small" URL/response:
 The server must respond with a status code of 200 and 1 byte in the body.
 The actual body content is irrelevant.
+The server SHOULD specify the content-type as application/octet-stream.
 
 2. A "large" URL/response:
 The server must respond with a status code of 200 and a body size of at least 8GB.
+The server SHOULD specify the content-type as application/octet-stream.
 The body can be bigger, and may need to grow as network speeds increases over time.
 The actual body content is irrelevant.
 The client will probably never completely download the object,
@@ -544,19 +546,20 @@ The server must handle a POST request with an arbitrary body size.
 The server should discard the payload.
 
 4. A configuration URL that returns a JSON {{RFC8259}} object with the information
-the client uses to run the test (sample below).
+the client uses to run the test (sample below). The server SHOULD specify the
+content-type as application/json.
 Sample JSON:
 
-   ~~~
-   {
-     "version": 1,
-     "urls": {
-       "small_https_download_url": "https://networkquality.example.com/api/v1/small",
-       "large_https_download_url": "https://networkquality.example.com/api/v1/large",
-       "https_upload_url": "https://networkquality.example.com/api/v1/upload"
-     }
-   }
-   ~~~
+~~~
+{
+  "version": 1,
+  "urls": {
+    "small_https_download_url": "https://networkquality.example.com/api/v1/small",
+    "large_https_download_url": "https://networkquality.example.com/api/v1/large",
+    "https_upload_url": "https://networkquality.example.com/api/v1/upload"
+  }
+}
+~~~
 
 The client begins the responsiveness measurement by querying for the JSON configuration.
 This supplies the URLs for creating the load-generating connections in
