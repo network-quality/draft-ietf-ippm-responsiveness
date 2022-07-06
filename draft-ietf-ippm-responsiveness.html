@@ -398,6 +398,8 @@
 <link href="#rfc.section.8" rel="Chapter" title="8 IANA Considerations">
 <link href="#rfc.section.9" rel="Chapter" title="9 Acknowledgments">
 <link href="#rfc.references" rel="Chapter" title="10 Informative References">
+<link href="#rfc.appendix.A" rel="Chapter" title="A Example Server Configuration">
+<link href="#rfc.appendix.A.1" rel="Chapter" title="A.1 Apache Traffic Server">
 <link href="#rfc.authors" rel="Chapter">
 
 
@@ -406,7 +408,7 @@
 
   <meta name="dct.creator" content="Paasch, C., Meyer, R., Cheshire, S., Shapira, O., and M. Mathis" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-ippm-responsiveness-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2022-3-04" />
+  <meta name="dct.issued" scheme="ISO8601" content="2022-7-06" />
   <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
   <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
 
@@ -430,7 +432,7 @@
 <td class="right">S. Cheshire</td>
 </tr>
 <tr>
-<td class="left">Expires: September 5, 2022</td>
+<td class="left">Expires: January 7, 2023</td>
 <td class="right">O. Shapira</td>
 </tr>
 <tr>
@@ -447,7 +449,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">March 04, 2022</td>
+<td class="right">July 06, 2022</td>
 </tr>
 
     	
@@ -466,7 +468,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on September 5, 2022.</p>
+<p>This Internet-Draft will expire on January 7, 2023.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2022 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -524,7 +526,11 @@
 </li>
 <li>10.   <a href="#rfc.references">Informative References</a>
 </li>
-<li><a href="#rfc.authors">Authors' Addresses</a>
+<li>Appendix A.   <a href="#rfc.appendix.A">Example Server Configuration</a>
+</li>
+<ul><li>A.1.   <a href="#rfc.appendix.A.1">Apache Traffic Server</a>
+</li>
+</ul><li><a href="#rfc.authors">Authors' Addresses</a>
 </li>
 
 
@@ -560,7 +566,7 @@
 
 <ol>
 <li>Today&#8217;s Internet traffic primarily uses HTTP/2 over TLS.  Thus, the algorithm should use that protocol.  <br><br> As a side note: other types of traffic are gaining in popularity (HTTP/3) and/or are already being used widely (RTP).  Traffic prioritization and QoS rules on the Internet may subject traffic to completely different paths: these could also be measured separately.</li>
-<li>The Internet is marked by the deployment of countless middleboxes like transparent TCP proxies or traffic prioritization for certain types of traffic.  The RPM Test must take into account their effect on DNS-request <a href="#RFC1035" class="xref">[RFC1035]</a>, TCP-handshake <a href="#RFC0793" class="xref">[RFC0793]</a>, TLS-handshake, and request/response.</li>
+<li>The Internet is marked by the deployment of countless middleboxes like transparent TCP proxies or traffic prioritization for certain types of traffic.  The RPM Test must take into account their effect on TCP-handshake <a href="#RFC0793" class="xref">[RFC0793]</a>, TLS-handshake, and request/response.</li>
 <li>The test result should be expressed in an intuitive, nontechnical form.</li>
 <li>Finally, to be useful to a wide audience, the measurement should finish within a short time frame.  Our target is 20 seconds.</li>
 </ol>
@@ -639,13 +645,13 @@
 <p></p>
 
 <ol>
-<li>The responsiveness of the different steps to create a new connection, all during working conditions.  <br><br> To do this, the test measures the time needed to make a DNS request, establish a TCP connection on port 443, establish a TLS context using TLS1.3 <a href="#RFC8446" class="xref">[RFC8446]</a>, and send and receive a one-byte object with a HTTP/2 GET request.  It repeats these steps multiple times for accuracy.</li>
+<li>The responsiveness of the different steps to create a new connection, all during working conditions.  <br><br> To do this, the test measures the time needed to establish a TCP connection on port 443, establish a TLS context using TLS1.3 <a href="#RFC8446" class="xref">[RFC8446]</a>, and send an HTTP/2 GET request for a a one-byte object and wait for the response to be fully received.  It repeats these steps multiple times for accuracy.</li>
 <li>The responsiveness of the network and the client/server networking stacks for the load-generating connections themselves.  <br><br> To do this, the load-generating connections multiplex an HTTP/2 GET request for a one-byte object to get the end-to-end latency on the connections that are using the network at full speed.</li>
 </ol>
 <h1 id="rfc.section.4.2.1">
 <a href="#rfc.section.4.2.1">4.2.1.</a> <a href="#aggregating-the-measurements" id="aggregating-the-measurements">Aggregating the Measurements</a>
 </h1>
-<p id="rfc.section.4.2.1.p.1">The algorithm produces sets of 5 times for each probe, namely: DNS handshake, TCP handshake, TLS handshake, HTTP/2 request/response on separate (idle) connections, HTTP/2 request/response on load-generating connections.  This fine-grained data is useful, but not necessary for creating a useful metric.</p>
+<p id="rfc.section.4.2.1.p.1">The algorithm produces sets of 4 times for each probe, namely: TCP handshake, TLS handshake, HTTP/2 request/response on separate (idle) connections, HTTP/2 request/response on load-generating connections.  This fine-grained data is useful, but not necessary for creating a useful metric.</p>
 <p id="rfc.section.4.2.1.p.2">To create a single &#8220;Responsiveness&#8221; (e.g., RPM) number, this first iteration of the algorithm gives an equal weight to each of these values.  That is, it sums the five time values for each probe, and divides by the total number of probes to compute an average probe duration.  The reciprocal of this, normalized to 60 seconds, gives the Round-trips Per Minute (RPM).</p>
 <h1 id="rfc.section.4.2.2">
 <a href="#rfc.section.4.2.2">4.2.2.</a> <a href="#statistical-confidence" id="statistical-confidence">Statistical Confidence</a>
@@ -684,7 +690,7 @@
 <a href="#rfc.section.6">6.</a> <a href="#rpm-test-server-api" id="rpm-test-server-api">RPM Test Server API</a>
 </h1>
 <p id="rfc.section.6.p.1">The RPM measurement uses standard protocols: no new protocol is defined.</p>
-<p id="rfc.section.6.p.2">Both the client and the server MUST support HTTP/2 over TLS 1.3.  The client MUST be able to send a GET request and a POST.  The server MUST be able to respond to both of these HTTP commands.  Further, the server endpoint MUST be accessible through a hostname that can be resolved through DNS.  The server MUST have the ability to provide content upon a GET request.  Both client and server SHOULD use loss-based congestion controls like Cubic.  The server MUST use a packet scheduling algorithm that minimizes internal queueing to avoid affecting the client&#8217;s measurement.</p>
+<p id="rfc.section.6.p.2">Both the client and the server MUST support HTTP/2 over TLS 1.3.  The client MUST be able to send a GET request and a POST.  The server MUST be able to respond to both of these HTTP commands.  The server MUST have the ability to provide content upon a GET request.  Both client and server SHOULD use loss-based congestion controls like Cubic.  The server MUST use a packet scheduling algorithm that minimizes internal queueing to avoid affecting the client&#8217;s measurement.</p>
 <p id="rfc.section.6.p.3">The server MUST respond to 4 URLs:</p>
 <pre>
 {
@@ -761,6 +767,33 @@
 <a>Rescorla, E.</a>, "<a href="https://tools.ietf.org/html/rfc8446">The Transport Layer Security (TLS) Protocol Version 1.3</a>", RFC 8446, DOI 10.17487/RFC8446, August 2018.</td>
 </tr>
 </tbody></table>
+<h1 id="rfc.appendix.A">
+<a href="#rfc.appendix.A">Appendix A.</a> <a href="#example-server-configuration" id="example-server-configuration">Example Server Configuration</a>
+</h1>
+<p id="rfc.section.A.p.1">This section shows fragments of sample server configurations to host an responsiveness measurement endpoint.</p>
+<h1 id="rfc.appendix.A.1">
+<a href="#rfc.appendix.A.1">A.1.</a> <a href="#apache-traffic-server" id="apache-traffic-server">Apache Traffic Server</a>
+</h1>
+<p id="rfc.section.A.1.p.1">Apache Traffic Server starting at version 9.1.0 supports configuration as a responsiveness server. It requires the generator and the statichit plugin.</p>
+<p id="rfc.section.A.1.p.2">The sample configuration file then is:</p>
+<pre>
+map https://networkquality.example.com/api/v1/large \
+    http://localhost/cache/4294967296/ \
+    @plugin=generator.so
+
+map https://networkquality.example.com/api/v1/carry/small \
+    http://localhost/cache/1/ \
+    @plugin=generator.so
+
+map https://networkquality.example.com/api/v1/carry/config \
+    http://localhost/ \
+    @plugin=statichit.so @pparam=--file-path=config.example.com.json \
+    @pparam=--mime-type=application/json
+
+map https://networkquality.example.com/api/v1/carry/slurp \
+    http://localhost/ \
+    @plugin=generator.so
+</pre>
 <h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
 <div class="avoidbreak">
   <address class="vcard">

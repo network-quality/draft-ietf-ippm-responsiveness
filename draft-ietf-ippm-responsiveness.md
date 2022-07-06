@@ -576,3 +576,35 @@ TBD
 We would like to thank Rich Brown for his editorial pass over this I-D.
 We also thank Erik Auerswald and Will Hawkins for their constructive feedback on the I-D.
 
+--- back
+
+# Example Server Configuration
+
+This section shows fragments of sample server configurations to host an responsiveness
+measurement endpoint.
+
+## Apache Traffic Server
+
+Apache Traffic Server starting at version 9.1.0 supports configuration as a responsiveness
+server. It requires the generator and the statichit plugin.
+
+The sample configuration file then is:
+
+~~~
+map https://networkquality.example.com/api/v1/large \
+    http://localhost/cache/4294967296/ \
+    @plugin=generator.so
+
+map https://networkquality.example.com/api/v1/carry/small \
+    http://localhost/cache/1/ \
+    @plugin=generator.so
+
+map https://networkquality.example.com/api/v1/carry/config \
+    http://localhost/ \
+    @plugin=statichit.so @pparam=--file-path=config.example.com.json \
+    @pparam=--mime-type=application/json
+
+map https://networkquality.example.com/api/v1/carry/slurp \
+    http://localhost/ \
+    @plugin=generator.so
+~~~
