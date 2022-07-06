@@ -218,7 +218,7 @@ these could also be measured separately.
 2. The Internet is marked by the deployment of countless middleboxes like
 transparent TCP proxies or traffic prioritization for certain types of traffic.
 The RPM Test must take into account their effect on
-DNS-request {{RFC1035}}, TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
+TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
 
 3. The test result should be expressed in an intuitive, nontechnical form.
 
@@ -382,7 +382,7 @@ Each RPM Test probe measures:
 1. The responsiveness of the different steps to create a new connection,
 all during working conditions.
 
-   To do this, the test measures the time needed to make a DNS request,
+   To do this, the test measures the time needed to
    establish a TCP connection on port 443,
    establish a TLS context using TLS1.3 {{RFC8446}}, and
    send an HTTP/2 GET request for a a one-byte object and wait for the response
@@ -398,8 +398,8 @@ connections that are using the network at full speed.
 
 ### Aggregating the Measurements
 
-The algorithm produces sets of 5 times for each probe, namely:
-DNS handshake, TCP handshake, TLS handshake, HTTP/2 request/response on
+The algorithm produces sets of 4 times for each probe, namely:
+TCP handshake, TLS handshake, HTTP/2 request/response on
 separate (idle) connections, HTTP/2 request/response on load-generating connections.
 This fine-grained data is useful, but not necessary for creating a useful metric.
 
@@ -519,8 +519,6 @@ Both the client and the server MUST support HTTP/2 over TLS 1.3.
 The client MUST be able to send a GET request and a POST.
 The server MUST be able to respond to both of these
 HTTP commands.
-Further, the server endpoint MUST be accessible through a hostname
-that can be resolved through DNS.
 The server MUST have the ability to provide content upon a GET request.
 Both client and server SHOULD use loss-based congestion controls
 like Cubic.
