@@ -385,7 +385,8 @@ all during working conditions.
    To do this, the test measures the time needed to make a DNS request,
    establish a TCP connection on port 443,
    establish a TLS context using TLS1.3 {{RFC8446}}, and
-   send and receive a one-byte object with a HTTP/2 GET request.
+   send an HTTP/2 GET request for a a one-byte object and wait for the response
+   to be fully received.
    It repeats these steps multiple times for accuracy.
 
 2. The responsiveness of the network and the client/server networking stacks
