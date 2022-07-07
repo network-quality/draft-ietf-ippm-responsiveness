@@ -444,31 +444,20 @@ responsiveness measurement or let the test run for longer.
 
 ## Measuring Responsiveness
 
-Once the network is in a consistent working conditions,
-the RPM Test must "probe" the network multiple times
-to measure its responsiveness.
+Measuring responsiveness during the previously explained working conditions creation
+is a continuous process during the duration of the test. It requires a sufficiently
+large sample-size to have confidence in the results.
 
-Each RPM Test probe measures:
+The measurement of the responsiveness happens by sending probe-requests for a small
+object. The probe requests are being sent in two ways:
 
-1. The responsiveness of the different steps to create a new connection,
-all during working conditions.
-
-   To do this, the test measures the time needed to
-   establish a TCP connection on port 443,
-   establish a TLS context using TLS1.3 {{RFC8446}}, and
-   send an HTTP/2 GET request for a one-byte object and wait for the response
-   to be fully received.
-   It repeats these steps multiple times for accuracy.
+1. A HTTP GET request on a separate connection.
    This test mimics the time it takes for a web browser to connect to a new
    web server and request the first element of a web page (e.g., “index.html”),
    or the startup time for a video streaming client to launch and begin fetching media.
 
-2. The responsiveness of the network and the client/server networking stacks
-for the load-generating connections themselves.
 
-   To do this, the load-generating connections multiplex an HTTP/2 GET
-   request for a one-byte object to get the end-to-end latency on the
-   connections that are using the network at full speed.
+2. A HTTP GET request multiplexed on the load-generating connections.
    This test mimics the time it takes for a video streaming client
    to skip ahead to a different chapter in the same video stream,
    or for a navigation client to react and fetch new map tiles
@@ -477,29 +466,39 @@ for the load-generating connections themselves.
    over an existing connection should take less time than
    creating a brand new TLS connection from scratch to do the same thing.
 
+The former will provide 3 set of data-points. First, the duration of the TCP-handshake
+(noted hereafter as tcp_foreign).
+Second, the TLS round-trip-time (noted tls_foreign). For this, it is important to note that different TLS versions
+have a different number of round-trips. Thus, the TLS establishment time needs to be
+normalized to the number of round-trips the TLS handshake takes until the connection
+is ready to transmit data. And third, the HTTP latency between issuing the GET
+request for a 1-byte object until the entire response has been received (noted http_foreign).
+
+The latter will provide a single data-point between the time the HTTP GET request
+for the 1-byte object is issued on the load-generating connection until the
+full HTTP response has been received (noted http_self).
+
+It is important to issue multiple of these probes. To have a large dataset, the
+methodology requires a client to issue these probes every 100 milli-seconds.
+For the probes on the load-generating connections, the client needs to use one of the
+initial load-generating connections.
+This means that every 100ms, 2 probes are being evaluated. The total amount of data
+used for these probes would be no more than about 50KB worth of data within one second.
+
 ### Aggregating the Measurements
 
 The algorithm produces sets of 4 times for each probe, namely:
-TCP handshake, TLS handshake, HTTP/2 request/response on
-separate (idle) connections, HTTP/2 request/response on load-generating connections.
-This fine-grained data is useful, but not necessary for creating a useful metric.
+tcp_foreign, tls_foreign, http_foreign, http_self (fromm the previous section). Each of these sets
+will have a large number of sample. To aggregate the methodology proposes the following:
 
-To create a single "Responsiveness" (e.g., RPM) number,
-this first iteration of the algorithm gives
-an equal weight to each of these values.
-That is, it computes the sum of the four time values for every probe performed,
-and divides the grand total by four times the number of probes performed,
-to compute a simple arithmetic mean of all the probe durations.
-Dividing 60 seconds by the mean probe duration
-gives the average Round-trips Per Minute (RPM) for the network path.
+Among each set, we take the 90th percentile, thus resulting in 4 individual numbers.
+To aggregate these individual numbers into a single responsiveness number, we suggest the following weighted mean:
 
-### Statistical Confidence
+~~~
+Responsiveness = 60000 / ((1/3*tcp_foreign + 1/3*tls_foreign + 1/3*http_foreign + http_self)/2)
+~~~
 
-The number of probes necessary for statistical confidence
-is an open question.
-One could imagine a computation of the variance and confidence interval
-that would drive the number of measurements and balance the accuracy
-with the speed of the measurement itself.
+This responsiveness value presents round-trips per minute (RPM).
 
 # Interpreting responsiveness results
 
