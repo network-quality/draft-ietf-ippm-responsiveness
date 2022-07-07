@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: Christoph Paasch
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Wed Jul  6 14:54:36 2022
+%%CreationDate: Thu Jul  7 15:47:07 2022
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -441,7 +441,7 @@ _S
 5 715 M
 (Intended status: Experimental                                S. Cheshire) s
 5 704 M
-(Expires: January 7, 2023                                      O. Shapira) s
+(Expires: January 8, 2023                                      O. Shapira) s
 5 693 M
 (                                                              Apple Inc.) s
 5 682 M
@@ -449,7 +449,7 @@ _S
 5 671 M
 (                                                             Google, Inc) s
 5 660 M
-(                                                           July 06, 2022) s
+(                                                           July 07, 2022) s
 5 627 M
 (                Responsiveness under Working Conditions) s
 5 616 M
@@ -509,7 +509,7 @@ _S
 5 231 M
 (   Task Force \(IETF\).  Note that other groups may also distribute) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 1]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 1]) s
 _R
 S
 %%Page: (2) 2
@@ -538,7 +538,7 @@ _S
 5 671 M
 (   material or to cite them other than as "work in progress.") s
 5 649 M
-(   This Internet-Draft will expire on January 7, 2023.) s
+(   This Internet-Draft will expire on January 8, 2023.) s
 5 627 M
 (Copyright Notice) s
 5 605 M
@@ -582,33 +582,33 @@ _S
 5 363 M
 (       4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   6) s
 5 352 M
-(       4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   7) s
+(       4.1.3.  Reaching full link utilization  . . . . . . . . . . .   7) s
 5 341 M
 (       4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   7) s
 5 330 M
-(     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   9) s
+(     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   8) s
 5 319 M
 (       4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .   9) s
 5 308 M
 (       4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .   9) s
 5 297 M
-(   5.  Interpreting responsiveness results . . . . . . . . . . . . .  10) s
+(   5.  Interpreting responsiveness results . . . . . . . . . . . . .   9) s
 5 286 M
 (     5.1.  Elements influencing responsiveness . . . . . . . . . . .  10) s
 5 275 M
 (       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  10) s
 5 264 M
-(       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  11) s
+(       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  10) s
 5 253 M
 (       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  11) s
 5 242 M
 (     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  11) s
 5 231 M
-(   6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  12) s
+(   6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  11) s
 5 220 M
 (   7.  Security Considerations . . . . . . . . . . . . . . . . . . .  13) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 2]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 2]) s
 _R
 S
 %%Page: (3) 3
@@ -635,7 +635,7 @@ _S
 5 693 M
 (     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  14) s
 5 682 M
-(   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15) s
+(   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14) s
 5 660 M
 (1.  Introduction) s
 5 638 M
@@ -703,7 +703,7 @@ _S
 5 220 M
 (   to make it clear that we are measuring all, not just idle,) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 3]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 3]) s
 _R
 S
 %%Page: (4) 4
@@ -794,7 +794,7 @@ _S
 5 264 M
 (   latency measurements in this particular state.) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 4]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 4]) s
 _R
 S
 %%Page: (5) 5
@@ -853,13 +853,13 @@ _S
 5 429 M
 (   To make an accurate measurement, the algorithm must reliably put the) s
 5 418 M
-(   network in a state that represents those "working conditions".  Once) s
+(   network in a state that represents those "working conditions".) s
 5 407 M
-(   the network has reached that state, the algorithm can measure its) s
+(   During this process, the algorithm measures the responsiveness of the) s
 5 396 M
-(   responsiveness.  The following explains how the former and the latter) s
+(   network.  The following explains how the former and the latter are) s
 5 385 M
-(   are achieved.) s
+(   achieved.) s
 5 363 M
 (4.1.  Working Conditions) s
 5 341 M
@@ -878,12 +878,8 @@ _S
 (   scenario by creating multiple of these transactions and using very) s
 5 253 M
 (   large data objects in these HTTP transactions.) s
-5 231 M
-(   This allows to create a stable state of working conditions during) s
-5 220 M
-(   which the network is used at its nearly full capacity, without) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 5]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 5]) s
 _R
 S
 %%Page: (6) 6
@@ -900,81 +896,79 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-(   generating DoS-like traffic patterns \(e.g., UDP flooding\).  When) s
+(   This allows to create a stable state of working conditions during) s
 5 726 M
-(   reaching these stable conditions \(called "saturation"\) the latency on) s
+(   which the network is used at its nearly full capacity, without) s
 5 715 M
-(   the network is stable enough to allow to measure the responsiveness) s
-5 704 M
-(   during that time.  Thus, the algorithm must detect when the network) s
+(   generating DoS-like traffic patterns \(e.g., UDP flooding\).) s
 5 693 M
-(   is reaching this point of saturation to trigger the latency probes.) s
-5 671 M
 (   Finally, as end-user usage of the network evolves to newer protocols) s
-5 660 M
+5 682 M
 (   and congestion control algorithms, it is important that the working) s
-5 649 M
+5 671 M
 (   conditions also can evolve to continuously represent a realistic) s
-5 638 M
+5 660 M
 (   traffic pattern.) s
-5 616 M
+5 638 M
 (4.1.1.  From single-flow to multi-flow) s
-5 594 M
+5 616 M
 (   A single TCP connection may not be sufficient to reach the capacity) s
-5 583 M
+5 605 M
 (   of a path.  For example, the 4MB constraints on TCP window size) s
-5 572 M
+5 594 M
 (   constraints may not fill the pipe.  Additionally, traditional loss-) s
-5 561 M
+5 583 M
 (   based TCP congestion control algorithms react aggressively to packet) s
-5 550 M
+5 572 M
 (   loss by reducing the congestion window.  This reaction \(intended by) s
-5 539 M
+5 561 M
 (   the protocol design\) decreases the queueing within the network,) s
-5 528 M
+5 550 M
 (   making it hard to reach the path's capacity.) s
-5 506 M
+5 528 M
 (   The goal of the RPM Test is to keep the network in working conditions) s
-5 495 M
+5 517 M
 (   in a sustained and persistent way.  It uses multiple TCP connections) s
-5 484 M
-(   and gradually adds more TCP flows until saturation is reached.) s
-5 462 M
+5 506 M
+(   and gradually adds more TCP flows until full link utilization is) s
+5 495 M
+(   reached.) s
+5 473 M
 (4.1.2.  Parallel vs Sequential Uplink and Downlink) s
-5 440 M
+5 451 M
 (   Poor responsiveness can be caused by queues in either \(or both\) the) s
-5 429 M
+5 440 M
 (   upstream and the downstream direction.  Furthermore, both paths may) s
-5 418 M
+5 429 M
 (   differ significantly due to access link conditions \(e.g., 5G) s
-5 407 M
+5 418 M
 (   downstream and LTE upstream\) or the routing changes within the ISPs.) s
-5 396 M
+5 407 M
 (   To measure responsiveness under working conditions, the algorithm) s
-5 385 M
+5 396 M
 (   must explore both directions.) s
-5 363 M
+5 374 M
 (   One approach could be to measure responsiveness in the uplink and) s
-5 352 M
+5 363 M
 (   downlink in parallel.  It would allow for a shorter test run-time.) s
-5 330 M
+5 341 M
 (   However, a number of caveats come with measuring in parallel:) s
-5 308 M
+5 319 M
 (   o  Half-duplex links may not permit simultaneous uplink and downlink) s
-5 297 M
+5 308 M
 (      traffic.  This means the test might not reach the path's capacity) s
-5 286 M
+5 297 M
 (      in both directions at once and thus not expose all the potential) s
-5 275 M
+5 286 M
 (      sources of low responsiveness.) s
-5 253 M
+5 264 M
 (   o  Debuggability of the results becomes harder: During parallel) s
-5 242 M
+5 253 M
 (      measurement it is impossible to differentiate whether the observed) s
-5 231 M
+5 242 M
 (      latency happens in the uplink or the downlink direction.) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 6]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 6]) s
 _R
 S
 %%Page: (7) 7
@@ -995,7 +989,7 @@ _S
 5 726 M
 (   Parallel testing is considered a future extension.) s
 5 704 M
-(4.1.3.  Reaching saturation) s
+(4.1.3.  Reaching full link utilization) s
 5 682 M
 (   The RPM Test gradually increases the number of TCP connections and) s
 5 671 M
@@ -1003,11 +997,11 @@ _S
 5 660 M
 (   connections in a unit of time.  When the goodput stops increasing, it) s
 5 649 M
-(   means that the network is used at its full capacity, meaning the path) s
+(   means that the network is used at its full capacity.  At this point) s
 5 638 M
-(   is saturated.  At this point we are creating the worst-case scenario) s
+(   we are creating the worst-case scenario within the limits of the) s
 5 627 M
-(   within the limits of the realistic traffic pattern.) s
+(   realistic traffic pattern.) s
 5 605 M
 (   The algorithm notes that throughput gradually increases until TCP) s
 5 594 M
@@ -1019,11 +1013,11 @@ _S
 5 561 M
 (   adding more TCP connections to the pool of load-generating) s
 5 550 M
-(   connections.  If new connections leave the throughput the same,) s
+(   connections.  If new connections leave the throughput the same, full) s
 5 539 M
-(   saturation has been reached and - more importantly - the working) s
+(   link utilization has been reached and - more importantly - the) s
 5 528 M
-(   condition is stable.) s
+(   working condition is stable.) s
 5 506 M
 (4.1.4.  Final "Working Conditions" Algorithm) s
 5 484 M
@@ -1067,7 +1061,7 @@ _S
 5 220 M
 (      goodput at interval x+1 \(for all b<=x<e\) is less than 5%.) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 7]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 7]) s
 _R
 S
 %%Page: (8) 8
@@ -1098,59 +1092,59 @@ _S
 5 616 M
 (         than a 5% increase over the moving average aggregate goodput at) s
 5 605 M
-(         interval i - 1, the network has not yet reached saturation.) s
-5 583 M
-(         +  If no load-generating connections have been added within the) s
+(         interval i - 1, the network has not yet reached full link) s
+5 594 M
+(         utilization.) s
 5 572 M
-(            last four \(4\) intervals, add four \(4\) more load-generating) s
+(         +  If no load-generating connections have been added within the) s
 5 561 M
+(            last four \(4\) intervals, add four \(4\) more load-generating) s
+5 550 M
 (            connections.) s
-5 539 M
-(      *  Else, the network has reached saturation with the existing) s
 5 528 M
-(         load-generating connections.  The current state is a candidate) s
+(      *  Else, the network has reached full link utilization with the) s
 5 517 M
-(         for stable working conditions.) s
-5 495 M
-(         +  If a\) there have been load-generating connections added in) s
+(         existing load-generating connections.  The current state is a) s
+5 506 M
+(         candidate for stable working conditions.) s
 5 484 M
-(            the past four \(4\) intervals and b\) there has been moving) s
+(         +  If a\) there have been load-generating connections added in) s
 5 473 M
-(            average stability during the period between intervals i-4) s
+(            the past four \(4\) intervals and b\) there has been moving) s
 5 462 M
-(            and i, then the network has reached stable saturation and) s
+(            average stability during the period between intervals i-4) s
 5 451 M
-(            the algorithm terminates.) s
-5 429 M
+(            and i, then the network has reached full link utilization) s
+5 440 M
+(            and the algorithm terminates.) s
+5 418 M
 (         +  Otherwise, add four \(4\) more load-generating connections.) s
-5 407 M
-(   In Section 3, it is mentioned that one of the goals is that the test) s
 5 396 M
-(   finishes within 20 seconds.  It is left to the implementation what to) s
+(   In Section 3, it is mentioned that one of the goals is that the test) s
 5 385 M
-(   do when saturation is not reached within that time-frame.  For) s
+(   finishes within 20 seconds.  It is left to the implementation what to) s
 5 374 M
-(   example, an implementation might gather a provisional responsiveness) s
+(   do when full link utilization is not reached within that time-frame.) s
 5 363 M
-(   measurement or let the test run for longer.) s
-5 341 M
-(   Note: It is tempting to envision an initial base round-trip time) s
+(   For example, an implementation might gather a provisional) s
+5 352 M
+(   responsiveness measurement or let the test run for longer.) s
 5 330 M
-(   \(RTT\) measurement and adjust the intervals as a function of that RTT.) s
-5 319 M
-(   However, experiments have shown that this makes the saturation) s
+(4.2.  Measuring Responsiveness) s
 5 308 M
-(   detection extremely unstable in low RTT environments.  In the) s
+(   Once the network is in a consistent working conditions, the RPM Test) s
 5 297 M
-(   situation where the "unloaded" RTT is in the single-digit millisecond) s
+(   must "probe" the network multiple times to measure its) s
 5 286 M
-(   range, yet the network's RTT increases under load to more than a) s
-5 275 M
-(   hundred milliseconds, the intervals become much too low to accurately) s
+(   responsiveness.) s
 5 264 M
-(   drive the algorithm.) s
+(   Each RPM Test probe measures:) s
+5 242 M
+(   1.  The responsiveness of the different steps to create a new) s
+5 231 M
+(       connection, all during working conditions.) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 8]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 8]) s
 _R
 S
 %%Page: (9) 9
@@ -1167,75 +1161,81 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-(4.2.  Measuring Responsiveness) s
-5 715 M
-(   Once the network is in a consistent working conditions, the RPM Test) s
-5 704 M
-(   must "probe" the network multiple times to measure its) s
-5 693 M
-(   responsiveness.) s
-5 671 M
-(   Each RPM Test probe measures:) s
-5 649 M
-(   1.  The responsiveness of the different steps to create a new) s
-5 638 M
-(       connection, all during working conditions.) s
-5 616 M
 (       To do this, the test measures the time needed to establish a TCP) s
-5 605 M
+5 726 M
 (       connection on port 443, establish a TLS context using TLS1.3) s
-5 594 M
+5 715 M
 (       [RFC8446], and send an HTTP/2 GET request for a a one-byte object) s
-5 583 M
+5 704 M
 (       and wait for the response to be fully received.  It repeats these) s
-5 572 M
+5 693 M
 (       steps multiple times for accuracy.) s
-5 550 M
+5 671 M
 (   2.  The responsiveness of the network and the client/server) s
-5 539 M
+5 660 M
 (       networking stacks for the load-generating connections themselves.) s
-5 517 M
+5 638 M
 (       To do this, the load-generating connections multiplex an HTTP/2) s
-5 506 M
+5 627 M
 (       GET request for a one-byte object to get the end-to-end latency) s
-5 495 M
+5 616 M
 (       on the connections that are using the network at full speed.) s
-5 473 M
+5 594 M
 (4.2.1.  Aggregating the Measurements) s
-5 451 M
+5 572 M
 (   The algorithm produces sets of 4 times for each probe, namely: TCP) s
-5 440 M
+5 561 M
 (   handshake, TLS handshake, HTTP/2 request/response on separate \(idle\)) s
-5 429 M
+5 550 M
 (   connections, HTTP/2 request/response on load-generating connections.) s
-5 418 M
+5 539 M
 (   This fine-grained data is useful, but not necessary for creating a) s
-5 407 M
+5 528 M
 (   useful metric.) s
-5 385 M
+5 506 M
 (   To create a single "Responsiveness" \(e.g., RPM\) number, this first) s
-5 374 M
+5 495 M
 (   iteration of the algorithm gives an equal weight to each of these) s
-5 363 M
+5 484 M
 (   values.  That is, it sums the five time values for each probe, and) s
-5 352 M
+5 473 M
 (   divides by the total number of probes to compute an average probe) s
-5 341 M
+5 462 M
 (   duration.  The reciprocal of this, normalized to 60 seconds, gives) s
-5 330 M
+5 451 M
 (   the Round-trips Per Minute \(RPM\).) s
-5 308 M
+5 429 M
 (4.2.2.  Statistical Confidence) s
-5 286 M
+5 407 M
 (   The number of probes necessary for statistical confidence is an open) s
-5 275 M
+5 396 M
 (   question.  One could imagine a computation of the variance and) s
-5 264 M
+5 385 M
 (   confidence interval that would drive the number of measurements and) s
-5 253 M
+5 374 M
 (   balance the accuracy with the speed of the measurement itself.) s
+5 352 M
+(5.  Interpreting responsiveness results) s
+5 330 M
+(   The described methodology uses a high-level approach to measure) s
+5 319 M
+(   responsiveness.  By executing the test with regular HTTP requests a) s
+5 308 M
+(   number of elements come into play that will influence the result.) s
+5 297 M
+(   Contrary to more traditional measurement methods the responsiveness) s
+5 286 M
+(   metric is not only influenced by the properties of the network but) s
+5 275 M
+(   can significantly be influenced by the properties of the client and) s
+5 264 M
+(   the server implementations.  This section describes how the different) s
+5 253 M
+(   elements influence responsiveness and how a user may differentiate) s
+5 242 M
+(   them when debugging a network.) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023                [Page 9]) s
+(Paasch, et al.           Expires January 8, 2023                [Page 9]) s
 _R
 S
 %%Page: (10) 10
@@ -1252,89 +1252,87 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-(5.  Interpreting responsiveness results) s
-5 715 M
-(   The described methodology uses a high-level approach to measure) s
-5 704 M
-(   responsiveness.  By executing the test with regular HTTP requests a) s
-5 693 M
-(   number of elements come into play that will influence the result.) s
-5 682 M
-(   Contrary to more traditional measurement methods the responsiveness) s
-5 671 M
-(   metric is not only influenced by the properties of the network but) s
-5 660 M
-(   can significantly be influenced by the properties of the client and) s
-5 649 M
-(   the server implementations.  This section describes how the different) s
-5 638 M
-(   elements influence responsiveness and how a user may differentiate) s
-5 627 M
-(   them when debugging a network.) s
-5 605 M
 (5.1.  Elements influencing responsiveness) s
-5 583 M
+5 715 M
 (   Due to the HTTP-centric approach of the measurement methodology a) s
-5 572 M
+5 704 M
 (   number of factors come into play that influence the results.  Namely,) s
-5 561 M
+5 693 M
 (   the client-side networking stack \(from the top of the HTTP-layer all) s
-5 550 M
+5 682 M
 (   the way down to the physical layer\), the network \(including potential) s
-5 539 M
+5 671 M
 (   transparent HTTP "accelerators"\), and the server-side networking) s
-5 528 M
+5 660 M
 (   stack.  The following outlines how each of these contributes to the) s
-5 517 M
+5 649 M
 (   responsiveness.) s
-5 495 M
+5 627 M
 (5.1.1.  Client side influence) s
-5 473 M
+5 605 M
 (   As the driver of the measurement, the client-side networking stack) s
-5 462 M
+5 594 M
 (   can have a large influence on the result.  The biggest influence of) s
-5 451 M
+5 583 M
 (   the client comes when measuring the responsiveness in the uplink) s
-5 440 M
+5 572 M
 (   direction.  Load-generation will cause queue-buildup in the transport) s
-5 429 M
+5 561 M
 (   layer as well as the HTTP layer.  Additionally, if the network's) s
-5 418 M
+5 550 M
 (   bottleneck is on the first hop, queue-buildup will happen at the) s
-5 407 M
+5 539 M
 (   layers below the transport stack \(e.g., NIC firmware\).) s
-5 385 M
+5 517 M
 (   Each of these queue build-ups may cause latency and thus low) s
-5 374 M
+5 506 M
 (   responsiveness.  A well-designed networking stack would ensure that) s
-5 363 M
+5 495 M
 (   queue-buildup in the TCP layer layer is kept at a bare minimum with) s
-5 352 M
+5 484 M
 (   solutions like TCP_NOTSENT_LOWAT [draft-ietf-tcpm-rfc793bis].  At the) s
-5 341 M
+5 473 M
 (   HTTP/2 layer it is important that the load-generating data is not) s
-5 330 M
+5 462 M
 (   interfering with the latency-measuring probes.  For example, the) s
-5 319 M
+5 451 M
 (   different streams should not be stacked one after the other but) s
-5 308 M
+5 440 M
 (   rather be allowed to be multiplexed for optimal latency.  The queue-) s
-5 297 M
+5 429 M
 (   buildup at these layers would only influence latency on the probes) s
-5 286 M
+5 418 M
 (   that are sent on the load-generating connections.) s
-5 264 M
+5 396 M
 (   Below the transport layer many places have a potential queue build-) s
-5 253 M
+5 385 M
 (   up.  It is important to keep these queues at reasonable sizes or that) s
-5 242 M
+5 374 M
 (   they implement techniques like FQ-Codel.  Depending on the techniques) s
-5 231 M
+5 363 M
 (   used at these layers, the queue build-up can influence latency on) s
-5 220 M
+5 352 M
 (   probes sent on load-generating connections as well as separate) s
+5 341 M
+(   connections.  If flow-queuing is used at these layers, the impact on) s
+5 330 M
+(   separate connections will be negligible.) s
+5 308 M
+(5.1.2.  Network influence) s
+5 286 M
+(   The network obviously is a large driver for the responsiveness) s
+5 275 M
+(   result.  Propagation delay from the client to the server as well as) s
+5 264 M
+(   queuing in the bottleneck node will cause latency.  Beyond these) s
+5 253 M
+(   traditional sources of latency, other factors may influence the) s
+5 242 M
+(   results as well.  Many networks deploy transparent TCP Proxies,) s
+5 231 M
+(   firewalls doing deep packet-inspection, HTTP "accelerators",... As) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023               [Page 10]) s
+(Paasch, et al.           Expires January 8, 2023               [Page 10]) s
 _R
 S
 %%Page: (11) 11
@@ -1351,85 +1349,83 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-(   connections.  If flow-queuing is used at these layers, the impact on) s
-5 726 M
-(   separate connections will be negligible.) s
-5 704 M
-(5.1.2.  Network influence) s
-5 682 M
-(   The network obviously is a large driver for the responsiveness) s
-5 671 M
-(   result.  Propagation delay from the client to the server as well as) s
-5 660 M
-(   queuing in the bottleneck node will cause latency.  Beyond these) s
-5 649 M
-(   traditional sources of latency, other factors may influence the) s
-5 638 M
-(   results as well.  Many networks deploy transparent TCP Proxies,) s
-5 627 M
-(   firewalls doing deep packet-inspection, HTTP "accelerators",... As) s
-5 616 M
 (   the methodology relies on the use of HTTP/2, the responsiveness) s
-5 605 M
+5 726 M
 (   metric will be influenced by such devices as well.) s
-5 583 M
+5 704 M
 (   The network will influence both kinds of latency probes that the) s
-5 572 M
+5 693 M
 (   responsiveness tests sends out.  Depending on the network's use of) s
-5 561 M
+5 682 M
 (   Smart Queue Management and whether this includes flow-queuing or not,) s
-5 550 M
+5 671 M
 (   the latency probes on the load-generating connections may be) s
-5 539 M
+5 660 M
 (   influenced differently than the probes on the separate connections.) s
-5 517 M
+5 638 M
 (5.1.3.  Server side influence) s
-5 495 M
+5 616 M
 (   Finally, the server-side introduces the same kind of influence on the) s
-5 484 M
+5 605 M
 (   responsiveness as the client-side.  With the difference that the) s
-5 473 M
+5 594 M
 (   responsiveness will be impacted during the downlink load generation.) s
-5 451 M
+5 572 M
 (5.2.  Root-causing Responsiveness) s
-5 429 M
+5 550 M
 (   Once an RPM result has been generated one might be tempted to try to) s
-5 418 M
+5 539 M
 (   localize the source of a potential low responsiveness.  The) s
-5 407 M
+5 528 M
 (   responsiveness measurement is however aimed at providing a quick,) s
-5 396 M
+5 517 M
 (   top-level view of the responsiveness under working conditions the way) s
-5 385 M
+5 506 M
 (   end-users experience it.  Localizing the source of low responsiveness) s
-5 374 M
+5 495 M
 (   involves however a set of different tools and methodologies.) s
-5 352 M
+5 473 M
 (   Nevertheless, the responsiveness test allows to gain some insight) s
-5 341 M
+5 462 M
 (   into what the source of the latency is.  The previous section) s
-5 330 M
+5 451 M
 (   described the elements that influence the responsiveness.  From there) s
-5 319 M
+5 440 M
 (   it became apparent that the latency measured on the load-generating) s
-5 308 M
+5 429 M
 (   connections and the latency measured on separate connections may be) s
-5 297 M
+5 418 M
 (   different due to the different elements.) s
-5 275 M
+5 396 M
 (   For example, if the latency measured on separate connections is much) s
-5 264 M
+5 385 M
 (   less than the latency measured on the load-generating connections, it) s
-5 253 M
+5 374 M
 (   is possible to narrow down the source of the additional latency on) s
-5 242 M
+5 363 M
 (   the load-generating connections.  As long as the other elements of) s
-5 231 M
+5 352 M
 (   the network don't do flow-queueing, the additional latency must come) s
-5 220 M
+5 341 M
 (   from the queue build-up at the HTTP and TCP layer.  This is because) s
+5 330 M
+(   all other bottlenecks in the network that may cause a queue build-up) s
+5 319 M
+(   will be affecting the load-generating connections as well as the) s
+5 308 M
+(   separate latency probing connections in the same way.) s
+5 286 M
+(6.  RPM Test Server API) s
+5 264 M
+(   The RPM measurement uses standard protocols: no new protocol is) s
+5 253 M
+(   defined.) s
+5 231 M
+(   Both the client and the server MUST support HTTP/2 over TLS 1.3.  The) s
+5 220 M
+(   client MUST be able to send a GET request and a POST.  The server) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023               [Page 11]) s
+(Paasch, et al.           Expires January 8, 2023               [Page 11]) s
 _R
 S
 %%Page: (12) 12
@@ -1446,75 +1442,83 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-(   all other bottlenecks in the network that may cause a queue build-up) s
-5 726 M
-(   will be affecting the load-generating connections as well as the) s
-5 715 M
-(   separate latency probing connections in the same way.) s
-5 693 M
-(6.  RPM Test Server API) s
-5 671 M
-(   The RPM measurement uses standard protocols: no new protocol is) s
-5 660 M
-(   defined.) s
-5 638 M
-(   Both the client and the server MUST support HTTP/2 over TLS 1.3.  The) s
-5 627 M
-(   client MUST be able to send a GET request and a POST.  The server) s
-5 616 M
 (   MUST be able to respond to both of these HTTP commands.  The server) s
-5 605 M
+5 726 M
 (   MUST have the ability to provide content upon a GET request.  Both) s
-5 594 M
+5 715 M
 (   client and server SHOULD use loss-based congestion controls like) s
-5 583 M
+5 704 M
 (   Cubic.  The server MUST use a packet scheduling algorithm that) s
-5 572 M
+5 693 M
 (   minimizes internal queueing to avoid affecting the client's) s
-5 561 M
+5 682 M
 (   measurement.) s
-5 539 M
+5 660 M
 (   The server MUST respond to 4 URLs:) s
-5 517 M
+5 638 M
 (   1.  A "small" URL/response: The server must respond with a status) s
-5 506 M
+5 627 M
 (       code of 200 and 1 byte in the body.  The actual body content is) s
-5 495 M
+5 616 M
 (       irrelevant.  The server SHOULD specify the content-type as) s
-5 484 M
+5 605 M
 (       application/octet-stream.) s
-5 462 M
+5 583 M
 (   2.  A "large" URL/response: The server must respond with a status) s
-5 451 M
+5 572 M
 (       code of 200 and a body size of at least 8GB.  The server SHOULD) s
-5 440 M
+5 561 M
 (       specify the content-type as application/octet-stream.  The body) s
-5 429 M
+5 550 M
 (       can be bigger, and may need to grow as network speeds increases) s
-5 418 M
+5 539 M
 (       over time.  The actual body content is irrelevant.  The client) s
-5 407 M
+5 528 M
 (       will probably never completely download the object, but will) s
-5 396 M
+5 517 M
 (       instead close the connection after reaching working condition and) s
-5 385 M
+5 506 M
 (       making its measurements.) s
-5 363 M
+5 484 M
 (   3.  An "upload" URL/response: The server must handle a POST request) s
-5 352 M
+5 473 M
 (       with an arbitrary body size.  The server should discard the) s
-5 341 M
+5 462 M
 (       payload.) s
-5 319 M
+5 440 M
 (   4.  A configuration URL that returns a JSON [RFC8259] object with the) s
-5 308 M
+5 429 M
 (       information the client uses to run the test \(sample below\).  The) s
-5 297 M
+5 418 M
 (       server SHOULD specify the content-type as application/json.) s
-5 286 M
+5 407 M
 (       Sample JSON:) s
+5 385 M
+({) s
+5 374 M
+(  "version": 1,) s
+5 363 M
+(  "urls": {) s
+5 352 M
+(    "small_https_download_url": "https://networkquality.example.com/api/v1/small",) s
+5 341 M
+(    "large_https_download_url": "https://networkquality.example.com/api/v1/large",) s
+5 330 M
+(    "https_upload_url": "https://networkquality.example.com/api/v1/upload") s
+5 319 M
+(  }) s
+5 308 M
+(}) s
+5 286 M
+(   The client begins the responsiveness measurement by querying for the) s
+5 275 M
+(   JSON configuration.  This supplies the URLs for creating the load-) s
+5 264 M
+(   generating connections in the upstream and downstream direction as) s
+5 253 M
+(   well as the small object for the latency measurements.) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023               [Page 12]) s
+(Paasch, et al.           Expires January 8, 2023               [Page 12]) s
 _R
 S
 %%Page: (13) 13
@@ -1531,75 +1535,69 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-({) s
-5 726 M
-(  "version": 1,) s
-5 715 M
-(  "urls": {) s
-5 704 M
-(    "small_https_download_url": "https://networkquality.example.com/api/v1/small",) s
-5 693 M
-(    "large_https_download_url": "https://networkquality.example.com/api/v1/large",) s
-5 682 M
-(    "https_upload_url": "https://networkquality.example.com/api/v1/upload") s
-5 671 M
-(  }) s
-5 660 M
-(}) s
-5 638 M
-(   The client begins the responsiveness measurement by querying for the) s
-5 627 M
-(   JSON configuration.  This supplies the URLs for creating the load-) s
-5 616 M
-(   generating connections in the upstream and downstream direction as) s
-5 605 M
-(   well as the small object for the latency measurements.) s
-5 583 M
 (7.  Security Considerations) s
-5 561 M
+5 715 M
 (   TBD) s
-5 539 M
+5 693 M
 (8.  IANA Considerations) s
-5 517 M
+5 671 M
 (   TBD) s
-5 495 M
+5 649 M
 (9.  Acknowledgments) s
-5 473 M
+5 627 M
 (   We would like to thank Rich Brown for his editorial pass over this) s
-5 462 M
+5 616 M
 (   I-D.  We also thank Erik Auerswald and Will Hawkins for their) s
-5 451 M
+5 605 M
 (   constructive feedback on the I-D.) s
-5 429 M
+5 583 M
 (10.  Informative References) s
-5 407 M
+5 561 M
 (   [Bufferbloat]) s
-5 396 M
+5 550 M
 (              Gettys, J. and K. Nichols, "Bufferbloat: Dark Buffers in) s
-5 385 M
+5 539 M
 (              the Internet", Communications of the ACM, Volume 55,) s
-5 374 M
+5 528 M
 (              Number 1 \(2012\) , n.d..) s
-5 352 M
+5 506 M
 (   [draft-ietf-tcpm-rfc793bis]) s
-5 341 M
+5 495 M
 (              Eddy, W., "Transmission Control Protocol \(TCP\)) s
-5 330 M
+5 484 M
 (              Specification", Internet Engineering Task Force , n.d..) s
-5 308 M
+5 462 M
 (   [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7,) s
-5 297 M
+5 451 M
 (              RFC 793, DOI 10.17487/RFC0793, September 1981,) s
-5 286 M
+5 440 M
 (              <https://www.rfc-editor.org/info/rfc793>.) s
-5 264 M
+5 418 M
 (   [RFC1035]  Mockapetris, P., "Domain names - implementation and) s
-5 253 M
+5 407 M
 (              specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,) s
-5 242 M
+5 396 M
 (              November 1987, <https://www.rfc-editor.org/info/rfc1035>.) s
+5 374 M
+(   [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,) s
+5 363 M
+(              "Proportional Integral Controller Enhanced \(PIE\): A) s
+5 352 M
+(              Lightweight Control Scheme to Address the Bufferbloat) s
+5 341 M
+(              Problem", RFC 8033, DOI 10.17487/RFC8033, February 2017,) s
+5 330 M
+(              <https://www.rfc-editor.org/info/rfc8033>.) s
+5 308 M
+(   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation \(JSON\) Data) s
+5 297 M
+(              Interchange Format", STD 90, RFC 8259,) s
+5 286 M
+(              DOI 10.17487/RFC8259, December 2017,) s
+5 275 M
+(              <https://www.rfc-editor.org/info/rfc8259>.) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023               [Page 13]) s
+(Paasch, et al.           Expires January 8, 2023               [Page 13]) s
 _R
 S
 %%Page: (14) 14
@@ -1616,57 +1614,67 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-(   [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,) s
-5 726 M
-(              "Proportional Integral Controller Enhanced \(PIE\): A) s
-5 715 M
-(              Lightweight Control Scheme to Address the Bufferbloat) s
-5 704 M
-(              Problem", RFC 8033, DOI 10.17487/RFC8033, February 2017,) s
-5 693 M
-(              <https://www.rfc-editor.org/info/rfc8033>.) s
-5 671 M
-(   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation \(JSON\) Data) s
-5 660 M
-(              Interchange Format", STD 90, RFC 8259,) s
-5 649 M
-(              DOI 10.17487/RFC8259, December 2017,) s
-5 638 M
-(              <https://www.rfc-editor.org/info/rfc8259>.) s
-5 616 M
 (   [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,) s
-5 605 M
+5 726 M
 (              J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler) s
-5 594 M
+5 715 M
 (              and Active Queue Management Algorithm", RFC 8290,) s
-5 583 M
+5 704 M
 (              DOI 10.17487/RFC8290, January 2018,) s
-5 572 M
+5 693 M
 (              <https://www.rfc-editor.org/info/rfc8290>.) s
-5 550 M
+5 671 M
 (   [RFC8446]  Rescorla, E., "The Transport Layer Security \(TLS\) Protocol) s
-5 539 M
+5 660 M
 (              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,) s
-5 528 M
+5 649 M
 (              <https://www.rfc-editor.org/info/rfc8446>.) s
-5 506 M
+5 627 M
 (Appendix A.  Example Server Configuration) s
-5 484 M
+5 605 M
 (   This section shows fragments of sample server configurations to host) s
-5 473 M
+5 594 M
 (   an responsiveness measurement endpoint.) s
-5 451 M
+5 572 M
 (A.1.  Apache Traffic Server) s
-5 429 M
+5 550 M
 (   Apache Traffic Server starting at version 9.1.0 supports) s
-5 418 M
+5 539 M
 (   configuration as a responsiveness server.  It requires the generator) s
-5 407 M
+5 528 M
 (   and the statichit plugin.) s
-5 385 M
+5 506 M
 (   The sample configuration file then is:) s
+5 484 M
+(  map https://networkquality.example.com/api/v1/large \\) s
+5 473 M
+(      http://localhost/cache/4294967296/ \\) s
+5 462 M
+(      @plugin=generator.so) s
+5 440 M
+(  map https://networkquality.example.com/api/v1/carry/small \\) s
+5 429 M
+(      http://localhost/cache/1/ \\) s
+5 418 M
+(      @plugin=generator.so) s
+5 396 M
+(  map https://networkquality.example.com/api/v1/carry/config \\) s
+5 385 M
+(      http://localhost/ \\) s
+5 374 M
+(      @plugin=statichit.so @pparam=--file-path=config.example.com.json \\) s
+5 363 M
+(      @pparam=--mime-type=application/json) s
+5 341 M
+(  map https://networkquality.example.com/api/v1/carry/slurp \\) s
+5 330 M
+(      http://localhost/ \\) s
+5 319 M
+(      @plugin=generator.so) s
+5 297 M
+(Authors' Addresses) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023               [Page 14]) s
+(Paasch, et al.           Expires January 8, 2023               [Page 14]) s
 _R
 S
 %%Page: (15) 15
@@ -1683,88 +1691,7 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions       July 2022) s
 5 737 M
-(  map https://networkquality.example.com/api/v1/large \\) s
-5 726 M
-(      http://localhost/cache/4294967296/ \\) s
-5 715 M
-(      @plugin=generator.so) s
-5 693 M
-(  map https://networkquality.example.com/api/v1/carry/small \\) s
-5 682 M
-(      http://localhost/cache/1/ \\) s
-5 671 M
-(      @plugin=generator.so) s
-5 649 M
-(  map https://networkquality.example.com/api/v1/carry/config \\) s
-5 638 M
-(      http://localhost/ \\) s
-5 627 M
-(      @plugin=statichit.so @pparam=--file-path=config.example.com.json \\) s
-5 616 M
-(      @pparam=--mime-type=application/json) s
-5 594 M
-(  map https://networkquality.example.com/api/v1/carry/slurp \\) s
-5 583 M
-(      http://localhost/ \\) s
-5 572 M
-(      @plugin=generator.so) s
-5 550 M
-(Authors' Addresses) s
-5 528 M
 (   Christoph Paasch) s
-5 517 M
-(   Apple Inc.) s
-5 506 M
-(   One Apple Park Way) s
-5 495 M
-(   Cupertino, California 95014) s
-5 484 M
-(   United States of America) s
-5 462 M
-(   Email: cpaasch@apple.com) s
-5 429 M
-(   Randall Meyer) s
-5 418 M
-(   Apple Inc.) s
-5 407 M
-(   One Apple Park Way) s
-5 396 M
-(   Cupertino, California 95014) s
-5 385 M
-(   United States of America) s
-5 363 M
-(   Email: rrm@apple.com) s
-5 330 M
-(   Stuart Cheshire) s
-5 319 M
-(   Apple Inc.) s
-5 308 M
-(   One Apple Park Way) s
-5 297 M
-(   Cupertino, California 95014) s
-5 286 M
-(   United States of America) s
-5 264 M
-(   Email: cheshire@apple.com) s
-5 176 M
-(Paasch, et al.           Expires January 7, 2023               [Page 15]) s
-_R
-S
-%%Page: (16) 16
-%%BeginPageSetup
-_S
-24 24 translate
-/pagenum 16 def
-/fname (draft-ietf-ippm-responsiveness.txt) def
-/fdir (.) def
-/ftail (draft-ietf-ippm-responsiveness.txt) def
-/user_header_p false def
-/user_footer_p false def
-%%EndPageSetup
-5 770 M
-(Internet-Draft   Responsiveness under Working Conditions       July 2022) s
-5 737 M
-(   Omer Shapira) s
 5 726 M
 (   Apple Inc.) s
 5 715 M
@@ -1774,24 +1701,60 @@ _S
 5 693 M
 (   United States of America) s
 5 671 M
-(   Email: oesh@apple.com) s
+(   Email: cpaasch@apple.com) s
 5 638 M
-(   Matt Mathis) s
+(   Randall Meyer) s
 5 627 M
-(   Google, Inc) s
+(   Apple Inc.) s
 5 616 M
-(   1600 Amphitheatre Parkway) s
+(   One Apple Park Way) s
 5 605 M
-(   Mountain View, CA  94043) s
+(   Cupertino, California 95014) s
 5 594 M
 (   United States of America) s
 5 572 M
+(   Email: rrm@apple.com) s
+5 539 M
+(   Stuart Cheshire) s
+5 528 M
+(   Apple Inc.) s
+5 517 M
+(   One Apple Park Way) s
+5 506 M
+(   Cupertino, California 95014) s
+5 495 M
+(   United States of America) s
+5 473 M
+(   Email: cheshire@apple.com) s
+5 440 M
+(   Omer Shapira) s
+5 429 M
+(   Apple Inc.) s
+5 418 M
+(   One Apple Park Way) s
+5 407 M
+(   Cupertino, California 95014) s
+5 396 M
+(   United States of America) s
+5 374 M
+(   Email: oesh@apple.com) s
+5 341 M
+(   Matt Mathis) s
+5 330 M
+(   Google, Inc) s
+5 319 M
+(   1600 Amphitheatre Parkway) s
+5 308 M
+(   Mountain View, CA  94043) s
+5 297 M
+(   United States of America) s
+5 275 M
 (   Email: mattmathis@google.com) s
 5 176 M
-(Paasch, et al.           Expires January 7, 2023               [Page 16]) s
+(Paasch, et al.           Expires January 8, 2023               [Page 15]) s
 _R
 S
 %%Trailer
-%%Pages: 16
+%%Pages: 15
 %%DocumentNeededResources: font Courier-Bold Courier 
 %%EOF

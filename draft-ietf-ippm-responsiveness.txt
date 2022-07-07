@@ -5,11 +5,11 @@
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
 Intended status: Experimental                                S. Cheshire
-Expires: January 7, 2023                                      O. Shapira
+Expires: January 8, 2023                                      O. Shapira
                                                               Apple Inc.
                                                                M. Mathis
                                                              Google, Inc
-                                                           July 06, 2022
+                                                           July 07, 2022
 
 
                 Responsiveness under Working Conditions
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Paasch, et al.           Expires January 7, 2023                [Page 1]
+Paasch, et al.           Expires January 8, 2023                [Page 1]
 
 Internet-Draft   Responsiveness under Working Conditions       July 2022
 
@@ -66,7 +66,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on January 7, 2023.
+   This Internet-Draft will expire on January 8, 2023.
 
 Copyright Notice
 
@@ -93,23 +93,23 @@ Table of Contents
      4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   5
        4.1.1.  From single-flow to multi-flow  . . . . . . . . . . .   6
        4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   6
-       4.1.3.  Reaching saturation . . . . . . . . . . . . . . . . .   7
+       4.1.3.  Reaching full link utilization  . . . . . . . . . . .   7
        4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   7
-     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   9
+     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   8
        4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .   9
        4.2.2.  Statistical Confidence  . . . . . . . . . . . . . . .   9
-   5.  Interpreting responsiveness results . . . . . . . . . . . . .  10
+   5.  Interpreting responsiveness results . . . . . . . . . . . . .   9
      5.1.  Elements influencing responsiveness . . . . . . . . . . .  10
        5.1.1.  Client side influence . . . . . . . . . . . . . . . .  10
-       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  11
+       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  10
        5.1.3.  Server side influence . . . . . . . . . . . . . . . .  11
      5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  11
-   6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  12
+   6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  11
    7.  Security Considerations . . . . . . . . . . . . . . . . . . .  13
 
 
 
-Paasch, et al.           Expires January 7, 2023                [Page 2]
+Paasch, et al.           Expires January 8, 2023                [Page 2]
 
 Internet-Draft   Responsiveness under Working Conditions       July 2022
 
@@ -119,7 +119,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    10. Informative References  . . . . . . . . . . . . . . . . . . .  13
    Appendix A.  Example Server Configuration . . . . . . . . . . . .  14
      A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  14
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  15
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  14
 
 1.  Introduction
 
@@ -165,7 +165,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires January 7, 2023                [Page 3]
+Paasch, et al.           Expires January 8, 2023                [Page 3]
 
 Internet-Draft   Responsiveness under Working Conditions       July 2022
 
@@ -221,7 +221,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires January 7, 2023                [Page 4]
+Paasch, et al.           Expires January 8, 2023                [Page 4]
 
 Internet-Draft   Responsiveness under Working Conditions       July 2022
 
@@ -255,10 +255,10 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 4.  Measuring Responsiveness Under Working Conditions
 
    To make an accurate measurement, the algorithm must reliably put the
-   network in a state that represents those "working conditions".  Once
-   the network has reached that state, the algorithm can measure its
-   responsiveness.  The following explains how the former and the latter
-   are achieved.
+   network in a state that represents those "working conditions".
+   During this process, the algorithm measures the responsiveness of the
+   network.  The following explains how the former and the latter are
+   achieved.
 
 4.1.  Working Conditions
 
@@ -272,21 +272,19 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    scenario by creating multiple of these transactions and using very
    large data objects in these HTTP transactions.
 
-   This allows to create a stable state of working conditions during
-   which the network is used at its nearly full capacity, without
 
 
 
-Paasch, et al.           Expires January 7, 2023                [Page 5]
+
+
+Paasch, et al.           Expires January 8, 2023                [Page 5]
 
 Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
-   generating DoS-like traffic patterns (e.g., UDP flooding).  When
-   reaching these stable conditions (called "saturation") the latency on
-   the network is stable enough to allow to measure the responsiveness
-   during that time.  Thus, the algorithm must detect when the network
-   is reaching this point of saturation to trigger the latency probes.
+   This allows to create a stable state of working conditions during
+   which the network is used at its nearly full capacity, without
+   generating DoS-like traffic patterns (e.g., UDP flooding).
 
    Finally, as end-user usage of the network evolves to newer protocols
    and congestion control algorithms, it is important that the working
@@ -305,7 +303,8 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
    The goal of the RPM Test is to keep the network in working conditions
    in a sustained and persistent way.  It uses multiple TCP connections
-   and gradually adds more TCP flows until saturation is reached.
+   and gradually adds more TCP flows until full link utilization is
+   reached.
 
 4.1.2.  Parallel vs Sequential Uplink and Downlink
 
@@ -333,7 +332,8 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires January 7, 2023                [Page 6]
+
+Paasch, et al.           Expires January 8, 2023                [Page 6]
 
 Internet-Draft   Responsiveness under Working Conditions       July 2022
 
@@ -341,23 +341,23 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    Thus, we recommend testing uplink and downlink sequentially.
    Parallel testing is considered a future extension.
 
-4.1.3.  Reaching saturation
+4.1.3.  Reaching full link utilization
 
    The RPM Test gradually increases the number of TCP connections and
    measures "goodput" - the sum of actual data transferred across all
    connections in a unit of time.  When the goodput stops increasing, it
-   means that the network is used at its full capacity, meaning the path
-   is saturated.  At this point we are creating the worst-case scenario
-   within the limits of the realistic traffic pattern.
+   means that the network is used at its full capacity.  At this point
+   we are creating the worst-case scenario within the limits of the
+   realistic traffic pattern.
 
    The algorithm notes that throughput gradually increases until TCP
    connections complete their TCP slow-start phase.  At that point,
    throughput eventually stalls usually due to receive window
    limitations.  The only means to further increase throughput is by
    adding more TCP connections to the pool of load-generating
-   connections.  If new connections leave the throughput the same,
-   saturation has been reached and - more importantly - the working
-   condition is stable.
+   connections.  If new connections leave the throughput the same, full
+   link utilization has been reached and - more importantly - the
+   working condition is stable.
 
 4.1.4.  Final "Working Conditions" Algorithm
 
@@ -389,7 +389,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires January 7, 2023                [Page 7]
+Paasch, et al.           Expires January 8, 2023                [Page 7]
 
 Internet-Draft   Responsiveness under Working Conditions       July 2022
 
@@ -406,49 +406,30 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
       *  If the moving average aggregate goodput at interval i is more
          than a 5% increase over the moving average aggregate goodput at
-         interval i - 1, the network has not yet reached saturation.
+         interval i - 1, the network has not yet reached full link
+         utilization.
 
          +  If no load-generating connections have been added within the
             last four (4) intervals, add four (4) more load-generating
             connections.
 
-      *  Else, the network has reached saturation with the existing
-         load-generating connections.  The current state is a candidate
-         for stable working conditions.
+      *  Else, the network has reached full link utilization with the
+         existing load-generating connections.  The current state is a
+         candidate for stable working conditions.
 
          +  If a) there have been load-generating connections added in
             the past four (4) intervals and b) there has been moving
             average stability during the period between intervals i-4
-            and i, then the network has reached stable saturation and
-            the algorithm terminates.
+            and i, then the network has reached full link utilization
+            and the algorithm terminates.
 
          +  Otherwise, add four (4) more load-generating connections.
 
    In Section 3, it is mentioned that one of the goals is that the test
    finishes within 20 seconds.  It is left to the implementation what to
-   do when saturation is not reached within that time-frame.  For
-   example, an implementation might gather a provisional responsiveness
-   measurement or let the test run for longer.
-
-   Note: It is tempting to envision an initial base round-trip time
-   (RTT) measurement and adjust the intervals as a function of that RTT.
-   However, experiments have shown that this makes the saturation
-   detection extremely unstable in low RTT environments.  In the
-   situation where the "unloaded" RTT is in the single-digit millisecond
-   range, yet the network's RTT increases under load to more than a
-   hundred milliseconds, the intervals become much too low to accurately
-   drive the algorithm.
-
-
-
-
-
-
-
-Paasch, et al.           Expires January 7, 2023                [Page 8]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
+   do when full link utilization is not reached within that time-frame.
+   For example, an implementation might gather a provisional
+   responsiveness measurement or let the test run for longer.
 
 4.2.  Measuring Responsiveness
 
@@ -460,6 +441,14 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
    1.  The responsiveness of the different steps to create a new
        connection, all during working conditions.
+
+
+
+
+Paasch, et al.           Expires January 8, 2023                [Page 8]
+
+Internet-Draft   Responsiveness under Working Conditions       July 2022
+
 
        To do this, the test measures the time needed to establish a TCP
        connection on port 443, establish a TLS context using TLS1.3
@@ -496,16 +485,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    confidence interval that would drive the number of measurements and
    balance the accuracy with the speed of the measurement itself.
 
-
-
-
-
-
-Paasch, et al.           Expires January 7, 2023                [Page 9]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
 5.  Interpreting responsiveness results
 
    The described methodology uses a high-level approach to measure
@@ -517,6 +496,15 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    the server implementations.  This section describes how the different
    elements influence responsiveness and how a user may differentiate
    them when debugging a network.
+
+
+
+
+
+Paasch, et al.           Expires January 8, 2023                [Page 9]
+
+Internet-Draft   Responsiveness under Working Conditions       July 2022
+
 
 5.1.  Elements influencing responsiveness
 
@@ -554,14 +542,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    they implement techniques like FQ-Codel.  Depending on the techniques
    used at these layers, the queue build-up can influence latency on
    probes sent on load-generating connections as well as separate
-
-
-
-Paasch, et al.           Expires January 7, 2023               [Page 10]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
    connections.  If flow-queuing is used at these layers, the impact on
    separate connections will be negligible.
 
@@ -573,6 +553,15 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    traditional sources of latency, other factors may influence the
    results as well.  Many networks deploy transparent TCP Proxies,
    firewalls doing deep packet-inspection, HTTP "accelerators",... As
+
+
+
+
+Paasch, et al.           Expires January 8, 2023               [Page 10]
+
+Internet-Draft   Responsiveness under Working Conditions       July 2022
+
+
    the methodology relies on the use of HTTP/2, the responsiveness
    metric will be influenced by such devices as well.
 
@@ -610,14 +599,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    the load-generating connections.  As long as the other elements of
    the network don't do flow-queueing, the additional latency must come
    from the queue build-up at the HTTP and TCP layer.  This is because
-
-
-
-Paasch, et al.           Expires January 7, 2023               [Page 11]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
    all other bottlenecks in the network that may cause a queue build-up
    will be affecting the load-generating connections as well as the
    separate latency probing connections in the same way.
@@ -629,6 +610,14 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
    Both the client and the server MUST support HTTP/2 over TLS 1.3.  The
    client MUST be able to send a GET request and a POST.  The server
+
+
+
+Paasch, et al.           Expires January 8, 2023               [Page 11]
+
+Internet-Draft   Responsiveness under Working Conditions       July 2022
+
+
    MUST be able to respond to both of these HTTP commands.  The server
    MUST have the ability to provide content upon a GET request.  Both
    client and server SHOULD use loss-based congestion controls like
@@ -661,19 +650,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
        server SHOULD specify the content-type as application/json.
        Sample JSON:
 
-
-
-
-
-
-
-
-
-Paasch, et al.           Expires January 7, 2023               [Page 12]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
 {
   "version": 1,
   "urls": {
@@ -687,6 +663,16 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    JSON configuration.  This supplies the URLs for creating the load-
    generating connections in the upstream and downstream direction as
    well as the small object for the latency measurements.
+
+
+
+
+
+
+Paasch, et al.           Expires January 8, 2023               [Page 12]
+
+Internet-Draft   Responsiveness under Working Conditions       July 2022
+
 
 7.  Security Considerations
 
@@ -721,15 +707,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
               specification", STD 13, RFC 1035, DOI 10.17487/RFC1035,
               November 1987, <https://www.rfc-editor.org/info/rfc1035>.
 
-
-
-
-
-Paasch, et al.           Expires January 7, 2023               [Page 13]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
    [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,
               "Proportional Integral Controller Enhanced (PIE): A
               Lightweight Control Scheme to Address the Bufferbloat
@@ -740,6 +717,18 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
               Interchange Format", STD 90, RFC 8259,
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/info/rfc8259>.
+
+
+
+
+
+
+
+
+Paasch, et al.           Expires January 8, 2023               [Page 13]
+
+Internet-Draft   Responsiveness under Working Conditions       July 2022
+
 
    [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,
               J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler
@@ -764,28 +753,6 @@ A.1.  Apache Traffic Server
 
    The sample configuration file then is:
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Paasch, et al.           Expires January 7, 2023               [Page 14]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
   map https://networkquality.example.com/api/v1/large \
       http://localhost/cache/4294967296/ \
       @plugin=generator.so
@@ -804,6 +771,20 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
       @plugin=generator.so
 
 Authors' Addresses
+
+
+
+
+
+
+
+
+
+
+Paasch, et al.           Expires January 8, 2023               [Page 14]
+
+Internet-Draft   Responsiveness under Working Conditions       July 2022
+
 
    Christoph Paasch
    Apple Inc.
@@ -832,16 +813,6 @@ Authors' Addresses
    Email: cheshire@apple.com
 
 
-
-
-
-
-
-Paasch, et al.           Expires January 7, 2023               [Page 15]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
    Omer Shapira
    Apple Inc.
    One Apple Park Way
@@ -866,31 +837,4 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Paasch, et al.           Expires January 7, 2023               [Page 16]
+Paasch, et al.           Expires January 8, 2023               [Page 15]

@@ -231,8 +231,7 @@ Our target is 20 seconds.
 To make an accurate measurement,
 the algorithm must reliably put the network in a state
 that represents those "working conditions".
-Once the network has reached that state,
-the algorithm can measure its responsiveness.
+During this process, the algorithm measures the responsiveness of the network.
 The following explains how
 the former and the latter are achieved.
 
@@ -251,10 +250,6 @@ transactions.
 This allows to create a stable state of working conditions during which the
 network is used at its nearly full capacity, without generating DoS-like traffic
 patterns (e.g., UDP flooding).
-When reaching these stable conditions (called "saturation") the latency on the
-network is stable enough to allow to measure the responsiveness during that time.
-Thus, the algorithm must detect when the network is reaching this point of saturation
-to trigger the latency probes.
 
 Finally, as end-user usage of the network evolves to newer protocols and congestion
 control algorithms, it is important that the working conditions also can evolve
@@ -274,7 +269,7 @@ queueing within the network, making it hard to reach the path's capacity.
 The goal of the RPM Test is to keep the network in working conditions
 in a sustained and persistent way.
 It uses multiple TCP connections and gradually adds more TCP flows
-until saturation is reached.
+until full link utilization is reached.
 
 ### Parallel vs Sequential Uplink and Downlink
 
@@ -301,12 +296,12 @@ the observed latency happens in the uplink or the downlink direction.
 Thus, we recommend testing uplink and downlink sequentially. Parallel testing
 is considered a future extension.
 
-### Reaching saturation
+### Reaching full link utilization
 
 The RPM Test gradually increases the number of TCP connections
 and measures "goodput" - the sum of actual data transferred
 across all connections in a unit of time.
-When the goodput stops increasing, it means that the network is used at its full capacity, meaning the path is saturated.
+When the goodput stops increasing, it means that the network is used at its full capacity.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.
 
@@ -317,7 +312,7 @@ usually due to receive window limitations.
 The only means to further increase throughput is by
 adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
-saturation has been reached and - more importantly -
+full link utilization has been reached and - more importantly -
 the working condition is stable.
 
 ### Final "Working Conditions" Algorithm
@@ -349,27 +344,17 @@ the steps of the algorithm are:
   - Compute the instantaneous aggregate goodput at interval i.
   - Compute the moving average aggregate goodput at interval i.
   - If the moving average aggregate goodput at interval i is more than a 5% increase over
-    the moving average aggregate goodput at interval i - 1, the network has not yet reached saturation.
+    the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.
     - If no load-generating connections have been added within the last four (4) intervals, add four (4) more load-generating connections.
-  - Else, the network has reached saturation with the existing load-generating connections. The current state is a candidate for stable working conditions.
+  - Else, the network has reached full link utilization with the existing load-generating connections. The current state is a candidate for stable working conditions.
     - If a) there have been load-generating connections added in the past four (4) intervals and b) there has been moving average stability during the period between intervals i-4 and i,
-      then the network has reached stable saturation and the algorithm terminates.
+      then the network has reached full link utilization and the algorithm terminates.
     - Otherwise, add four (4) more load-generating connections.
 
 In {{goals}}, it is mentioned that one of the goals is that the test finishes within
-20 seconds. It is left to the implementation what to do when saturation is not reached
+20 seconds. It is left to the implementation what to do when full link utilization is not reached
 within that time-frame. For example, an implementation might gather a provisional
 responsiveness measurement or let the test run for longer.
-
-Note: It is tempting to envision an initial base round-trip time (RTT)
-measurement and adjust the intervals as a function of that RTT.
-However,
-experiments have shown that this makes the saturation detection extremely
-unstable in low RTT environments.
-In the situation where the "unloaded" RTT is in the
-single-digit millisecond range, yet the network's RTT increases under load
-to more than a hundred milliseconds, the intervals become much too low to
-accurately drive the algorithm.
 
 ## Measuring Responsiveness
 

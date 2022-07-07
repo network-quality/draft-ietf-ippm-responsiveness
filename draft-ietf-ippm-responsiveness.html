@@ -382,7 +382,7 @@
 <link href="#rfc.section.4.1" rel="Chapter" title="4.1 Working Conditions">
 <link href="#rfc.section.4.1.1" rel="Chapter" title="4.1.1 From single-flow to multi-flow">
 <link href="#rfc.section.4.1.2" rel="Chapter" title="4.1.2 Parallel vs Sequential Uplink and Downlink">
-<link href="#rfc.section.4.1.3" rel="Chapter" title="4.1.3 Reaching saturation">
+<link href="#rfc.section.4.1.3" rel="Chapter" title="4.1.3 Reaching full link utilization">
 <link href="#rfc.section.4.1.4" rel="Chapter" title="4.1.4 Final &#8220;Working Conditions&#8221; Algorithm">
 <link href="#rfc.section.4.2" rel="Chapter" title="4.2 Measuring Responsiveness">
 <link href="#rfc.section.4.2.1" rel="Chapter" title="4.2.1 Aggregating the Measurements">
@@ -408,7 +408,7 @@
 
   <meta name="dct.creator" content="Paasch, C., Meyer, R., Cheshire, S., Shapira, O., and M. Mathis" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-ippm-responsiveness-00" />
-  <meta name="dct.issued" scheme="ISO8601" content="2022-7-06" />
+  <meta name="dct.issued" scheme="ISO8601" content="2022-7-07" />
   <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
   <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
 
@@ -432,7 +432,7 @@
 <td class="right">S. Cheshire</td>
 </tr>
 <tr>
-<td class="left">Expires: January 7, 2023</td>
+<td class="left">Expires: January 8, 2023</td>
 <td class="right">O. Shapira</td>
 </tr>
 <tr>
@@ -449,7 +449,7 @@
 </tr>
 <tr>
 <td class="left"></td>
-<td class="right">July 06, 2022</td>
+<td class="right">July 07, 2022</td>
 </tr>
 
     	
@@ -468,7 +468,7 @@
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 7, 2023.</p>
+<p>This Internet-Draft will expire on January 8, 2023.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2022 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -494,7 +494,7 @@
 </li>
 <li>4.1.2.   <a href="#rfc.section.4.1.2">Parallel vs Sequential Uplink and Downlink</a>
 </li>
-<li>4.1.3.   <a href="#rfc.section.4.1.3">Reaching saturation</a>
+<li>4.1.3.   <a href="#rfc.section.4.1.3">Reaching full link utilization</a>
 </li>
 <li>4.1.4.   <a href="#rfc.section.4.1.4">Final &#8220;Working Conditions&#8221; Algorithm</a>
 </li>
@@ -573,19 +573,19 @@
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#measuring-responsiveness-under-working-conditions" id="measuring-responsiveness-under-working-conditions">Measuring Responsiveness Under Working Conditions</a>
 </h1>
-<p id="rfc.section.4.p.1">To make an accurate measurement, the algorithm must reliably put the network in a state that represents those &#8220;working conditions&#8221;.  Once the network has reached that state, the algorithm can measure its responsiveness.  The following explains how the former and the latter are achieved.</p>
+<p id="rfc.section.4.p.1">To make an accurate measurement, the algorithm must reliably put the network in a state that represents those &#8220;working conditions&#8221;.  During this process, the algorithm measures the responsiveness of the network.  The following explains how the former and the latter are achieved.</p>
 <h1 id="rfc.section.4.1">
 <a href="#rfc.section.4.1">4.1.</a> <a href="#working-conditions" id="working-conditions">Working Conditions</a>
 </h1>
 <p id="rfc.section.4.1.p.1">There are many different ways to define the state of &#8220;working conditions&#8221; to measure responsiveness. There is no one true answer to this question. It is a tradeoff between using realistic traffic patterns and pushing the network to its limits.</p>
 <p id="rfc.section.4.1.p.2">In this document we aim to generate a realistic traffic pattern by using standard HTTP transactions but exploring the worst-case scenario by creating multiple of these transactions and using very large data objects in these HTTP transactions.</p>
-<p id="rfc.section.4.1.p.3">This allows to create a stable state of working conditions during which the network is used at its nearly full capacity, without generating DoS-like traffic patterns (e.g., UDP flooding).  When reaching these stable conditions (called &#8220;saturation&#8221;) the latency on the network is stable enough to allow to measure the responsiveness during that time.  Thus, the algorithm must detect when the network is reaching this point of saturation to trigger the latency probes.</p>
+<p id="rfc.section.4.1.p.3">This allows to create a stable state of working conditions during which the network is used at its nearly full capacity, without generating DoS-like traffic patterns (e.g., UDP flooding).</p>
 <p id="rfc.section.4.1.p.4">Finally, as end-user usage of the network evolves to newer protocols and congestion control algorithms, it is important that the working conditions also can evolve to continuously represent a realistic traffic pattern.</p>
 <h1 id="rfc.section.4.1.1">
 <a href="#rfc.section.4.1.1">4.1.1.</a> <a href="#from-single-flow-to-multi-flow" id="from-single-flow-to-multi-flow">From single-flow to multi-flow</a>
 </h1>
 <p id="rfc.section.4.1.1.p.1">A single TCP connection may not be sufficient to reach the capacity of a path.  For example, the 4MB constraints on TCP window size constraints may not fill the pipe.  Additionally, traditional loss-based TCP congestion control algorithms react aggressively to packet loss by reducing the congestion window.  This reaction (intended by the protocol design) decreases the queueing within the network, making it hard to reach the path&#8217;s capacity.</p>
-<p id="rfc.section.4.1.1.p.2">The goal of the RPM Test is to keep the network in working conditions in a sustained and persistent way.  It uses multiple TCP connections and gradually adds more TCP flows until saturation is reached.</p>
+<p id="rfc.section.4.1.1.p.2">The goal of the RPM Test is to keep the network in working conditions in a sustained and persistent way.  It uses multiple TCP connections and gradually adds more TCP flows until full link utilization is reached.</p>
 <h1 id="rfc.section.4.1.2">
 <a href="#rfc.section.4.1.2">4.1.2.</a> <a href="#parallel-vs-sequential-uplink-and-downlink" id="parallel-vs-sequential-uplink-and-downlink">Parallel vs Sequential Uplink and Downlink</a>
 </h1>
@@ -600,10 +600,10 @@
 </ul>
 <p id="rfc.section.4.1.2.p.5">Thus, we recommend testing uplink and downlink sequentially. Parallel testing is considered a future extension.</p>
 <h1 id="rfc.section.4.1.3">
-<a href="#rfc.section.4.1.3">4.1.3.</a> <a href="#reaching-saturation" id="reaching-saturation">Reaching saturation</a>
+<a href="#rfc.section.4.1.3">4.1.3.</a> <a href="#reaching-full-link-utilization" id="reaching-full-link-utilization">Reaching full link utilization</a>
 </h1>
-<p id="rfc.section.4.1.3.p.1">The RPM Test gradually increases the number of TCP connections and measures &#8220;goodput&#8221; - the sum of actual data transferred across all connections in a unit of time.  When the goodput stops increasing, it means that the network is used at its full capacity, meaning the path is saturated.  At this point we are creating the worst-case scenario within the limits of the realistic traffic pattern.</p>
-<p id="rfc.section.4.1.3.p.2">The algorithm notes that throughput gradually increases until TCP connections complete their TCP slow-start phase.  At that point, throughput eventually stalls usually due to receive window limitations.  The only means to further increase throughput is by adding more TCP connections to the pool of load-generating connections.  If new connections leave the throughput the same, saturation has been reached and - more importantly - the working condition is stable.</p>
+<p id="rfc.section.4.1.3.p.1">The RPM Test gradually increases the number of TCP connections and measures &#8220;goodput&#8221; - the sum of actual data transferred across all connections in a unit of time.  When the goodput stops increasing, it means that the network is used at its full capacity.  At this point we are creating the worst-case scenario within the limits of the realistic traffic pattern.</p>
+<p id="rfc.section.4.1.3.p.2">The algorithm notes that throughput gradually increases until TCP connections complete their TCP slow-start phase.  At that point, throughput eventually stalls usually due to receive window limitations.  The only means to further increase throughput is by adding more TCP connections to the pool of load-generating connections.  If new connections leave the throughput the same, full link utilization has been reached and - more importantly - the working condition is stable.</p>
 <h1 id="rfc.section.4.1.4">
 <a href="#rfc.section.4.1.4">4.1.4.</a> <a href="#final-working-conditions-algorithm" id="final-working-conditions-algorithm">Final &#8220;Working Conditions&#8221; Algorithm</a>
 </h1>
@@ -625,18 +625,17 @@
 <li>At each interval: <ul>
 <li>Compute the instantaneous aggregate goodput at interval i.</li>
 <li>Compute the moving average aggregate goodput at interval i.</li>
-<li>If the moving average aggregate goodput at interval i is more than a 5% increase over the moving average aggregate goodput at interval i - 1, the network has not yet reached saturation.  <ul><li>If no load-generating connections have been added within the last four (4) intervals, add four (4) more load-generating connections.</li></ul>
+<li>If the moving average aggregate goodput at interval i is more than a 5% increase over the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.  <ul><li>If no load-generating connections have been added within the last four (4) intervals, add four (4) more load-generating connections.</li></ul>
 </li>
-<li>Else, the network has reached saturation with the existing load-generating connections. The current state is a candidate for stable working conditions.  <ul>
-<li>If a) there have been load-generating connections added in the past four (4) intervals and b) there has been moving average stability during the period between intervals i-4 and i, then the network has reached stable saturation and the algorithm terminates.</li>
+<li>Else, the network has reached full link utilization with the existing load-generating connections. The current state is a candidate for stable working conditions.  <ul>
+<li>If a) there have been load-generating connections added in the past four (4) intervals and b) there has been moving average stability during the period between intervals i-4 and i, then the network has reached full link utilization and the algorithm terminates.</li>
 <li>Otherwise, add four (4) more load-generating connections.</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
-<p id="rfc.section.4.1.4.p.6">In <a href="#goals" class="xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within 20 seconds. It is left to the implementation what to do when saturation is not reached within that time-frame. For example, an implementation might gather a provisional responsiveness measurement or let the test run for longer.</p>
-<p id="rfc.section.4.1.4.p.7">Note: It is tempting to envision an initial base round-trip time (RTT) measurement and adjust the intervals as a function of that RTT.  However, experiments have shown that this makes the saturation detection extremely unstable in low RTT environments.  In the situation where the &#8220;unloaded&#8221; RTT is in the single-digit millisecond range, yet the network&#8217;s RTT increases under load to more than a hundred milliseconds, the intervals become much too low to accurately drive the algorithm.</p>
+<p id="rfc.section.4.1.4.p.6">In <a href="#goals" class="xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within 20 seconds. It is left to the implementation what to do when full link utilization is not reached within that time-frame. For example, an implementation might gather a provisional responsiveness measurement or let the test run for longer.</p>
 <h1 id="rfc.section.4.2">
 <a href="#rfc.section.4.2">4.2.</a> <a href="#measuring-responsiveness" id="measuring-responsiveness">Measuring Responsiveness</a>
 </h1>
