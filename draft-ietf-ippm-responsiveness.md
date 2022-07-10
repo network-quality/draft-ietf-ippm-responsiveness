@@ -259,18 +259,35 @@ to continuously represent a realistic traffic pattern.
 
 ### From single-flow to multi-flow
 
-A single TCP connection may not be sufficient to reach the capacity of a path.
-For example, the 4MB constraints on TCP window size constraints
-may not fill the pipe.
+A single TCP connection may not be sufficient
+to reach the capacity of a path quickly.
+Using a 4MB receive window, over a network with a 32 ms round-trip time,
+a single TCP connection can achieve up to 1Gb/s throughput.
+For higher throughput and/or networks with higher round-trip time,
+TCP allows larger receive window sizes, up to 1 GB.
+For most applications there is little reason to open multiple
+parallel TCP connections in an attempt to achieve higher throughput.
+
+However, it may take some time for a single TCP connection to ramp
+up to full speed, and one of the goals of the RPM test is to quickly
+load the network to capacity, take its measurements, and then finish.
 Additionally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
 This reaction (intended by the protocol design) decreases the
-queueing within the network, making it hard to reach the path's capacity.
+queueing within the network, making it harder to determine the
+depth of the bottleneck queue reliably.
 
-The goal of the RPM Test is to keep the network in working conditions
-in a sustained and persistent way.
-It uses multiple TCP connections and gradually adds more TCP flows
-until full link utilization is reached.
+The purpose of the RPM Test is not to productively move data
+across the network in a useful way, the way a normal application does.
+The purpose of the RPM Test is, as quickly as possible, to simulate
+a representative traffic load as if real applications were doing
+sustained data transfers, measure the resulting round-trip time
+occurring under those realistic conditions, and then end the test.
+Because of this, using multiple simultaneous parallel connections
+allows the RPM test to complete its task more quickly, in a way that
+overall is less disruptive and less wasteful of network capacity
+than a test using a single TCP connection that would take longer
+to bring the bottleneck hop to a stable saturated state.
 
 ### Parallel vs Sequential Uplink and Downlink
 
@@ -306,10 +323,12 @@ When the goodput stops increasing, it means that the network is used at its full
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.
 
-The algorithm notes that throughput gradually increases until TCP
+The algorithm notes that throughput increases rapidly until TCP
 connections complete their TCP slow-start phase.
-At that point, throughput eventually stalls
-usually due to receive window limitations.
+At that point, throughput eventually stalls,
+often due to receive window limitations, particularly in cases of
+high network bandwidth, high network round-trip time,
+low receive window size, or a combination of all three.
 The only means to further increase throughput is by
 adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
