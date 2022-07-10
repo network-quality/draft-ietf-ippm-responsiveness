@@ -335,7 +335,10 @@ Where
 - i: The index of the current interval. i is initialized to 0 when the algorithm begins and
   increases by one for each interval.
 - instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
-  interval p. If p is less than 0, the number of total bytes of data transferred within the
+  interval p, divided by the interval duration.
+  If p is negative (i.e., a time interval logically prior to the start of the test beginning,
+  used in moving average calculations),
+  the number of total bytes of data transferred within that
   interval is considered to be 0.
 - moving average aggregate goodput at interval p: The number of total bytes of data transferred within
   interval p and the three immediately preceding intervals, divided by four times the interval duration.
