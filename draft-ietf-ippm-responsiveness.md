@@ -506,10 +506,18 @@ The client MUST be able to send a GET request and a POST.
 The server MUST be able to respond to both of these
 HTTP commands.
 The server MUST have the ability to provide content upon a GET request.
-Both client and server SHOULD use loss-based congestion controls
-like Cubic.
 The server MUST use a packet scheduling algorithm that minimizes internal queueing
 to avoid affecting the client's measurement.
+Both client and server SHOULD use L4S congestion control where available
+(e.g., TCP Prague with ECT(1) packet marking),
+or traditional loss-based congestion controls (e.g., CUBIC) otherwise.
+The authors of this document believe that use of L4S should
+improve responsiveness, but the RPM Test itself holds no such bias.
+The RPM Test itself simply measures the network and reports what it finds.
+Consequently, because a client cannot experience any benefit
+from L4S if the client is not using L4S, it is important
+that the RPM Test use L4S when it is available, in order to
+detect and report the benefit, if any, achieved by using L4S.
 
 The server MUST respond to 4 URLs:
 
