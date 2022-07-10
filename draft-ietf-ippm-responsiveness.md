@@ -5,6 +5,8 @@ docname: draft-ietf-ippm-responsiveness-00
 date:
 category: exp
 
+submissionType: IETF
+coding: utf-8
 ipr: trust200902
 area: Transport
 workgroup: IP Performance Measurement
@@ -72,7 +74,6 @@ informative:
     title: "Transmission Control Protocol (TCP) Specification"
     seriesinfo: Internet Engineering Task Force
   RFC0793:
-  RFC1035:
   RFC8290:
   RFC8033:
   RFC8259:
@@ -539,9 +540,9 @@ Sample JSON:
 {
   "version": 1,
   "urls": {
-    "small_https_download_url": "https://networkquality.example.com/api/v1/small",
-    "large_https_download_url": "https://networkquality.example.com/api/v1/large",
-    "https_upload_url": "https://networkquality.example.com/api/v1/upload"
+    "large_https_download_url":"https://nq.example.com/api/v1/large",
+    "small_https_download_url":"https://nq.example.com/api/v1/small",
+    "https_upload_url":        "https://nq.example.com/api/v1/upload"
   }
 }
 ~~~
@@ -579,20 +580,21 @@ server. It requires the generator and the statichit plugin.
 The sample configuration file then is:
 
 ~~~
-map https://networkquality.example.com/api/v1/large \
+map https://nq.example.com/api/v1/config \
+    http://localhost/ \
+    @plugin=statichit.so \
+    @pparam=--file-path=config.example.com.json \
+    @pparam=--mime-type=application/json
+
+map https://nq.example.com/api/v1/large \
     http://localhost/cache/4294967296/ \
     @plugin=generator.so
 
-map https://networkquality.example.com/api/v1/carry/small \
+map https://nq.example.com/api/v1/small \
     http://localhost/cache/1/ \
     @plugin=generator.so
 
-map https://networkquality.example.com/api/v1/carry/config \
-    http://localhost/ \
-    @plugin=statichit.so @pparam=--file-path=config.example.com.json \
-    @pparam=--mime-type=application/json
-
-map https://networkquality.example.com/api/v1/carry/slurp \
+map https://nq.example.com/api/v1/upload \
     http://localhost/ \
     @plugin=generator.so
 ~~~
