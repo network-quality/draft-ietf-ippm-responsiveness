@@ -508,16 +508,31 @@ HTTP commands.
 The server MUST have the ability to provide content upon a GET request.
 The server MUST use a packet scheduling algorithm that minimizes internal queueing
 to avoid affecting the client's measurement.
-Both client and server SHOULD use L4S congestion control where available
+
+As clients and servers become deployed that use L4S congestion control
 (e.g., TCP Prague with ECT(1) packet marking),
-or traditional loss-based congestion controls (e.g., CUBIC) otherwise.
-The authors of this document believe that use of L4S should
-improve responsiveness, but the RPM Test itself holds no such bias.
-The RPM Test itself simply measures the network and reports what it finds.
-Consequently, because a client cannot experience any benefit
-from L4S if the client is not using L4S, it is important
-that the RPM Test use L4S when it is available, in order to
-detect and report the benefit, if any, achieved by using L4S.
+for their normal traffic when it is available, and fall back
+to traditional loss-based congestion controls (e.g., Reno or CUBIC)
+otherwise, the same strategy SHOULD be used for RPM test traffic.
+This is RECOMMENDED so that the synthetic traffic generated
+by the RPM test mimics real-world traffic for that server.
+
+Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
+SHOULD NOT be used for RPM test traffic because they take
+much longer to discover the depth of the bottleneck buffers.
+Delay-based congestion-control algorithms seek to mitigate the
+effects of bufferbloat, by detecting and responding to early signs
+of increasing round-trip delay, and reducing the amount of data they
+have in flight before the bottleneck buffer fills up and overflows.
+In a world where bufferbloat is common, this is a pragmatic
+mitigation to allow software to work better in that environment.
+However, that approach does not fix the underlying problem of bufferbloat;
+it merely avoids it in some cases,
+and allows the problem in the network to persist.
+For a diagnostic tool made to identify symptoms of bufferbloat in the
+network so that they can be fixed, using a transport protocol explicitly
+designed to mask those symptoms would be a poor choice, and would
+require the test to run for much longer to deliver the same results.
 
 The server MUST respond to 4 URLs:
 
