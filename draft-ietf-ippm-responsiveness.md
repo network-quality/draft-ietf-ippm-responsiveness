@@ -136,8 +136,11 @@ measure and express responsiveness.
 Existing network measurement tools could incorporate a
 responsiveness measurement into their set of metrics.
 Doing so would also raise the awareness of the problem and
-make the standard "network quality measures" of
-throughput, idle latency, and responsiveness.
+would help establish a new expectation
+that the standard measures of network quality should
+-- in addition to throughput and idle latency --
+also include latency under load, or, as we prefer to call it,
+responsiveness under working conditions.
 
 ## Terminology
 
@@ -250,7 +253,8 @@ transactions.
 
 This allows to create a stable state of working conditions during which the
 network is used at its nearly full capacity, without generating DoS-like traffic
-patterns (e.g., UDP flooding).
+patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
+representative of what a typical user’s network experiences in normal operation.
 
 Finally, as end-user usage of the network evolves to newer protocols and congestion
 control algorithms, it is important that the working conditions also can evolve
@@ -331,12 +335,19 @@ Where
 - i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
   increases by one for each interval.
 - instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
-  interval p. If p is less than 0, the number of total bytes of data transferred within the
+  interval p, divided by the interval duration.
+  If p is negative (i.e., a time interval logically prior to the start of the test beginning,
+  used in moving average calculations),
+  the number of total bytes of data transferred within that
   interval is considered to be 0.
-- moving average aggregate goodput at interval p: The average of the number of total bytes of data
-  transferred in the instantaneous average aggregate goodput at intervals p - x, for all 0&le;x&lt;4.
-- moving average stability during the period between intervals b and e: Whether or not the differences between the moving average aggregate goodput at interval x and
-  the moving average aggregate goodput at interval x+1 (for all b&le;x&lt;e) is less than 5%.
+- moving average aggregate goodput at interval p: The number of total bytes of data transferred within
+  interval p and the three immediately preceding intervals, divided by four times the interval duration.
+- moving average stability during the period between intervals b and e:
+  Whether or not, for all b&le;x&lt;e, the absolute difference is less than 5% between
+  the moving average aggregate goodput at interval x and
+  the moving average aggregate goodput at interval x+1.
+  If all absolute differences are below 5% then the moving average has achieved stability.
+  If any of the absolute differences are 5% or more then the moving average has not achieved stability.
 
 the steps of the algorithm are:
 
@@ -374,13 +385,23 @@ all during working conditions.
    send an HTTP/2 GET request for a one-byte object and wait for the response
    to be fully received.
    It repeats these steps multiple times for accuracy.
+   This test mimics the time it takes for a web browser to connect to a new
+   web server and request the first element of a web page (e.g., “index.html”),
+   or the startup time for a video streaming client to launch and begin fetching media.
 
 2. The responsiveness of the network and the client/server networking stacks
 for the load-generating connections themselves.
 
    To do this, the load-generating connections multiplex an HTTP/2 GET
-request for a one-byte object to get the end-to-end latency on the
-connections that are using the network at full speed.
+   request for a one-byte object to get the end-to-end latency on the
+   connections that are using the network at full speed.
+   This test mimics the time it takes for a video streaming client
+   to skip ahead to a different chapter in the same video stream,
+   or for a navigation client to react and fetch new map tiles
+   when the user scrolls the map to view a different area.
+   In a well functioning system fetching new data
+   over an existing connection should take less time than
+   creating a brand new TLS connection from scratch to do the same thing.
 
 ### Aggregating the Measurements
 
@@ -392,11 +413,11 @@ This fine-grained data is useful, but not necessary for creating a useful metric
 To create a single "Responsiveness" (e.g., RPM) number,
 this first iteration of the algorithm gives
 an equal weight to each of these values.
-That is, it sums the five time values for each probe,
-and divides by the total number of probes to compute
-an average probe duration.
-The reciprocal of this, normalized to 60 seconds,
-gives the Round-trips Per Minute (RPM).
+That is, it computes the sum of the four time values for every probe performed,
+and divides the grand total by four times the number of probes performed,
+to compute a simple arithmetic mean of all the probe durations.
+Dividing 60 seconds by the mean probe duration
+gives the average Round-trips Per Minute (RPM) for the network path.
 
 ### Statistical Confidence
 
@@ -498,8 +519,11 @@ probing connections in the same way.
 
 # RPM Test Server API
 
-The RPM measurement uses standard protocols:
-no new protocol is defined.
+The RPM measurement is built upon a foundation of standard protocols:
+IP, TCP, TLS, HTTP/2.
+On top of this foundation, a minimal amount of new “protocol” is defined,
+merely specifying the URLs that used for GET and PUT in the process of
+executing the test.
 
 Both the client and the server MUST support HTTP/2 over TLS 1.3.
 The client MUST be able to send a GET request and a POST.
