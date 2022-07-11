@@ -612,15 +612,15 @@ The server MUST respond to 4 URLs:
 
 1. A "small" URL/response:
 The server must respond with a status code of 200 and 1 byte in the body.
-The actual body content is irrelevant.
+The actual message content is irrelevant.
 The server SHOULD specify the content-type as application/octet-stream.
-The server SHOULD be terse in the headers returned in the response.
+The server SHOULD minimize the size, in bytes, of the response fields that are encoded and sent on the wire.
 
 2. A "large" URL/response:
 The server must respond with a status code of 200 and a body size of at least 8GB.
 The server SHOULD specify the content-type as application/octet-stream.
 The body can be bigger, and may need to grow as network speeds increases over time.
-The actual body content is irrelevant.
+The actual message content is irrelevant.
 The client will probably never completely download the object,
 but will instead close the connection after reaching working condition
 and making its measurements.
@@ -628,8 +628,7 @@ and making its measurements.
 3. An "upload" URL/response:
 The server must handle a POST request with an arbitrary body size.
 The server should discard the payload.
-The server should discard the payload.
-The actual POST body content is irrelevant.
+The actual POST message content is irrelevant.
 The client will probably never completely upload the object,
 but will instead close the connection after reaching working condition
 and making its measurements.
