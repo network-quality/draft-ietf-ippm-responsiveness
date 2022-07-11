@@ -611,6 +611,7 @@ The server MUST respond to 4 URLs:
 The server must respond with a status code of 200 and 1 byte in the body.
 The actual body content is irrelevant.
 The server SHOULD specify the content-type as application/octet-stream.
+The server SHOULD be terse in the headers returned in the response.
 
 2. A "large" URL/response:
 The server must respond with a status code of 200 and a body size of at least 8GB.
@@ -624,6 +625,11 @@ and making its measurements.
 3. An "upload" URL/response:
 The server must handle a POST request with an arbitrary body size.
 The server should discard the payload.
+The server should discard the payload.
+The actual POST body content is irrelevant.
+The client will probably never completely upload the object,
+but will instead close the connection after reaching working condition
+and making its measurements.
 
 4. A configuration URL that returns a JSON {{RFC8259}} object with the information
 the client uses to run the test (sample below). The server SHOULD specify the
@@ -638,8 +644,14 @@ Sample JSON:
     "small_https_download_url":"https://nq.example.com/api/v1/small",
     "https_upload_url":        "https://nq.example.com/api/v1/upload"
   }
+  "test_endpoint": "hostname123.provider.com"
 }
 ~~~
+
+All of the fields in the sample configuration are required except "test\_endpoint".
+If the test server provider can pin all of the requests for a test run to a specific
+host in the service (for a particular run), they can specify that host name in the
+"test\_endpoint" field.
 
 The client begins the responsiveness measurement by querying for the JSON configuration.
 This supplies the URLs for creating the load-generating connections in
@@ -671,7 +683,7 @@ measurement endpoint.
 Apache Traffic Server starting at version 9.1.0 supports configuration as a responsiveness
 server. It requires the generator and the statichit plugin.
 
-The sample configuration file then is:
+The sample remap configuration file then is:
 
 ~~~
 map https://nq.example.com/api/v1/config \
@@ -681,7 +693,7 @@ map https://nq.example.com/api/v1/config \
     @pparam=--mime-type=application/json
 
 map https://nq.example.com/api/v1/large \
-    http://localhost/cache/4294967296/ \
+    http://localhost/cache/8589934592/ \
     @plugin=generator.so
 
 map https://nq.example.com/api/v1/small \
