@@ -123,7 +123,7 @@ and are to some extent widely implemented.
 Nevertheless, people still suffer from bufferbloat.
 
 Although significant, the impact on user experience can be transitory --
-that is, its effect is not always present.
+that is, its effect is not always visible to the user.
 Whenever a network is actively being used at its full capacity,
 buffers can fill up and create latency for traffic.
 The duration of those full buffers may be brief:
@@ -255,7 +255,7 @@ In order to discover the depth of the buffer at the bottleneck hop,
 the RPM Test mimics normal network operations and data transfers,
 to cause this bottleneck buffer to fill to capacity, and then
 measures the resulting end-to-end latency under these operating conditions.
-A well managed bottleneck queue will keeps its queue occupancy
+A well managed bottleneck queue keeps its queue occupancy
 under control, resulting in consistently low round-trip time
 and consistently good responsiveness.
 A poorly managed bottleneck queue will not.

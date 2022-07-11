@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: Christoph Paasch
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Mon Jul 11 12:44:49 2022
+%%CreationDate: Mon Jul 11 14:22:55 2022
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -653,19 +653,19 @@ _S
 5 561 M
 (   Although significant, the impact on user experience can be transitory) s
 5 550 M
-(   - that is, its effect is not always present.  Whenever a network is) s
+(   - that is, its effect is not always visible to the user.  Whenever a) s
 5 539 M
-(   actively being used at its full capacity, buffers can fill up and) s
+(   network is actively being used at its full capacity, buffers can fill) s
 5 528 M
-(   create latency for traffic.  The duration of those full buffers may) s
+(   up and create latency for traffic.  The duration of those full) s
 5 517 M
-(   be brief: a medium-sized file transfer, like an email attachment or) s
+(   buffers may be brief: a medium-sized file transfer, like an email) s
 5 506 M
-(   uploading photos, can create bursts of latency spikes.  An example of) s
+(   attachment or uploading photos, can create bursts of latency spikes.) s
 5 495 M
-(   this is lag occurring during a videoconference, where a connection is) s
+(   An example of this is lag occurring during a videoconference, where a) s
 5 484 M
-(   briefly shown as unstable.) s
+(   connection is briefly shown as unstable.) s
 5 462 M
 (   These short-lived disruptions make it hard to narrow down the cause.) s
 5 451 M
@@ -899,7 +899,7 @@ _S
 5 264 M
 (   the resulting end-to-end latency under these operating conditions.  A) s
 5 253 M
-(   well managed bottleneck queue will keeps its queue occupancy under) s
+(   well managed bottleneck queue keeps its queue occupancy under) s
 5 242 M
 (   control, resulting in consistently low round-trip time and) s
 5 231 M
@@ -1643,7 +1643,7 @@ _S
 5 297 M
 (   GET and PUT in the process of executing the test.) s
 5 275 M
-(   Both the client and the server MUST support HTTP/2 over TLS 1.3.  The) s
+(   Both the client and the server MUST support HTTP/2 over TLS.  The) s
 5 264 M
 (   client MUST be able to send a GET request and a POST.  The server) s
 5 253 M
@@ -1680,43 +1680,43 @@ _S
 5 682 M
 (   1.  A "small" URL/response: The server must respond with a status) s
 5 671 M
-(       code of 200 and 1 byte in the body.  The actual body content is) s
+(       code of 200 and 1 byte in the body.  The actual message content) s
 5 660 M
-(       irrelevant.  The server SHOULD specify the content-type as) s
+(       is irrelevant.  The server SHOULD specify the content-type as) s
 5 649 M
-(       application/octet-stream.  The server SHOULD be terse in the) s
+(       application/octet-stream.  The server SHOULD minimize the size,) s
 5 638 M
-(       headers returned in the response.) s
-5 616 M
-(   2.  A "large" URL/response: The server must respond with a status) s
+(       in bytes, of the response fields that are encoded and sent on the) s
+5 627 M
+(       wire.) s
 5 605 M
-(       code of 200 and a body size of at least 8GB.  The server SHOULD) s
+(   2.  A "large" URL/response: The server must respond with a status) s
 5 594 M
-(       specify the content-type as application/octet-stream.  The body) s
+(       code of 200 and a body size of at least 8GB.  The server SHOULD) s
 5 583 M
-(       can be bigger, and may need to grow as network speeds increases) s
+(       specify the content-type as application/octet-stream.  The body) s
 5 572 M
-(       over time.  The actual body content is irrelevant.  The client) s
+(       can be bigger, and may need to grow as network speeds increases) s
 5 561 M
-(       will probably never completely download the object, but will) s
+(       over time.  The actual message content is irrelevant.  The client) s
 5 550 M
-(       instead close the connection after reaching working condition and) s
+(       will probably never completely download the object, but will) s
 5 539 M
+(       instead close the connection after reaching working condition and) s
+5 528 M
 (       making its measurements.) s
-5 517 M
-(   3.  An "upload" URL/response: The server must handle a POST request) s
 5 506 M
-(       with an arbitrary body size.  The server should discard the) s
+(   3.  An "upload" URL/response: The server must handle a POST request) s
 5 495 M
-(       payload.  The server should discard the payload.  The actual POST) s
+(       with an arbitrary body size.  The server should discard the) s
 5 484 M
-(       body content is irrelevant.  The client will probably never) s
+(       payload.  The actual POST message content is irrelevant.  The) s
 5 473 M
-(       completely upload the object, but will instead close the) s
+(       client will probably never completely upload the object, but will) s
 5 462 M
-(       connection after reaching working condition and making its) s
+(       instead close the connection after reaching working condition and) s
 5 451 M
-(       measurements.) s
+(       making its measurements.) s
 5 429 M
 (   4.  A configuration URL that returns a JSON [RFC8259] object with the) s
 5 418 M

@@ -131,13 +131,13 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    from bufferbloat.
 
    Although significant, the impact on user experience can be transitory
-   - that is, its effect is not always present.  Whenever a network is
-   actively being used at its full capacity, buffers can fill up and
-   create latency for traffic.  The duration of those full buffers may
-   be brief: a medium-sized file transfer, like an email attachment or
-   uploading photos, can create bursts of latency spikes.  An example of
-   this is lag occurring during a videoconference, where a connection is
-   briefly shown as unstable.
+   - that is, its effect is not always visible to the user.  Whenever a
+   network is actively being used at its full capacity, buffers can fill
+   up and create latency for traffic.  The duration of those full
+   buffers may be brief: a medium-sized file transfer, like an email
+   attachment or uploading photos, can create bursts of latency spikes.
+   An example of this is lag occurring during a videoconference, where a
+   connection is briefly shown as unstable.
 
    These short-lived disruptions make it hard to narrow down the cause.
    We believe that it is necessary to create a standardized way to
@@ -270,7 +270,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    the RPM Test mimics normal network operations and data transfers, to
    cause this bottleneck buffer to fill to capacity, and then measures
    the resulting end-to-end latency under these operating conditions.  A
-   well managed bottleneck queue will keeps its queue occupancy under
+   well managed bottleneck queue keeps its queue occupancy under
    control, resulting in consistently low round-trip time and
    consistently good responsiveness.  A poorly managed bottleneck queue
    will not.
@@ -716,7 +716,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    new "protocol" is defined, merely specifying the URLs that used for
    GET and PUT in the process of executing the test.
 
-   Both the client and the server MUST support HTTP/2 over TLS 1.3.  The
+   Both the client and the server MUST support HTTP/2 over TLS.  The
    client MUST be able to send a GET request and a POST.  The server
    MUST be able to respond to both of these HTTP commands.  The server
    MUST have the ability to provide content upon a GET request.  Both
@@ -736,27 +736,27 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    The server MUST respond to 4 URLs:
 
    1.  A "small" URL/response: The server must respond with a status
-       code of 200 and 1 byte in the body.  The actual body content is
-       irrelevant.  The server SHOULD specify the content-type as
-       application/octet-stream.  The server SHOULD be terse in the
-       headers returned in the response.
+       code of 200 and 1 byte in the body.  The actual message content
+       is irrelevant.  The server SHOULD specify the content-type as
+       application/octet-stream.  The server SHOULD minimize the size,
+       in bytes, of the response fields that are encoded and sent on the
+       wire.
 
    2.  A "large" URL/response: The server must respond with a status
        code of 200 and a body size of at least 8GB.  The server SHOULD
        specify the content-type as application/octet-stream.  The body
        can be bigger, and may need to grow as network speeds increases
-       over time.  The actual body content is irrelevant.  The client
+       over time.  The actual message content is irrelevant.  The client
        will probably never completely download the object, but will
        instead close the connection after reaching working condition and
        making its measurements.
 
    3.  An "upload" URL/response: The server must handle a POST request
        with an arbitrary body size.  The server should discard the
-       payload.  The server should discard the payload.  The actual POST
-       body content is irrelevant.  The client will probably never
-       completely upload the object, but will instead close the
-       connection after reaching working condition and making its
-       measurements.
+       payload.  The actual POST message content is irrelevant.  The
+       client will probably never completely upload the object, but will
+       instead close the connection after reaching working condition and
+       making its measurements.
 
    4.  A configuration URL that returns a JSON [RFC8259] object with the
        information the client uses to run the test (sample below).  The
