@@ -74,6 +74,10 @@ informative:
     title: "Transmission Control Protocol (TCP) Specification"
     seriesinfo: Internet Engineering Task Force
   RFC0793:
+  RFC6335:
+  RFC6762:
+  RFC6763:
+  RFC8766:
   RFC8290:
   RFC8033:
   RFC8259:
@@ -552,13 +556,59 @@ This supplies the URLs for creating the load-generating connections in
 the upstream and downstream direction as well as the small object
 for the latency measurements.
 
+# RPM Test Server Discovery
+
+It makes sense to host RPM Test Server instances in Internet
+Data Centers where they can be accessed easily by users
+wishing to test the quality of their Internet connection.
+However, when a user performs an RPM test and determines
+that they are suffering from poor RPM during download,
+the logical next question might be,
+“What’s causing my poor performance?
+Is it poor buffer management by my ISP?
+Is it poor buffer management in my home Wi-Fi Access point?
+Something else?”
+
+To help an end user answer this question, it will be useful for home gateway
+equipment to host RPM Test Server instances.
+In an example configuration, a user may have cable modem
+service offering 100 Mb/s download speed, connected via
+gigabit Ethernet to one or more Wi-Fi access points in the home,
+which then offer service to Wi-Fi client devices at different rates
+depending on distance, interference from other traffic, etc.
+By having the cable modem itself host an RPM Test Server instance,
+the user can then run a test between the cable modem and their computer
+or smartphone, to help isolate whether bufferbloat they are experiencing
+is occurring in equipment inside the home (like their Wi-Fi access points)
+or somewhere outside the home.
+
+To aid in discoverability of these facilities,
+local RPM Test Server instances SHOULD advertise the availability
+of service type {{RFC6335}} “_nq._tcp” (Network Quality),
+via DNS-Based Service Discovery {{RFC6763}},
+using Multicast DNS on its local link(s) {{RFC6762}}.
+Where applicable, an RPM Test Server instance SHOULD also advertise
+the availability of its service via unicast discovery,
+for discovery by client devices not directly attached to the same link.
+Population of the appropriate DNS zone with the
+relevant unicast discovery records can be performed
+automatically using a Discovery Proxy {{RFC8766}},
+or in some scenarios simply by having a human
+administrator manually enter the required records.
+Similarly, a “cloud” service, providing Internet hosting service for
+“example.com” could choose to include the relevant DNS-SD records
+within the “example.com” domain {{RFC6763}} to communicate
+to clients the list of available RPM Test Server instances.
+
 # Security Considerations
 
 TBD
 
 # IANA Considerations
 
-TBD
+IANA has been requested to record the service type
+“_nq._tcp” (Network Quality)
+for advertising and discovery of RPM Test Server instances.
 
 # Acknowledgments
 
