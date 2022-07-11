@@ -198,12 +198,63 @@ Data sitting in TCP sockets or waiting for the application
 to send or read causes artificial latency, and affects user experience
 the same way as "traditional" bufferbloat.
 
-Finally, it is important to note that queueing only happens behind
-a slow "bottleneck" link in the network,
-and only occurs when sufficient traffic is present.
-The RPM Test must ensure that buffers are actually full
-for a sustained period, and only then make repeated latency
-measurements in this particular state.
+Finally, it is crucial to recognize that significant
+queueing only happens on entry to the lowest-capacity
+(or “bottleneck”) hop on a network path.
+For any flow of data between two communicating devices,
+there is always one hop along the path where the capacity
+available to that flow at that hop is the lowest among
+all the hops of that flow’s path at that moment in time.
+It is important to understand that the existence of a
+lowest-capacity hop on a network path is not itself a problem.
+In a heterogeneous network like the Internet it is
+inevitable that there must necessarily be some hop
+along the path with the lowest capacity for that path.
+If that hop were to be improved to make it no longer
+the lowest-capacity hop, then some other hop would
+become the new lowest-capacity hop for that path.
+In this context a “bottleneck” should not be seen as a problem to
+be fixed, because any attempt to “fix” the bottleneck is futile --
+such a “fix” can never remove the existence of a bottleneck
+on a path; it just moves the bottleneck somewhere else.
+Arguably, this heterogeneity of the Internet is one of its greatest strengths.
+Allowing individual technologies to evolve and improve at their
+own pace, without requiring the entire Internet to change in
+lock-step, has enabled enormous improvements over the years
+in technologies like DSL, cable modems, Ethernet, and Wi-Fi,
+each advancing independently as new developments became ready.
+As a result of this flexibility we have moved incrementally,
+one step at a time, from 56kb/s dial-up modems in the 1990s to
+Gb/s home Internet service and Gb/s wireless connectivity today.
+
+Note that in a shared datagram network, conditions do not remain static.
+The hop that is the current bottleneck may change from moment to moment.
+For example, changes in other traffic may result in changes
+to a flow’s share of a given hop. A user moving around
+may cause the Wi-Fi transmission rate to vary widely,
+from a few Mb/s when far from the Access Point,
+all the way up to Gb/s or more when close to the Access Point.
+
+Consequently, if we wish to enjoy the benefits of the Internet’s great
+flexibility, we need software that embraces and celebrates this
+diversity and adapts intelligently to the varying conditions it encounters.
+
+Because significant queueing only happens on entry to the bottleneck
+hop, the queue management at this critical hop of the path almost
+entirely determines the responsiveness of the entire flow.
+If the bottleneck hop’s queue management algorithm allows an
+excessively large queue to form, this results in excessively large
+delays for packets sitting in that queue awaiting transmission,
+significantly degrading overall user experience.
+
+In order to discover the depth of the buffer at the bottleneck hop,
+the RPM Test mimics normal network operations and data transfers,
+to cause this bottleneck buffer to fill to capacity, and then
+measures the resulting end-to-end latency under these operating conditions.
+A well managed bottleneck queue will keeps its queue occupancy
+under control, resulting in consistently low round-trip time
+and consistently good responsiveness.
+A poorly managed bottleneck queue will not.
 
 # Goals
 
