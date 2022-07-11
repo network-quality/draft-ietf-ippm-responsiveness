@@ -598,7 +598,7 @@ On top of this foundation, a minimal amount of new “protocol” is defined,
 merely specifying the URLs that used for GET and PUT in the process of
 executing the test.
 
-Both the client and the server MUST support HTTP/2 over TLS 1.3.
+Both the client and the server MUST support HTTP/2 over TLS.
 The client MUST be able to send a GET request and a POST.
 The server MUST be able to respond to both of these
 HTTP commands.
