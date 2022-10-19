@@ -449,15 +449,15 @@ is a continuous process during the duration of the test. It requires a sufficien
 large sample-size to have confidence in the results.
 
 The measurement of the responsiveness happens by sending probe-requests for a small
-object. The probe requests are being sent in two ways:
+object. There are two types of probe requests:
 
-1. A HTTP GET request on a separate connection.
+1. A HTTP GET request on a separate connection ("foreign probes").
    This test mimics the time it takes for a web browser to connect to a new
    web server and request the first element of a web page (e.g., “index.html”),
    or the startup time for a video streaming client to launch and begin fetching media.
 
 
-2. A HTTP GET request multiplexed on the load-generating connections.
+2. A HTTP GET request multiplexed on the load-generating connections ("self probes").
    This test mimics the time it takes for a video streaming client
    to skip ahead to a different chapter in the same video stream,
    or for a navigation client to react and fetch new map tiles
@@ -466,20 +466,22 @@ object. The probe requests are being sent in two ways:
    over an existing connection should take less time than
    creating a brand new TLS connection from scratch to do the same thing.
 
-The former will provide 3 set of data-points. First, the duration of the TCP-handshake
+Foreign probes will provide 3 sets of data-points. First, the duration of the TCP-handshake
 (noted hereafter as tcp_foreign).
 Second, the TLS round-trip-time (noted tls_foreign). For this, it is important to note that different TLS versions
 have a different number of round-trips. Thus, the TLS establishment time needs to be
 normalized to the number of round-trips the TLS handshake takes until the connection
-is ready to transmit data. And third, the HTTP latency between issuing the GET
-request for a 1-byte object until the entire response has been received (noted http_foreign).
+is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
+request for a 1-byte object and receiving the entire response (noted http_foreign).
 
-The latter will provide a single data-point between the time the HTTP GET request
-for the 1-byte object is issued on the load-generating connection until the
+Self probes will provide a single data-point for the duration between of time between
+when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
 full HTTP response has been received (noted http_self).
 
-It is important to issue multiple of these probes. To have a large dataset, the
-methodology requires a client to issue these probes every 100 milli-seconds.
+tcp_foreign, tls_foreign, http_foreign and http_self are all measured in milliseconds.
+
+The more probes that are sent, the more data is available for calculation. In order to generate
+as much data as possible, the methodology requires a client to issue these probes every 100ms.
 For the probes on the load-generating connections, the client needs to use one of the
 initial load-generating connections.
 This means that every 100ms, 2 probes are being evaluated. The total amount of data
@@ -488,14 +490,15 @@ used for these probes would be no more than about 50KB worth of data within one 
 ### Aggregating the Measurements
 
 The algorithm produces sets of 4 times for each probe, namely:
-tcp_foreign, tls_foreign, http_foreign, http_self (fromm the previous section). Each of these sets
-will have a large number of sample. To aggregate the methodology proposes the following:
+tcp_foreign, tls_foreign, http_foreign, http_self (from the previous section). Each of these sets
+will have a large number of samples. Use the following methodology to calculate a single RPM value
+from these data:
 
-Among each set, we take the 90th percentile, thus resulting in 4 individual numbers.
-To aggregate these individual numbers into a single responsiveness number, we suggest the following weighted mean:
+1. Among each set, take the 90th percentile, thus resulting in 4 individual numbers (tcp_foreign_p90, tls_foreign_p90, http_foreign_p90, http_self_p90).
+2. Calculate the RPM as the weighted mean:
 
 ~~~
-Responsiveness = 60000 / ((1/3*tcp_foreign + 1/3*tls_foreign + 1/3*http_foreign + http_self)/2)
+Responsiveness = 60000 / ((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 + http_self_p90)/2)
 ~~~
 
 This responsiveness value presents round-trips per minute (RPM).
