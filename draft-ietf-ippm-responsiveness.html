@@ -1,712 +1,2037 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Responsiveness under Working Conditions</title>
+<meta content="Christoph Paasch" name="author">
+<meta content="Randall Meyer" name="author">
+<meta content="Stuart Cheshire" name="author">
+<meta content="Omer Shapira" name="author">
+<meta content="Matt Mathis" name="author">
+<meta content="
+       For many years, a lack of responsiveness, variously called
+lag, latency, or bufferbloat, has been recognized
+as an unfortunate, but common, symptom in today's networks.
+Even after a decade of work on standardizing technical solutions,
+it remains a common problem for the end users. 
+       Everyone &quot;knows&quot; that it is &quot;normal&quot; for a video conference to
+have problems when somebody else at home is
+watching a 4K movie or uploading photos from their phone.
+However, there is no technical reason for this to be the case.
+In fact, various queue management solutions (fq_codel, cake, PIE)
+have solved the problem. 
+       Our networks remain unresponsive, not from a lack of technical solutions,
+but rather a lack of awareness of the problem and its solutions.
+We believe that creating a tool whose measurement matches people's
+everyday experience will create the necessary awareness,
+and result in a demand for products that solve the problem. 
+       This document specifies the &quot;RPM Test&quot; for measuring responsiveness.
+It uses common protocols and mechanisms to measure user
+experience specifically when the network is under working conditions.
+The measurement is expressed as &quot;Round-trips Per Minute&quot; (RPM)
+and should be included with throughput (up and down) and
+idle latency as critical indicators of network quality. 
+    " name="description">
+<meta content="xml2rfc 3.12.0" name="generator">
+<meta content="Internet-Draft" name="keyword">
+<meta content="draft-ietf-ippm-responsiveness-00" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.12.0
+    Python 3.8.10
+    appdirs 1.4.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.0
+    html5lib 1.0.1
+    intervaltree 3.1.0
+    Jinja2 2.11.3
+    kitchen 1.2.6
+    lxml 4.5.0
+    pycairo 1.16.2
+    pycountry 20.7.3
+    pyflakes 2.4.0
+    PyYAML 5.3.1
+    requests 2.22.0
+    setuptools 45.2.0
+    six 1.14.0
+-->
+<link href="draft-ietf-ippm-responsiveness.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-<head profile="http://www.w3.org/2006/03/hcard http://dublincore.org/documents/2008/08/04/dc-html/">
-  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
 
-  <title>Responsiveness under Working Conditions</title>
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necssary during the development of the v3
+  formatters.
 
-  <style type="text/css" title="Xml2Rfc (sans serif)">
-  /*<![CDATA[*/
-	  a {
-	  text-decoration: none;
-	  }
-      /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
-      a.info {
-          /* This is the key. */
-          position: relative;
-          z-index: 24;
-          text-decoration: none;
-      }
-      a.info:hover {
-          z-index: 25;
-          color: #FFF; background-color: #900;
-      }
-      a.info span { display: none; }
-      a.info:hover span.info {
-          /* The span will display just on :hover state. */
-          display: block;
-          position: absolute;
-          font-size: smaller;
-          top: 2em; left: -5em; width: 15em;
-          padding: 2px; border: 1px solid #333;
-          color: #900; background-color: #EEE;
-          text-align: left;
-      }
-	  a.smpl {
-	  color: black;
-	  }
-	  a:hover {
-	  text-decoration: underline;
-	  }
-	  a:active {
-	  text-decoration: underline;
-	  }
-	  address {
-	  margin-top: 1em;
-	  margin-left: 2em;
-	  font-style: normal;
-	  }
-	  body {
-	  color: black;
-	  font-family: verdana, helvetica, arial, sans-serif;
-	  font-size: 10pt;
-	  max-width: 55em;
-	  
-	  }
-	  cite {
-	  font-style: normal;
-	  }
-	  dd {
-	  margin-right: 2em;
-	  }
-	  dl {
-	  margin-left: 2em;
-	  }
-	
-	  ul.empty {
-	  list-style-type: none;
-	  }
-	  ul.empty li {
-	  margin-top: .5em;
-	  }
-	  dl p {
-	  margin-left: 0em;
-	  }
-	  dt {
-	  margin-top: .5em;
-	  }
-	  h1 {
-	  font-size: 14pt;
-	  line-height: 21pt;
-	  page-break-after: avoid;
-	  }
-	  h1.np {
-	  page-break-before: always;
-	  }
-	  h1 a {
-	  color: #333333;
-	  }
-	  h2 {
-	  font-size: 12pt;
-	  line-height: 15pt;
-	  page-break-after: avoid;
-	  }
-	  h3, h4, h5, h6 {
-	  font-size: 10pt;
-	  page-break-after: avoid;
-	  }
-	  h2 a, h3 a, h4 a, h5 a, h6 a {
-	  color: black;
-	  }
-	  img {
-	  margin-left: 3em;
-	  }
-	  li {
-	  margin-left: 2em;
-	  margin-right: 2em;
-	  }
-	  ol {
-	  margin-left: 2em;
-	  margin-right: 2em;
-	  }
-	  ol p {
-	  margin-left: 0em;
-	  }
-	  p {
-	  margin-left: 2em;
-	  margin-right: 2em;
-	  }
-	  pre {
-	  margin-left: 3em;
-	  background-color: lightyellow;
-	  padding: .25em;
-	  }
-	  pre.text2 {
-	  border-style: dotted;
-	  border-width: 1px;
-	  background-color: #f0f0f0;
-	  width: 69em;
-	  }
-	  pre.inline {
-	  background-color: white;
-	  padding: 0em;
-	  }
-	  pre.text {
-	  border-style: dotted;
-	  border-width: 1px;
-	  background-color: #f8f8f8;
-	  width: 69em;
-	  }
-	  pre.drawing {
-	  border-style: solid;
-	  border-width: 1px;
-	  background-color: #f8f8f8;
-	  padding: 2em;
-	  }
-	  table {
-	  margin-left: 2em;
-	  }
-	  table.tt {
-	  vertical-align: top;
-	  }
-	  table.full {
-	  border-style: outset;
-	  border-width: 1px;
-	  }
-	  table.headers {
-	  border-style: outset;
-	  border-width: 1px;
-	  }
-	  table.tt td {
-	  vertical-align: top;
-	  }
-	  table.full td {
-	  border-style: inset;
-	  border-width: 1px;
-	  }
-	  table.tt th {
-	  vertical-align: top;
-	  }
-	  table.full th {
-	  border-style: inset;
-	  border-width: 1px;
-	  }
-	  table.headers th {
-	  border-style: none none inset none;
-	  border-width: 1px;
-	  }
-	  table.left {
-	  margin-right: auto;
-	  }
-	  table.right {
-	  margin-left: auto;
-	  }
-	  table.center {
-	  margin-left: auto;
-	  margin-right: auto;
-	  }
-	  caption {
-	  caption-side: bottom;
-	  font-weight: bold;
-	  font-size: 9pt;
-	  margin-top: .5em;
-	  }
-	
-	  table.header {
-	  border-spacing: 1px;
-	  width: 95%;
-	  font-size: 10pt;
-	  color: white;
-	  }
-	  td.top {
-	  vertical-align: top;
-	  }
-	  td.topnowrap {
-	  vertical-align: top;
-	  white-space: nowrap; 
-	  }
-	  table.header td {
-	  background-color: gray;
-	  width: 50%;
-	  }
-	  table.header a {
-	  color: white;
-	  }
-	  td.reference {
-	  vertical-align: top;
-	  white-space: nowrap;
-	  padding-right: 1em;
-	  }
-	  thead {
-	  display:table-header-group;
-	  }
-	  ul.toc, ul.toc ul {
-	  list-style: none;
-	  margin-left: 1.5em;
-	  margin-right: 0em;
-	  padding-left: 0em;
-	  }
-	  ul.toc li {
-	  line-height: 150%;
-	  font-weight: bold;
-	  font-size: 10pt;
-	  margin-left: 0em;
-	  margin-right: 0em;
-	  }
-	  ul.toc li li {
-	  line-height: normal;
-	  font-weight: normal;
-	  font-size: 9pt;
-	  margin-left: 0em;
-	  margin-right: 0em;
-	  }
-	  li.excluded {
-	  font-size: 0pt;
-	  }
-	  ul p {
-	  margin-left: 0em;
-	  }
-	
-	  .comment {
-	  background-color: yellow;
-	  }
-	  .center {
-	  text-align: center;
-	  }
-	  .error {
-	  color: red;
-	  font-style: italic;
-	  font-weight: bold;
-	  }
-	  .figure {
-	  font-weight: bold;
-	  text-align: center;
-	  font-size: 9pt;
-	  }
-	  .filename {
-	  color: #333333;
-	  font-weight: bold;
-	  font-size: 12pt;
-	  line-height: 21pt;
-	  text-align: center;
-	  }
-	  .fn {
-	  font-weight: bold;
-	  }
-	  .hidden {
-	  display: none;
-	  }
-	  .left {
-	  text-align: left;
-	  }
-	  .right {
-	  text-align: right;
-	  }
-	  .title {
-	  color: #990000;
-	  font-size: 18pt;
-	  line-height: 18pt;
-	  font-weight: bold;
-	  text-align: center;
-	  margin-top: 36pt;
-	  }
-	  .vcardline {
-	  display: block;
-	  }
-	  .warning {
-	  font-size: 14pt;
-	  background-color: yellow;
-	  }
-	
-	
-	  @media print {
-	  .noprint {
-		display: none;
-	  }
-	
-	  a {
-		color: black;
-		text-decoration: none;
-	  }
-	
-	  table.header {
-		width: 90%;
-	  }
-	
-	  td.header {
-		width: 50%;
-		color: black;
-		background-color: white;
-		vertical-align: top;
-		font-size: 12pt;
-	  }
-	
-	  ul.toc a::after {
-		content: leader('.') target-counter(attr(href), page);
-	  }
-	
-	  ul.ind li li a {
-		content: target-counter(attr(href), page);
-	  }
-	
-	  .print2col {
-		column-count: 2;
-		-moz-column-count: 2;
-		column-fill: auto;
-	  }
-	  }
-	
-	  @page {
-	  @top-left {
-		   content: "Internet-Draft"; 
-	  } 
-	  @top-right {
-		   content: "December 2010"; 
-	  } 
-	  @top-center {
-		   content: "Abbreviated Title";
-	  } 
-	  @bottom-left {
-		   content: "Doe"; 
-	  } 
-	  @bottom-center {
-		   content: "Expires June 2011"; 
-	  } 
-	  @bottom-right {
-		   content: "[Page " counter(page) "]"; 
-	  } 
-	  }
-	
-	  @page:first { 
-		@top-left {
-		  content: normal;
-		}
-		@top-right {
-		  content: normal;
-		}
-		@top-center {
-		  content: normal;
-		}
-	  }
-  /*]]>*/
-  </style>
+*/
 
-  <link href="#rfc.toc" rel="Contents">
-<link href="#rfc.section.1" rel="Chapter" title="1 Introduction">
-<link href="#rfc.section.1.1" rel="Chapter" title="1.1 Terminology">
-<link href="#rfc.section.2" rel="Chapter" title="2 Design Constraints">
-<link href="#rfc.section.3" rel="Chapter" title="3 Goals">
-<link href="#rfc.section.4" rel="Chapter" title="4 Measuring Responsiveness Under Working Conditions">
-<link href="#rfc.section.4.1" rel="Chapter" title="4.1 Working Conditions">
-<link href="#rfc.section.4.1.1" rel="Chapter" title="4.1.1 From single-flow to multi-flow">
-<link href="#rfc.section.4.1.2" rel="Chapter" title="4.1.2 Parallel vs Sequential Uplink and Downlink">
-<link href="#rfc.section.4.1.3" rel="Chapter" title="4.1.3 Reaching full link utilization">
-<link href="#rfc.section.4.1.4" rel="Chapter" title="4.1.4 Final &#8220;Working Conditions&#8221; Algorithm">
-<link href="#rfc.section.4.2" rel="Chapter" title="4.2 Measuring Responsiveness">
-<link href="#rfc.section.4.2.1" rel="Chapter" title="4.2.1 Aggregating the Measurements">
-<link href="#rfc.section.5" rel="Chapter" title="5 Interpreting responsiveness results">
-<link href="#rfc.section.5.1" rel="Chapter" title="5.1 Elements influencing responsiveness">
-<link href="#rfc.section.5.1.1" rel="Chapter" title="5.1.1 Client side influence">
-<link href="#rfc.section.5.1.2" rel="Chapter" title="5.1.2 Network influence">
-<link href="#rfc.section.5.1.3" rel="Chapter" title="5.1.3 Server side influence">
-<link href="#rfc.section.5.2" rel="Chapter" title="5.2 Root-causing Responsiveness">
-<link href="#rfc.section.6" rel="Chapter" title="6 RPM Test Server API">
-<link href="#rfc.section.7" rel="Chapter" title="7 RPM Test Server Discovery">
-<link href="#rfc.section.8" rel="Chapter" title="8 Security Considerations">
-<link href="#rfc.section.9" rel="Chapter" title="9 IANA Considerations">
-<link href="#rfc.section.10" rel="Chapter" title="10 Acknowledgments">
-<link href="#rfc.references" rel="Chapter" title="11 Informative References">
-<link href="#rfc.appendix.A" rel="Chapter" title="A Example Server Configuration">
-<link href="#rfc.appendix.A.1" rel="Chapter" title="A.1 Apache Traffic Server">
-<link href="#rfc.authors" rel="Chapter">
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  border: none;
+  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
+     support flexbox yet.
+  */
+  display: table;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre, code {
+  background-color: #f9f9f9;
+  font-family: 'Roboto Mono', monospace;
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    float: none;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The follwing is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
 
 
-  <meta name="generator" content="xml2rfc version 2.8.5 - https://tools.ietf.org/tools/xml2rfc" />
-  <link rel="schema.dct" href="http://purl.org/dc/terms/" />
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
 
-  <meta name="dct.creator" content="Paasch, C., Meyer, R., Cheshire, S., Shapira, O., and M. Mathis" />
-  <meta name="dct.identifier" content="urn:ietf:id:draft-ietf-ippm-responsiveness-01" />
-  <meta name="dct.issued" scheme="ISO8601" content="2022-7-11" />
-  <meta name="dct.abstract" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common, symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
-  <meta name="description" content="For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common, symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users." />
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
 
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre, code {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+pre.sourcecode,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact informatio look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background sligthtly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottim margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the comact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div:first-child > pre.sourcecode,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
 </head>
-
 <body>
-
-  <table class="header">
-    <tbody>
-    
-    	<tr>
-<td class="left">IP Performance Measurement</td>
-<td class="right">C. Paasch</td>
-</tr>
-<tr>
+<script src="metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
 <td class="left">Internet-Draft</td>
-<td class="right">R. Meyer</td>
-</tr>
-<tr>
-<td class="left">Intended status: Experimental</td>
-<td class="right">S. Cheshire</td>
-</tr>
-<tr>
-<td class="left">Expires: January 12, 2023</td>
-<td class="right">O. Shapira</td>
-</tr>
-<tr>
-<td class="left"></td>
-<td class="right">Apple Inc.</td>
-</tr>
-<tr>
-<td class="left"></td>
-<td class="right">M. Mathis</td>
-</tr>
-<tr>
-<td class="left"></td>
-<td class="right">Google, Inc</td>
-</tr>
-<tr>
-<td class="left"></td>
-<td class="right">July 11, 2022</td>
-</tr>
-
-    	
-    </tbody>
-  </table>
-
-  <p class="title">Responsiveness under Working Conditions<br />
-  <span class="filename">draft-ietf-ippm-responsiveness-01</span></p>
-  
-  <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
-<p>For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common, symptom in today&#8217;s networks.  Even after a decade of work on standardizing technical solutions, it remains a common problem for the end users.</p>
-<p>Everyone &#8220;knows&#8221; that it is &#8220;normal&#8221; for a video conference to have problems when somebody else at home is watching a 4K movie or uploading photos from their phone.  However, there is no technical reason for this to be the case.  In fact, various queue management solutions (fq_codel, cake, PIE) have solved the problem.</p>
-<p>Our networks remain unresponsive, not from a lack of technical solutions, but rather a lack of awareness of the problem and its solutions.  We believe that creating a tool whose measurement matches people&#8217;s everyday experience will create the necessary awareness, and result in a demand for products that solve the problem.</p>
-<p>This document specifies the &#8220;RPM Test&#8221; for measuring responsiveness.  It uses common protocols and mechanisms to measure user experience specifically when the network is under working conditions.  The measurement is expressed as &#8220;Round-trips Per Minute&#8221; (RPM) and should be included with throughput (up and down) and idle latency as critical indicators of network quality.</p>
-<h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
-<p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
-<p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
-<p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on January 12, 2023.</p>
-<h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2022 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
-<p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
-
-  
-  <hr class="noprint" />
-  <h1 class="np" id="rfc.toc"><a href="#rfc.toc">Table of Contents</a></h1>
-  <ul class="toc">
-
-  	<li>1.   <a href="#rfc.section.1">Introduction</a>
+<td class="center">Responsiveness under Working Conditions</td>
+<td class="right">July 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Paasch, et al.</td>
+<td class="center">Expires 16 January 2023</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">IP Performance Measurement</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-ietf-ippm-responsiveness-00</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-07-15" class="published">15 July 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Experimental</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2023-01-16">16 January 2023</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">C. Paasch</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">R. Meyer</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">S. Cheshire</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">O. Shapira</div>
+<div class="org">Apple Inc.</div>
+</div>
+<div class="author">
+      <div class="author-name">M. Mathis</div>
+<div class="org">Google, Inc</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Responsiveness under Working Conditions</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">For many years, a lack of responsiveness, variously called
+lag, latency, or bufferbloat, has been recognized
+as an unfortunate, but common, symptom in today's networks.
+Even after a decade of work on standardizing technical solutions,
+it remains a common problem for the end users.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-2">Everyone "knows" that it is "normal" for a video conference to
+have problems when somebody else at home is
+watching a 4K movie or uploading photos from their phone.
+However, there is no technical reason for this to be the case.
+In fact, various queue management solutions (fq_codel, cake, PIE)
+have solved the problem.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
+<p id="section-abstract-3">Our networks remain unresponsive, not from a lack of technical solutions,
+but rather a lack of awareness of the problem and its solutions.
+We believe that creating a tool whose measurement matches people's
+everyday experience will create the necessary awareness,
+and result in a demand for products that solve the problem.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+<p id="section-abstract-4">This document specifies the "RPM Test" for measuring responsiveness.
+It uses common protocols and mechanisms to measure user
+experience specifically when the network is under working conditions.
+The measurement is expressed as "Round-trips Per Minute" (RPM)
+and should be included with throughput (up and down) and
+idle latency as critical indicators of network quality.<a href="#section-abstract-4" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 16 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
 </li>
-<ul><li>1.1.   <a href="#rfc.section.1.1">Terminology</a>
+            </ul>
 </li>
-</ul><li>2.   <a href="#rfc.section.2">Design Constraints</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-design-constraints" class="xref">Design Constraints</a></p>
 </li>
-<li>3.   <a href="#rfc.section.3">Goals</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-goals" class="xref">Goals</a></p>
 </li>
-<li>4.   <a href="#rfc.section.4">Measuring Responsiveness Under Working Conditions</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-measuring-responsiveness-un" class="xref">Measuring Responsiveness Under Working Conditions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-working-conditions" class="xref">Working Conditions</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
+                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="xref">4.1.1</a>.  <a href="#name-from-single-flow-to-multi-f" class="xref">From single-flow to multi-flow</a></p>
 </li>
-<ul><li>4.1.   <a href="#rfc.section.4.1">Working Conditions</a>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
+                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="xref">4.1.2</a>.  <a href="#name-parallel-vs-sequential-upli" class="xref">Parallel vs Sequential Uplink and Downlink</a></p>
 </li>
-<ul><li>4.1.1.   <a href="#rfc.section.4.1.1">From single-flow to multi-flow</a>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.3">
+                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="xref">4.1.3</a>.  <a href="#name-reaching-full-link-utilizat" class="xref">Reaching full link utilization</a></p>
 </li>
-<li>4.1.2.   <a href="#rfc.section.4.1.2">Parallel vs Sequential Uplink and Downlink</a>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.4">
+                    <p id="section-toc.1-1.4.2.1.2.4.1"><a href="#section-4.1.4" class="xref">4.1.4</a>.  <a href="#name-final-working-conditions-al" class="xref">Final "Working Conditions" Algorithm</a></p>
 </li>
-<li>4.1.3.   <a href="#rfc.section.4.1.3">Reaching full link utilization</a>
+                </ul>
 </li>
-<li>4.1.4.   <a href="#rfc.section.4.1.4">Final &#8220;Working Conditions&#8221; Algorithm</a>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-measuring-responsiveness" class="xref">Measuring Responsiveness</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="xref">4.2.1</a>.  <a href="#name-aggregating-the-measurement" class="xref">Aggregating the Measurements</a></p>
 </li>
-</ul><li>4.2.   <a href="#rfc.section.4.2">Measuring Responsiveness</a>
+                </ul>
 </li>
-<ul><li>4.2.1.   <a href="#rfc.section.4.2.1">Aggregating the Measurements</a>
+            </ul>
 </li>
-</ul></ul><li>5.   <a href="#rfc.section.5">Interpreting responsiveness results</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-interpreting-responsiveness" class="xref">Interpreting responsiveness results</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-elements-influencing-respon" class="xref">Elements influencing responsiveness</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="xref">5.1.1</a>.  <a href="#name-client-side-influence" class="xref">Client side influence</a></p>
 </li>
-<ul><li>5.1.   <a href="#rfc.section.5.1">Elements influencing responsiveness</a>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="xref">5.1.2</a>.  <a href="#name-network-influence" class="xref">Network influence</a></p>
 </li>
-<ul><li>5.1.1.   <a href="#rfc.section.5.1.1">Client side influence</a>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
+                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="xref">5.1.3</a>.  <a href="#name-server-side-influence" class="xref">Server side influence</a></p>
 </li>
-<li>5.1.2.   <a href="#rfc.section.5.1.2">Network influence</a>
+                </ul>
 </li>
-<li>5.1.3.   <a href="#rfc.section.5.1.3">Server side influence</a>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-root-causing-responsiveness" class="xref">Root-causing Responsiveness</a></p>
 </li>
-</ul><li>5.2.   <a href="#rfc.section.5.2">Root-causing Responsiveness</a>
+            </ul>
 </li>
-</ul><li>6.   <a href="#rfc.section.6">RPM Test Server API</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-rpm-test-server-api" class="xref">RPM Test Server API</a></p>
 </li>
-<li>7.   <a href="#rfc.section.7">RPM Test Server Discovery</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-rpm-test-server-discovery" class="xref">RPM Test Server Discovery</a></p>
 </li>
-<li>8.   <a href="#rfc.section.8">Security Considerations</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
 </li>
-<li>9.   <a href="#rfc.section.9">IANA Considerations</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
 </li>
-<li>10.   <a href="#rfc.section.10">Acknowledgments</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
 </li>
-<li>11.   <a href="#rfc.references">Informative References</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-informative-references" class="xref">Informative References</a></p>
 </li>
-<li>Appendix A.   <a href="#rfc.appendix.A">Example Server Configuration</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-example-server-configuratio" class="xref">Example Server Configuration</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-A.1" class="xref">A.1</a>.  <a href="#name-apache-traffic-server" class="xref">Apache Traffic Server</a></p>
 </li>
-<ul><li>A.1.   <a href="#rfc.appendix.A.1">Apache Traffic Server</a>
+            </ul>
 </li>
-</ul><li><a href="#rfc.authors">Authors' Addresses</a>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
 </li>
-
-
-  </ul>
-
-  <h1 id="rfc.section.1">
-<a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
-</h1>
-<p id="rfc.section.1.p.1">For many years, a lack of responsiveness, variously called lag, latency, or bufferbloat, has been recognized as an unfortunate, but common, symptom in today&#8217;s networks <a href="#Bufferbloat" class="xref">[Bufferbloat]</a>.  Solutions like fq_codel <a href="#RFC8290" class="xref">[RFC8290]</a> or PIE <a href="#RFC8033" class="xref">[RFC8033]</a> have been standardized and are to some extent widely implemented.  Nevertheless, people still suffer from bufferbloat.</p>
-<p id="rfc.section.1.p.2">Although significant, the impact on user experience can be transitory &#8211; that is, its effect is not always visible to the user.  Whenever a network is actively being used at its full capacity, buffers can fill up and create latency for traffic.  The duration of those full buffers may be brief: a medium-sized file transfer, like an email attachment or uploading photos, can create bursts of latency spikes.  An example of this is lag occurring during a videoconference, where a connection is briefly shown as unstable.</p>
-<p id="rfc.section.1.p.3">These short-lived disruptions make it hard to narrow down the cause.  We believe that it is necessary to create a standardized way to measure and express responsiveness.</p>
-<p id="rfc.section.1.p.4">Existing network measurement tools could incorporate a responsiveness measurement into their set of metrics.  Doing so would also raise the awareness of the problem and would help establish a new expectation that the standard measures of network quality should &#8211; in addition to throughput and idle latency &#8211; also include latency under load, or, as we prefer to call it, responsiveness under working conditions.</p>
-<h1 id="rfc.section.1.1">
-<a href="#rfc.section.1.1">1.1.</a> <a href="#terminology" id="terminology">Terminology</a>
-</h1>
-<p id="rfc.section.1.1.p.1">A word about the term &#8220;bufferbloat&#8221; &#8211; the undesirable latency that comes from a router or other network equipment buffering too much data.  This document uses the term as a general description of bad latency, using more precise wording where warranted.</p>
-<p id="rfc.section.1.1.p.2">&#8220;Latency&#8221; is a poor measure of responsiveness, since it can be hard for the general public to understand.  The units are unfamiliar (&#8220;what is a millisecond?&#8221;) and counterintuitive (&#8220;100 msec &#8211; that sounds good &#8211; it&#8217;s only a tenth of a second!&#8221;).</p>
-<p id="rfc.section.1.1.p.3">Instead, we create the term &#8220;Responsiveness under working conditions&#8221; to make it clear that we are measuring all, not just idle, conditions, and use &#8220;round-trips per minute&#8221; as the metric.  The advantage of round-trips per minute are two-fold: First, it allows for a metric that is &#8220;the higher the better&#8221;. This kind of metric is often more intuitive for end-users.  Second, the range of the values tends to be around the 4-digit integer range which is also a value easy to compare and read, again allowing for a more intuitive use.  Finally, we abbreviate the measurement to &#8220;RPM&#8221;, a wink to the &#8220;revolutions per minute&#8221; that we use for car engines.</p>
-<p id="rfc.section.1.1.p.4">This document defines an algorithm for the &#8220;RPM Test&#8221; that explicitly measures responsiveness under working conditions.</p>
-<h1 id="rfc.section.2">
-<a href="#rfc.section.2">2.</a> <a href="#design-constraints" id="design-constraints">Design Constraints</a>
-</h1>
-<p id="rfc.section.2.p.1">There are many challenges around measurements on the Internet.  They include the dynamic nature of the Internet, the diverse nature of the traffic, the large number of devices that affect traffic, and the difficulty of attaining appropriate measurement conditions.</p>
-<p id="rfc.section.2.p.2">Internet paths are changing all the time.  Daily fluctuations in the demand make the bottlenecks ebb and flow.  To minimize the variability of routing changes, it&#8217;s best to keep the test duration relatively short.</p>
-<p id="rfc.section.2.p.3">TCP and UDP traffic, or traffic on ports 80 and 443, may take significantly different paths on the Internet and be subject to entirely different Quality of Service (QoS) treatment.  A good test will use standard transport-layer traffic &#8211; typical for people&#8217;s use of the network &#8211; that is subject to the transport&#8217;s congestion control that might reduce the traffic&#8217;s rate and thus its buffering in the network.</p>
-<p id="rfc.section.2.p.4">Traditionally, one thinks of bufferbloat happening on the routers and switches of the Internet.  However, the networking stacks of the clients and servers can have huge buffers.  Data sitting in TCP sockets or waiting for the application to send or read causes artificial latency, and affects user experience the same way as &#8220;traditional&#8221; bufferbloat.</p>
-<p id="rfc.section.2.p.5">Finally, it is crucial to recognize that significant queueing only happens on entry to the lowest-capacity (or &#8220;bottleneck&#8221;) hop on a network path.  For any flow of data between two communicating devices, there is always one hop along the path where the capacity available to that flow at that hop is the lowest among all the hops of that flow&#8217;s path at that moment in time.  It is important to understand that the existence of a lowest-capacity hop on a network path is not itself a problem.  In a heterogeneous network like the Internet it is inevitable that there must necessarily be some hop along the path with the lowest capacity for that path.  If that hop were to be improved to make it no longer the lowest-capacity hop, then some other hop would become the new lowest-capacity hop for that path.  In this context a &#8220;bottleneck&#8221; should not be seen as a problem to be fixed, because any attempt to &#8220;fix&#8221; the bottleneck is futile &#8211; such a &#8220;fix&#8221; can never remove the existence of a bottleneck on a path; it just moves the bottleneck somewhere else.  Arguably, this heterogeneity of the Internet is one of its greatest strengths.  Allowing individual technologies to evolve and improve at their own pace, without requiring the entire Internet to change in lock-step, has enabled enormous improvements over the years in technologies like DSL, cable modems, Ethernet, and Wi-Fi, each advancing independently as new developments became ready.  As a result of this flexibility we have moved incrementally, one step at a time, from 56kb/s dial-up modems in the 1990s to Gb/s home Internet service and Gb/s wireless connectivity today.</p>
-<p id="rfc.section.2.p.6">Note that in a shared datagram network, conditions do not remain static.  The hop that is the current bottleneck may change from moment to moment.  For example, changes in other traffic may result in changes to a flow&#8217;s share of a given hop. A user moving around may cause the Wi-Fi transmission rate to vary widely, from a few Mb/s when far from the Access Point, all the way up to Gb/s or more when close to the Access Point.</p>
-<p id="rfc.section.2.p.7">Consequently, if we wish to enjoy the benefits of the Internet&#8217;s great flexibility, we need software that embraces and celebrates this diversity and adapts intelligently to the varying conditions it encounters.</p>
-<p id="rfc.section.2.p.8">Because significant queueing only happens on entry to the bottleneck hop, the queue management at this critical hop of the path almost entirely determines the responsiveness of the entire flow.  If the bottleneck hop&#8217;s queue management algorithm allows an excessively large queue to form, this results in excessively large delays for packets sitting in that queue awaiting transmission, significantly degrading overall user experience.</p>
-<p id="rfc.section.2.p.9">In order to discover the depth of the buffer at the bottleneck hop, the RPM Test mimics normal network operations and data transfers, to cause this bottleneck buffer to fill to capacity, and then measures the resulting end-to-end latency under these operating conditions.  A well managed bottleneck queue keeps its queue occupancy under control, resulting in consistently low round-trip time and consistently good responsiveness.  A poorly managed bottleneck queue will not.</p>
-<h1 id="rfc.section.3">
-<a href="#rfc.section.3">3.</a> <a href="#goals" id="goals">Goals</a>
-</h1>
-<p id="rfc.section.3.p.1">The algorithm described here defines an RPM Test that serves as a good proxy for user experience. This means:</p>
-<p></p>
-
-<ol>
-<li>Today&#8217;s Internet traffic primarily uses HTTP/2 over TLS.  Thus, the algorithm should use that protocol.  <br><br> As a side note: other types of traffic are gaining in popularity (HTTP/3) and/or are already being used widely (RTP).  Traffic prioritization and QoS rules on the Internet may subject traffic to completely different paths: these could also be measured separately.</li>
-<li>The Internet is marked by the deployment of countless middleboxes like transparent TCP proxies or traffic prioritization for certain types of traffic.  The RPM Test must take into account their effect on TCP-handshake <a href="#RFC0793" class="xref">[RFC0793]</a>, TLS-handshake, and request/response.</li>
-<li>The test result should be expressed in an intuitive, nontechnical form.</li>
-<li>Finally, to be useful to a wide audience, the measurement should finish within a short time frame.  Our target is 20 seconds.</li>
-</ol>
-<h1 id="rfc.section.4">
-<a href="#rfc.section.4">4.</a> <a href="#measuring-responsiveness-under-working-conditions" id="measuring-responsiveness-under-working-conditions">Measuring Responsiveness Under Working Conditions</a>
-</h1>
-<p id="rfc.section.4.p.1">To make an accurate measurement, the algorithm must reliably put the network in a state that represents those &#8220;working conditions&#8221;.  During this process, the algorithm measures the responsiveness of the network.  The following explains how the former and the latter are achieved.</p>
-<h1 id="rfc.section.4.1">
-<a href="#rfc.section.4.1">4.1.</a> <a href="#working-conditions" id="working-conditions">Working Conditions</a>
-</h1>
-<p id="rfc.section.4.1.p.1">There are many different ways to define the state of &#8220;working conditions&#8221; to measure responsiveness. There is no one true answer to this question. It is a tradeoff between using realistic traffic patterns and pushing the network to its limits.</p>
-<p id="rfc.section.4.1.p.2">In this document we aim to generate a realistic traffic pattern by using standard HTTP transactions but exploring the worst-case scenario by creating multiple of these transactions and using very large data objects in these HTTP transactions.</p>
-<p id="rfc.section.4.1.p.3">This allows to create a stable state of working conditions during which the network is used at its nearly full capacity, without generating DoS-like traffic patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix representative of what a typical user&#8217;s network experiences in normal operation.</p>
-<p id="rfc.section.4.1.p.4">Finally, as end-user usage of the network evolves to newer protocols and congestion control algorithms, it is important that the working conditions also can evolve to continuously represent a realistic traffic pattern.</p>
-<h1 id="rfc.section.4.1.1">
-<a href="#rfc.section.4.1.1">4.1.1.</a> <a href="#from-single-flow-to-multi-flow" id="from-single-flow-to-multi-flow">From single-flow to multi-flow</a>
-</h1>
-<p id="rfc.section.4.1.1.p.1">A single TCP connection may not be sufficient to reach the capacity of a path quickly.  Using a 4MB receive window, over a network with a 32 ms round-trip time, a single TCP connection can achieve up to 1Gb/s throughput.  For higher throughput and/or networks with higher round-trip time, TCP allows larger receive window sizes, up to 1 GB.  For most applications there is little reason to open multiple parallel TCP connections in an attempt to achieve higher throughput.</p>
-<p id="rfc.section.4.1.1.p.2">However, it may take some time for a single TCP connection to ramp up to full speed, and one of the goals of the RPM test is to quickly load the network to capacity, take its measurements, and then finish.  Additionally, traditional loss-based TCP congestion control algorithms react aggressively to packet loss by reducing the congestion window.  This reaction (intended by the protocol design) decreases the queueing within the network, making it harder to determine the depth of the bottleneck queue reliably.</p>
-<p id="rfc.section.4.1.1.p.3">The purpose of the RPM Test is not to productively move data across the network in a useful way, the way a normal application does.  The purpose of the RPM Test is, as quickly as possible, to simulate a representative traffic load as if real applications were doing sustained data transfers, measure the resulting round-trip time occurring under those realistic conditions, and then end the test.  Because of this, using multiple simultaneous parallel connections allows the RPM test to complete its task more quickly, in a way that overall is less disruptive and less wasteful of network capacity than a test using a single TCP connection that would take longer to bring the bottleneck hop to a stable saturated state.</p>
-<h1 id="rfc.section.4.1.2">
-<a href="#rfc.section.4.1.2">4.1.2.</a> <a href="#parallel-vs-sequential-uplink-and-downlink" id="parallel-vs-sequential-uplink-and-downlink">Parallel vs Sequential Uplink and Downlink</a>
-</h1>
-<p id="rfc.section.4.1.2.p.1">Poor responsiveness can be caused by queues in either (or both) the upstream and the downstream direction.  Furthermore, both paths may differ significantly due to access link conditions (e.g., 5G downstream and LTE upstream) or the routing changes within the ISPs.  To measure responsiveness under working conditions, the algorithm must explore both directions.</p>
-<p id="rfc.section.4.1.2.p.2">One approach could be to measure responsiveness in the uplink and downlink in parallel. It would allow for a shorter test run-time.</p>
-<p id="rfc.section.4.1.2.p.3">However, a number of caveats come with measuring in parallel:</p>
-<p></p>
-
-<ul>
-<li>Half-duplex links may not permit simultaneous uplink and downlink traffic.  This means the test might not reach the path&#8217;s capacity in both directions at once and thus not expose all the potential sources of low responsiveness.</li>
-<li>Debuggability of the results becomes harder: During parallel measurement it is impossible to differentiate whether the observed latency happens in the uplink or the downlink direction.</li>
-</ul>
-<p id="rfc.section.4.1.2.p.5">Thus, we recommend testing uplink and downlink sequentially. Parallel testing is considered a future extension.</p>
-<h1 id="rfc.section.4.1.3">
-<a href="#rfc.section.4.1.3">4.1.3.</a> <a href="#reaching-full-link-utilization" id="reaching-full-link-utilization">Reaching full link utilization</a>
-</h1>
-<p id="rfc.section.4.1.3.p.1">The RPM Test gradually increases the number of TCP connections and measures &#8220;goodput&#8221; &#8211; the sum of actual data transferred across all connections in a unit of time.  When the goodput stops increasing, it means that the network is used at its full capacity.  At this point we are creating the worst-case scenario within the limits of the realistic traffic pattern.</p>
-<p id="rfc.section.4.1.3.p.2">The algorithm notes that throughput increases rapidly until TCP connections complete their TCP slow-start phase.  At that point, throughput eventually stalls, often due to receive window limitations, particularly in cases of high network bandwidth, high network round-trip time, low receive window size, or a combination of all three.  The only means to further increase throughput is by adding more TCP connections to the pool of load-generating connections.  If new connections leave the throughput the same, full link utilization has been reached and &#8211; more importantly &#8211; the working condition is stable.</p>
-<h1 id="rfc.section.4.1.4">
-<a href="#rfc.section.4.1.4">4.1.4.</a> <a href="#final-working-conditions-algorithm" id="final-working-conditions-algorithm">Final &#8220;Working Conditions&#8221; Algorithm</a>
-</h1>
-<p id="rfc.section.4.1.4.p.1">The following algorithm reaches working conditions of a network by using HTTP/2 upload (POST) or download (GET) requests of infinitely large files.  The algorithm is the same for upload and download and uses the same term &#8220;load-generating connection&#8221; for each.  The actions of the algorithm take place at regular intervals. For the current draft the interval is defined as one second.</p>
-<p id="rfc.section.4.1.4.p.2">Where</p>
-<p></p>
-
-<ul>
-<li>i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and increases by one for each interval.</li>
-<li>instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within interval p, divided by the interval duration.  If p is negative (i.e., a time interval logically prior to the start of the test beginning, used in moving average calculations), the number of total bytes of data transferred within that interval is considered to be 0.</li>
-<li>moving average aggregate goodput at interval p: The number of total bytes of data transferred within interval p and the three immediately preceding intervals, divided by four times the interval duration.</li>
-<li>moving average stability during the period between intervals b and e: Whether or not, for all b&#8804;x&lt;e, the absolute difference is less than 5% between the moving average aggregate goodput at interval x and the moving average aggregate goodput at interval x+1.  If all absolute differences are below 5% then the moving average has achieved stability.  If any of the absolute differences are 5% or more then the moving average has not achieved stability.</li>
-</ul>
-<p id="rfc.section.4.1.4.p.4">the steps of the algorithm are:</p>
-<p></p>
-
-<ul>
-<li>Create four load-generating connections.</li>
-<li>At each interval: <ul>
-<li>Compute the instantaneous aggregate goodput at interval i.</li>
-<li>Compute the moving average aggregate goodput at interval i.</li>
-<li>If the moving average aggregate goodput at interval i is more than a 5% increase over the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.  <ul><li>If no load-generating connections have been added within the last four intervals, add four more load-generating connections.</li></ul>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">For many years, a lack of responsiveness, variously called
+lag, latency, or bufferbloat, has been recognized
+as an unfortunate, but common, symptom in today's networks <span>[<a href="#Bufferbloat" class="xref">Bufferbloat</a>]</span>.
+Solutions like fq_codel <span>[<a href="#RFC8290" class="xref">RFC8290</a>]</span> or PIE <span>[<a href="#RFC8033" class="xref">RFC8033</a>]</span> have been standardized
+and are to some extent widely implemented.
+Nevertheless, people still suffer from bufferbloat.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">Although significant, the impact on user experience can be transitory -
+that is, its effect is not always present.
+Whenever a network is actively being used at its full capacity,
+buffers can fill up and create latency for traffic.
+The duration of those full buffers may be brief:
+a medium-sized file transfer, like an email attachment
+or uploading photos,
+can create bursts of latency spikes.
+An example of this is lag occurring during a videoconference,
+where a connection is briefly shown as unstable.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">These short-lived disruptions make it hard to narrow down the cause.
+We believe that it is necessary to create a standardized way to
+measure and express responsiveness.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">Existing network measurement tools could incorporate a
+responsiveness measurement into their set of metrics.
+Doing so would also raise the awareness of the problem and
+would help establish a new expectation
+that the standard measures of network quality should
+- in addition to throughput and idle latency -
+also include latency under load, or, as we prefer to call it,
+responsiveness under working conditions.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<div id="terminology">
+<section id="section-1.1">
+        <h3 id="name-terminology">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.1-1">A word about the term "bufferbloat" - the undesirable latency
+that comes from a router or other network equipment
+buffering too much data.
+This document uses the term as a general description of bad latency,
+using more precise wording where warranted.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">"Latency" is a poor measure of responsiveness,
+since it can be hard for the general public to understand.
+The units are unfamiliar ("what is a millisecond?") and
+counterintuitive ("100 msec - that sounds good -
+it's only a tenth of a second!").<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+<p id="section-1.1-3">Instead, we create the term "Responsiveness under working conditions"
+to make it clear that we are measuring all, not just idle, conditions,
+and use "round-trips per minute" as the metric.
+The advantage of round-trips per minute are two-fold: First, it allows for a metric
+that is "the higher the better". This kind of metric is often more intuitive for end-users.
+Second, the range of the values tends to be around the 4-digit integer range which
+is also a value easy to compare and read, again allowing for a more intuitive use.
+Finally, we abbreviate the measurement to "RPM", a wink to the
+"revolutions per minute" that we use for car engines.<a href="#section-1.1-3" class="pilcrow">¶</a></p>
+<p id="section-1.1-4">This document defines an algorithm for the "RPM Test"
+that explicitly measures responsiveness under working conditions.<a href="#section-1.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="design-constraints">
+<section id="section-2">
+      <h2 id="name-design-constraints">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-design-constraints" class="section-name selfRef">Design Constraints</a>
+      </h2>
+<p id="section-2-1">There are many challenges around measurements on the Internet.
+They include the dynamic nature of the Internet,
+the diverse nature of the traffic,
+the large number of devices that affect traffic,
+and the difficulty of attaining appropriate measurement conditions.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Internet paths are changing all the time.
+Daily fluctuations in the demand make the bottlenecks ebb and flow.
+To minimize the variability of routing changes,
+it's best to keep the test duration relatively short.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">TCP and UDP traffic, or traffic on ports 80 and 443, may take
+significantly different paths on the Internet and
+be subject to entirely different Quality of Service (QoS) treatment.
+A good test will use standard transport-layer traffic - typical
+for people's use of the network -
+that is subject to the transport's congestion control that might
+reduce the traffic's rate and thus its buffering in the network.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">Traditionally, one thinks of bufferbloat happening on the
+routers and switches of the Internet.
+However, the networking stacks of the clients and servers can
+have huge buffers.
+Data sitting in TCP sockets or waiting for the application
+to send or read causes artificial latency, and affects user experience
+the same way as "traditional" bufferbloat.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">Finally, it is crucial to recognize that significant
+queueing only happens on entry to the lowest-capacity
+(or "bottleneck") hop on a network path.
+For any flow of data between two communicating devices,
+there is always one hop along the path where the capacity
+available to that flow at that hop is the lowest among
+all the hops of that flow's path at that moment in time.
+It is important to understand that the existence of a
+lowest-capacity hop on a network path is not itself a problem.
+In a heterogeneous network like the Internet it is
+inevitable that there must necessarily be some hop
+along the path with the lowest capacity for that path.
+If that hop were to be improved to make it no longer
+the lowest-capacity hop, then some other hop would
+become the new lowest-capacity hop for that path.
+In this context a "bottleneck" should not be seen as a problem to
+be fixed, because any attempt to "fix" the bottleneck is futile -
+such a "fix" can never remove the existence of a bottleneck
+on a path; it just moves the bottleneck somewhere else.
+Arguably, this heterogeneity of the Internet is one of its greatest strengths.
+Allowing individual technologies to evolve and improve at their
+own pace, without requiring the entire Internet to change in
+lock-step, has enabled enormous improvements over the years
+in technologies like DSL, cable modems, Ethernet, and Wi-Fi,
+each advancing independently as new developments became ready.
+As a result of this flexibility we have moved incrementally,
+one step at a time, from 56kb/s dial-up modems in the 1990s to
+Gb/s home Internet service and Gb/s wireless connectivity today.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-6">Note that in a shared datagram network, conditions do not remain static.
+The hop that is the current bottleneck may change from moment to moment.
+For example, changes in other traffic may result in changes
+to a flow's share of a given hop. A user moving around
+may cause the Wi-Fi transmission rate to vary widely,
+from a few Mb/s when far from the Access Point,
+all the way up to Gb/s or more when close to the Access Point.<a href="#section-2-6" class="pilcrow">¶</a></p>
+<p id="section-2-7">Consequently, if we wish to enjoy the benefits of the Internet's great
+flexibility, we need software that embraces and celebrates this
+diversity and adapts intelligently to the varying conditions it encounters.<a href="#section-2-7" class="pilcrow">¶</a></p>
+<p id="section-2-8">Because significant queueing only happens on entry to the bottleneck
+hop, the queue management at this critical hop of the path almost
+entirely determines the responsiveness of the entire flow.
+If the bottleneck hop's queue management algorithm allows an
+excessively large queue to form, this results in excessively large
+delays for packets sitting in that queue awaiting transmission,
+significantly degrading overall user experience.<a href="#section-2-8" class="pilcrow">¶</a></p>
+<p id="section-2-9">In order to discover the depth of the buffer at the bottleneck hop,
+the RPM Test mimics normal network operations and data transfers,
+to cause this bottleneck buffer to fill to capacity, and then
+measures the resulting end-to-end latency under these operating conditions.
+A well managed bottleneck queue will keeps its queue occupancy
+under control, resulting in consistently low round-trip time
+and consistently good responsiveness.
+A poorly managed bottleneck queue will not.<a href="#section-2-9" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="goals">
+<section id="section-3">
+      <h2 id="name-goals">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-goals" class="section-name selfRef">Goals</a>
+      </h2>
+<p id="section-3-1">The algorithm described here defines an RPM Test that serves as a good
+proxy for user experience. This means:<a href="#section-3-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-3-2">
+<li id="section-3-2.1">
+          <p id="section-3-2.1.1">Today's Internet traffic primarily uses HTTP/2 over TLS.
+Thus, the algorithm should use that protocol.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
+<p id="section-3-2.1.2">
+As a side note: other types of traffic are gaining in popularity (HTTP/3)
+and/or are already being used widely (RTP).
+Traffic prioritization and QoS rules on the Internet may
+subject traffic to completely different paths:
+these could also be measured separately.<a href="#section-3-2.1.2" class="pilcrow">¶</a></p>
 </li>
-<li>Else, the network has reached full link utilization with the existing load-generating connections. The current state is a candidate for stable working conditions.  <ul>
-<li>If a) there have been load-generating connections added in the past four intervals and b) there has been moving average stability during the period between intervals i-4 and i, then the network has reached full link utilization and the algorithm terminates.</li>
-<li>Otherwise, add four more load-generating connections.</li>
-</ul>
+        <li id="section-3-2.2">The Internet is marked by the deployment of countless middleboxes like
+transparent TCP proxies or traffic prioritization for certain types of traffic.
+The RPM Test must take into account their effect on
+TCP-handshake <span>[<a href="#RFC0793" class="xref">RFC0793</a>]</span>, TLS-handshake, and request/response.<a href="#section-3-2.2" class="pilcrow">¶</a>
 </li>
-</ul>
+        <li id="section-3-2.3">The test result should be expressed in an intuitive, nontechnical form.<a href="#section-3-2.3" class="pilcrow">¶</a>
 </li>
-</ul>
-<p id="rfc.section.4.1.4.p.6">In <a href="#goals" class="xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within 20 seconds. It is left to the implementation what to do when full link utilization is not reached within that time-frame. For example, an implementation might gather a provisional responsiveness measurement or let the test run for longer.</p>
-<h1 id="rfc.section.4.2">
-<a href="#rfc.section.4.2">4.2.</a> <a href="#measuring-responsiveness" id="measuring-responsiveness">Measuring Responsiveness</a>
-</h1>
-<p id="rfc.section.4.2.p.1">Measuring responsiveness during the previously explained working conditions creation is a continuous process during the duration of the test. It requires a sufficiently large sample-size to have confidence in the results.</p>
-<p id="rfc.section.4.2.p.2">The measurement of the responsiveness happens by sending probe-requests for a small object. The probe requests are being sent in two ways:</p>
-<p></p>
-
-<ol>
-<li>A HTTP GET request on a separate connection.  This test mimics the time it takes for a web browser to connect to a new web server and request the first element of a web page (e.g., &#8220;index.html&#8221;), or the startup time for a video streaming client to launch and begin fetching media.</li>
-<li>A HTTP GET request multiplexed on the load-generating connections.  This test mimics the time it takes for a video streaming client to skip ahead to a different chapter in the same video stream, or for a navigation client to react and fetch new map tiles when the user scrolls the map to view a different area.  In a well functioning system fetching new data over an existing connection should take less time than creating a brand new TLS connection from scratch to do the same thing.</li>
-</ol>
-<p id="rfc.section.4.2.p.4">The former will provide 3 set of data-points. First, the duration of the TCP-handshake (noted hereafter as tcp_foreign).  Second, the TLS round-trip-time (noted tls_foreign). For this, it is important to note that different TLS versions have a different number of round-trips. Thus, the TLS establishment time needs to be normalized to the number of round-trips the TLS handshake takes until the connection is ready to transmit data. And third, the HTTP latency between issuing the GET request for a 1-byte object until the entire response has been received (noted http_foreign).</p>
-<p id="rfc.section.4.2.p.5">The latter will provide a single data-point between the time the HTTP GET request for the 1-byte object is issued on the load-generating connection until the full HTTP response has been received (noted http_self).</p>
-<p id="rfc.section.4.2.p.6">It is important to issue multiple of these probes. To have a large dataset, the methodology requires a client to issue these probes every 100 milli-seconds.  For the probes on the load-generating connections, the client needs to use one of the initial load-generating connections.  This means that every 100ms, 2 probes are being evaluated. The total amount of data used for these probes would be no more than about 50KB worth of data within one second.</p>
-<h1 id="rfc.section.4.2.1">
-<a href="#rfc.section.4.2.1">4.2.1.</a> <a href="#aggregating-the-measurements" id="aggregating-the-measurements">Aggregating the Measurements</a>
-</h1>
-<p id="rfc.section.4.2.1.p.1">The algorithm produces sets of 4 times for each probe, namely: tcp_foreign, tls_foreign, http_foreign, http_self (fromm the previous section). Each of these sets will have a large number of sample. To aggregate the methodology proposes the following:</p>
-<p id="rfc.section.4.2.1.p.2">Among each set, we take the 90th percentile, thus resulting in 4 individual numbers.  To aggregate these individual numbers into a single responsiveness number, we suggest the following weighted mean:</p>
+        <li id="section-3-2.4">Finally, to be useful to a wide audience, the measurement
+should finish within a short time frame.
+Our target is 20 seconds.<a href="#section-3-2.4" class="pilcrow">¶</a>
+</li>
+      </ol>
+</section>
+</div>
+<div id="measuring-responsiveness-under-working-conditions">
+<section id="section-4">
+      <h2 id="name-measuring-responsiveness-un">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-measuring-responsiveness-un" class="section-name selfRef">Measuring Responsiveness Under Working Conditions</a>
+      </h2>
+<p id="section-4-1">To make an accurate measurement,
+the algorithm must reliably put the network in a state
+that represents those "working conditions".
+During this process, the algorithm measures the responsiveness of the network.
+The following explains how
+the former and the latter are achieved.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<div id="working-conditions">
+<section id="section-4.1">
+        <h3 id="name-working-conditions">
+<a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-working-conditions" class="section-name selfRef">Working Conditions</a>
+        </h3>
+<p id="section-4.1-1">There are many different ways to define the state of "working conditions" to
+measure responsiveness. There is no one true answer to this question. It is a
+tradeoff between using realistic traffic patterns and pushing the network to
+its limits.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">In this document we aim to generate a realistic traffic pattern by
+using standard HTTP transactions but exploring the worst-case scenario by creating
+multiple of these transactions and using very large data objects in these HTTP
+transactions.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">This allows to create a stable state of working conditions during which the
+network is used at its nearly full capacity, without generating DoS-like traffic
+patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
+representative of what a typical user's network experiences in normal operation.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">Finally, as end-user usage of the network evolves to newer protocols and congestion
+control algorithms, it is important that the working conditions also can evolve
+to continuously represent a realistic traffic pattern.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<div id="from-single-flow-to-multi-flow">
+<section id="section-4.1.1">
+          <h4 id="name-from-single-flow-to-multi-f">
+<a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-from-single-flow-to-multi-f" class="section-name selfRef">From single-flow to multi-flow</a>
+          </h4>
+<p id="section-4.1.1-1">A single TCP connection may not be sufficient
+to reach the capacity of a path quickly.
+Using a 4MB receive window, over a network with a 32 ms round-trip time,
+a single TCP connection can achieve up to 1Gb/s throughput.
+For higher throughput and/or networks with higher round-trip time,
+TCP allows larger receive window sizes, up to 1 GB.
+For most applications there is little reason to open multiple
+parallel TCP connections in an attempt to achieve higher throughput.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-2">However, it may take some time for a single TCP connection to ramp
+up to full speed, and one of the goals of the RPM test is to quickly
+load the network to capacity, take its measurements, and then finish.
+Additionally, traditional loss-based TCP congestion control algorithms
+react aggressively to packet loss by reducing the congestion window.
+This reaction (intended by the protocol design) decreases the
+queueing within the network, making it harder to determine the
+depth of the bottleneck queue reliably.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-3">The purpose of the RPM Test is not to productively move data
+across the network in a useful way, the way a normal application does.
+The purpose of the RPM Test is, as quickly as possible, to simulate
+a representative traffic load as if real applications were doing
+sustained data transfers, measure the resulting round-trip time
+occurring under those realistic conditions, and then end the test.
+Because of this, using multiple simultaneous parallel connections
+allows the RPM test to complete its task more quickly, in a way that
+overall is less disruptive and less wasteful of network capacity
+than a test using a single TCP connection that would take longer
+to bring the bottleneck hop to a stable saturated state.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="parallel-vs-sequential-uplink-and-downlink">
+<section id="section-4.1.2">
+          <h4 id="name-parallel-vs-sequential-upli">
+<a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-parallel-vs-sequential-upli" class="section-name selfRef">Parallel vs Sequential Uplink and Downlink</a>
+          </h4>
+<p id="section-4.1.2-1">Poor responsiveness can be caused by queues in either (or both)
+the upstream and the downstream direction.
+Furthermore, both paths may differ significantly due to access link
+conditions (e.g., 5G downstream and LTE upstream) or the routing changes
+within the ISPs.
+To measure responsiveness under working conditions,
+the algorithm must explore both directions.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.2-2">One approach could be to measure responsiveness in the uplink and downlink
+in parallel. It would allow for a shorter test run-time.<a href="#section-4.1.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.2-3">However, a number of caveats come with measuring in parallel:<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.2-4.1">Half-duplex links may not permit simultaneous uplink and downlink traffic.
+This means the test might not reach the path's capacity in both directions at once and thus not expose
+all the potential sources of low responsiveness.<a href="#section-4.1.2-4.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.2-4.2">Debuggability of the results becomes harder:
+During parallel measurement it is impossible to differentiate whether
+the observed latency happens in the uplink or the downlink direction.<a href="#section-4.1.2-4.2" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-4.1.2-5">Thus, we recommend testing uplink and downlink sequentially. Parallel testing
+is considered a future extension.<a href="#section-4.1.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="reaching-full-link-utilization">
+<section id="section-4.1.3">
+          <h4 id="name-reaching-full-link-utilizat">
+<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-reaching-full-link-utilizat" class="section-name selfRef">Reaching full link utilization</a>
+          </h4>
+<p id="section-4.1.3-1">The RPM Test gradually increases the number of TCP connections
+and measures "goodput" - the sum of actual data transferred
+across all connections in a unit of time.
+When the goodput stops increasing, it means that the network is used at its full capacity.
+At this point we are creating the worst-case scenario within the limits of the
+realistic traffic pattern.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.3-2">The algorithm notes that throughput increases rapidly until TCP
+connections complete their TCP slow-start phase.
+At that point, throughput eventually stalls,
+often due to receive window limitations, particularly in cases of
+high network bandwidth, high network round-trip time,
+low receive window size, or a combination of all three.
+The only means to further increase throughput is by
+adding more TCP connections to the pool of load-generating connections.
+If new connections leave the throughput the same,
+full link utilization has been reached and - more importantly -
+the working condition is stable.<a href="#section-4.1.3-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="final-working-conditions-algorithm">
+<section id="section-4.1.4">
+          <h4 id="name-final-working-conditions-al">
+<a href="#section-4.1.4" class="section-number selfRef">4.1.4. </a><a href="#name-final-working-conditions-al" class="section-name selfRef">Final "Working Conditions" Algorithm</a>
+          </h4>
+<p id="section-4.1.4-1">The following algorithm reaches working conditions of a network
+by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
+files.
+The algorithm is the same for upload and download and uses
+the same term "load-generating connection" for each.
+The actions of the algorithm take place at regular intervals. For the current draft
+the interval is defined as one second.<a href="#section-4.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.4-2">Where<a href="#section-4.1.4-2" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-3.1">i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
+increases by one for each interval.<a href="#section-4.1.4-3.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.4-3.2">instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
+interval p, divided by the interval duration.
+If p is negative (i.e., a time interval logically prior to the start of the test beginning,
+used in moving average calculations),
+the number of total bytes of data transferred within that
+interval is considered to be 0.<a href="#section-4.1.4-3.2" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.4-3.3">moving average aggregate goodput at interval p: The number of total bytes of data transferred within
+interval p and the three immediately preceding intervals, divided by four times the interval duration.<a href="#section-4.1.4-3.3" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.4-3.4">moving average stability during the period between intervals b and e:
+Whether or not, for all b&lt;=x&lt;e, the absolute difference is less than 5% between
+the moving average aggregate goodput at interval x and
+the moving average aggregate goodput at interval x+1.
+If all absolute differences are below 5% then the moving average has achieved stability.
+If any of the absolute differences are 5% or more then the moving average has not achieved stability.<a href="#section-4.1.4-3.4" class="pilcrow">¶</a>
+</li>
+          </ul>
+<p id="section-4.1.4-4">the steps of the algorithm are:<a href="#section-4.1.4-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-5.1">Create four load-generating connections.<a href="#section-4.1.4-5.1" class="pilcrow">¶</a>
+</li>
+            <li class="normal" id="section-4.1.4-5.2">
+              <p id="section-4.1.4-5.2.1">At each interval:<a href="#section-4.1.4-5.2.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-5.2.2.1">Compute the instantaneous aggregate goodput at interval i.<a href="#section-4.1.4-5.2.2.1" class="pilcrow">¶</a>
+</li>
+                <li class="normal" id="section-4.1.4-5.2.2.2">Compute the moving average aggregate goodput at interval i.<a href="#section-4.1.4-5.2.2.2" class="pilcrow">¶</a>
+</li>
+                <li class="normal" id="section-4.1.4-5.2.2.3">
+                  <p id="section-4.1.4-5.2.2.3.1">If the moving average aggregate goodput at interval i is more than a 5% increase over
+the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.<a href="#section-4.1.4-5.2.2.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-5.2.2.3.2.1">If no load-generating connections have been added within the last four intervals, add four more load-generating connections.<a href="#section-4.1.4-5.2.2.3.2.1" class="pilcrow">¶</a>
+</li>
+                  </ul>
+</li>
+                <li class="normal" id="section-4.1.4-5.2.2.4">
+                  <p id="section-4.1.4-5.2.2.4.1">Else, the network has reached full link utilization with the existing load-generating connections. The current state is a candidate for stable working conditions.<a href="#section-4.1.4-5.2.2.4.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.1.4-5.2.2.4.2.1">If a) there have been load-generating connections added in the past four intervals and b) there has been moving average stability during the period between intervals i-4 and i,
+then the network has reached full link utilization and the algorithm terminates.<a href="#section-4.1.4-5.2.2.4.2.1" class="pilcrow">¶</a>
+</li>
+                    <li class="normal" id="section-4.1.4-5.2.2.4.2.2">Otherwise, add four more load-generating connections.<a href="#section-4.1.4-5.2.2.4.2.2" class="pilcrow">¶</a>
+</li>
+                  </ul>
+</li>
+              </ul>
+</li>
+          </ul>
+<p id="section-4.1.4-6">In <a href="#goals" class="xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within
+20 seconds. It is left to the implementation what to do when full link utilization is not reached
+within that time-frame. For example, an implementation might gather a provisional
+responsiveness measurement or let the test run for longer.<a href="#section-4.1.4-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="measuring-responsiveness">
+<section id="section-4.2">
+        <h3 id="name-measuring-responsiveness">
+<a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-measuring-responsiveness" class="section-name selfRef">Measuring Responsiveness</a>
+        </h3>
+<p id="section-4.2-1">Measuring responsiveness during the previously explained working conditions creation
+is a continuous process during the duration of the test. It requires a sufficiently
+large sample-size to have confidence in the results.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The measurement of the responsiveness happens by sending probe-requests for a small
+object. There are two types of probe requests:<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2-3">
+<li id="section-4.2-3.1">A HTTP GET request on a separate connection ("foreign probes").
+This test mimics the time it takes for a web browser to connect to a new
+web server and request the first element of a web page (e.g., "index.html"),
+or the startup time for a video streaming client to launch and begin fetching media.<a href="#section-4.2-3.1" class="pilcrow">¶</a>
+</li>
+          <li id="section-4.2-3.2">A HTTP GET request multiplexed on the load-generating connections ("self probes").
+This test mimics the time it takes for a video streaming client
+to skip ahead to a different chapter in the same video stream,
+or for a navigation client to react and fetch new map tiles
+when the user scrolls the map to view a different area.
+In a well functioning system fetching new data
+over an existing connection should take less time than
+creating a brand new TLS connection from scratch to do the same thing.<a href="#section-4.2-3.2" class="pilcrow">¶</a>
+</li>
+        </ol>
+<p id="section-4.2-4">Foreign probes will provide 3 sets of data-points. First, the duration of the TCP-handshake
+(noted hereafter as tcp_foreign).
+Second, the TLS round-trip-time (noted tls_foreign). For this, it is important to note that different TLS versions
+have a different number of round-trips. Thus, the TLS establishment time needs to be
+normalized to the number of round-trips the TLS handshake takes until the connection
+is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
+request for a 1-byte object and receiving the entire response (noted http_foreign).<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-5">Self probes will provide a single data-point for the duration between of time between
+when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
+full HTTP response has been received (noted http_self).<a href="#section-4.2-5" class="pilcrow">¶</a></p>
+<p id="section-4.2-6">tcp_foreign, tls_foreign, http_foreign and http_self are all measured in milliseconds.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
+<p id="section-4.2-7">The more probes that are sent, the more data is available for calculation. In order to generate
+as much data as possible, the methodology requires a client to issue these probes every 100ms.
+For the probes on the load-generating connections, the client needs to use one of the
+initial load-generating connections.
+This means that every 100ms, 2 probes are being evaluated. The total amount of data
+used for these probes would be no more than about 50KB worth of data within one second.<a href="#section-4.2-7" class="pilcrow">¶</a></p>
+<div id="aggregating-the-measurements">
+<section id="section-4.2.1">
+          <h4 id="name-aggregating-the-measurement">
+<a href="#section-4.2.1" class="section-number selfRef">4.2.1. </a><a href="#name-aggregating-the-measurement" class="section-name selfRef">Aggregating the Measurements</a>
+          </h4>
+<p id="section-4.2.1-1">The algorithm produces sets of 4 times for each probe, namely:
+tcp_foreign, tls_foreign, http_foreign, http_self (from the previous section). Each of these sets
+will have a large number of samples. Use the following methodology to calculate a single RPM value
+from these data:<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4.2.1-2">
+<li id="section-4.2.1-2.1">Among each set, take the 90th percentile, thus resulting in 4 individual numbers (tcp_foreign_p90, tls_foreign_p90, http_foreign_p90, http_self_p90).<a href="#section-4.2.1-2.1" class="pilcrow">¶</a>
+</li>
+            <li id="section-4.2.1-2.2">Calculate the RPM as the weighted mean:<a href="#section-4.2.1-2.2" class="pilcrow">¶</a>
+</li>
+          </ol>
+<div class="alignLeft art-text artwork" id="section-4.2.1-3">
 <pre>
-Responsiveness = 60000 / ((1/3*tcp_foreign + 1/3*tls_foreign + 1/3*http_foreign + http_self)/2)
-</pre>
-<p id="rfc.section.4.2.1.p.3">This responsiveness value presents round-trips per minute (RPM).</p>
-<h1 id="rfc.section.5">
-<a href="#rfc.section.5">5.</a> <a href="#interpreting-responsiveness-results" id="interpreting-responsiveness-results">Interpreting responsiveness results</a>
-</h1>
-<p id="rfc.section.5.p.1">The described methodology uses a high-level approach to measure responsiveness.  By executing the test with regular HTTP requests a number of elements come into play that will influence the result. Contrary to more traditional measurement methods the responsiveness metric is not only influenced by the properties of the network but can significantly be influenced by the properties of the client and the server implementations. This section describes how the different elements influence responsiveness and how a user may differentiate them when debugging a network.</p>
-<h1 id="rfc.section.5.1">
-<a href="#rfc.section.5.1">5.1.</a> <a href="#elements-influencing-responsiveness" id="elements-influencing-responsiveness">Elements influencing responsiveness</a>
-</h1>
-<p id="rfc.section.5.1.p.1">Due to the HTTP-centric approach of the measurement methodology a number of factors come into play that influence the results. Namely, the client-side networking stack (from the top of the HTTP-layer all the way down to the physical layer), the network (including potential transparent HTTP &#8220;accelerators&#8221;), and the server-side networking stack. The following outlines how each of these contributes to the responsiveness.</p>
-<h1 id="rfc.section.5.1.1">
-<a href="#rfc.section.5.1.1">5.1.1.</a> <a href="#client-side-influence" id="client-side-influence">Client side influence</a>
-</h1>
-<p id="rfc.section.5.1.1.p.1">As the driver of the measurement, the client-side networking stack can have a large influence on the result. The biggest influence of the client comes when measuring the responsiveness in the uplink direction. Load-generation will cause queue-buildup in the transport layer as well as the HTTP layer. Additionally, if the network&#8217;s bottleneck is on the first hop, queue-buildup will happen at the layers below the transport stack (e.g., NIC firmware).</p>
-<p id="rfc.section.5.1.1.p.2">Each of these queue build-ups may cause latency and thus low responsiveness.  A well designed networking stack would ensure that queue-buildup in the TCP layer is kept at a bare minimum with solutions like TCP_NOTSENT_LOWAT <a href="#draft-ietf-tcpm-rfc793bis" class="xref">[draft-ietf-tcpm-rfc793bis]</a>.  At the HTTP/2 layer it is important that the load-generating data is not interfering with the latency-measuring probes. For example, the different streams should not be stacked one after the other but rather be allowed to be multiplexed for optimal latency. The queue-buildup at these layers would only influence latency on the probes that are sent on the load-generating connections.</p>
-<p id="rfc.section.5.1.1.p.3">Below the transport layer many places have a potential queue build-up. It is important to keep these queues at reasonable sizes or that they implement techniques like FQ-Codel. Depending on the techniques used at these layers, the queue build-up can influence latency on probes sent on load-generating connections as well as separate connections. If flow-queuing is used at these layers, the impact on separate connections will be negligible.</p>
-<h1 id="rfc.section.5.1.2">
-<a href="#rfc.section.5.1.2">5.1.2.</a> <a href="#network-influence" id="network-influence">Network influence</a>
-</h1>
-<p id="rfc.section.5.1.2.p.1">The network obviously is a large driver for the responsiveness result.  Propagation delay from the client to the server as well as queuing in the bottleneck node will cause latency. Beyond these traditional sources of latency, other factors may influence the results as well. Many networks deploy transparent TCP Proxies, firewalls doing deep packet-inspection, HTTP &#8220;accelerators&#8221;,&#8230; As the methodology relies on the use of HTTP/2, the responsiveness metric will be influenced by such devices as well.</p>
-<p id="rfc.section.5.1.2.p.2">The network will influence both kinds of latency probes that the responsiveness tests sends out. Depending on the network&#8217;s use of Smart Queue Management and whether this includes flow-queuing or not, the latency probes on the load-generating connections may be influenced differently than the probes on the separate connections.</p>
-<h1 id="rfc.section.5.1.3">
-<a href="#rfc.section.5.1.3">5.1.3.</a> <a href="#server-side-influence" id="server-side-influence">Server side influence</a>
-</h1>
-<p id="rfc.section.5.1.3.p.1">Finally, the server-side introduces the same kind of influence on the responsiveness as the client-side, with the difference that the responsiveness will be impacted during the downlink load generation.</p>
-<h1 id="rfc.section.5.2">
-<a href="#rfc.section.5.2">5.2.</a> <a href="#root-causing-responsiveness" id="root-causing-responsiveness">Root-causing Responsiveness</a>
-</h1>
-<p id="rfc.section.5.2.p.1">Once an RPM result has been generated one might be tempted to try to localize the source of a potential low responsiveness. The responsiveness measurement is however aimed at providing a quick, top-level view of the responsiveness under working conditions the way end-users experience it.  Localizing the source of low responsiveness involves however a set of different tools and methodologies.</p>
-<p id="rfc.section.5.2.p.2">Nevertheless, the responsiveness test allows to gain some insight into what the source of the latency is. The previous section described the elements that influence the responsiveness. From there it became apparent that the latency measured on the load-generating connections and the latency measured on separate connections may be different due to the different elements.</p>
-<p id="rfc.section.5.2.p.3">For example, if the latency measured on separate connections is much less than the latency measured on the load-generating connections, it is possible to narrow down the source of the additional latency on the load-generating connections.  As long as the other elements of the network don&#8217;t do flow-queueing, the additional latency must come from the queue build-up at the HTTP and TCP layer.  This is because all other bottlenecks in the network that may cause a queue build-up will be affecting the load-generating connections as well as the separate latency probing connections in the same way.</p>
-<h1 id="rfc.section.6">
-<a href="#rfc.section.6">6.</a> <a href="#rpm-test-server-api" id="rpm-test-server-api">RPM Test Server API</a>
-</h1>
-<p id="rfc.section.6.p.1">The RPM measurement is built upon a foundation of standard protocols: IP, TCP, TLS, HTTP/2.  On top of this foundation, a minimal amount of new &#8220;protocol&#8221; is defined, merely specifying the URLs that used for GET and PUT in the process of executing the test.</p>
-<p id="rfc.section.6.p.2">Both the client and the server MUST support HTTP/2 over TLS.  The client MUST be able to send a GET request and a POST.  The server MUST be able to respond to both of these HTTP commands.  The server MUST have the ability to provide content upon a GET request.  Both client and server SHOULD use loss-based congestion controls like Cubic.  The server MUST use a packet scheduling algorithm that minimizes internal queueing to avoid affecting the client&#8217;s measurement.</p>
-<p id="rfc.section.6.p.3">The server MUST respond to 4 URLs:</p>
-<p></p>
-
-<ol>
-<li>A &#8220;small&#8221; URL/response: The server must respond with a status code of 200 and 1 byte in the body.  The actual message content is irrelevant.  The server SHOULD specify the content-type as application/octet-stream.  The server SHOULD minimize the size, in bytes, of the response fields that are encoded and sent on the wire.</li>
-<li>A &#8220;large&#8221; URL/response: The server must respond with a status code of 200 and a body size of at least 8GB.  The server SHOULD specify the content-type as application/octet-stream.  The body can be bigger, and may need to grow as network speeds increases over time.  The actual message content is irrelevant.  The client will probably never completely download the object, but will instead close the connection after reaching working condition and making its measurements.</li>
-<li>An &#8220;upload&#8221; URL/response: The server must handle a POST request with an arbitrary body size.  The server should discard the payload.  The actual POST message content is irrelevant.  The client will probably never completely upload the object, but will instead close the connection after reaching working condition and making its measurements.</li>
-<li>A configuration URL that returns a JSON <a href="#RFC8259" class="xref">[RFC8259]</a> object with the information the client uses to run the test (sample below). The server SHOULD specify the content-type as application/json.  Sample JSON:</li>
-</ol>
+Responsiveness = 60000 / ((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 + http_self_p90)/2)
+</pre><a href="#section-4.2.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-4.2.1-4">This responsiveness value presents round-trips per minute (RPM).<a href="#section-4.2.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="interpreting-responsiveness-results">
+<section id="section-5">
+      <h2 id="name-interpreting-responsiveness">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-interpreting-responsiveness" class="section-name selfRef">Interpreting responsiveness results</a>
+      </h2>
+<p id="section-5-1">The described methodology uses a high-level approach to measure responsiveness.
+By executing the test with regular HTTP requests a number of elements come into
+play that will influence the result. Contrary to more traditional measurement methods
+the responsiveness metric is not only influenced by the properties of the
+network but can significantly be influenced by the properties of the client
+and the server implementations. This section describes how the different
+elements influence responsiveness and how a user may differentiate them
+when debugging a network.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<div id="elements-influencing-responsiveness">
+<section id="section-5.1">
+        <h3 id="name-elements-influencing-respon">
+<a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-elements-influencing-respon" class="section-name selfRef">Elements influencing responsiveness</a>
+        </h3>
+<p id="section-5.1-1">Due to the HTTP-centric approach of the measurement methodology a number of
+factors come into play that influence the results. Namely, the client-side
+networking stack (from the top of the HTTP-layer all the way down to the physical layer),
+the network (including potential transparent HTTP "accelerators"), and the server-side
+networking stack. The following outlines how each of these contributes to the responsiveness.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<div id="client-side-influence">
+<section id="section-5.1.1">
+          <h4 id="name-client-side-influence">
+<a href="#section-5.1.1" class="section-number selfRef">5.1.1. </a><a href="#name-client-side-influence" class="section-name selfRef">Client side influence</a>
+          </h4>
+<p id="section-5.1.1-1">As the driver of the measurement, the client-side networking stack can have a
+large influence on the result. The biggest influence of the client comes
+when measuring the responsiveness in the uplink direction. Load-generation will
+cause queue-buildup in the transport layer as well as the HTTP layer. Additionally,
+if the network's bottleneck is on the first hop, queue-buildup will happen at the
+layers below the transport stack (e.g., NIC firmware).<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-2">Each of these queue build-ups may cause latency and thus low responsiveness.
+A well designed networking stack would ensure that queue-buildup in the TCP layer
+is kept at a bare minimum with solutions like TCP_NOTSENT_LOWAT <span>[<a href="#draft-ietf-tcpm-rfc793bis" class="xref">draft-ietf-tcpm-rfc793bis</a>]</span>.
+At the HTTP/2 layer it is important that the load-generating data is not interfering
+with the latency-measuring probes. For example, the different streams should not
+be stacked one after the other but rather be allowed to be multiplexed for
+optimal latency. The queue-buildup at these layers would only influence latency
+on the probes that are sent on the load-generating connections.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-5.1.1-3">Below the transport layer many places have a potential queue build-up. It is
+important to keep these queues at reasonable sizes or that they implement techniques
+like FQ-Codel. Depending on the techniques used at these layers, the queue build-up
+can influence latency on probes sent on load-generating connections as well as
+separate connections. If flow-queuing is used at these layers, the impact on
+separate connections will be negligible.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="network-influence">
+<section id="section-5.1.2">
+          <h4 id="name-network-influence">
+<a href="#section-5.1.2" class="section-number selfRef">5.1.2. </a><a href="#name-network-influence" class="section-name selfRef">Network influence</a>
+          </h4>
+<p id="section-5.1.2-1">The network obviously is a large driver for the responsiveness result.
+Propagation delay from the client to the server as well as queuing in the
+bottleneck node will cause latency. Beyond these traditional sources of latency,
+other factors may influence the results as well. Many networks deploy transparent
+TCP Proxies, firewalls doing deep packet-inspection, HTTP "accelerators",...
+As the methodology relies on the use of HTTP/2, the responsiveness metric will
+be influenced by such devices as well.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.2-2">The network will influence both kinds of latency probes that the responsiveness
+tests sends out. Depending on the network's use of Smart Queue Management and whether
+this includes flow-queuing or not, the latency probes on the load-generating
+connections may be influenced differently than the probes on the separate
+connections.<a href="#section-5.1.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="server-side-influence">
+<section id="section-5.1.3">
+          <h4 id="name-server-side-influence">
+<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-server-side-influence" class="section-name selfRef">Server side influence</a>
+          </h4>
+<p id="section-5.1.3-1">Finally, the server-side introduces the same kind of influence on the responsiveness
+as the client-side, with the difference that the responsiveness will be impacted
+during the downlink load generation.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="root-causing-responsiveness">
+<section id="section-5.2">
+        <h3 id="name-root-causing-responsiveness">
+<a href="#section-5.2" class="section-number selfRef">5.2. </a><a href="#name-root-causing-responsiveness" class="section-name selfRef">Root-causing Responsiveness</a>
+        </h3>
+<p id="section-5.2-1">Once an RPM result has been generated one might be tempted to try to localize
+the source of a potential low responsiveness. The responsiveness measurement
+is however aimed at providing a quick, top-level view of the responsiveness
+under working conditions the way end-users experience it.
+Localizing the source of low responsiveness involves however a set of different
+tools and methodologies.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
+<p id="section-5.2-2">Nevertheless, the responsiveness test allows to gain some insight into what the
+source of the latency is. The previous section described the elements that influence
+the responsiveness. From there it became apparent that the latency measured
+on the load-generating connections and the latency measured on separate connections
+may be different due to the different elements.<a href="#section-5.2-2" class="pilcrow">¶</a></p>
+<p id="section-5.2-3">For example, if the latency measured on separate connections is much less than the
+latency measured on the load-generating connections, it is possible to narrow
+down the source of the additional latency on the load-generating connections.
+As long as the other elements of the network don't do flow-queueing, the additional
+latency must come from the queue build-up at the HTTP and TCP layer.
+This is because all other bottlenecks in the network that may cause a queue build-up
+will be affecting the load-generating connections as well as the separate latency
+probing connections in the same way.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="rpm-test-server-api">
+<section id="section-6">
+      <h2 id="name-rpm-test-server-api">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-rpm-test-server-api" class="section-name selfRef">RPM Test Server API</a>
+      </h2>
+<p id="section-6-1">The RPM measurement is built upon a foundation of standard protocols:
+IP, TCP, TLS, HTTP/2.
+On top of this foundation, a minimal amount of new "protocol" is defined,
+merely specifying the URLs that used for GET and PUT in the process of
+executing the test.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Both the client and the server MUST support HTTP/2 over TLS.
+The client MUST be able to send a GET request and a POST.
+The server MUST be able to respond to both of these
+HTTP commands.
+The server MUST have the ability to provide content upon a GET request.
+Both client and server SHOULD use loss-based congestion controls
+like Cubic.
+The server MUST use a packet scheduling algorithm that minimizes internal queueing
+to avoid affecting the client's measurement.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">The server MUST respond to 4 URLs:<a href="#section-6-3" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6-4">
+<li id="section-6-4.1">A "small" URL/response:
+The server must respond with a status code of 200 and 1 byte in the body.
+The actual message content is irrelevant.
+The server SHOULD specify the content-type as application/octet-stream.
+The server SHOULD minimize the size, in bytes, of the response fields that are encoded and sent on the wire.<a href="#section-6-4.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-6-4.2">A "large" URL/response:
+The server must respond with a status code of 200 and a body size of at least 8GB.
+The server SHOULD specify the content-type as application/octet-stream.
+The body can be bigger, and may need to grow as network speeds increases over time.
+The actual message content is irrelevant.
+The client will probably never completely download the object,
+but will instead close the connection after reaching working condition
+and making its measurements.<a href="#section-6-4.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-6-4.3">An "upload" URL/response:
+The server must handle a POST request with an arbitrary body size.
+The server should discard the payload.
+The actual POST message content is irrelevant.
+The client will probably never completely upload the object,
+but will instead close the connection after reaching working condition
+and making its measurements.<a href="#section-6-4.3" class="pilcrow">¶</a>
+</li>
+        <li id="section-6-4.4">A configuration URL that returns a JSON <span>[<a href="#RFC8259" class="xref">RFC8259</a>]</span> object with the information
+the client uses to run the test (sample below). The server SHOULD specify the
+content-type as application/json.
+Sample JSON:<a href="#section-6-4.4" class="pilcrow">¶</a>
+</li>
+      </ol>
+<div class="alignLeft art-text artwork" id="section-6-5">
 <pre>
 {
   "version": 1,
@@ -717,95 +2042,158 @@ Responsiveness = 60000 / ((1/3*tcp_foreign + 1/3*tls_foreign + 1/3*http_foreign 
   }
   "test_endpoint": "hostname123.provider.com"
 }
-</pre>
-<p id="rfc.section.6.p.5">All of the fields in the sample configuration are required except &#8220;test_endpoint&#8221;.  If the test server provider can pin all of the requests for a test run to a specific host in the service (for a particular run), they can specify that host name in the &#8220;test_endpoint&#8221; field.</p>
-<p id="rfc.section.6.p.6">The client begins the responsiveness measurement by querying for the JSON configuration.  This supplies the URLs for creating the load-generating connections in the upstream and downstream direction as well as the small object for the latency measurements.</p>
-<h1 id="rfc.section.7">
-<a href="#rfc.section.7">7.</a> <a href="#rpm-test-server-discovery" id="rpm-test-server-discovery">RPM Test Server Discovery</a>
-</h1>
-<p id="rfc.section.7.p.1">It makes sense to host RPM Test Server instances in Internet Data Centers where they can be accessed easily by users wishing to test the quality of their Internet connection.  However, when a user performs an RPM test and determines that they are suffering from poor RPM during download, the logical next question might be, &#8220;What&#8217;s causing my poor performance? Is it poor buffer management by my ISP? Is it poor buffer management in my home Wi-Fi Access point? Something else?&#8221;</p>
-<p id="rfc.section.7.p.2">To help an end user answer this question, it will be useful for home gateway equipment to host RPM Test Server instances.  In an example configuration, a user may have cable modem service offering 100 Mb/s download speed, connected via gigabit Ethernet to one or more Wi-Fi access points in the home, which then offer service to Wi-Fi client devices at different rates depending on distance, interference from other traffic, etc.  By having the cable modem itself host an RPM Test Server instance, the user can then run a test between the cable modem and their computer or smartphone, to help isolate whether bufferbloat they are experiencing is occurring in equipment inside the home (like their Wi-Fi access points) or somewhere outside the home.</p>
-<p id="rfc.section.7.p.3">To aid in discoverability of these facilities, local RPM Test Server instances SHOULD advertise the availability of service type <a href="#RFC6335" class="xref">[RFC6335]</a> &#8220;_nq._tcp&#8221; (Network Quality), via DNS-Based Service Discovery <a href="#RFC6763" class="xref">[RFC6763]</a>, using Multicast DNS on its local link(s) <a href="#RFC6762" class="xref">[RFC6762]</a>.  Where applicable, an RPM Test Server instance SHOULD also advertise the availability of its service via unicast discovery, for discovery by client devices not directly attached to the same link.  Population of the appropriate DNS zone with the relevant unicast discovery records can be performed automatically using a Discovery Proxy <a href="#RFC8766" class="xref">[RFC8766]</a>, or in some scenarios simply by having a human administrator manually enter the required records.  Similarly, a &#8220;cloud&#8221; service, providing Internet hosting service for &#8220;example.com&#8221; could choose to include the relevant DNS-SD records within the &#8220;example.com&#8221; domain <a href="#RFC6763" class="xref">[RFC6763]</a> to communicate to clients the list of available RPM Test Server instances.</p>
-<h1 id="rfc.section.8">
-<a href="#rfc.section.8">8.</a> <a href="#security-considerations" id="security-considerations">Security Considerations</a>
-</h1>
-<p id="rfc.section.8.p.1">TBD</p>
-<h1 id="rfc.section.9">
-<a href="#rfc.section.9">9.</a> <a href="#iana-considerations" id="iana-considerations">IANA Considerations</a>
-</h1>
-<p id="rfc.section.9.p.1">IANA has been requested to record the service type &#8220;_nq._tcp&#8221; (Network Quality) for advertising and discovery of RPM Test Server instances.</p>
-<h1 id="rfc.section.10">
-<a href="#rfc.section.10">10.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
-</h1>
-<p id="rfc.section.10.p.1">We would like to thank Rich Brown for his editorial pass over this I-D.  We also thank Erik Auerswald and Will Hawkins for their constructive feedback on the I-D.</p>
-<h1 id="rfc.references">
-<a href="#rfc.references">11.</a> Informative References</h1>
-<table><tbody>
-<tr>
-<td class="reference"><b id="Bufferbloat">[Bufferbloat]</b></td>
-<td class="top">
-<a>Gettys, J.</a> and <a>K. Nichols</a>, "<a>Bufferbloat: Dark Buffers in the Internet</a>", Communications of the ACM, Volume 55, Number 1 (2012) , n.d..</td>
-</tr>
-<tr>
-<td class="reference"><b id="draft-ietf-tcpm-rfc793bis">[draft-ietf-tcpm-rfc793bis]</b></td>
-<td class="top">
-<a>Eddy, W.</a>, "<a>Transmission Control Protocol (TCP) Specification</a>", Internet Engineering Task Force , n.d..</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC0793">[RFC0793]</b></td>
-<td class="top">
-<a>Postel, J.</a>, "<a href="https://tools.ietf.org/html/rfc793">Transmission Control Protocol</a>", STD 7, RFC 793, DOI 10.17487/RFC0793, September 1981.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC6335">[RFC6335]</b></td>
-<td class="top">
-<a>Cotton, M.</a>, <a>Eggert, L.</a>, <a>Touch, J.</a>, <a>Westerlund, M.</a> and <a>S. Cheshire</a>, "<a href="https://tools.ietf.org/html/rfc6335">Internet Assigned Numbers Authority (IANA) Procedures for the Management of the Service Name and Transport Protocol Port Number Registry</a>", BCP 165, RFC 6335, DOI 10.17487/RFC6335, August 2011.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC6762">[RFC6762]</b></td>
-<td class="top">
-<a>Cheshire, S.</a> and <a>M. Krochmal</a>, "<a href="https://tools.ietf.org/html/rfc6762">Multicast DNS</a>", RFC 6762, DOI 10.17487/RFC6762, February 2013.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC6763">[RFC6763]</b></td>
-<td class="top">
-<a>Cheshire, S.</a> and <a>M. Krochmal</a>, "<a href="https://tools.ietf.org/html/rfc6763">DNS-Based Service Discovery</a>", RFC 6763, DOI 10.17487/RFC6763, February 2013.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC8033">[RFC8033]</b></td>
-<td class="top">
-<a>Pan, R.</a>, <a>Natarajan, P.</a>, <a>Baker, F.</a> and <a>G. White</a>, "<a href="https://tools.ietf.org/html/rfc8033">Proportional Integral Controller Enhanced (PIE): A Lightweight Control Scheme to Address the Bufferbloat Problem</a>", RFC 8033, DOI 10.17487/RFC8033, February 2017.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC8259">[RFC8259]</b></td>
-<td class="top">
-<a>Bray, T.</a>, "<a href="https://tools.ietf.org/html/rfc8259">The JavaScript Object Notation (JSON) Data Interchange Format</a>", STD 90, RFC 8259, DOI 10.17487/RFC8259, December 2017.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC8290">[RFC8290]</b></td>
-<td class="top">
-<a>Hoeiland-Joergensen, T.</a>, <a>McKenney, P.</a>, <a>Taht, D.</a>, <a>Gettys, J.</a> and <a>E. Dumazet</a>, "<a href="https://tools.ietf.org/html/rfc8290">The Flow Queue CoDel Packet Scheduler and Active Queue Management Algorithm</a>", RFC 8290, DOI 10.17487/RFC8290, January 2018.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC8446">[RFC8446]</b></td>
-<td class="top">
-<a>Rescorla, E.</a>, "<a href="https://tools.ietf.org/html/rfc8446">The Transport Layer Security (TLS) Protocol Version 1.3</a>", RFC 8446, DOI 10.17487/RFC8446, August 2018.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC8766">[RFC8766]</b></td>
-<td class="top">
-<a>Cheshire, S.</a>, "<a href="https://tools.ietf.org/html/rfc8766">Discovery Proxy for Multicast DNS-Based Service Discovery</a>", RFC 8766, DOI 10.17487/RFC8766, June 2020.</td>
-</tr>
-</tbody></table>
-<h1 id="rfc.appendix.A">
-<a href="#rfc.appendix.A">Appendix A.</a> <a href="#example-server-configuration" id="example-server-configuration">Example Server Configuration</a>
-</h1>
-<p id="rfc.section.A.p.1">This section shows fragments of sample server configurations to host an responsiveness measurement endpoint.</p>
-<h1 id="rfc.appendix.A.1">
-<a href="#rfc.appendix.A.1">A.1.</a> <a href="#apache-traffic-server" id="apache-traffic-server">Apache Traffic Server</a>
-</h1>
-<p id="rfc.section.A.1.p.1">Apache Traffic Server starting at version 9.1.0 supports configuration as a responsiveness server. It requires the generator and the statichit plugin.</p>
-<p id="rfc.section.A.1.p.2">The sample remap configuration file then is:</p>
+</pre><a href="#section-6-5" class="pilcrow">¶</a>
+</div>
+<p id="section-6-6">All of the fields in the sample configuration are required except "test_endpoint".
+If the test server provider can pin all of the requests for a test run to a specific
+host in the service (for a particular run), they can specify that host name in the
+"test_endpoint" field.<a href="#section-6-6" class="pilcrow">¶</a></p>
+<p id="section-6-7">The client begins the responsiveness measurement by querying for the JSON configuration.
+This supplies the URLs for creating the load-generating connections in
+the upstream and downstream direction as well as the small object
+for the latency measurements.<a href="#section-6-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="rpm-test-server-discovery">
+<section id="section-7">
+      <h2 id="name-rpm-test-server-discovery">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-rpm-test-server-discovery" class="section-name selfRef">RPM Test Server Discovery</a>
+      </h2>
+<p id="section-7-1">It makes sense to host RPM Test Server instances in Internet
+Data Centers where they can be accessed easily by users
+wishing to test the quality of their Internet connection.
+However, when a user performs an RPM test and determines
+that they are suffering from poor RPM during download,
+the logical next question might be,
+"What's causing my poor performance?
+Is it poor buffer management by my ISP?
+Is it poor buffer management in my home Wi-Fi Access point?
+Something else?"<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">To help an end user answer this question, it will be useful for home gateway
+equipment to host RPM Test Server instances.
+In an example configuration, a user may have cable modem
+service offering 100 Mb/s download speed, connected via
+gigabit Ethernet to one or more Wi-Fi access points in the home,
+which then offer service to Wi-Fi client devices at different rates
+depending on distance, interference from other traffic, etc.
+By having the cable modem itself host an RPM Test Server instance,
+the user can then run a test between the cable modem and their computer
+or smartphone, to help isolate whether bufferbloat they are experiencing
+is occurring in equipment inside the home (like their Wi-Fi access points)
+or somewhere outside the home.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<p id="section-7-3">To aid in discoverability of these facilities,
+local RPM Test Server instances SHOULD advertise the availability
+of service type <span>[<a href="#RFC6335" class="xref">RFC6335</a>]</span> "_nq._tcp" (Network Quality),
+via DNS-Based Service Discovery <span>[<a href="#RFC6763" class="xref">RFC6763</a>]</span>,
+using Multicast DNS on its local link(s) <span>[<a href="#RFC6762" class="xref">RFC6762</a>]</span>.
+Where applicable, an RPM Test Server instance SHOULD also advertise
+the availability of its service via unicast discovery,
+for discovery by client devices not directly attached to the same link.
+Population of the appropriate DNS zone with the
+relevant unicast discovery records can be performed
+automatically using a Discovery Proxy <span>[<a href="#RFC8766" class="xref">RFC8766</a>]</span>,
+or in some scenarios simply by having a human
+administrator manually enter the required records.
+Similarly, a "cloud" service, providing Internet hosting service for
+"example.com" could choose to include the relevant DNS-SD records
+within the "example.com" domain <span>[<a href="#RFC6763" class="xref">RFC6763</a>]</span> to communicate
+to clients the list of available RPM Test Server instances.<a href="#section-7-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-8">
+      <h2 id="name-security-considerations">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-8-1">TBD<a href="#section-8-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-9">
+      <h2 id="name-iana-considerations">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-9-1">IANA has been requested to record the service type
+"_nq._tcp" (Network Quality)
+for advertising and discovery of RPM Test Server instances.<a href="#section-9-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="section-10">
+      <h2 id="name-acknowledgments">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-10-1">We would like to thank Rich Brown for his editorial pass over this I-D.
+We also thank Erik Auerswald and Will Hawkins for their constructive feedback on the I-D.<a href="#section-10-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-11">
+      <h2 id="name-informative-references">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+      </h2>
+<dl class="references">
+<dt id="Bufferbloat">[Bufferbloat]</dt>
+      <dd>
+<span class="refAuthor">Gettys, J.</span> and <span class="refAuthor">K. Nichols</span>, <span class="refTitle">"Bufferbloat: Dark Buffers in the Internet"</span>, <span class="seriesInfo">Communications of the ACM, Volume 55, Number 1 (2012) </span>, <span>n.d.</span>. </dd>
+<dd class="break"></dd>
+<dt id="draft-ietf-tcpm-rfc793bis">[draft-ietf-tcpm-rfc793bis]</dt>
+      <dd>
+<span class="refAuthor">Eddy, W.</span>, <span class="refTitle">"Transmission Control Protocol (TCP) Specification"</span>, <span class="seriesInfo">Internet Engineering Task Force </span>, <span>n.d.</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC0793">[RFC0793]</dt>
+      <dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Transmission Control Protocol"</span>, <span class="seriesInfo">STD 7</span>, <span class="seriesInfo">RFC 793</span>, <span class="seriesInfo">DOI 10.17487/RFC0793</span>, <time datetime="1981-09" class="refDate">September 1981</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc793">https://www.rfc-editor.org/info/rfc793</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6335">[RFC6335]</dt>
+      <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Touch, J.</span>, <span class="refAuthor">Westerlund, M.</span>, and <span class="refAuthor">S. Cheshire</span>, <span class="refTitle">"Internet Assigned Numbers Authority (IANA) Procedures for the Management of the Service Name and Transport Protocol Port Number Registry"</span>, <span class="seriesInfo">BCP 165</span>, <span class="seriesInfo">RFC 6335</span>, <span class="seriesInfo">DOI 10.17487/RFC6335</span>, <time datetime="2011-08" class="refDate">August 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6335">https://www.rfc-editor.org/info/rfc6335</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6762">[RFC6762]</dt>
+      <dd>
+<span class="refAuthor">Cheshire, S.</span> and <span class="refAuthor">M. Krochmal</span>, <span class="refTitle">"Multicast DNS"</span>, <span class="seriesInfo">RFC 6762</span>, <span class="seriesInfo">DOI 10.17487/RFC6762</span>, <time datetime="2013-02" class="refDate">February 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6762">https://www.rfc-editor.org/info/rfc6762</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6763">[RFC6763]</dt>
+      <dd>
+<span class="refAuthor">Cheshire, S.</span> and <span class="refAuthor">M. Krochmal</span>, <span class="refTitle">"DNS-Based Service Discovery"</span>, <span class="seriesInfo">RFC 6763</span>, <span class="seriesInfo">DOI 10.17487/RFC6763</span>, <time datetime="2013-02" class="refDate">February 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6763">https://www.rfc-editor.org/info/rfc6763</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8033">[RFC8033]</dt>
+      <dd>
+<span class="refAuthor">Pan, R.</span>, <span class="refAuthor">Natarajan, P.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">G. White</span>, <span class="refTitle">"Proportional Integral Controller Enhanced (PIE): A Lightweight Control Scheme to Address the Bufferbloat Problem"</span>, <span class="seriesInfo">RFC 8033</span>, <span class="seriesInfo">DOI 10.17487/RFC8033</span>, <time datetime="2017-02" class="refDate">February 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8033">https://www.rfc-editor.org/info/rfc8033</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8259">[RFC8259]</dt>
+      <dd>
+<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8259">https://www.rfc-editor.org/info/rfc8259</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8290">[RFC8290]</dt>
+      <dd>
+<span class="refAuthor">Hoeiland-Joergensen, T.</span>, <span class="refAuthor">McKenney, P.</span>, <span class="refAuthor">Taht, D.</span>, <span class="refAuthor">Gettys, J.</span>, and <span class="refAuthor">E. Dumazet</span>, <span class="refTitle">"The Flow Queue CoDel Packet Scheduler and Active Queue Management Algorithm"</span>, <span class="seriesInfo">RFC 8290</span>, <span class="seriesInfo">DOI 10.17487/RFC8290</span>, <time datetime="2018-01" class="refDate">January 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8290">https://www.rfc-editor.org/info/rfc8290</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8446">[RFC8446]</dt>
+      <dd>
+<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8446">https://www.rfc-editor.org/info/rfc8446</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8766">[RFC8766]</dt>
+    <dd>
+<span class="refAuthor">Cheshire, S.</span>, <span class="refTitle">"Discovery Proxy for Multicast DNS-Based Service Discovery"</span>, <span class="seriesInfo">RFC 8766</span>, <span class="seriesInfo">DOI 10.17487/RFC8766</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8766">https://www.rfc-editor.org/info/rfc8766</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<div id="example-server-configuration">
+<section id="appendix-A">
+      <h2 id="name-example-server-configuratio">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-example-server-configuratio" class="section-name selfRef">Example Server Configuration</a>
+      </h2>
+<p id="appendix-A-1">This section shows fragments of sample server configurations to host an responsiveness
+measurement endpoint.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<div id="apache-traffic-server">
+<section id="appendix-A.1">
+        <h3 id="name-apache-traffic-server">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-apache-traffic-server" class="section-name selfRef">Apache Traffic Server</a>
+        </h3>
+<p id="appendix-A.1-1">Apache Traffic Server starting at version 9.1.0 supports configuration as a responsiveness
+server. It requires the generator and the statichit plugin.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-2">The sample remap configuration file then is:<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-A.1-3">
 <pre>
 map https://nq.example.com/api/v1/config \
     http://localhost/ \
@@ -824,119 +2212,86 @@ map https://nq.example.com/api/v1/small \
 map https://nq.example.com/api/v1/upload \
     http://localhost/ \
     @plugin=generator.so
-</pre>
-<h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
-<div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Christoph Paasch</span> 
-	  <span class="n hidden">
-		<span class="family-name">Paasch</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Apple Inc.</span>
-	<span class="adr">
-	  <span class="vcardline">One Apple Park Way</span>
-
-	  <span class="vcardline">
-		<span class="locality">Cupertino, California 95014</span>,  
-		<span class="region"></span>
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">United States of America</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:cpaasch@apple.com">cpaasch@apple.com</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Randall Meyer</span> 
-	  <span class="n hidden">
-		<span class="family-name">Meyer</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Apple Inc.</span>
-	<span class="adr">
-	  <span class="vcardline">One Apple Park Way</span>
-
-	  <span class="vcardline">
-		<span class="locality">Cupertino, California 95014</span>,  
-		<span class="region"></span>
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">United States of America</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:rrm@apple.com">rrm@apple.com</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Stuart Cheshire</span> 
-	  <span class="n hidden">
-		<span class="family-name">Cheshire</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Apple Inc.</span>
-	<span class="adr">
-	  <span class="vcardline">One Apple Park Way</span>
-
-	  <span class="vcardline">
-		<span class="locality">Cupertino, California 95014</span>,  
-		<span class="region"></span>
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">United States of America</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:cheshire@apple.com">cheshire@apple.com</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Omer Shapira</span> 
-	  <span class="n hidden">
-		<span class="family-name">Shapira</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Apple Inc.</span>
-	<span class="adr">
-	  <span class="vcardline">One Apple Park Way</span>
-
-	  <span class="vcardline">
-		<span class="locality">Cupertino, California 95014</span>,  
-		<span class="region"></span>
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">United States of America</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:oesh@apple.com">oesh@apple.com</a></span>
-
-  </address>
-</div><div class="avoidbreak">
-  <address class="vcard">
-	<span class="vcardline">
-	  <span class="fn">Matt Mathis</span> 
-	  <span class="n hidden">
-		<span class="family-name">Mathis</span>
-	  </span>
-	</span>
-	<span class="org vcardline">Google, Inc</span>
-	<span class="adr">
-	  <span class="vcardline">1600 Amphitheatre Parkway</span>
-
-	  <span class="vcardline">
-		<span class="locality">Mountain View, CA  94043</span>,  
-		<span class="region"></span>
-		<span class="code"></span>
-	  </span>
-	  <span class="country-name vcardline">United States of America</span>
-	</span>
-	<span class="vcardline">EMail: <a href="mailto:mattmathis@google.com">mattmathis@google.com</a></span>
-
-  </address>
+</pre><a href="#appendix-A.1-3" class="pilcrow">¶</a>
 </div>
-
+</section>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-B">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Christoph Paasch</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cpaasch@apple.com" class="email">cpaasch@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Randall Meyer</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:rrm@apple.com" class="email">rrm@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Stuart Cheshire</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:cheshire@apple.com" class="email">cheshire@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Omer Shapira</span></div>
+<div dir="auto" class="left"><span class="org">Apple Inc.</span></div>
+<div dir="auto" class="left"><span class="street-address">One Apple Park Way</span></div>
+<div dir="auto" class="left">
+<span class="locality">Cupertino, California 95014</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:oesh@apple.com" class="email">oesh@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Matt Mathis</span></div>
+<div dir="auto" class="left"><span class="org">Google, Inc</span></div>
+<div dir="auto" class="left"><span class="street-address">1600 Amphitheatre Parkway</span></div>
+<div dir="auto" class="left">
+<span class="locality">Mountain View, CA  94043</span>,  </div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:mattmathis@google.com" class="email">mattmathis@google.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
 </body>
 </html>
