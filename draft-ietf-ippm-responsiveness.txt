@@ -5,11 +5,11 @@
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
 Intended status: Experimental                                S. Cheshire
-Expires: 16 January 2023                                      O. Shapira
+Expires: 22 April 2023                                        O. Shapira
                                                               Apple Inc.
                                                                M. Mathis
                                                              Google, Inc
-                                                            15 July 2022
+                                                         19 October 2022
 
 
                 Responsiveness under Working Conditions
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 1]
+Paasch, et al.            Expires 22 April 2023                 [Page 1]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    Internet-Drafts are working documents of the Internet Engineering
@@ -68,7 +68,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 16 January 2023.
+   This Internet-Draft will expire on 22 April 2023.
 
 Copyright Notice
 
@@ -105,22 +105,22 @@ Table of Contents
        5.1.3.  Server side influence . . . . . . . . . . . . . . . .  13
      5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  13
    6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  14
-   7.  RPM Test Server Discovery . . . . . . . . . . . . . . . . . .  15
+   7.  RPM Test Server Discovery . . . . . . . . . . . . . . . . . .  16
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 2]
+Paasch, et al.            Expires 22 April 2023                 [Page 2]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  16
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  16
-   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  16
-   11. Informative References  . . . . . . . . . . . . . . . . . . .  16
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  17
+   11. Informative References  . . . . . . . . . . . . . . . . . . .  17
    Appendix A.  Example Server Configuration . . . . . . . . . . . .  18
      A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  18
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  18
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  19
 
 1.  Introduction
 
@@ -132,7 +132,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    from bufferbloat.
 
    Although significant, the impact on user experience can be transitory
-   - that is, its effect is not always visible to the user.  Whenever a
+   -- that is, its effect is not always visible to the user.  Whenever a
    network is actively being used at its full capacity, buffers can fill
    up and create latency for traffic.  The duration of those full
    buffers may be brief: a medium-sized file transfer, like an email
@@ -147,27 +147,27 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    Existing network measurement tools could incorporate a responsiveness
    measurement into their set of metrics.  Doing so would also raise the
    awareness of the problem and would help establish a new expectation
-   that the standard measures of network quality should - in addition to
-   throughput and idle latency - also include latency under load, or, as
-   we prefer to call it, responsiveness under working conditions.
+   that the standard measures of network quality should -- in addition
+   to throughput and idle latency -- also include latency under load,
+   or, as we prefer to call it, responsiveness under working conditions.
 
 1.1.  Terminology
 
-   A word about the term "bufferbloat" - the undesirable latency that
+   A word about the term "bufferbloat" -- the undesirable latency that
    comes from a router or other network equipment buffering too much
    data.  This document uses the term as a general description of bad
    latency, using more precise wording where warranted.
 
    "Latency" is a poor measure of responsiveness, since it can be hard
    for the general public to understand.  The units are unfamiliar
-   ("what is a millisecond?") and counterintuitive ("100 msec - that
-   sounds good - it's only a tenth of a second!").
+   ("what is a millisecond?") and counterintuitive ("100 msec -- that
+   sounds good -- it's only a tenth of a second!").
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 3]
+Paasch, et al.            Expires 22 April 2023                 [Page 3]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    Instead, we create the term "Responsiveness under working conditions"
@@ -199,8 +199,8 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    TCP and UDP traffic, or traffic on ports 80 and 443, may take
    significantly different paths on the Internet and be subject to
    entirely different Quality of Service (QoS) treatment.  A good test
-   will use standard transport-layer traffic - typical for people's use
-   of the network - that is subject to the transport's congestion
+   will use standard transport-layer traffic -- typical for people's use
+   of the network -- that is subject to the transport's congestion
    control that might reduce the traffic's rate and thus its buffering
    in the network.
 
@@ -221,9 +221,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 4]
+Paasch, et al.            Expires 22 April 2023                 [Page 4]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    path is not itself a problem.  In a heterogeneous network like the
@@ -232,7 +232,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    were to be improved to make it no longer the lowest-capacity hop,
    then some other hop would become the new lowest-capacity hop for that
    path.  In this context a "bottleneck" should not be seen as a problem
-   to be fixed, because any attempt to "fix" the bottleneck is futile -
+   to be fixed, because any attempt to "fix" the bottleneck is futile --
    such a "fix" can never remove the existence of a bottleneck on a
    path; it just moves the bottleneck somewhere else.  Arguably, this
    heterogeneity of the Internet is one of its greatest strengths.
@@ -277,9 +277,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 5]
+Paasch, et al.            Expires 22 April 2023                 [Page 5]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 3.  Goals
@@ -333,9 +333,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 6]
+Paasch, et al.            Expires 22 April 2023                 [Page 6]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    This allows to create a stable state of working conditions during
@@ -389,9 +389,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 7]
+Paasch, et al.            Expires 22 April 2023                 [Page 7]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 4.1.2.  Parallel vs Sequential Uplink and Downlink
@@ -423,7 +423,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 4.1.3.  Reaching full link utilization
 
    The RPM Test gradually increases the number of TCP connections and
-   measures "goodput" - the sum of actual data transferred across all
+   measures "goodput" -- the sum of actual data transferred across all
    connections in a unit of time.  When the goodput stops increasing, it
    means that the network is used at its full capacity.  At this point
    we are creating the worst-case scenario within the limits of the
@@ -437,7 +437,7 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    all three.  The only means to further increase throughput is by
    adding more TCP connections to the pool of load-generating
    connections.  If new connections leave the throughput the same, full
-   link utilization has been reached and - more importantly - the
+   link utilization has been reached and -- more importantly -- the
    working condition is stable.
 
 
@@ -445,9 +445,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 8]
+Paasch, et al.            Expires 22 April 2023                 [Page 8]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 4.1.4.  Final "Working Conditions" Algorithm
@@ -501,9 +501,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023                [Page 9]
+Paasch, et al.            Expires 22 April 2023                 [Page 9]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
       -  If the moving average aggregate goodput at interval i is more
@@ -557,9 +557,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023               [Page 10]
+Paasch, et al.            Expires 22 April 2023                [Page 10]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
        In a well functioning system fetching new data over an existing
@@ -576,10 +576,10 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    elapsed time between issuing the GET request for a 1-byte object and
    receiving the entire response (noted http_foreign).
 
-   Self probes will provide a single data-point for the duration between
-   of time between when the HTTP GET request for the 1-byte object is
-   issued on the load-generating connection and the full HTTP response
-   has been received (noted http_self).
+   Self probes will provide a single data-point for the duration of time
+   between when the HTTP GET request for the 1-byte object is issued on
+   the load-generating connection and the full HTTP response has been
+   received (noted http_self).
 
    tcp_foreign, tls_foreign, http_foreign and http_self are all measured
    in milliseconds.
@@ -613,9 +613,9 @@ Responsiveness = 60000 / ((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_
 
 
 
-Paasch, et al.           Expires 16 January 2023               [Page 11]
+Paasch, et al.            Expires 22 April 2023                [Page 11]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 5.  Interpreting responsiveness results
@@ -669,9 +669,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023               [Page 12]
+Paasch, et al.            Expires 22 April 2023                [Page 12]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    Below the transport layer many places have a potential queue build-
@@ -725,9 +725,9 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023               [Page 13]
+Paasch, et al.            Expires 22 April 2023                [Page 13]
 
-Internet-Draft   Responsiveness under Working Conditions       July 2022
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    For example, if the latency measured on separate connections is much
@@ -750,11 +750,41 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    Both the client and the server MUST support HTTP/2 over TLS.  The
    client MUST be able to send a GET request and a POST.  The server
    MUST be able to respond to both of these HTTP commands.  The server
-   MUST have the ability to provide content upon a GET request.  Both
-   client and server SHOULD use loss-based congestion controls like
-   Cubic.  The server MUST use a packet scheduling algorithm that
-   minimizes internal queueing to avoid affecting the client's
-   measurement.
+   MUST have the ability to provide content upon a GET request.  The
+   server MUST use a packet scheduling algorithm that minimizes internal
+   queueing to avoid affecting the client's measurement.
+
+   As clients and servers become deployed that use L4S congestion
+   control (e.g., TCP Prague with ECT(1) packet marking), for their
+   normal traffic when it is available, and fall back to traditional
+   loss-based congestion controls (e.g., Reno or CUBIC) otherwise, the
+   same strategy SHOULD be used for RPM test traffic.  This is
+   RECOMMENDED so that the synthetic traffic generated by the RPM test
+   mimics real-world traffic for that server.
+
+   Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
+   SHOULD NOT be used for RPM test traffic because they take much longer
+   to discover the depth of the bottleneck buffers.  Delay-based
+   congestion-control algorithms seek to mitigate the effects of
+   bufferbloat, by detecting and responding to early signs of increasing
+   round-trip delay, and reducing the amount of data they have in flight
+   before the bottleneck buffer fills up and overflows.  In a world
+   where bufferbloat is common, this is a pragmatic mitigation to allow
+   software to work better in that environment.  However, that approach
+   does not fix the underlying problem of bufferbloat; it merely avoids
+   it in some cases, and allows the problem in the network to persist.
+   For a diagnostic tool made to identify symptoms of bufferbloat in the
+   network so that they can be fixed, using a transport protocol
+   explicitly designed to mask those symptoms would be a poor choice,
+   and would require the test to run for much longer to deliver the same
+   results.
+
+
+
+Paasch, et al.            Expires 22 April 2023                [Page 14]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
 
    The server MUST respond to 4 URLs:
 
@@ -773,18 +803,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
        will probably never completely download the object, but will
        instead close the connection after reaching working condition and
        making its measurements.
-
-
-
-
-
-
-
-
-Paasch, et al.           Expires 16 January 2023               [Page 14]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
 
    3.  An "upload" URL/response: The server must handle a POST request
        with an arbitrary body size.  The server should discard the
@@ -814,6 +832,16 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    particular run), they can specify that host name in the
    "test_endpoint" field.
 
+
+
+
+
+
+Paasch, et al.            Expires 22 April 2023                [Page 15]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
+
    The client begins the responsiveness measurement by querying for the
    JSON configuration.  This supplies the URLs for creating the load-
    generating connections in the upstream and downstream direction as
@@ -834,14 +862,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    gateway equipment to host RPM Test Server instances.  In an example
    configuration, a user may have cable modem service offering 100 Mb/s
    download speed, connected via gigabit Ethernet to one or more Wi-Fi
-
-
-
-Paasch, et al.           Expires 16 January 2023               [Page 15]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
    access points in the home, which then offer service to Wi-Fi client
    devices at different rates depending on distance, interference from
    other traffic, etc.  By having the cable modem itself host an RPM
@@ -867,6 +887,17 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    to communicate to clients the list of available RPM Test Server
    instances.
 
+
+
+
+
+
+
+Paasch, et al.            Expires 22 April 2023                [Page 16]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
+
 8.  Security Considerations
 
    TBD
@@ -879,9 +910,12 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 10.  Acknowledgments
 
-   We would like to thank Rich Brown for his editorial pass over this
-   I-D.  We also thank Erik Auerswald and Will Hawkins for their
-   constructive feedback on the I-D.
+   Special thanks go to Will Hawkins and Jeroen Schickendantz for their
+   tireless enthousiasm around the project and their contributions to
+   this I-D and the development of the Go responsiveness measurement
+   tool.  We would also like to thank Rich Brown for his editorial pass
+   over this I-D.  We also thank Erik Auerswald for his constructive
+   feedback on the I-D.
 
 11.  Informative References
 
@@ -890,20 +924,12 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
               the Internet", Communications of the ACM, Volume 55,
               Number 1 (2012) , n.d..
 
-
-
-
-Paasch, et al.           Expires 16 January 2023               [Page 16]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
    [draft-ietf-tcpm-rfc793bis]
               Eddy, W., "Transmission Control Protocol (TCP)
               Specification", Internet Engineering Task Force , n.d..
 
-   [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7,
-              RFC 793, DOI 10.17487/RFC0793, September 1981,
+   [RFC0793]  Postel, J., "Transmission Control Protocol", RFC 793,
+              DOI 10.17487/RFC0793, September 1981,
               <https://www.rfc-editor.org/info/rfc793>.
 
    [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.
@@ -920,6 +946,13 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    [RFC6763]  Cheshire, S. and M. Krochmal, "DNS-Based Service
               Discovery", RFC 6763, DOI 10.17487/RFC6763, February 2013,
               <https://www.rfc-editor.org/info/rfc6763>.
+
+
+
+Paasch, et al.            Expires 22 April 2023                [Page 17]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
 
    [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,
               "Proportional Integral Controller Enhanced (PIE): A
@@ -946,14 +979,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
               Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June
               2020, <https://www.rfc-editor.org/info/rfc8766>.
 
-
-
-
-Paasch, et al.           Expires 16 January 2023               [Page 17]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
 Appendix A.  Example Server Configuration
 
    This section shows fragments of sample server configurations to host
@@ -966,6 +991,24 @@ A.1.  Apache Traffic Server
    and the statichit plugin.
 
    The sample remap configuration file then is:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Paasch, et al.            Expires 22 April 2023                [Page 18]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
 
    map https://nq.example.com/api/v1/config \
        http://localhost/ \
@@ -992,7 +1035,6 @@ Authors' Addresses
    One Apple Park Way
    Cupertino, California 95014,
    United States of America
-
    Email: cpaasch@apple.com
 
 
@@ -1001,15 +1043,6 @@ Authors' Addresses
    One Apple Park Way
    Cupertino, California 95014,
    United States of America
-
-
-
-
-Paasch, et al.           Expires 16 January 2023               [Page 18]
-
-Internet-Draft   Responsiveness under Working Conditions       July 2022
-
-
    Email: rrm@apple.com
 
 
@@ -1018,8 +1051,19 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    One Apple Park Way
    Cupertino, California 95014,
    United States of America
-
    Email: cheshire@apple.com
+
+
+
+
+
+
+
+
+
+Paasch, et al.            Expires 22 April 2023                [Page 19]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    Omer Shapira
@@ -1027,7 +1071,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    One Apple Park Way
    Cupertino, California 95014,
    United States of America
-
    Email: oesh@apple.com
 
 
@@ -1036,7 +1079,6 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
    1600 Amphitheatre Parkway
    Mountain View, CA  94043,
    United States of America
-
    Email: mattmathis@google.com
 
 
@@ -1061,4 +1103,18 @@ Internet-Draft   Responsiveness under Working Conditions       July 2022
 
 
 
-Paasch, et al.           Expires 16 January 2023               [Page 19]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Paasch, et al.            Expires 22 April 2023                [Page 20]

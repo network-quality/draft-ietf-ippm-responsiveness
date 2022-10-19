@@ -474,7 +474,7 @@ normalized to the number of round-trips the TLS handshake takes until the connec
 is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
 request for a 1-byte object and receiving the entire response (noted http_foreign).
 
-Self probes will provide a single data-point for the duration between of time between
+Self probes will provide a single data-point for the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
 full HTTP response has been received (noted http_self).
 
@@ -742,8 +742,11 @@ for advertising and discovery of RPM Test Server instances.
 
 # Acknowledgments
 
-We would like to thank Rich Brown for his editorial pass over this I-D.
-We also thank Erik Auerswald and Will Hawkins for their constructive feedback on the I-D.
+Special thanks go to Will Hawkins and Jeroen Schickendantz for their tireless
+enthousiasm around the project and their contributions to this I-D and the development
+of the Go responsiveness measurement tool.
+We would also like to thank Rich Brown for his editorial pass over this I-D.
+We also thank Erik Auerswald for his constructive feedback on the I-D.
 
 --- back
 

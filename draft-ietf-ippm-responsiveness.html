@@ -34,27 +34,26 @@ The measurement is expressed as &quot;Round-trips Per Minute&quot; (RPM)
 and should be included with throughput (up and down) and
 idle latency as critical indicators of network quality. 
     " name="description">
-<meta content="xml2rfc 3.12.0" name="generator">
+<meta content="xml2rfc 3.15.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-ippm-responsiveness-00" name="ietf.draft">
+<meta content="draft-ietf-ippm-responsiveness-01" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.12.0
-    Python 3.8.10
+  xml2rfc 3.15.1
+    Python 3.9.6
     appdirs 1.4.4
     ConfigArgParse 1.5.3
-    google-i18n-address 2.5.0
-    html5lib 1.0.1
+    google-i18n-address 2.5.2
+    html5lib 1.1
     intervaltree 3.1.0
-    Jinja2 2.11.3
+    Jinja2 3.1.2
     kitchen 1.2.6
-    lxml 4.5.0
-    pycairo 1.16.2
-    pycountry 20.7.3
-    pyflakes 2.4.0
-    PyYAML 5.3.1
-    requests 2.22.0
-    setuptools 45.2.0
-    six 1.14.0
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
+    PyYAML 6.0
+    requests 2.28.1
+    setuptools 58.0.4
+    six 1.15.0
 -->
 <link href="draft-ietf-ippm-responsiveness.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -196,11 +195,8 @@ svg {
   margin: 1em 0;
 }
 .alignCenter > *:first-child {
-  border: none;
-  /* this isn't optimal, but it's an existence proof.  PrinceXML doesn't
-     support flexbox yet.
-  */
   display: table;
+  border: none;
   margin: 0 auto;
 }
 
@@ -278,7 +274,7 @@ a.selfRef:hover {
 } */
 
 /* Figures */
-tt, code, pre, code {
+tt, code, pre {
   background-color: #f9f9f9;
   font-family: 'Roboto Mono', monospace;
 }
@@ -680,6 +676,9 @@ hr.addr {
   figure {
     overflow: scroll;
   }
+  pre.breakable {
+    break-inside: auto;
+  }
   h1, h2, h3, h4, h5, h6 {
     page-break-after: avoid;
   }
@@ -847,7 +846,7 @@ section {
 }
 
 /* prevent monospace from becoming overly large */
-tt, code, pre, code {
+tt, code, pre {
   font-size: 95%;
 }
 
@@ -1070,6 +1069,7 @@ aside > p {
 /* Sourcecode margin in print, when there's no pilcrow */
 @media print {
   .artwork,
+  .artwork > pre,
   .sourcecode {
     margin-bottom: 1em;
   }
@@ -1090,6 +1090,9 @@ table {
 }
 td {
   border-top: 1px solid #ddd;
+}
+tr {
+  break-inside: avoid;
 }
 tr:nth-child(2n+1) > td {
   background-color: #f8f8f8;
@@ -1205,17 +1208,17 @@ li > p:last-of-type {
 <link href="rfc-local.css" rel="stylesheet" type="text/css">
 <script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
 </head>
-<body>
+<body class="xml2rfc">
 <script src="metadata.min.js"></script>
 <table class="ears">
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Responsiveness under Working Conditions</td>
-<td class="right">July 2022</td>
+<td class="right">October 2022</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Paasch, et al.</td>
-<td class="center">Expires 16 January 2023</td>
+<td class="center">Expires 22 April 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1225,15 +1228,15 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">IP Performance Measurement</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-ippm-responsiveness-00</dd>
+<dd class="internet-draft">draft-ietf-ippm-responsiveness-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-07-15" class="published">15 July 2022</time>
+<time datetime="2022-10-19" class="published">19 October 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-01-16">16 January 2023</time></dd>
+<dd class="expires"><time datetime="2023-04-22">22 April 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1304,7 +1307,7 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 January 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 22 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1334,99 +1337,99 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
         </h2>
 <nav class="toc"><ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
-            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="xref">1</a>.  <a href="#name-introduction" class="xref">Introduction</a></p>
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
-                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="xref">1.1</a>.  <a href="#name-terminology" class="xref">Terminology</a></p>
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
-            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="xref">2</a>.  <a href="#name-design-constraints" class="xref">Design Constraints</a></p>
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-design-constraints" class="internal xref">Design Constraints</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1"><a href="#section-3" class="xref">3</a>.  <a href="#name-goals" class="xref">Goals</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-goals" class="internal xref">Goals</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="xref">4</a>.  <a href="#name-measuring-responsiveness-un" class="xref">Measuring Responsiveness Under Working Conditions</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-measuring-responsiveness-un" class="internal xref">Measuring Responsiveness Under Working Conditions</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1">
-                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="xref">4.1</a>.  <a href="#name-working-conditions" class="xref">Working Conditions</a></p>
+                <p id="section-toc.1-1.4.2.1.1"><a href="#section-4.1" class="auto internal xref">4.1</a>.  <a href="#name-working-conditions" class="internal xref">Working Conditions</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.1">
-                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="xref">4.1.1</a>.  <a href="#name-from-single-flow-to-multi-f" class="xref">From single-flow to multi-flow</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.1.1"><a href="#section-4.1.1" class="auto internal xref">4.1.1</a>.  <a href="#name-from-single-flow-to-multi-f" class="internal xref">From single-flow to multi-flow</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.2">
-                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="xref">4.1.2</a>.  <a href="#name-parallel-vs-sequential-upli" class="xref">Parallel vs Sequential Uplink and Downlink</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-parallel-vs-sequential-upli" class="internal xref">Parallel vs Sequential Uplink and Downlink</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.3">
-                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="xref">4.1.3</a>.  <a href="#name-reaching-full-link-utilizat" class="xref">Reaching full link utilization</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-reaching-full-link-utilizat" class="internal xref">Reaching full link utilization</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.4">
-                    <p id="section-toc.1-1.4.2.1.2.4.1"><a href="#section-4.1.4" class="xref">4.1.4</a>.  <a href="#name-final-working-conditions-al" class="xref">Final "Working Conditions" Algorithm</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.4.1"><a href="#section-4.1.4" class="auto internal xref">4.1.4</a>.  <a href="#name-final-working-conditions-al" class="internal xref">Final "Working Conditions" Algorithm</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2">
-                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="xref">4.2</a>.  <a href="#name-measuring-responsiveness" class="xref">Measuring Responsiveness</a></p>
+                <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-measuring-responsiveness" class="internal xref">Measuring Responsiveness</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.2.2.1">
-                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="xref">4.2.1</a>.  <a href="#name-aggregating-the-measurement" class="xref">Aggregating the Measurements</a></p>
+                    <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-aggregating-the-measurement" class="internal xref">Aggregating the Measurements</a></p>
 </li>
                 </ul>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="xref">5</a>.  <a href="#name-interpreting-responsiveness" class="xref">Interpreting responsiveness results</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-interpreting-responsiveness" class="internal xref">Interpreting responsiveness results</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1">
-                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="xref">5.1</a>.  <a href="#name-elements-influencing-respon" class="xref">Elements influencing responsiveness</a></p>
+                <p id="section-toc.1-1.5.2.1.1"><a href="#section-5.1" class="auto internal xref">5.1</a>.  <a href="#name-elements-influencing-respon" class="internal xref">Elements influencing responsiveness</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.1">
-                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="xref">5.1.1</a>.  <a href="#name-client-side-influence" class="xref">Client side influence</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.1.1"><a href="#section-5.1.1" class="auto internal xref">5.1.1</a>.  <a href="#name-client-side-influence" class="internal xref">Client side influence</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.2">
-                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="xref">5.1.2</a>.  <a href="#name-network-influence" class="xref">Network influence</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-network-influence" class="internal xref">Network influence</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
-                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="xref">5.1.3</a>.  <a href="#name-server-side-influence" class="xref">Server side influence</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="auto internal xref">5.1.3</a>.  <a href="#name-server-side-influence" class="internal xref">Server side influence</a></p>
 </li>
                 </ul>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2">
-                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="xref">5.2</a>.  <a href="#name-root-causing-responsiveness" class="xref">Root-causing Responsiveness</a></p>
+                <p id="section-toc.1-1.5.2.2.1"><a href="#section-5.2" class="auto internal xref">5.2</a>.  <a href="#name-root-causing-responsiveness" class="internal xref">Root-causing Responsiveness</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#section-6" class="xref">6</a>.  <a href="#name-rpm-test-server-api" class="xref">RPM Test Server API</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-rpm-test-server-api" class="internal xref">RPM Test Server API</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#section-7" class="xref">7</a>.  <a href="#name-rpm-test-server-discovery" class="xref">RPM Test Server Discovery</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-rpm-test-server-discovery" class="internal xref">RPM Test Server Discovery</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
-            <p id="section-toc.1-1.8.1"><a href="#section-8" class="xref">8</a>.  <a href="#name-security-considerations" class="xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="xref">9</a>.  <a href="#name-iana-considerations" class="xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#section-10" class="xref">10</a>. <a href="#name-acknowledgments" class="xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
-            <p id="section-toc.1-1.11.1"><a href="#section-11" class="xref">11</a>. <a href="#name-informative-references" class="xref">Informative References</a></p>
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-informative-references" class="internal xref">Informative References</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
-            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="xref">Appendix A</a>.  <a href="#name-example-server-configuratio" class="xref">Example Server Configuration</a></p>
+            <p id="section-toc.1-1.12.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-example-server-configuratio" class="internal xref">Example Server Configuration</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
-                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-A.1" class="xref">A.1</a>.  <a href="#name-apache-traffic-server" class="xref">Apache Traffic Server</a></p>
+                <p id="section-toc.1-1.12.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-apache-traffic-server" class="internal xref">Apache Traffic Server</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
-            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="xref"></a><a href="#name-authors-addresses" class="xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.13.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1439,12 +1442,12 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
       </h2>
 <p id="section-1-1">For many years, a lack of responsiveness, variously called
 lag, latency, or bufferbloat, has been recognized
-as an unfortunate, but common, symptom in today's networks <span>[<a href="#Bufferbloat" class="xref">Bufferbloat</a>]</span>.
-Solutions like fq_codel <span>[<a href="#RFC8290" class="xref">RFC8290</a>]</span> or PIE <span>[<a href="#RFC8033" class="xref">RFC8033</a>]</span> have been standardized
+as an unfortunate, but common, symptom in today's networks <span>[<a href="#Bufferbloat" class="cite xref">Bufferbloat</a>]</span>.
+Solutions like fq_codel <span>[<a href="#RFC8290" class="cite xref">RFC8290</a>]</span> or PIE <span>[<a href="#RFC8033" class="cite xref">RFC8033</a>]</span> have been standardized
 and are to some extent widely implemented.
 Nevertheless, people still suffer from bufferbloat.<a href="#section-1-1" class="pilcrow">¶</a></p>
-<p id="section-1-2">Although significant, the impact on user experience can be transitory -
-that is, its effect is not always present.
+<p id="section-1-2">Although significant, the impact on user experience can be transitory --
+that is, its effect is not always visible to the user.
 Whenever a network is actively being used at its full capacity,
 buffers can fill up and create latency for traffic.
 The duration of those full buffers may be brief:
@@ -1461,7 +1464,7 @@ responsiveness measurement into their set of metrics.
 Doing so would also raise the awareness of the problem and
 would help establish a new expectation
 that the standard measures of network quality should
-- in addition to throughput and idle latency -
+-- in addition to throughput and idle latency --
 also include latency under load, or, as we prefer to call it,
 responsiveness under working conditions.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <div id="terminology">
@@ -1469,7 +1472,7 @@ responsiveness under working conditions.<a href="#section-1-4" class="pilcrow">�
         <h3 id="name-terminology">
 <a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
         </h3>
-<p id="section-1.1-1">A word about the term "bufferbloat" - the undesirable latency
+<p id="section-1.1-1">A word about the term "bufferbloat" -- the undesirable latency
 that comes from a router or other network equipment
 buffering too much data.
 This document uses the term as a general description of bad latency,
@@ -1477,7 +1480,7 @@ using more precise wording where warranted.<a href="#section-1.1-1" class="pilcr
 <p id="section-1.1-2">"Latency" is a poor measure of responsiveness,
 since it can be hard for the general public to understand.
 The units are unfamiliar ("what is a millisecond?") and
-counterintuitive ("100 msec - that sounds good -
+counterintuitive ("100 msec -- that sounds good --
 it's only a tenth of a second!").<a href="#section-1.1-2" class="pilcrow">¶</a></p>
 <p id="section-1.1-3">Instead, we create the term "Responsiveness under working conditions"
 to make it clear that we are measuring all, not just idle, conditions,
@@ -1511,8 +1514,8 @@ it's best to keep the test duration relatively short.<a href="#section-2-2" clas
 <p id="section-2-3">TCP and UDP traffic, or traffic on ports 80 and 443, may take
 significantly different paths on the Internet and
 be subject to entirely different Quality of Service (QoS) treatment.
-A good test will use standard transport-layer traffic - typical
-for people's use of the network -
+A good test will use standard transport-layer traffic -- typical
+for people's use of the network --
 that is subject to the transport's congestion control that might
 reduce the traffic's rate and thus its buffering in the network.<a href="#section-2-3" class="pilcrow">¶</a></p>
 <p id="section-2-4">Traditionally, one thinks of bufferbloat happening on the
@@ -1538,7 +1541,7 @@ If that hop were to be improved to make it no longer
 the lowest-capacity hop, then some other hop would
 become the new lowest-capacity hop for that path.
 In this context a "bottleneck" should not be seen as a problem to
-be fixed, because any attempt to "fix" the bottleneck is futile -
+be fixed, because any attempt to "fix" the bottleneck is futile --
 such a "fix" can never remove the existence of a bottleneck
 on a path; it just moves the bottleneck somewhere else.
 Arguably, this heterogeneity of the Internet is one of its greatest strengths.
@@ -1571,7 +1574,7 @@ significantly degrading overall user experience.<a href="#section-2-8" class="pi
 the RPM Test mimics normal network operations and data transfers,
 to cause this bottleneck buffer to fill to capacity, and then
 measures the resulting end-to-end latency under these operating conditions.
-A well managed bottleneck queue will keeps its queue occupancy
+A well managed bottleneck queue keeps its queue occupancy
 under control, resulting in consistently low round-trip time
 and consistently good responsiveness.
 A poorly managed bottleneck queue will not.<a href="#section-2-9" class="pilcrow">¶</a></p>
@@ -1598,7 +1601,7 @@ these could also be measured separately.<a href="#section-3-2.1.2" class="pilcro
         <li id="section-3-2.2">The Internet is marked by the deployment of countless middleboxes like
 transparent TCP proxies or traffic prioritization for certain types of traffic.
 The RPM Test must take into account their effect on
-TCP-handshake <span>[<a href="#RFC0793" class="xref">RFC0793</a>]</span>, TLS-handshake, and request/response.<a href="#section-3-2.2" class="pilcrow">¶</a>
+TCP-handshake <span>[<a href="#RFC0793" class="cite xref">RFC0793</a>]</span>, TLS-handshake, and request/response.<a href="#section-3-2.2" class="pilcrow">¶</a>
 </li>
         <li id="section-3-2.3">The test result should be expressed in an intuitive, nontechnical form.<a href="#section-3-2.3" class="pilcrow">¶</a>
 </li>
@@ -1709,7 +1712,7 @@ is considered a future extension.<a href="#section-4.1.2-5" class="pilcrow">¶</
 <a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-reaching-full-link-utilizat" class="section-name selfRef">Reaching full link utilization</a>
           </h4>
 <p id="section-4.1.3-1">The RPM Test gradually increases the number of TCP connections
-and measures "goodput" - the sum of actual data transferred
+and measures "goodput" -- the sum of actual data transferred
 across all connections in a unit of time.
 When the goodput stops increasing, it means that the network is used at its full capacity.
 At this point we are creating the worst-case scenario within the limits of the
@@ -1723,7 +1726,7 @@ low receive window size, or a combination of all three.
 The only means to further increase throughput is by
 adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
-full link utilization has been reached and - more importantly -
+full link utilization has been reached and -- more importantly --
 the working condition is stable.<a href="#section-4.1.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1794,7 +1797,7 @@ then the network has reached full link utilization and the algorithm terminates.
               </ul>
 </li>
           </ul>
-<p id="section-4.1.4-6">In <a href="#goals" class="xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within
+<p id="section-4.1.4-6">In <a href="#goals" class="auto internal xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within
 20 seconds. It is left to the implementation what to do when full link utilization is not reached
 within that time-frame. For example, an implementation might gather a provisional
 responsiveness measurement or let the test run for longer.<a href="#section-4.1.4-6" class="pilcrow">¶</a></p>
@@ -1835,7 +1838,7 @@ have a different number of round-trips. Thus, the TLS establishment time needs t
 normalized to the number of round-trips the TLS handshake takes until the connection
 is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
 request for a 1-byte object and receiving the entire response (noted http_foreign).<a href="#section-4.2-4" class="pilcrow">¶</a></p>
-<p id="section-4.2-5">Self probes will provide a single data-point for the duration between of time between
+<p id="section-4.2-5">Self probes will provide a single data-point for the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
 full HTTP response has been received (noted http_self).<a href="#section-4.2-5" class="pilcrow">¶</a></p>
 <p id="section-4.2-6">tcp_foreign, tls_foreign, http_foreign and http_self are all measured in milliseconds.<a href="#section-4.2-6" class="pilcrow">¶</a></p>
@@ -1908,7 +1911,7 @@ if the network's bottleneck is on the first hop, queue-buildup will happen at th
 layers below the transport stack (e.g., NIC firmware).<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-2">Each of these queue build-ups may cause latency and thus low responsiveness.
 A well designed networking stack would ensure that queue-buildup in the TCP layer
-is kept at a bare minimum with solutions like TCP_NOTSENT_LOWAT <span>[<a href="#draft-ietf-tcpm-rfc793bis" class="xref">draft-ietf-tcpm-rfc793bis</a>]</span>.
+is kept at a bare minimum with solutions like TCP_NOTSENT_LOWAT <span>[<a href="#draft-ietf-tcpm-rfc793bis" class="cite xref">draft-ietf-tcpm-rfc793bis</a>]</span>.
 At the HTTP/2 layer it is important that the load-generating data is not interfering
 with the latency-measuring probes. For example, the different streams should not
 be stacked one after the other but rather be allowed to be multiplexed for
@@ -1996,42 +1999,63 @@ The client MUST be able to send a GET request and a POST.
 The server MUST be able to respond to both of these
 HTTP commands.
 The server MUST have the ability to provide content upon a GET request.
-Both client and server SHOULD use loss-based congestion controls
-like Cubic.
 The server MUST use a packet scheduling algorithm that minimizes internal queueing
 to avoid affecting the client's measurement.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">The server MUST respond to 4 URLs:<a href="#section-6-3" class="pilcrow">¶</a></p>
-<ol start="1" type="1" class="normal type-1" id="section-6-4">
-<li id="section-6-4.1">A "small" URL/response:
+<p id="section-6-3">As clients and servers become deployed that use L4S congestion control
+(e.g., TCP Prague with ECT(1) packet marking),
+for their normal traffic when it is available, and fall back
+to traditional loss-based congestion controls (e.g., Reno or CUBIC)
+otherwise, the same strategy SHOULD be used for RPM test traffic.
+This is RECOMMENDED so that the synthetic traffic generated
+by the RPM test mimics real-world traffic for that server.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
+SHOULD NOT be used for RPM test traffic because they take
+much longer to discover the depth of the bottleneck buffers.
+Delay-based congestion-control algorithms seek to mitigate the
+effects of bufferbloat, by detecting and responding to early signs
+of increasing round-trip delay, and reducing the amount of data they
+have in flight before the bottleneck buffer fills up and overflows.
+In a world where bufferbloat is common, this is a pragmatic
+mitigation to allow software to work better in that environment.
+However, that approach does not fix the underlying problem of bufferbloat;
+it merely avoids it in some cases,
+and allows the problem in the network to persist.
+For a diagnostic tool made to identify symptoms of bufferbloat in the
+network so that they can be fixed, using a transport protocol explicitly
+designed to mask those symptoms would be a poor choice, and would
+require the test to run for much longer to deliver the same results.<a href="#section-6-4" class="pilcrow">¶</a></p>
+<p id="section-6-5">The server MUST respond to 4 URLs:<a href="#section-6-5" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-6-6">
+<li id="section-6-6.1">A "small" URL/response:
 The server must respond with a status code of 200 and 1 byte in the body.
 The actual message content is irrelevant.
 The server SHOULD specify the content-type as application/octet-stream.
-The server SHOULD minimize the size, in bytes, of the response fields that are encoded and sent on the wire.<a href="#section-6-4.1" class="pilcrow">¶</a>
+The server SHOULD minimize the size, in bytes, of the response fields that are encoded and sent on the wire.<a href="#section-6-6.1" class="pilcrow">¶</a>
 </li>
-        <li id="section-6-4.2">A "large" URL/response:
+        <li id="section-6-6.2">A "large" URL/response:
 The server must respond with a status code of 200 and a body size of at least 8GB.
 The server SHOULD specify the content-type as application/octet-stream.
 The body can be bigger, and may need to grow as network speeds increases over time.
 The actual message content is irrelevant.
 The client will probably never completely download the object,
 but will instead close the connection after reaching working condition
-and making its measurements.<a href="#section-6-4.2" class="pilcrow">¶</a>
+and making its measurements.<a href="#section-6-6.2" class="pilcrow">¶</a>
 </li>
-        <li id="section-6-4.3">An "upload" URL/response:
+        <li id="section-6-6.3">An "upload" URL/response:
 The server must handle a POST request with an arbitrary body size.
 The server should discard the payload.
 The actual POST message content is irrelevant.
 The client will probably never completely upload the object,
 but will instead close the connection after reaching working condition
-and making its measurements.<a href="#section-6-4.3" class="pilcrow">¶</a>
+and making its measurements.<a href="#section-6-6.3" class="pilcrow">¶</a>
 </li>
-        <li id="section-6-4.4">A configuration URL that returns a JSON <span>[<a href="#RFC8259" class="xref">RFC8259</a>]</span> object with the information
+        <li id="section-6-6.4">A configuration URL that returns a JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> object with the information
 the client uses to run the test (sample below). The server SHOULD specify the
 content-type as application/json.
-Sample JSON:<a href="#section-6-4.4" class="pilcrow">¶</a>
+Sample JSON:<a href="#section-6-6.4" class="pilcrow">¶</a>
 </li>
       </ol>
-<div class="alignLeft art-text artwork" id="section-6-5">
+<div class="alignLeft art-text artwork" id="section-6-7">
 <pre>
 {
   "version": 1,
@@ -2042,16 +2066,16 @@ Sample JSON:<a href="#section-6-4.4" class="pilcrow">¶</a>
   }
   "test_endpoint": "hostname123.provider.com"
 }
-</pre><a href="#section-6-5" class="pilcrow">¶</a>
+</pre><a href="#section-6-7" class="pilcrow">¶</a>
 </div>
-<p id="section-6-6">All of the fields in the sample configuration are required except "test_endpoint".
+<p id="section-6-8">All of the fields in the sample configuration are required except "test_endpoint".
 If the test server provider can pin all of the requests for a test run to a specific
 host in the service (for a particular run), they can specify that host name in the
-"test_endpoint" field.<a href="#section-6-6" class="pilcrow">¶</a></p>
-<p id="section-6-7">The client begins the responsiveness measurement by querying for the JSON configuration.
+"test_endpoint" field.<a href="#section-6-8" class="pilcrow">¶</a></p>
+<p id="section-6-9">The client begins the responsiveness measurement by querying for the JSON configuration.
 This supplies the URLs for creating the load-generating connections in
 the upstream and downstream direction as well as the small object
-for the latency measurements.<a href="#section-6-7" class="pilcrow">¶</a></p>
+for the latency measurements.<a href="#section-6-9" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="rpm-test-server-discovery">
@@ -2083,20 +2107,20 @@ is occurring in equipment inside the home (like their Wi-Fi access points)
 or somewhere outside the home.<a href="#section-7-2" class="pilcrow">¶</a></p>
 <p id="section-7-3">To aid in discoverability of these facilities,
 local RPM Test Server instances SHOULD advertise the availability
-of service type <span>[<a href="#RFC6335" class="xref">RFC6335</a>]</span> "_nq._tcp" (Network Quality),
-via DNS-Based Service Discovery <span>[<a href="#RFC6763" class="xref">RFC6763</a>]</span>,
-using Multicast DNS on its local link(s) <span>[<a href="#RFC6762" class="xref">RFC6762</a>]</span>.
+of service type <span>[<a href="#RFC6335" class="cite xref">RFC6335</a>]</span> "_nq._tcp" (Network Quality),
+via DNS-Based Service Discovery <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>,
+using Multicast DNS on its local link(s) <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span>.
 Where applicable, an RPM Test Server instance SHOULD also advertise
 the availability of its service via unicast discovery,
 for discovery by client devices not directly attached to the same link.
 Population of the appropriate DNS zone with the
 relevant unicast discovery records can be performed
-automatically using a Discovery Proxy <span>[<a href="#RFC8766" class="xref">RFC8766</a>]</span>,
+automatically using a Discovery Proxy <span>[<a href="#RFC8766" class="cite xref">RFC8766</a>]</span>,
 or in some scenarios simply by having a human
 administrator manually enter the required records.
 Similarly, a "cloud" service, providing Internet hosting service for
 "example.com" could choose to include the relevant DNS-SD records
-within the "example.com" domain <span>[<a href="#RFC6763" class="xref">RFC6763</a>]</span> to communicate
+within the "example.com" domain <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span> to communicate
 to clients the list of available RPM Test Server instances.<a href="#section-7-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2123,8 +2147,11 @@ for advertising and discovery of RPM Test Server instances.<a href="#section-9-1
       <h2 id="name-acknowledgments">
 <a href="#section-10" class="section-number selfRef">10. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
       </h2>
-<p id="section-10-1">We would like to thank Rich Brown for his editorial pass over this I-D.
-We also thank Erik Auerswald and Will Hawkins for their constructive feedback on the I-D.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-1">Special thanks go to Will Hawkins and Jeroen Schickendantz for their tireless
+enthousiasm around the project and their contributions to this I-D and the development
+of the Go responsiveness measurement tool.
+We would also like to thank Rich Brown for his editorial pass over this I-D.
+We also thank Erik Auerswald for his constructive feedback on the I-D.<a href="#section-10-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <section id="section-11">
@@ -2142,7 +2169,7 @@ We also thank Erik Auerswald and Will Hawkins for their constructive feedback on
 <dd class="break"></dd>
 <dt id="RFC0793">[RFC0793]</dt>
       <dd>
-<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Transmission Control Protocol"</span>, <span class="seriesInfo">STD 7</span>, <span class="seriesInfo">RFC 793</span>, <span class="seriesInfo">DOI 10.17487/RFC0793</span>, <time datetime="1981-09" class="refDate">September 1981</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc793">https://www.rfc-editor.org/info/rfc793</a>&gt;</span>. </dd>
+<span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Transmission Control Protocol"</span>, <span class="seriesInfo">RFC 793</span>, <span class="seriesInfo">DOI 10.17487/RFC0793</span>, <time datetime="1981-09" class="refDate">September 1981</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc793">https://www.rfc-editor.org/info/rfc793</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC6335">[RFC6335]</dt>
       <dd>

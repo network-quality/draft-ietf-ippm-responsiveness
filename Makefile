@@ -22,7 +22,7 @@ all: $(drafts)
 %.pdf: %.txt
 	@echo "Converting TXT to PDF"
 	enscript -B -o $(patsubst %.txt,%.ps,$<) $<
-	ps2pdf $(patsubst %.txt,%.ps,$<)
+	pstopdf $(patsubst %.txt,%.ps,$<)
 
 test: all
 	@echo "Spell checking"
