@@ -4,12 +4,12 @@
 
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
-Intended status: Experimental                                S. Cheshire
-Expires: 22 April 2023                                        O. Shapira
+Intended status: Standards Track                             S. Cheshire
+Expires: 23 April 2023                                        O. Shapira
                                                               Apple Inc.
                                                                M. Mathis
                                                              Google, Inc
-                                                         19 October 2022
+                                                         20 October 2022
 
 
                 Responsiveness under Working Conditions
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 1]
+Paasch, et al.            Expires 23 April 2023                 [Page 1]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -68,7 +68,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 22 April 2023.
+   This Internet-Draft will expire on 23 April 2023.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 2]
+Paasch, et al.            Expires 23 April 2023                 [Page 2]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -165,7 +165,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 3]
+Paasch, et al.            Expires 23 April 2023                 [Page 3]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -221,7 +221,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 4]
+Paasch, et al.            Expires 23 April 2023                 [Page 4]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -277,7 +277,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 5]
+Paasch, et al.            Expires 23 April 2023                 [Page 5]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -333,7 +333,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 6]
+Paasch, et al.            Expires 23 April 2023                 [Page 6]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -389,7 +389,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 7]
+Paasch, et al.            Expires 23 April 2023                 [Page 7]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -445,7 +445,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 8]
+Paasch, et al.            Expires 23 April 2023                 [Page 8]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -501,7 +501,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                 [Page 9]
+Paasch, et al.            Expires 23 April 2023                 [Page 9]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -557,7 +557,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 10]
+Paasch, et al.            Expires 23 April 2023                [Page 10]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -613,7 +613,7 @@ Responsiveness = 60000 / ((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 11]
+Paasch, et al.            Expires 23 April 2023                [Page 11]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -669,7 +669,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 12]
+Paasch, et al.            Expires 23 April 2023                [Page 12]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -725,7 +725,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 13]
+Paasch, et al.            Expires 23 April 2023                [Page 13]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -781,7 +781,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 14]
+Paasch, et al.            Expires 23 April 2023                [Page 14]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -837,7 +837,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 15]
+Paasch, et al.            Expires 23 April 2023                [Page 15]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -893,7 +893,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 16]
+Paasch, et al.            Expires 23 April 2023                [Page 16]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -949,7 +949,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 17]
+Paasch, et al.            Expires 23 April 2023                [Page 17]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -1005,7 +1005,7 @@ A.1.  Apache Traffic Server
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 18]
+Paasch, et al.            Expires 23 April 2023                [Page 18]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -1061,7 +1061,7 @@ Authors' Addresses
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 19]
+Paasch, et al.            Expires 23 April 2023                [Page 19]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
@@ -1117,4 +1117,4 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-Paasch, et al.            Expires 22 April 2023                [Page 20]
+Paasch, et al.            Expires 23 April 2023                [Page 20]

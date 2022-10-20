@@ -16,9 +16,9 @@ BT
 0 -1.1 TD
 (Internet-Draft                                                  R. Meyer)Tj
 T*
-(Intended status: Experimental                                S. Cheshire)Tj
+(Intended status: Standards Track                             S. Cheshire)Tj
 T*
-(Expires: 22 April 2023                                        O. Shapira)Tj
+(Expires: 23 April 2023                                        O. Shapira)Tj
 T*
 (                                                              Apple Inc.)Tj
 T*
@@ -26,7 +26,7 @@ T*
 T*
 (                                                             Google, Inc)Tj
 T*
-(                                                         19 October 2022)Tj
+(                                                         20 October 2022)Tj
 0 -3.3 TD
 (                Responsiveness under Working Conditions)Tj
 0 -1.1 TD
@@ -82,7 +82,7 @@ T*
 0 -1.1 TD
 (   provisions of BCP 78 and BCP 79.)Tj
 0 -8.8 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 1])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 1])Tj
 ET
 endstream
 endobj
@@ -127,7 +127,7 @@ T*
 T*
 (   material or to cite them other than as "work in progress.")Tj
 0 -2.2 TD
-(   This Internet-Draft will expire on 22 April 2023.)Tj
+(   This Internet-Draft will expire on 23 April 2023.)Tj
 T*
 (Copyright Notice)Tj
 T*
@@ -193,7 +193,7 @@ T*
 T*
 (   7.  RPM Test Server Discovery . . . . . . . . . . . . . . . . . .  16)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 2])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 2])Tj
 ET
 endstream
 endobj
@@ -302,7 +302,7 @@ T*
 T*
 (   sounds good -- it’s only a tenth of a second!"\).)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 3])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 3])Tj
 ET
 endstream
 endobj
@@ -413,7 +413,7 @@ T*
 T*
 (   understand that the existence of a lowest-capacity hop on a network)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 4])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 4])Tj
 ET
 endstream
 endobj
@@ -530,7 +530,7 @@ T*
 T*
 (   will not.)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 5])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 5])Tj
 ET
 endstream
 endobj
@@ -627,7 +627,7 @@ T*
 T*
 (   large data objects in these HTTP transactions.)Tj
 0 -7.7 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 6])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 6])Tj
 ET
 endstream
 endobj
@@ -728,7 +728,7 @@ T*
 T*
 (   the bottleneck hop to a stable saturated state.)Tj
 0 -12.1 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 7])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 7])Tj
 ET
 endstream
 endobj
@@ -829,7 +829,7 @@ T*
 T*
 (   working condition is stable.)Tj
 0 -7.7 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 8])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 8])Tj
 ET
 endstream
 endobj
@@ -924,7 +924,7 @@ T*
 T*
 (      -  Compute the moving average aggregate goodput at interval i.)Tj
 0 -8.8 TD
-(Paasch, et al.            Expires 22 April 2023                 [Page 9])Tj
+(Paasch, et al.            Expires 23 April 2023                 [Page 9])Tj
 ET
 endstream
 endobj
@@ -1029,7 +1029,7 @@ T*
 T*
 (       map tiles when the user scrolls the map to view a different area.)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 10])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 10])Tj
 ET
 endstream
 endobj
@@ -1136,7 +1136,7 @@ T*
 0 -2.2 TD
 (   This responsiveness value presents round-trips per minute \(RPM\).)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 11])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 11])Tj
 ET
 endstream
 endobj
@@ -1237,7 +1237,7 @@ T*
 T*
 (   that are sent on the load-generating connections.)Tj
 0 -11 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 12])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 12])Tj
 ET
 endstream
 endobj
@@ -1342,7 +1342,7 @@ T*
 T*
 (   different due to the different elements.)Tj
 0 -6.6 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 13])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 13])Tj
 ET
 endstream
 endobj
@@ -1457,7 +1457,7 @@ T*
 T*
 (   results.)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 14])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 14])Tj
 ET
 endstream
 endobj
@@ -1564,7 +1564,7 @@ T*
 T*
 (   "test_endpoint" field.)Tj
 0 -7.7 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 15])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 15])Tj
 ET
 endstream
 endobj
@@ -1673,7 +1673,7 @@ T*
 T*
 (   instances.)Tj
 0 -8.8 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 16])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 16])Tj
 ET
 endstream
 endobj
@@ -1774,7 +1774,7 @@ T*
 T*
 (              <https://www.rfc-editor.org/info/rfc6763>.)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 17])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 17])Tj
 ET
 endstream
 endobj
@@ -1859,7 +1859,7 @@ T*
 0 -2.2 TD
 (   The sample remap configuration file then is:)Tj
 0 -16.5 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 18])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 18])Tj
 ET
 endstream
 endobj
@@ -1954,7 +1954,7 @@ T*
 T*
 (   Email: cheshire@apple.com)Tj
 0 -11 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 19])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 19])Tj
 ET
 endstream
 endobj
@@ -2007,7 +2007,7 @@ T*
 T*
 (   Email: mattmathis@google.com)Tj
 0 -41.8 TD
-(Paasch, et al.            Expires 22 April 2023                [Page 20])Tj
+(Paasch, et al.            Expires 23 April 2023                [Page 20])Tj
 ET
 endstream
 endobj
@@ -2266,8 +2266,8 @@ endobj
 endobj
 69 0 obj
 <<
-/CreationDate (D:20221019154715-07'00')
-/ModDate (D:20221019154715-07'00')
+/CreationDate (D:20221020133238-07'00')
+/ModDate (D:20221020133238-07'00')
 /Producer (Apple pstopdf)
 >>
 endobj
@@ -2356,7 +2356,7 @@ trailer
 /Size 71
 /Root 70 0 R
 /Info 69 0 R
-/ID [<be4d9dcce96fc18439a42726ee764d76><be4d9dcce96fc18439a42726ee764d76>]
+/ID [<44188cbb2023bedf4a476673982d593f><44188cbb2023bedf4a476673982d593f>]
 >>
 startxref
 61095
