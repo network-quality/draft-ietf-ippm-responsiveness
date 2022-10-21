@@ -100,9 +100,9 @@ Table of Contents
      4.3.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  10
    5.  Interpreting responsiveness results . . . . . . . . . . . . .  12
      5.1.  Elements influencing responsiveness . . . . . . . . . . .  12
-       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  13
+       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  12
        5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  13
-       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  14
+       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  13
      5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  14
    6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  14
    7.  RPM Test Server Discovery . . . . . . . . . . . . . . . . . .  16
@@ -118,7 +118,7 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
    10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  17
    11. Informative References  . . . . . . . . . . . . . . . . . . .  17
-   Appendix A.  Example Server Configuration . . . . . . . . . . . .  19
+   Appendix A.  Example Server Configuration . . . . . . . . . . . .  18
      A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  19
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  19
 
@@ -587,14 +587,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
       immediately preceding intervals, divided by four times the
       interval duration.
 
-   *  moving average stability during the period between intervals b and
-      e: Whether or not, for all b<=x<e, the absolute difference is less
-      than 5% between the moving average aggregate goodput at interval x
-      and the moving average aggregate goodput at interval x+1.  If all
-      absolute differences are below 5% then the moving average has
-      achieved stability.  If any of the absolute differences are 5% or
-      more then the moving average has not achieved stability.
-
    the steps of the algorithm are:
 
    *  Create a load-generating connection.
@@ -610,6 +602,14 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
       -  Compute the moving average aggregate goodput at interval i.
 
+      -  Compute the responsiveness
+
+      -  If the moving average aggregate goodput at interval i is more
+         than a 5% increase over the moving average aggregate goodput at
+         interval i - 1, the network has not yet reached full link
+         utilization.  Continue for 4 more iterations.
+
+
 
 
 
@@ -617,13 +617,6 @@ Paasch, et al.            Expires 24 April 2023                [Page 11]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
-
-      -  Compute the responsiveness
-
-      -  If the moving average aggregate goodput at interval i is more
-         than a 5% increase over the moving average aggregate goodput at
-         interval i - 1, the network has not yet reached full link
-         utilization.  Continue for 4 more iterations.
 
       -  If the responsiveness at interval i is more than a 5% reduction
          over the responsiveness at interval i - 1, the network has not
@@ -661,8 +654,15 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    stack.  The following outlines how each of these contributes to the
    responsiveness.
 
+5.1.1.  Client side influence
 
-
+   As the driver of the measurement, the client-side networking stack
+   can have a large influence on the result.  The biggest influence of
+   the client comes when measuring the responsiveness in the uplink
+   direction.  Load-generation will cause queue-buildup in the transport
+   layer as well as the HTTP layer.  Additionally, if the network's
+   bottleneck is on the first hop, queue-buildup will happen at the
+   layers below the transport stack (e.g., NIC firmware).
 
 
 
@@ -673,16 +673,6 @@ Paasch, et al.            Expires 24 April 2023                [Page 12]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
-
-5.1.1.  Client side influence
-
-   As the driver of the measurement, the client-side networking stack
-   can have a large influence on the result.  The biggest influence of
-   the client comes when measuring the responsiveness in the uplink
-   direction.  Load-generation will cause queue-buildup in the transport
-   layer as well as the HTTP layer.  Additionally, if the network's
-   bottleneck is on the first hop, queue-buildup will happen at the
-   layers below the transport stack (e.g., NIC firmware).
 
    Each of these queue build-ups may cause latency and thus low
    responsiveness.  A well designed networking stack would ensure that
@@ -720,6 +710,16 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    the latency probes on the load-generating connections may be
    influenced differently than the probes on the separate connections.
 
+5.1.3.  Server side influence
+
+   Finally, the server-side introduces the same kind of influence on the
+   responsiveness as the client-side, with the difference that the
+   responsiveness will be impacted during the downlink load generation.
+
+
+
+
+
 
 
 
@@ -729,12 +729,6 @@ Paasch, et al.            Expires 24 April 2023                [Page 13]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
-
-5.1.3.  Server side influence
-
-   Finally, the server-side introduces the same kind of influence on the
-   responsiveness as the client-side, with the difference that the
-   responsiveness will be impacted during the downlink load generation.
 
 5.2.  Root-causing Responsiveness
 
@@ -776,7 +770,13 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    server MUST use a packet scheduling algorithm that minimizes internal
    queueing to avoid affecting the client's measurement.
 
-
+   As clients and servers become deployed that use L4S congestion
+   control (e.g., TCP Prague with ECT(1) packet marking), for their
+   normal traffic when it is available, and fall back to traditional
+   loss-based congestion controls (e.g., Reno or CUBIC) otherwise, the
+   same strategy SHOULD be used for RPM test traffic.  This is
+   RECOMMENDED so that the synthetic traffic generated by the RPM test
+   mimics real-world traffic for that server.
 
 
 
@@ -785,14 +785,6 @@ Paasch, et al.            Expires 24 April 2023                [Page 14]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
 
-
-   As clients and servers become deployed that use L4S congestion
-   control (e.g., TCP Prague with ECT(1) packet marking), for their
-   normal traffic when it is available, and fall back to traditional
-   loss-based congestion controls (e.g., Reno or CUBIC) otherwise, the
-   same strategy SHOULD be used for RPM test traffic.  This is
-   RECOMMENDED so that the synthetic traffic generated by the RPM test
-   mimics real-world traffic for that server.
 
    Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
    SHOULD NOT be used for RPM test traffic because they take much longer
@@ -829,19 +821,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
        instead close the connection after reaching working condition and
        making its measurements.
 
-
-
-
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 15]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
    3.  An "upload" URL/response: The server must handle a POST request
        with an arbitrary body size.  The server should discard the
        payload.  The actual POST message content is irrelevant.  The
@@ -853,6 +832,15 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
        information the client uses to run the test (sample below).  The
        server SHOULD specify the content-type as application/json.
        Sample JSON:
+
+
+
+
+
+Paasch, et al.            Expires 24 April 2023                [Page 15]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
 
    {
      "version": 1,
@@ -890,14 +878,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    gateway equipment to host RPM Test Server instances.  In an example
    configuration, a user may have cable modem service offering 100 Mb/s
    download speed, connected via gigabit Ethernet to one or more Wi-Fi
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 16]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
    access points in the home, which then offer service to Wi-Fi client
    devices at different rates depending on distance, interference from
    other traffic, etc.  By having the cable modem itself host an RPM
@@ -910,6 +890,14 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    To aid in discoverability of these facilities, local RPM Test Server
    instances SHOULD advertise the availability of service type [RFC6335]
    "_nq._tcp" (Network Quality), via DNS-Based Service Discovery
+
+
+
+Paasch, et al.            Expires 24 April 2023                [Page 16]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
+
    [RFC6763], using Multicast DNS on its local link(s) [RFC6762].  Where
    applicable, an RPM Test Server instance SHOULD also advertise the
    availability of its service via unicast discovery, for discovery by
@@ -944,16 +932,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 11.  Informative References
 
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 17]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
    [Bufferbloat]
               Gettys, J. and K. Nichols, "Bufferbloat: Dark Buffers in
               the Internet", Communications of the ACM, Volume 55,
@@ -966,6 +944,15 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    [RFC0793]  Postel, J., "Transmission Control Protocol", RFC 793,
               DOI 10.17487/RFC0793, September 1981,
               <https://www.rfc-editor.org/info/rfc793>.
+
+
+
+
+
+Paasch, et al.            Expires 24 April 2023                [Page 17]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
 
    [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.
               Cheshire, "Internet Assigned Numbers Authority (IANA)
@@ -1003,13 +990,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
               Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
               <https://www.rfc-editor.org/info/rfc8446>.
 
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 18]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
    [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based
               Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June
               2020, <https://www.rfc-editor.org/info/rfc8766>.
@@ -1018,6 +998,17 @@ Appendix A.  Example Server Configuration
 
    This section shows fragments of sample server configurations to host
    an responsiveness measurement endpoint.
+
+
+
+
+
+
+
+Paasch, et al.            Expires 24 April 2023                [Page 18]
+
+Internet-Draft   Responsiveness under Working Conditions    October 2022
+
 
 A.1.  Apache Traffic Server
 
@@ -1055,6 +1046,15 @@ Authors' Addresses
    Email: cpaasch@apple.com
 
 
+   Randall Meyer
+   Apple Inc.
+   One Apple Park Way
+   Cupertino, California 95014,
+   United States of America
+   Email: rrm@apple.com
+
+
+
 
 
 
@@ -1064,14 +1064,6 @@ Authors' Addresses
 Paasch, et al.            Expires 24 April 2023                [Page 19]
 
 Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
-   Randall Meyer
-   Apple Inc.
-   One Apple Park Way
-   Cupertino, California 95014,
-   United States of America
-   Email: rrm@apple.com
 
 
    Stuart Cheshire
@@ -1096,6 +1088,14 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    Mountain View, CA  94043,
    United States of America
    Email: mattmathis@google.com
+
+
+
+
+
+
+
+
 
 
 

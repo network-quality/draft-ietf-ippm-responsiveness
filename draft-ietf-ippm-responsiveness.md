@@ -507,12 +507,7 @@ Where
   interval is considered to be 0.
 - moving average aggregate goodput at interval p: The number of total bytes of data transferred within
   interval p and the three immediately preceding intervals, divided by four times the interval duration.
-- moving average stability during the period between intervals b and e:
-  Whether or not, for all b&le;x&lt;e, the absolute difference is less than 5% between
-  the moving average aggregate goodput at interval x and
-  the moving average aggregate goodput at interval x+1.
-  If all absolute differences are below 5% then the moving average has achieved stability.
-  If any of the absolute differences are 5% or more then the moving average has not achieved stability.
+
 
 the steps of the algorithm are:
 
