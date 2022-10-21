@@ -301,13 +301,21 @@ measure responsiveness. There is no one true answer to this question. It is a
 tradeoff between using realistic traffic patterns and pushing the network to
 its limits.
 
+The working conditions we try to achieve is a scenario where the path between the
+measuring endpoints is utilized at its full end-to-end capacity. An ideal
+sender could send at just this link-speed without building a queue on the
+bottleneck. Thus, in order to measure the worst-case responsiveness we need to
+ensure that a queue is building up on the bottleneck, meaning that responsiveness
+is at its worst.
+
 In this document we aim to generate a realistic traffic pattern by
 using standard HTTP transactions but exploring the worst-case scenario by creating
 multiple of these transactions and using very large data objects in these HTTP
 transactions.
 
 This allows to create a stable state of working conditions during which the
-network is used at its nearly full capacity, without generating DoS-like traffic
+bottleneck of the path between client and server has its buffer filled
+up entirely, without generating DoS-like traffic
 patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
 representative of what a typical user’s network experiences in normal operation.
 
@@ -319,18 +327,24 @@ to continuously represent a realistic traffic pattern.
 ### From single-flow to multi-flow
 
 A single TCP connection may not be sufficient
-to reach the capacity of a path quickly.
+to reach the capacity and full buffer occupancy of a path quickly.
 Using a 4MB receive window, over a network with a 32 ms round-trip time,
 a single TCP connection can achieve up to 1Gb/s throughput.
-For higher throughput and/or networks with higher round-trip time,
-TCP allows larger receive window sizes, up to 1 GB.
-For most applications there is little reason to open multiple
-parallel TCP connections in an attempt to achieve higher throughput.
+Additionally, deep buffers along the path between the two endpoints may be
+significantly larger than 4MB.
+TCP allows larger receive window sizes, up to 1GB. However, most transport stacks
+aggressively limit the size of the receive window to avoid consuming too much
+memory.
 
-However, it may take some time for a single TCP connection to ramp
-up to full speed, and one of the goals of the RPM test is to quickly
-load the network to capacity, take its measurements, and then finish.
-Additionally, traditional loss-based TCP congestion control algorithms
+Thus, the only way to achieve full capacity and full buffer occupancy on those
+networks is by creating multiple connections, allowing to actively fill the
+bottleneck's buffer to achieve maximum working conditions.
+
+Even if a single TCP connection would be able to fill the bottleneck's buffer,
+it may take some time for a single TCP connection to ramp
+up to full speed. One of the goals of the RPM test is to quickly
+load the network, take its measurements, and then finish.
+Finally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
 This reaction (intended by the protocol design) decreases the
 queueing within the network, making it harder to determine the
@@ -373,12 +387,13 @@ the observed latency happens in the uplink or the downlink direction.
 Thus, we recommend testing uplink and downlink sequentially. Parallel testing
 is considered a future extension.
 
-### Reaching full link utilization
+### Reaching full buffer utilization
 
 The RPM Test gradually increases the number of TCP connections
-and measures "goodput" -- the sum of actual data transferred
-across all connections in a unit of time.
-When the goodput stops increasing, it means that the network is used at its full capacity.
+and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
+as well as responsiveness continuously.
+When both goodput and responsiveness stop changing, it means that the test
+managed to fill the buffer of the bottleneck.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.
 
@@ -393,54 +408,6 @@ adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
 full link utilization has been reached and -- more importantly --
 the working condition is stable.
-
-### Final "Working Conditions" Algorithm
-
-The following algorithm reaches working conditions of a network
-by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
-files.
-The algorithm is the same for upload and download and uses
-the same term "load-generating connection" for each.
-The actions of the algorithm take place at regular intervals. For the current draft
-the interval is defined as one second.
-
-Where
-
-- i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
-  increases by one for each interval.
-- instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
-  interval p, divided by the interval duration.
-  If p is negative (i.e., a time interval logically prior to the start of the test beginning,
-  used in moving average calculations),
-  the number of total bytes of data transferred within that
-  interval is considered to be 0.
-- moving average aggregate goodput at interval p: The number of total bytes of data transferred within
-  interval p and the three immediately preceding intervals, divided by four times the interval duration.
-- moving average stability during the period between intervals b and e:
-  Whether or not, for all b&le;x&lt;e, the absolute difference is less than 5% between
-  the moving average aggregate goodput at interval x and
-  the moving average aggregate goodput at interval x+1.
-  If all absolute differences are below 5% then the moving average has achieved stability.
-  If any of the absolute differences are 5% or more then the moving average has not achieved stability.
-
-the steps of the algorithm are:
-
-- Create four load-generating connections.
-- At each interval:
-  - Compute the instantaneous aggregate goodput at interval i.
-  - Compute the moving average aggregate goodput at interval i.
-  - If the moving average aggregate goodput at interval i is more than a 5% increase over
-    the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.
-    - If no load-generating connections have been added within the last four intervals, add four more load-generating connections.
-  - Else, the network has reached full link utilization with the existing load-generating connections. The current state is a candidate for stable working conditions.
-    - If a) there have been load-generating connections added in the past four intervals and b) there has been moving average stability during the period between intervals i-4 and i,
-      then the network has reached full link utilization and the algorithm terminates.
-    - Otherwise, add four more load-generating connections.
-
-In {{goals}}, it is mentioned that one of the goals is that the test finishes within
-20 seconds. It is left to the implementation what to do when full link utilization is not reached
-within that time-frame. For example, an implementation might gather a provisional
-responsiveness measurement or let the test run for longer.
 
 ## Measuring Responsiveness
 
@@ -498,10 +465,75 @@ from these data:
 2. Calculate the RPM as the weighted mean:
 
 ~~~
-Responsiveness = 60000 / ((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 + http_self_p90)/2)
+Responsiveness = 60000 /
+((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 +
+  http_self_p90)/2)
 ~~~
 
 This responsiveness value presents round-trips per minute (RPM).
+
+
+## Final Algorithm
+
+Considering the previous two sections, where we explain what the meaning of
+working conditions is and the definition of responsiveness, we can design the
+final algorithm. In order to measure the worst-case latency we need to transmit
+traffic at the full capacity of the path as well as ensure the buffers are filled
+to the maximum.
+We can achieve this by continuously adding HTTP sessions to the pool of connections
+in a 1-second interval. This will ensure that we quickly reach capacity and full
+buffer occupancy. We need to continuously measure goodput and responsiveness and
+as soon as we detect stability for both metrics we can ensure that the full
+working conditions have been reached.
+
+
+The following algorithm reaches working conditions of a network
+by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
+files.
+The algorithm is the same for upload and download and uses
+the same term "load-generating connection" for each.
+The actions of the algorithm take place at regular intervals. For the current draft
+the interval is defined as one second.
+
+Where
+
+- i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
+  increases by one for each interval.
+- instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
+  interval p, divided by the interval duration.
+  If p is negative (i.e., a time interval logically prior to the start of the test beginning,
+  used in moving average calculations),
+  the number of total bytes of data transferred within that
+  interval is considered to be 0.
+- moving average aggregate goodput at interval p: The number of total bytes of data transferred within
+  interval p and the three immediately preceding intervals, divided by four times the interval duration.
+- moving average stability during the period between intervals b and e:
+  Whether or not, for all b&le;x&lt;e, the absolute difference is less than 5% between
+  the moving average aggregate goodput at interval x and
+  the moving average aggregate goodput at interval x+1.
+  If all absolute differences are below 5% then the moving average has achieved stability.
+  If any of the absolute differences are 5% or more then the moving average has not achieved stability.
+
+the steps of the algorithm are:
+
+- Create a load-generating connection.
+- Start probing for responsiveness every 100ms, as described in the previous section.
+- At each interval:
+  - Create an additional load-generating connection.
+  - Compute the instantaneous aggregate goodput at interval i.
+  - Compute the moving average aggregate goodput at interval i.
+  - Compute the responsiveness
+  - If the moving average aggregate goodput at interval i is more than a 5% increase over
+    the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.
+    Continue for 4 more iterations.
+  - If the responsiveness at interval i is more than a 5% reduction over the responsiveness at interval i - 1, the network
+    has not yet reached full buffer occupancy.
+    Continue for 4 more iterations.
+
+In {{goals}}, it is mentioned that one of the goals is that the test finishes within
+20 seconds. It is left to the implementation what to do when stability is not reached
+within that time-frame. For example, an implementation might gather a provisional
+responsiveness measurement or let the test run for longer.
 
 # Interpreting responsiveness results
 

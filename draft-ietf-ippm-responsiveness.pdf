@@ -18,7 +18,7 @@ BT
 T*
 (Intended status: Standards Track                             S. Cheshire)Tj
 T*
-(Expires: 23 April 2023                                        O. Shapira)Tj
+(Expires: 24 April 2023                                        O. Shapira)Tj
 T*
 (                                                              Apple Inc.)Tj
 T*
@@ -26,7 +26,7 @@ T*
 T*
 (                                                             Google, Inc)Tj
 T*
-(                                                         20 October 2022)Tj
+(                                                         21 October 2022)Tj
 0 -3.3 TD
 (                Responsiveness under Working Conditions)Tj
 0 -1.1 TD
@@ -82,7 +82,7 @@ T*
 0 -1.1 TD
 (   provisions of BCP 78 and BCP 79.)Tj
 0 -8.8 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 1])Tj
+(Paasch, et al.            Expires 24 April 2023                 [Page 1])Tj
 ET
 endstream
 endobj
@@ -127,7 +127,7 @@ T*
 T*
 (   material or to cite them other than as "work in progress.")Tj
 0 -2.2 TD
-(   This Internet-Draft will expire on 23 April 2023.)Tj
+(   This Internet-Draft will expire on 24 April 2023.)Tj
 T*
 (Copyright Notice)Tj
 T*
@@ -169,13 +169,13 @@ T*
 T*
 (       4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   8)Tj
 T*
-(       4.1.3.  Reaching full link utilization  . . . . . . . . . . .   8)Tj
+(       4.1.3.  Reaching full buffer utilization  . . . . . . . . . .   8)Tj
 T*
-(       4.1.4.  Final "Working Conditions" Algorithm  . . . . . . . .   9)Tj
+(     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   9)Tj
 T*
-(     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .  10)Tj
+(       4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .  10)Tj
 T*
-(       4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .  11)Tj
+(     4.3.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  10)Tj
 T*
 (   5.  Interpreting responsiveness results . . . . . . . . . . . . .  12)Tj
 T*
@@ -187,13 +187,13 @@ T*
 T*
 (       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  13)Tj
 T*
-(     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  13)Tj
+(     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  14)Tj
 T*
 (   6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  14)Tj
 T*
 (   7.  RPM Test Server Discovery . . . . . . . . . . . . . . . . . .  16)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 2])Tj
+(Paasch, et al.            Expires 24 April 2023                 [Page 2])Tj
 ET
 endstream
 endobj
@@ -232,7 +232,7 @@ T*
 T*
 (   Appendix A.  Example Server Configuration . . . . . . . . . . . .  18)Tj
 T*
-(     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  18)Tj
+(     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  19)Tj
 T*
 (   Authors’ Addresses  . . . . . . . . . . . . . . . . . . . . . . .  19)Tj
 0 -2.2 TD
@@ -302,7 +302,7 @@ T*
 T*
 (   sounds good -- it’s only a tenth of a second!"\).)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 3])Tj
+(Paasch, et al.            Expires 24 April 2023                 [Page 3])Tj
 ET
 endstream
 endobj
@@ -413,7 +413,7 @@ T*
 T*
 (   understand that the existence of a lowest-capacity hop on a network)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 4])Tj
+(Paasch, et al.            Expires 24 April 2023                 [Page 4])Tj
 ET
 endstream
 endobj
@@ -530,7 +530,7 @@ T*
 T*
 (   will not.)Tj
 0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 5])Tj
+(Paasch, et al.            Expires 24 April 2023                 [Page 5])Tj
 ET
 endstream
 endobj
@@ -547,7 +547,7 @@ endobj
 endobj
 20 0 obj
 <<
-/Length 2554
+/Length 2741
 >>
 stream
 BT
@@ -619,15 +619,19 @@ T*
 T*
 (   patterns and pushing the network to its limits.)Tj
 0 -2.2 TD
-(   In this document we aim to generate a realistic traffic pattern by)Tj
+(   The working conditions we try to achieve is a scenario where the path)Tj
 0 -1.1 TD
-(   using standard HTTP transactions but exploring the worst-case)Tj
+(   between the measuring endpoints is utilized at its full end-to-end)Tj
 T*
-(   scenario by creating multiple of these transactions and using very)Tj
+(   capacity.  An ideal sender could send at just this link-speed without)Tj
 T*
-(   large data objects in these HTTP transactions.)Tj
-0 -7.7 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 6])Tj
+(   building a queue on the bottleneck.  Thus, in order to measure the)Tj
+T*
+(   worst-case responsiveness we need to ensure that a queue is building)Tj
+T*
+(   up on the bottleneck, meaning that responsiveness is at its worst.)Tj
+0 -5.5 TD
+(Paasch, et al.            Expires 24 April 2023                 [Page 6])Tj
 ET
 endstream
 endobj
@@ -644,7 +648,7 @@ endobj
 endobj
 23 0 obj
 <<
-/Length 2935
+/Length 3220
 >>
 stream
 BT
@@ -656,15 +660,25 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
+(   In this document we aim to generate a realistic traffic pattern by)Tj
+0 -1.1 TD
+(   using standard HTTP transactions but exploring the worst-case)Tj
+T*
+(   scenario by creating multiple of these transactions and using very)Tj
+T*
+(   large data objects in these HTTP transactions.)Tj
+0 -2.2 TD
 (   This allows to create a stable state of working conditions during)Tj
 0 -1.1 TD
-(   which the network is used at its nearly full capacity, without)Tj
+(   which the bottleneck of the path between client and server has its)Tj
 T*
-(   generating DoS-like traffic patterns \(e.g., intentional UDP)Tj
+(   buffer filled up entirely, without generating DoS-like traffic)Tj
 T*
-(   flooding\).  This creates a realistic traffic mix representative of)Tj
+(   patterns \(e.g., intentional UDP flooding\).  This creates a realistic)Tj
 T*
-(   what a typical user’s network experiences in normal operation.)Tj
+(   traffic mix representative of what a typical user’s network)Tj
+T*
+(   experiences in normal operation.)Tj
 0 -2.2 TD
 (   Finally, as end-user usage of the network evolves to newer protocols)Tj
 0 -1.1 TD
@@ -678,25 +692,37 @@ T*
 T*
 (   A single TCP connection may not be sufficient to reach the capacity)Tj
 0 -1.1 TD
-(   of a path quickly.  Using a 4MB receive window, over a network with a)Tj
+(   and full buffer occupancy of a path quickly.  Using a 4MB receive)Tj
 T*
-(   32 ms round-trip time, a single TCP connection can achieve up to 1Gb/)Tj
+(   window, over a network with a 32 ms round-trip time, a single TCP)Tj
 T*
-(   s throughput.  For higher throughput and/or networks with higher)Tj
+(   connection can achieve up to 1Gb/s throughput.  Additionally, deep)Tj
 T*
-(   round-trip time, TCP allows larger receive window sizes, up to 1 GB.)Tj
+(   buffers along the path between the two endpoints may be significantly)Tj
 T*
-(   For most applications there is little reason to open multiple)Tj
+(   larger than 4MB.  TCP allows larger receive window sizes, up to 1GB.)Tj
 T*
-(   parallel TCP connections in an attempt to achieve higher throughput.)Tj
+(   However, most transport stacks aggressively limit the size of the)Tj
+T*
+(   receive window to avoid consuming too much memory.)Tj
 0 -2.2 TD
-(   However, it may take some time for a single TCP connection to ramp up)Tj
+(   Thus, the only way to achieve full capacity and full buffer occupancy)Tj
 0 -1.1 TD
-(   to full speed, and one of the goals of the RPM test is to quickly)Tj
+(   on those networks is by creating multiple connections, allowing to)Tj
 T*
-(   load the network to capacity, take its measurements, and then finish.)Tj
+(   actively fill the bottleneck’s buffer to achieve maximum working)Tj
 T*
-(   Additionally, traditional loss-based TCP congestion control)Tj
+(   conditions.)Tj
+0 -2.2 TD
+(   Even if a single TCP connection would be able to fill the)Tj
+0 -1.1 TD
+(   bottleneck’s buffer, it may take some time for a single TCP)Tj
+T*
+(   connection to ramp up to full speed.  One of the goals of the RPM)Tj
+T*
+(   test is to quickly load the network, take its measurements, and then)Tj
+T*
+(   finish.  Finally, traditional loss-based TCP congestion control)Tj
 T*
 (   algorithms react aggressively to packet loss by reducing the)Tj
 T*
@@ -715,20 +741,8 @@ T*
 (   representative traffic load as if real applications were doing)Tj
 T*
 (   sustained data transfers, measure the resulting round-trip time)Tj
-T*
-(   occurring under those realistic conditions, and then end the test.)Tj
-T*
-(   Because of this, using multiple simultaneous parallel connections)Tj
-T*
-(   allows the RPM test to complete its task more quickly, in a way that)Tj
-T*
-(   overall is less disruptive and less wasteful of network capacity than)Tj
-T*
-(   a test using a single TCP connection that would take longer to bring)Tj
-T*
-(   the bottleneck hop to a stable saturated state.)Tj
-0 -12.1 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 7])Tj
+0 -4.4 TD
+(Paasch, et al.            Expires 24 April 2023                 [Page 7])Tj
 ET
 endstream
 endobj
@@ -745,7 +759,7 @@ endobj
 endobj
 26 0 obj
 <<
-/Length 2853
+/Length 3055
 >>
 stream
 BT
@@ -757,8 +771,20 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
-(4.1.2.  Parallel vs Sequential Uplink and Downlink)Tj
+(   occurring under those realistic conditions, and then end the test.)Tj
+0 -1.1 TD
+(   Because of this, using multiple simultaneous parallel connections)Tj
+T*
+(   allows the RPM test to complete its task more quickly, in a way that)Tj
+T*
+(   overall is less disruptive and less wasteful of network capacity than)Tj
+T*
+(   a test using a single TCP connection that would take longer to bring)Tj
+T*
+(   the bottleneck hop to a stable saturated state.)Tj
 0 -2.2 TD
+(4.1.2.  Parallel vs Sequential Uplink and Downlink)Tj
+T*
 (   Poor responsiveness can be caused by queues in either \(or both\) the)Tj
 0 -1.1 TD
 (   upstream and the downstream direction.  Furthermore, both paths may)Tj
@@ -795,19 +821,21 @@ T*
 0 -1.1 TD
 (   Parallel testing is considered a future extension.)Tj
 0 -2.2 TD
-(4.1.3.  Reaching full link utilization)Tj
+(4.1.3.  Reaching full buffer utilization)Tj
 T*
 (   The RPM Test gradually increases the number of TCP connections and)Tj
 0 -1.1 TD
-(   measures "goodput" -- the sum of actual data transferred across all)Tj
+(   measures "goodput" \(the sum of actual data transferred across all)Tj
 T*
-(   connections in a unit of time.  When the goodput stops increasing, it)Tj
+(   connections in a unit of time\) as well as responsiveness)Tj
 T*
-(   means that the network is used at its full capacity.  At this point)Tj
+(   continuously.  When both goodput and responsiveness stop changing, it)Tj
 T*
-(   we are creating the worst-case scenario within the limits of the)Tj
+(   means that the test managed to fill the buffer of the bottleneck.  At)Tj
 T*
-(   realistic traffic pattern.)Tj
+(   this point we are creating the worst-case scenario within the limits)Tj
+T*
+(   of the realistic traffic pattern.)Tj
 0 -2.2 TD
 (   The algorithm notes that throughput increases rapidly until TCP)Tj
 0 -1.1 TD
@@ -818,18 +846,8 @@ T*
 (   limitations, particularly in cases of high network bandwidth, high)Tj
 T*
 (   network round-trip time, low receive window size, or a combination of)Tj
-T*
-(   all three.  The only means to further increase throughput is by)Tj
-T*
-(   adding more TCP connections to the pool of load-generating)Tj
-T*
-(   connections.  If new connections leave the throughput the same, full)Tj
-T*
-(   link utilization has been reached and -- more importantly -- the)Tj
-T*
-(   working condition is stable.)Tj
-0 -7.7 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 8])Tj
+0 -4.4 TD
+(Paasch, et al.            Expires 24 April 2023                 [Page 8])Tj
 ET
 endstream
 endobj
@@ -846,7 +864,7 @@ endobj
 endobj
 29 0 obj
 <<
-/Length 2527
+/Length 3173
 >>
 stream
 BT
@@ -858,8 +876,212 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
-(4.1.4.  Final "Working Conditions" Algorithm)Tj
+(   all three.  The only means to further increase throughput is by)Tj
+0 -1.1 TD
+(   adding more TCP connections to the pool of load-generating)Tj
+T*
+(   connections.  If new connections leave the throughput the same, full)Tj
+T*
+(   link utilization has been reached and -- more importantly -- the)Tj
+T*
+(   working condition is stable.)Tj
 0 -2.2 TD
+(4.2.  Measuring Responsiveness)Tj
+T*
+(   Measuring responsiveness during the previously explained working)Tj
+0 -1.1 TD
+(   conditions creation is a continuous process during the duration of)Tj
+T*
+(   the test.  It requires a sufficiently large sample-size to have)Tj
+T*
+(   confidence in the results.)Tj
+0 -2.2 TD
+(   The measurement of the responsiveness happens by sending probe-)Tj
+0 -1.1 TD
+(   requests for a small object.  There are two types of probe requests:)Tj
+0 -2.2 TD
+(   1.  A HTTP GET request on a separate connection \("foreign probes"\).)Tj
+0 -1.1 TD
+(       This test mimics the time it takes for a web browser to connect)Tj
+T*
+(       to a new web server and request the first element of a web page)Tj
+T*
+(       \(e.g., "index.html"\), or the startup time for a video streaming)Tj
+T*
+(       client to launch and begin fetching media.)Tj
+0 -2.2 TD
+(   2.  A HTTP GET request multiplexed on the load-generating connections)Tj
+0 -1.1 TD
+(       \("self probes"\).  This test mimics the time it takes for a video)Tj
+T*
+(       streaming client to skip ahead to a different chapter in the same)Tj
+T*
+(       video stream, or for a navigation client to react and fetch new)Tj
+T*
+(       map tiles when the user scrolls the map to view a different area.)Tj
+T*
+(       In a well functioning system fetching new data over an existing)Tj
+T*
+(       connection should take less time than creating a brand new TLS)Tj
+T*
+(       connection from scratch to do the same thing.)Tj
+0 -2.2 TD
+(   Foreign probes will provide 3 sets of data-points.  First, the)Tj
+0 -1.1 TD
+(   duration of the TCP-handshake \(noted hereafter as tcp_foreign\).)Tj
+T*
+(   Second, the TLS round-trip-time \(noted tls_foreign\).  For this, it is)Tj
+T*
+(   important to note that different TLS versions have a different number)Tj
+T*
+(   of round-trips.  Thus, the TLS establishment time needs to be)Tj
+T*
+(   normalized to the number of round-trips the TLS handshake takes until)Tj
+T*
+(   the connection is ready to transmit data.  And third, the HTTP)Tj
+T*
+(   elapsed time between issuing the GET request for a 1-byte object and)Tj
+T*
+(   receiving the entire response \(noted http_foreign\).)Tj
+0 -2.2 TD
+(   Self probes will provide a single data-point for the duration of time)Tj
+0 -1.1 TD
+(   between when the HTTP GET request for the 1-byte object is issued on)Tj
+T*
+(   the load-generating connection and the full HTTP response has been)Tj
+T*
+(   received \(noted http_self\).)Tj
+0 -2.2 TD
+(   tcp_foreign, tls_foreign, http_foreign and http_self are all measured)Tj
+0 -1.1 TD
+(   in milliseconds.)Tj
+0 -4.4 TD
+(Paasch, et al.            Expires 24 April 2023                 [Page 9])Tj
+ET
+endstream
+endobj
+30 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+32 0 obj
+<<
+/Length 2542
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
+(   The more probes that are sent, the more data is available for)Tj
+0 -1.1 TD
+(   calculation.  In order to generate as much data as possible, the)Tj
+T*
+(   methodology requires a client to issue these probes every 100ms.  For)Tj
+T*
+(   the probes on the load-generating connections, the client needs to)Tj
+T*
+(   use one of the initial load-generating connections.  This means that)Tj
+T*
+(   every 100ms, 2 probes are being evaluated.  The total amount of data)Tj
+T*
+(   used for these probes would be no more than about 50KB worth of data)Tj
+T*
+(   within one second.)Tj
+0 -2.2 TD
+(4.2.1.  Aggregating the Measurements)Tj
+T*
+(   The algorithm produces sets of 4 times for each probe, namely:)Tj
+0 -1.1 TD
+(   tcp_foreign, tls_foreign, http_foreign, http_self \(from the previous)Tj
+T*
+(   section\).  Each of these sets will have a large number of samples.)Tj
+T*
+(   Use the following methodology to calculate a single RPM value from)Tj
+T*
+(   these data:)Tj
+0 -2.2 TD
+(   1.  Among each set, take the 90th percentile, thus resulting in 4)Tj
+0 -1.1 TD
+(       individual numbers \(tcp_foreign_p90, tls_foreign_p90,)Tj
+T*
+(       http_foreign_p90, http_self_p90\).)Tj
+0 -2.2 TD
+(   2.  Calculate the RPM as the weighted mean:)Tj
+T*
+(   Responsiveness = 60000 /)Tj
+0 -1.1 TD
+(   \(\(1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 +)Tj
+T*
+(     http_self_p90\)/2\))Tj
+0 -2.2 TD
+(   This responsiveness value presents round-trips per minute \(RPM\).)Tj
+T*
+(4.3.  Final Algorithm)Tj
+T*
+(   Considering the previous two sections, where we explain what the)Tj
+0 -1.1 TD
+(   meaning of working conditions is and the definition of)Tj
+T*
+(   responsiveness, we can design the final algorithm.  In order to)Tj
+T*
+(   measure the worst-case latency we need to transmit traffic at the)Tj
+T*
+(   full capacity of the path as well as ensure the buffers are filled to)Tj
+T*
+(   the maximum.  We can achieve this by continuously adding HTTP)Tj
+T*
+(   sessions to the pool of connections in a 1-second interval.  This)Tj
+T*
+(   will ensure that we quickly reach capacity and full buffer occupancy.)Tj
+T*
+(   We need to continuously measure goodput and responsiveness and as)Tj
+T*
+(   soon as we detect stability for both metrics we can ensure that the)Tj
+T*
+(   full working conditions have been reached.)Tj
+0 -11 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 10])Tj
+ET
+endstream
+endobj
+33 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+35 0 obj
+<<
+/Length 2653
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   The following algorithm reaches working conditions of a network by)Tj
 0 -1.1 TD
 (   using HTTP/2 upload \(POST\) or download \(GET\) requests of infinitely)Tj
@@ -916,227 +1138,21 @@ T*
 0 -2.2 TD
 (   the steps of the algorithm are:)Tj
 T*
-(   *  Create four load-generating connections.)Tj
+(   *  Create a load-generating connection.)Tj
 T*
+(   *  Start probing for responsiveness every 100ms, as described in the)Tj
+0 -1.1 TD
+(      previous section.)Tj
+0 -2.2 TD
 (   *  At each interval:)Tj
+T*
+(      -  Create an additional load-generating connection.)Tj
 T*
 (      -  Compute the instantaneous aggregate goodput at interval i.)Tj
 T*
 (      -  Compute the moving average aggregate goodput at interval i.)Tj
-0 -8.8 TD
-(Paasch, et al.            Expires 23 April 2023                 [Page 9])Tj
-ET
-endstream
-endobj
-30 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-32 0 obj
-<<
-/Length 3032
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
-(      -  If the moving average aggregate goodput at interval i is more)Tj
-0 -1.1 TD
-(         than a 5% increase over the moving average aggregate goodput at)Tj
-T*
-(         interval i - 1, the network has not yet reached full link)Tj
-T*
-(         utilization.)Tj
-0 -2.2 TD
-(         o  If no load-generating connections have been added within the)Tj
-0 -1.1 TD
-(            last four intervals, add four more load-generating)Tj
-T*
-(            connections.)Tj
-0 -2.2 TD
-(      -  Else, the network has reached full link utilization with the)Tj
-0 -1.1 TD
-(         existing load-generating connections.  The current state is a)Tj
-T*
-(         candidate for stable working conditions.)Tj
-0 -2.2 TD
-(         o  If a\) there have been load-generating connections added in)Tj
-0 -1.1 TD
-(            the past four intervals and b\) there has been moving average)Tj
-T*
-(            stability during the period between intervals i-4 and i,)Tj
-T*
-(            then the network has reached full link utilization and the)Tj
-T*
-(            algorithm terminates.)Tj
-0 -2.2 TD
-(         o  Otherwise, add four more load-generating connections.)Tj
-T*
-(   In Section 3, it is mentioned that one of the goals is that the test)Tj
-0 -1.1 TD
-(   finishes within 20 seconds.  It is left to the implementation what to)Tj
-T*
-(   do when full link utilization is not reached within that time-frame.)Tj
-T*
-(   For example, an implementation might gather a provisional)Tj
-T*
-(   responsiveness measurement or let the test run for longer.)Tj
-0 -2.2 TD
-(4.2.  Measuring Responsiveness)Tj
-T*
-(   Measuring responsiveness during the previously explained working)Tj
-0 -1.1 TD
-(   conditions creation is a continuous process during the duration of)Tj
-T*
-(   the test.  It requires a sufficiently large sample-size to have)Tj
-T*
-(   confidence in the results.)Tj
-0 -2.2 TD
-(   The measurement of the responsiveness happens by sending probe-)Tj
-0 -1.1 TD
-(   requests for a small object.  There are two types of probe requests:)Tj
-0 -2.2 TD
-(   1.  A HTTP GET request on a separate connection \("foreign probes"\).)Tj
-0 -1.1 TD
-(       This test mimics the time it takes for a web browser to connect)Tj
-T*
-(       to a new web server and request the first element of a web page)Tj
-T*
-(       \(e.g., "index.html"\), or the startup time for a video streaming)Tj
-T*
-(       client to launch and begin fetching media.)Tj
-0 -2.2 TD
-(   2.  A HTTP GET request multiplexed on the load-generating connections)Tj
-0 -1.1 TD
-(       \("self probes"\).  This test mimics the time it takes for a video)Tj
-T*
-(       streaming client to skip ahead to a different chapter in the same)Tj
-T*
-(       video stream, or for a navigation client to react and fetch new)Tj
-T*
-(       map tiles when the user scrolls the map to view a different area.)Tj
-0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 10])Tj
-ET
-endstream
-endobj
-33 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-35 0 obj
-<<
-/Length 3018
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
-(       In a well functioning system fetching new data over an existing)Tj
-0 -1.1 TD
-(       connection should take less time than creating a brand new TLS)Tj
-T*
-(       connection from scratch to do the same thing.)Tj
-0 -2.2 TD
-(   Foreign probes will provide 3 sets of data-points.  First, the)Tj
-0 -1.1 TD
-(   duration of the TCP-handshake \(noted hereafter as tcp_foreign\).)Tj
-T*
-(   Second, the TLS round-trip-time \(noted tls_foreign\).  For this, it is)Tj
-T*
-(   important to note that different TLS versions have a different number)Tj
-T*
-(   of round-trips.  Thus, the TLS establishment time needs to be)Tj
-T*
-(   normalized to the number of round-trips the TLS handshake takes until)Tj
-T*
-(   the connection is ready to transmit data.  And third, the HTTP)Tj
-T*
-(   elapsed time between issuing the GET request for a 1-byte object and)Tj
-T*
-(   receiving the entire response \(noted http_foreign\).)Tj
-0 -2.2 TD
-(   Self probes will provide a single data-point for the duration of time)Tj
-0 -1.1 TD
-(   between when the HTTP GET request for the 1-byte object is issued on)Tj
-T*
-(   the load-generating connection and the full HTTP response has been)Tj
-T*
-(   received \(noted http_self\).)Tj
-0 -2.2 TD
-(   tcp_foreign, tls_foreign, http_foreign and http_self are all measured)Tj
-0 -1.1 TD
-(   in milliseconds.)Tj
-0 -2.2 TD
-(   The more probes that are sent, the more data is available for)Tj
-0 -1.1 TD
-(   calculation.  In order to generate as much data as possible, the)Tj
-T*
-(   methodology requires a client to issue these probes every 100ms.  For)Tj
-T*
-(   the probes on the load-generating connections, the client needs to)Tj
-T*
-(   use one of the initial load-generating connections.  This means that)Tj
-T*
-(   every 100ms, 2 probes are being evaluated.  The total amount of data)Tj
-T*
-(   used for these probes would be no more than about 50KB worth of data)Tj
-T*
-(   within one second.)Tj
-0 -2.2 TD
-(4.2.1.  Aggregating the Measurements)Tj
-T*
-(   The algorithm produces sets of 4 times for each probe, namely:)Tj
-0 -1.1 TD
-(   tcp_foreign, tls_foreign, http_foreign, http_self \(from the previous)Tj
-T*
-(   section\).  Each of these sets will have a large number of samples.)Tj
-T*
-(   Use the following methodology to calculate a single RPM value from)Tj
-T*
-(   these data:)Tj
-0 -2.2 TD
-(   1.  Among each set, take the 90th percentile, thus resulting in 4)Tj
-0 -1.1 TD
-(       individual numbers \(tcp_foreign_p90, tls_foreign_p90,)Tj
-T*
-(       http_foreign_p90, http_self_p90\).)Tj
-0 -2.2 TD
-(   2.  Calculate the RPM as the weighted mean:)Tj
-T*
-(Responsiveness = 60000 / \(\(1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p)Tj
-0 -1.1 TD
-(90 + http_self_p90\)/2\))Tj
-0 -2.2 TD
-(   This responsiveness value presents round-trips per minute \(RPM\).)Tj
-0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 11])Tj
+0 -5.5 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 11])Tj
 ET
 endstream
 endobj
@@ -1153,7 +1169,7 @@ endobj
 endobj
 40 0 obj
 <<
-/Length 2843
+/Length 3023
 >>
 stream
 BT
@@ -1165,8 +1181,36 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
-(5.  Interpreting responsiveness results)Tj
+(      -  Compute the responsiveness)Tj
 0 -2.2 TD
+(      -  If the moving average aggregate goodput at interval i is more)Tj
+0 -1.1 TD
+(         than a 5% increase over the moving average aggregate goodput at)Tj
+T*
+(         interval i - 1, the network has not yet reached full link)Tj
+T*
+(         utilization.  Continue for 4 more iterations.)Tj
+0 -2.2 TD
+(      -  If the responsiveness at interval i is more than a 5% reduction)Tj
+0 -1.1 TD
+(         over the responsiveness at interval i - 1, the network has not)Tj
+T*
+(         yet reached full buffer occupancy.  Continue for 4 more)Tj
+T*
+(         iterations.)Tj
+0 -2.2 TD
+(   In Section 3, it is mentioned that one of the goals is that the test)Tj
+0 -1.1 TD
+(   finishes within 20 seconds.  It is left to the implementation what to)Tj
+T*
+(   do when stability is not reached within that time-frame.  For)Tj
+T*
+(   example, an implementation might gather a provisional responsiveness)Tj
+T*
+(   measurement or let the test run for longer.)Tj
+0 -2.2 TD
+(5.  Interpreting responsiveness results)Tj
+T*
 (   The described methodology uses a high-level approach to measure)Tj
 0 -1.1 TD
 (   responsiveness.  By executing the test with regular HTTP requests a)Tj
@@ -1214,7 +1258,36 @@ T*
 (   layer as well as the HTTP layer.  Additionally, if the network’s)Tj
 T*
 (   bottleneck is on the first hop, queue-buildup will happen at the)Tj
-T*
+0 -4.4 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 12])Tj
+ET
+endstream
+endobj
+41 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+43 0 obj
+<<
+/Length 2895
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   layers below the transport stack \(e.g., NIC firmware\).)Tj
 0 -2.2 TD
 (   Each of these queue build-ups may cause latency and thus low)Tj
@@ -1236,36 +1309,7 @@ T*
 (   buildup at these layers would only influence latency on the probes)Tj
 T*
 (   that are sent on the load-generating connections.)Tj
-0 -11 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 12])Tj
-ET
-endstream
-endobj
-41 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-43 0 obj
-<<
-/Length 3025
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
+0 -2.2 TD
 (   Below the transport layer many places have a potential queue build-)Tj
 0 -1.1 TD
 (   up.  It is important to keep these queues at reasonable sizes or that)Tj
@@ -1315,9 +1359,38 @@ T*
 (   responsiveness as the client-side, with the difference that the)Tj
 T*
 (   responsiveness will be impacted during the downlink load generation.)Tj
-0 -2.2 TD
+0 -9.9 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 13])Tj
+ET
+endstream
+endobj
+44 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+46 0 obj
+<<
+/Length 3221
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (5.2.  Root-causing Responsiveness)Tj
-T*
+0 -2.2 TD
 (   Once an RPM result has been generated one might be tempted to try to)Tj
 0 -1.1 TD
 (   localize the source of a potential low responsiveness.  The)Tj
@@ -1341,36 +1414,7 @@ T*
 (   connections and the latency measured on separate connections may be)Tj
 T*
 (   different due to the different elements.)Tj
-0 -6.6 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 13])Tj
-ET
-endstream
-endobj
-44 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-46 0 obj
-<<
-/Length 3449
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
+0 -2.2 TD
 (   For example, if the latency measured on separate connections is much)Tj
 0 -1.1 TD
 (   less than the latency measured on the load-generating connections, it)Tj
@@ -1424,7 +1468,36 @@ T*
 (   RECOMMENDED so that the synthetic traffic generated by the RPM test)Tj
 T*
 (   mimics real-world traffic for that server.)Tj
-0 -2.2 TD
+0 -5.5 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 14])Tj
+ET
+endstream
+endobj
+47 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+49 0 obj
+<<
+/Length 3199
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   Delay-based congestion-control algorithms \(e.g., Vegas, FAST, BBR\))Tj
 0 -1.1 TD
 (   SHOULD NOT be used for RPM test traffic because they take much longer)Tj
@@ -1456,38 +1529,9 @@ T*
 (   and would require the test to run for much longer to deliver the same)Tj
 T*
 (   results.)Tj
-0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 14])Tj
-ET
-endstream
-endobj
-47 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-49 0 obj
-<<
-/Length 2748
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
-(   The server MUST respond to 4 URLs:)Tj
 0 -2.2 TD
+(   The server MUST respond to 4 URLs:)Tj
+T*
 (   1.  A "small" URL/response: The server must respond with a status)Tj
 0 -1.1 TD
 (       code of 200 and 1 byte in the body.  The actual message content)Tj
@@ -1535,7 +1579,36 @@ T*
 (       server SHOULD specify the content-type as application/json.)Tj
 T*
 (       Sample JSON:)Tj
-0 -2.2 TD
+0 -6.6 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 15])Tj
+ET
+endstream
+endobj
+50 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+52 0 obj
+<<
+/Length 3013
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   {)Tj
 0 -1.1 TD
 (     "version": 1,)Tj
@@ -1563,36 +1636,7 @@ T*
 (   particular run\), they can specify that host name in the)Tj
 T*
 (   "test_endpoint" field.)Tj
-0 -7.7 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 15])Tj
-ET
-endstream
-endobj
-50 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-52 0 obj
-<<
-/Length 3157
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
+0 -2.2 TD
 (   The client begins the responsiveness measurement by querying for the)Tj
 0 -1.1 TD
 (   JSON configuration.  This supplies the URLs for creating the load-)Tj
@@ -1648,9 +1692,38 @@ T*
 (   instances SHOULD advertise the availability of service type [RFC6335])Tj
 T*
 (   "_nq._tcp" \(Network Quality\), via DNS-Based Service Discovery)Tj
-T*
+0 -4.4 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 16])Tj
+ET
+endstream
+endobj
+53 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+55 0 obj
+<<
+/Length 2525
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   [RFC6763], using Multicast DNS on its local link\(s\) [RFC6762].  Where)Tj
-T*
+0 -1.1 TD
 (   applicable, an RPM Test Server instance SHOULD also advertise the)Tj
 T*
 (   availability of its service via unicast discovery, for discovery by)Tj
@@ -1672,38 +1745,9 @@ T*
 (   to communicate to clients the list of available RPM Test Server)Tj
 T*
 (   instances.)Tj
-0 -8.8 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 16])Tj
-ET
-endstream
-endobj
-53 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-55 0 obj
-<<
-/Length 2526
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
-(8.  Security Considerations)Tj
 0 -2.2 TD
+(8.  Security Considerations)Tj
+T*
 (   TBD)Tj
 T*
 (9.  IANA Considerations)Tj
@@ -1749,7 +1793,36 @@ T*
 (              DOI 10.17487/RFC0793, September 1981,)Tj
 T*
 (              <https://www.rfc-editor.org/info/rfc793>.)Tj
-0 -2.2 TD
+0 -6.6 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 17])Tj
+ET
+endstream
+endobj
+56 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+58 0 obj
+<<
+/Length 2799
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.)Tj
 0 -1.1 TD
 (              Cheshire, "Internet Assigned Numbers Authority \(IANA\))Tj
@@ -1773,36 +1846,7 @@ T*
 (              Discovery", RFC 6763, DOI 10.17487/RFC6763, February 2013,)Tj
 T*
 (              <https://www.rfc-editor.org/info/rfc6763>.)Tj
-0 -4.4 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 17])Tj
-ET
-endstream
-endobj
-56 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-58 0 obj
-<<
-/Length 2204
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
+0 -2.2 TD
 (   [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,)Tj
 0 -1.1 TD
 (              "Proportional Integral Controller Enhanced \(PIE\): A)Tj
@@ -1848,18 +1892,8 @@ T*
 (   This section shows fragments of sample server configurations to host)Tj
 0 -1.1 TD
 (   an responsiveness measurement endpoint.)Tj
-0 -2.2 TD
-(A.1.  Apache Traffic Server)Tj
-T*
-(   Apache Traffic Server starting at version 9.1.0 supports)Tj
-0 -1.1 TD
-(   configuration as a responsiveness server.  It requires the generator)Tj
-T*
-(   and the statichit plugin.)Tj
-0 -2.2 TD
-(   The sample remap configuration file then is:)Tj
-0 -16.5 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 18])Tj
+0 -8.8 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 18])Tj
 ET
 endstream
 endobj
@@ -1876,7 +1910,7 @@ endobj
 endobj
 61 0 obj
 <<
-/Length 1530
+/Length 1623
 >>
 stream
 BT
@@ -1888,6 +1922,16 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
+(A.1.  Apache Traffic Server)Tj
+0 -2.2 TD
+(   Apache Traffic Server starting at version 9.1.0 supports)Tj
+0 -1.1 TD
+(   configuration as a responsiveness server.  It requires the generator)Tj
+T*
+(   and the statichit plugin.)Tj
+0 -2.2 TD
+(   The sample remap configuration file then is:)Tj
+T*
 (   map https://nq.example.com/api/v1/config \\)Tj
 0 -1.1 TD
 (       http://localhost/ \\)Tj
@@ -1941,20 +1985,8 @@ T*
 (   United States of America)Tj
 T*
 (   Email: rrm@apple.com)Tj
-0 -3.3 TD
-(   Stuart Cheshire)Tj
-0 -1.1 TD
-(   Apple Inc.)Tj
-T*
-(   One Apple Park Way)Tj
-T*
-(   Cupertino, California 95014,)Tj
-T*
-(   United States of America)Tj
-T*
-(   Email: cheshire@apple.com)Tj
 0 -11 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 19])Tj
+(Paasch, et al.            Expires 24 April 2023                [Page 19])Tj
 ET
 endstream
 endobj
@@ -1971,7 +2003,7 @@ endobj
 endobj
 64 0 obj
 <<
-/Length 620
+/Length 818
 >>
 stream
 BT
@@ -1982,6 +2014,18 @@ BT
 0 Tc
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
+(   Stuart Cheshire)Tj
+0 -1.1 TD
+(   Apple Inc.)Tj
+T*
+(   One Apple Park Way)Tj
+T*
+(   Cupertino, California 95014,)Tj
+T*
+(   United States of America)Tj
+T*
+(   Email: cheshire@apple.com)Tj
 0 -3.3 TD
 (   Omer Shapira)Tj
 0 -1.1 TD
@@ -2006,8 +2050,8 @@ T*
 (   United States of America)Tj
 T*
 (   Email: mattmathis@google.com)Tj
-0 -41.8 TD
-(Paasch, et al.            Expires 23 April 2023                [Page 20])Tj
+0 -33 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 20])Tj
 ET
 endstream
 endobj
@@ -2266,8 +2310,8 @@ endobj
 endobj
 69 0 obj
 <<
-/CreationDate (D:20221020133238-07'00')
-/ModDate (D:20221020133238-07'00')
+/CreationDate (D:20221021130256-07'00')
+/ModDate (D:20221021130256-07'00')
 /Producer (Apple pstopdf)
 >>
 endobj
@@ -2281,83 +2325,83 @@ endobj
 xref
 0 71
 0000000000 65535 f 
-0000058806 00000 n 
+0000060285 00000 n 
 0000000016 00000 n 
 0000002738 00000 n 
-0000058239 00000 n 
-0000057908 00000 n 
-0000060538 00000 n 
-0000058886 00000 n 
+0000059718 00000 n 
+0000059387 00000 n 
+0000062017 00000 n 
+0000060365 00000 n 
 0000002833 00000 n 
 0000006225 00000 n 
-0000058966 00000 n 
+0000060445 00000 n 
 0000006320 00000 n 
 0000009573 00000 n 
-0000059049 00000 n 
+0000060528 00000 n 
 0000009669 00000 n 
 0000012953 00000 n 
-0000059132 00000 n 
+0000060611 00000 n 
 0000013049 00000 n 
 0000016557 00000 n 
-0000059215 00000 n 
+0000060694 00000 n 
 0000016653 00000 n 
-0000019260 00000 n 
-0000059298 00000 n 
-0000019356 00000 n 
-0000022344 00000 n 
-0000059381 00000 n 
-0000022440 00000 n 
-0000025346 00000 n 
-0000059464 00000 n 
-0000025442 00000 n 
-0000028022 00000 n 
-0000059547 00000 n 
-0000028118 00000 n 
-0000031203 00000 n 
-0000059630 00000 n 
-0000031299 00000 n 
-0000034370 00000 n 
-0000060811 00000 n 
-0000060673 00000 n 
-0000059714 00000 n 
-0000034466 00000 n 
-0000037362 00000 n 
-0000059798 00000 n 
-0000037458 00000 n 
-0000040536 00000 n 
-0000059882 00000 n 
-0000040632 00000 n 
-0000044134 00000 n 
-0000059966 00000 n 
-0000044230 00000 n 
-0000047031 00000 n 
-0000060050 00000 n 
-0000047127 00000 n 
-0000050337 00000 n 
-0000060134 00000 n 
-0000050433 00000 n 
-0000053012 00000 n 
-0000060218 00000 n 
-0000053108 00000 n 
-0000055365 00000 n 
-0000060302 00000 n 
-0000055461 00000 n 
-0000057044 00000 n 
-0000060386 00000 n 
-0000057140 00000 n 
-0000057812 00000 n 
-0000058048 00000 n 
-0000060470 00000 n 
-0000060498 00000 n 
-0000060902 00000 n 
-0000061025 00000 n 
+0000019447 00000 n 
+0000060777 00000 n 
+0000019543 00000 n 
+0000022816 00000 n 
+0000060860 00000 n 
+0000022912 00000 n 
+0000026020 00000 n 
+0000060943 00000 n 
+0000026116 00000 n 
+0000029342 00000 n 
+0000061026 00000 n 
+0000029438 00000 n 
+0000032033 00000 n 
+0000061109 00000 n 
+0000032129 00000 n 
+0000034835 00000 n 
+0000062290 00000 n 
+0000062152 00000 n 
+0000061193 00000 n 
+0000034931 00000 n 
+0000038007 00000 n 
+0000061277 00000 n 
+0000038103 00000 n 
+0000041051 00000 n 
+0000061361 00000 n 
+0000041147 00000 n 
+0000044421 00000 n 
+0000061445 00000 n 
+0000044517 00000 n 
+0000047769 00000 n 
+0000061529 00000 n 
+0000047865 00000 n 
+0000050931 00000 n 
+0000061613 00000 n 
+0000051027 00000 n 
+0000053605 00000 n 
+0000061697 00000 n 
+0000053701 00000 n 
+0000056553 00000 n 
+0000061781 00000 n 
+0000056649 00000 n 
+0000058325 00000 n 
+0000061865 00000 n 
+0000058421 00000 n 
+0000059291 00000 n 
+0000059527 00000 n 
+0000061949 00000 n 
+0000061977 00000 n 
+0000062381 00000 n 
+0000062504 00000 n 
 trailer
 <<
 /Size 71
 /Root 70 0 R
 /Info 69 0 R
-/ID [<44188cbb2023bedf4a476673982d593f><44188cbb2023bedf4a476673982d593f>]
+/ID [<6ebadce90fb4cbeced89acfa0597679d><6ebadce90fb4cbeced89acfa0597679d>]
 >>
 startxref
-61095
+62574
 %%EOF

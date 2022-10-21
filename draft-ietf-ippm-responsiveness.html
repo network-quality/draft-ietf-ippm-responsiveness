@@ -1218,7 +1218,7 @@ li > p:last-of-type {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Paasch, et al.</td>
-<td class="center">Expires 23 April 2023</td>
+<td class="center">Expires 24 April 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1231,12 +1231,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-ippm-responsiveness-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-10-20" class="published">20 October 2022</time>
+<time datetime="2022-10-21" class="published">21 October 2022</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-04-23">23 April 2023</time></dd>
+<dd class="expires"><time datetime="2023-04-24">24 April 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1307,7 +1307,7 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 23 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 24 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1363,10 +1363,7 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
                     <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-parallel-vs-sequential-upli" class="internal xref">Parallel vs Sequential Uplink and Downlink</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.3">
-                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-reaching-full-link-utilizat" class="internal xref">Reaching full link utilization</a></p>
-</li>
-                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.4">
-                    <p id="section-toc.1-1.4.2.1.2.4.1"><a href="#section-4.1.4" class="auto internal xref">4.1.4</a>.  <a href="#name-final-working-conditions-al" class="internal xref">Final "Working Conditions" Algorithm</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-reaching-full-buffer-utiliz" class="internal xref">Reaching full buffer utilization</a></p>
 </li>
                 </ul>
 </li>
@@ -1377,6 +1374,9 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
                     <p id="section-toc.1-1.4.2.2.2.1.1"><a href="#section-4.2.1" class="auto internal xref">4.2.1</a>.  <a href="#name-aggregating-the-measurement" class="internal xref">Aggregating the Measurements</a></p>
 </li>
                 </ul>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-final-algorithm" class="internal xref">Final Algorithm</a></p>
 </li>
             </ul>
 </li>
@@ -1632,39 +1632,51 @@ the former and the latter are achieved.<a href="#section-4-1" class="pilcrow">¶
 measure responsiveness. There is no one true answer to this question. It is a
 tradeoff between using realistic traffic patterns and pushing the network to
 its limits.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">In this document we aim to generate a realistic traffic pattern by
+<p id="section-4.1-2">The working conditions we try to achieve is a scenario where the path between the
+measuring endpoints is utilized at its full end-to-end capacity. An ideal
+sender could send at just this link-speed without building a queue on the
+bottleneck. Thus, in order to measure the worst-case responsiveness we need to
+ensure that a queue is building up on the bottleneck, meaning that responsiveness
+is at its worst.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">In this document we aim to generate a realistic traffic pattern by
 using standard HTTP transactions but exploring the worst-case scenario by creating
 multiple of these transactions and using very large data objects in these HTTP
-transactions.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
-<p id="section-4.1-3">This allows to create a stable state of working conditions during which the
-network is used at its nearly full capacity, without generating DoS-like traffic
+transactions.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-4">This allows to create a stable state of working conditions during which the
+bottleneck of the path between client and server has its buffer filled
+up entirely, without generating DoS-like traffic
 patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
-representative of what a typical user's network experiences in normal operation.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1-4">Finally, as end-user usage of the network evolves to newer protocols and congestion
+representative of what a typical user's network experiences in normal operation.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1-5">Finally, as end-user usage of the network evolves to newer protocols and congestion
 control algorithms, it is important that the working conditions also can evolve
-to continuously represent a realistic traffic pattern.<a href="#section-4.1-4" class="pilcrow">¶</a></p>
+to continuously represent a realistic traffic pattern.<a href="#section-4.1-5" class="pilcrow">¶</a></p>
 <div id="from-single-flow-to-multi-flow">
 <section id="section-4.1.1">
           <h4 id="name-from-single-flow-to-multi-f">
 <a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-from-single-flow-to-multi-f" class="section-name selfRef">From single-flow to multi-flow</a>
           </h4>
 <p id="section-4.1.1-1">A single TCP connection may not be sufficient
-to reach the capacity of a path quickly.
+to reach the capacity and full buffer occupancy of a path quickly.
 Using a 4MB receive window, over a network with a 32 ms round-trip time,
 a single TCP connection can achieve up to 1Gb/s throughput.
-For higher throughput and/or networks with higher round-trip time,
-TCP allows larger receive window sizes, up to 1 GB.
-For most applications there is little reason to open multiple
-parallel TCP connections in an attempt to achieve higher throughput.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-2">However, it may take some time for a single TCP connection to ramp
-up to full speed, and one of the goals of the RPM test is to quickly
-load the network to capacity, take its measurements, and then finish.
-Additionally, traditional loss-based TCP congestion control algorithms
+Additionally, deep buffers along the path between the two endpoints may be
+significantly larger than 4MB.
+TCP allows larger receive window sizes, up to 1GB. However, most transport stacks
+aggressively limit the size of the receive window to avoid consuming too much
+memory.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-2">Thus, the only way to achieve full capacity and full buffer occupancy on those
+networks is by creating multiple connections, allowing to actively fill the
+bottleneck's buffer to achieve maximum working conditions.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-3">Even if a single TCP connection would be able to fill the bottleneck's buffer,
+it may take some time for a single TCP connection to ramp
+up to full speed. One of the goals of the RPM test is to quickly
+load the network, take its measurements, and then finish.
+Finally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
 This reaction (intended by the protocol design) decreases the
 queueing within the network, making it harder to determine the
-depth of the bottleneck queue reliably.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-3">The purpose of the RPM Test is not to productively move data
+depth of the bottleneck queue reliably.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-4">The purpose of the RPM Test is not to productively move data
 across the network in a useful way, the way a normal application does.
 The purpose of the RPM Test is, as quickly as possible, to simulate
 a representative traffic load as if real applications were doing
@@ -1674,7 +1686,7 @@ Because of this, using multiple simultaneous parallel connections
 allows the RPM test to complete its task more quickly, in a way that
 overall is less disruptive and less wasteful of network capacity
 than a test using a single TCP connection that would take longer
-to bring the bottleneck hop to a stable saturated state.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
+to bring the bottleneck hop to a stable saturated state.<a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="parallel-vs-sequential-uplink-and-downlink">
@@ -1706,15 +1718,16 @@ the observed latency happens in the uplink or the downlink direction.<a href="#s
 is considered a future extension.<a href="#section-4.1.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="reaching-full-link-utilization">
+<div id="reaching-full-buffer-utilization">
 <section id="section-4.1.3">
-          <h4 id="name-reaching-full-link-utilizat">
-<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-reaching-full-link-utilizat" class="section-name selfRef">Reaching full link utilization</a>
+          <h4 id="name-reaching-full-buffer-utiliz">
+<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-reaching-full-buffer-utiliz" class="section-name selfRef">Reaching full buffer utilization</a>
           </h4>
 <p id="section-4.1.3-1">The RPM Test gradually increases the number of TCP connections
-and measures "goodput" -- the sum of actual data transferred
-across all connections in a unit of time.
-When the goodput stops increasing, it means that the network is used at its full capacity.
+and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
+as well as responsiveness continuously.
+When both goodput and responsiveness stop changing, it means that the test
+managed to fill the buffer of the bottleneck.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.3-2">The algorithm notes that throughput increases rapidly until TCP
@@ -1728,79 +1741,6 @@ adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
 full link utilization has been reached and -- more importantly --
 the working condition is stable.<a href="#section-4.1.3-2" class="pilcrow">¶</a></p>
-</section>
-</div>
-<div id="final-working-conditions-algorithm">
-<section id="section-4.1.4">
-          <h4 id="name-final-working-conditions-al">
-<a href="#section-4.1.4" class="section-number selfRef">4.1.4. </a><a href="#name-final-working-conditions-al" class="section-name selfRef">Final "Working Conditions" Algorithm</a>
-          </h4>
-<p id="section-4.1.4-1">The following algorithm reaches working conditions of a network
-by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
-files.
-The algorithm is the same for upload and download and uses
-the same term "load-generating connection" for each.
-The actions of the algorithm take place at regular intervals. For the current draft
-the interval is defined as one second.<a href="#section-4.1.4-1" class="pilcrow">¶</a></p>
-<p id="section-4.1.4-2">Where<a href="#section-4.1.4-2" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.1.4-3.1">i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
-increases by one for each interval.<a href="#section-4.1.4-3.1" class="pilcrow">¶</a>
-</li>
-            <li class="normal" id="section-4.1.4-3.2">instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
-interval p, divided by the interval duration.
-If p is negative (i.e., a time interval logically prior to the start of the test beginning,
-used in moving average calculations),
-the number of total bytes of data transferred within that
-interval is considered to be 0.<a href="#section-4.1.4-3.2" class="pilcrow">¶</a>
-</li>
-            <li class="normal" id="section-4.1.4-3.3">moving average aggregate goodput at interval p: The number of total bytes of data transferred within
-interval p and the three immediately preceding intervals, divided by four times the interval duration.<a href="#section-4.1.4-3.3" class="pilcrow">¶</a>
-</li>
-            <li class="normal" id="section-4.1.4-3.4">moving average stability during the period between intervals b and e:
-Whether or not, for all b&lt;=x&lt;e, the absolute difference is less than 5% between
-the moving average aggregate goodput at interval x and
-the moving average aggregate goodput at interval x+1.
-If all absolute differences are below 5% then the moving average has achieved stability.
-If any of the absolute differences are 5% or more then the moving average has not achieved stability.<a href="#section-4.1.4-3.4" class="pilcrow">¶</a>
-</li>
-          </ul>
-<p id="section-4.1.4-4">the steps of the algorithm are:<a href="#section-4.1.4-4" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.1.4-5.1">Create four load-generating connections.<a href="#section-4.1.4-5.1" class="pilcrow">¶</a>
-</li>
-            <li class="normal" id="section-4.1.4-5.2">
-              <p id="section-4.1.4-5.2.1">At each interval:<a href="#section-4.1.4-5.2.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.1.4-5.2.2.1">Compute the instantaneous aggregate goodput at interval i.<a href="#section-4.1.4-5.2.2.1" class="pilcrow">¶</a>
-</li>
-                <li class="normal" id="section-4.1.4-5.2.2.2">Compute the moving average aggregate goodput at interval i.<a href="#section-4.1.4-5.2.2.2" class="pilcrow">¶</a>
-</li>
-                <li class="normal" id="section-4.1.4-5.2.2.3">
-                  <p id="section-4.1.4-5.2.2.3.1">If the moving average aggregate goodput at interval i is more than a 5% increase over
-the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.<a href="#section-4.1.4-5.2.2.3.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.1.4-5.2.2.3.2.1">If no load-generating connections have been added within the last four intervals, add four more load-generating connections.<a href="#section-4.1.4-5.2.2.3.2.1" class="pilcrow">¶</a>
-</li>
-                  </ul>
-</li>
-                <li class="normal" id="section-4.1.4-5.2.2.4">
-                  <p id="section-4.1.4-5.2.2.4.1">Else, the network has reached full link utilization with the existing load-generating connections. The current state is a candidate for stable working conditions.<a href="#section-4.1.4-5.2.2.4.1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-4.1.4-5.2.2.4.2.1">If a) there have been load-generating connections added in the past four intervals and b) there has been moving average stability during the period between intervals i-4 and i,
-then the network has reached full link utilization and the algorithm terminates.<a href="#section-4.1.4-5.2.2.4.2.1" class="pilcrow">¶</a>
-</li>
-                    <li class="normal" id="section-4.1.4-5.2.2.4.2.2">Otherwise, add four more load-generating connections.<a href="#section-4.1.4-5.2.2.4.2.2" class="pilcrow">¶</a>
-</li>
-                  </ul>
-</li>
-              </ul>
-</li>
-          </ul>
-<p id="section-4.1.4-6">In <a href="#goals" class="auto internal xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within
-20 seconds. It is left to the implementation what to do when full link utilization is not reached
-within that time-frame. For example, an implementation might gather a provisional
-responsiveness measurement or let the test run for longer.<a href="#section-4.1.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1865,12 +1805,93 @@ from these data:<a href="#section-4.2.1-1" class="pilcrow">¶</a></p>
           </ol>
 <div class="alignLeft art-text artwork" id="section-4.2.1-3">
 <pre>
-Responsiveness = 60000 / ((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 + http_self_p90)/2)
+Responsiveness = 60000 /
+((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 +
+  http_self_p90)/2)
 </pre><a href="#section-4.2.1-3" class="pilcrow">¶</a>
 </div>
 <p id="section-4.2.1-4">This responsiveness value presents round-trips per minute (RPM).<a href="#section-4.2.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
+</section>
+</div>
+<div id="final-algorithm">
+<section id="section-4.3">
+        <h3 id="name-final-algorithm">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-final-algorithm" class="section-name selfRef">Final Algorithm</a>
+        </h3>
+<p id="section-4.3-1">Considering the previous two sections, where we explain what the meaning of
+working conditions is and the definition of responsiveness, we can design the
+final algorithm. In order to measure the worst-case latency we need to transmit
+traffic at the full capacity of the path as well as ensure the buffers are filled
+to the maximum.
+We can achieve this by continuously adding HTTP sessions to the pool of connections
+in a 1-second interval. This will ensure that we quickly reach capacity and full
+buffer occupancy. We need to continuously measure goodput and responsiveness and
+as soon as we detect stability for both metrics we can ensure that the full
+working conditions have been reached.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">The following algorithm reaches working conditions of a network
+by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
+files.
+The algorithm is the same for upload and download and uses
+the same term "load-generating connection" for each.
+The actions of the algorithm take place at regular intervals. For the current draft
+the interval is defined as one second.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-3">Where<a href="#section-4.3-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.3-4.1">i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
+increases by one for each interval.<a href="#section-4.3-4.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-4.2">instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
+interval p, divided by the interval duration.
+If p is negative (i.e., a time interval logically prior to the start of the test beginning,
+used in moving average calculations),
+the number of total bytes of data transferred within that
+interval is considered to be 0.<a href="#section-4.3-4.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-4.3">moving average aggregate goodput at interval p: The number of total bytes of data transferred within
+interval p and the three immediately preceding intervals, divided by four times the interval duration.<a href="#section-4.3-4.3" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-4.4">moving average stability during the period between intervals b and e:
+Whether or not, for all b&lt;=x&lt;e, the absolute difference is less than 5% between
+the moving average aggregate goodput at interval x and
+the moving average aggregate goodput at interval x+1.
+If all absolute differences are below 5% then the moving average has achieved stability.
+If any of the absolute differences are 5% or more then the moving average has not achieved stability.<a href="#section-4.3-4.4" class="pilcrow">¶</a>
+</li>
+        </ul>
+<p id="section-4.3-5">the steps of the algorithm are:<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.3-6.1">Create a load-generating connection.<a href="#section-4.3-6.1" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-6.2">Start probing for responsiveness every 100ms, as described in the previous section.<a href="#section-4.3-6.2" class="pilcrow">¶</a>
+</li>
+          <li class="normal" id="section-4.3-6.3">
+            <p id="section-4.3-6.3.1">At each interval:<a href="#section-4.3-6.3.1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-4.3-6.3.2.1">Create an additional load-generating connection.<a href="#section-4.3-6.3.2.1" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.3-6.3.2.2">Compute the instantaneous aggregate goodput at interval i.<a href="#section-4.3-6.3.2.2" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.3-6.3.2.3">Compute the moving average aggregate goodput at interval i.<a href="#section-4.3-6.3.2.3" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.3-6.3.2.4">Compute the responsiveness<a href="#section-4.3-6.3.2.4" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.3-6.3.2.5">If the moving average aggregate goodput at interval i is more than a 5% increase over
+the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.
+Continue for 4 more iterations.<a href="#section-4.3-6.3.2.5" class="pilcrow">¶</a>
+</li>
+              <li class="normal" id="section-4.3-6.3.2.6">If the responsiveness at interval i is more than a 5% reduction over the responsiveness at interval i - 1, the network
+has not yet reached full buffer occupancy.
+Continue for 4 more iterations.<a href="#section-4.3-6.3.2.6" class="pilcrow">¶</a>
+</li>
+            </ul>
+</li>
+        </ul>
+<p id="section-4.3-7">In <a href="#goals" class="auto internal xref">Section 3</a>, it is mentioned that one of the goals is that the test finishes within
+20 seconds. It is left to the implementation what to do when stability is not reached
+within that time-frame. For example, an implementation might gather a provisional
+responsiveness measurement or let the test run for longer.<a href="#section-4.3-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
