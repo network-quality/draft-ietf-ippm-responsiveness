@@ -181,11 +181,11 @@ T*
 T*
 (     5.1.  Elements influencing responsiveness . . . . . . . . . . .  12)Tj
 T*
-(       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  12)Tj
+(       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  13)Tj
 T*
 (       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  13)Tj
 T*
-(       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  13)Tj
+(       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  14)Tj
 T*
 (     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  14)Tj
 T*
@@ -230,7 +230,7 @@ T*
 T*
 (   11. Informative References  . . . . . . . . . . . . . . . . . . .  17)Tj
 T*
-(   Appendix A.  Example Server Configuration . . . . . . . . . . . .  18)Tj
+(   Appendix A.  Example Server Configuration . . . . . . . . . . . .  19)Tj
 T*
 (     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  19)Tj
 T*
@@ -1169,7 +1169,7 @@ endobj
 endobj
 40 0 obj
 <<
-/Length 3023
+/Length 2649
 >>
 stream
 BT
@@ -1209,6 +1209,10 @@ T*
 T*
 (   measurement or let the test run for longer.)Tj
 0 -2.2 TD
+(   Finally, if at any point one of these connections terminates with an)Tj
+0 -1.1 TD
+(   error, the test should be aborted.)Tj
+0 -2.2 TD
 (5.  Interpreting responsiveness results)Tj
 T*
 (   The described methodology uses a high-level approach to measure)Tj
@@ -1244,21 +1248,7 @@ T*
 (   stack.  The following outlines how each of these contributes to the)Tj
 T*
 (   responsiveness.)Tj
-0 -2.2 TD
-(5.1.1.  Client side influence)Tj
-T*
-(   As the driver of the measurement, the client-side networking stack)Tj
-0 -1.1 TD
-(   can have a large influence on the result.  The biggest influence of)Tj
-T*
-(   the client comes when measuring the responsiveness in the uplink)Tj
-T*
-(   direction.  Load-generation will cause queue-buildup in the transport)Tj
-T*
-(   layer as well as the HTTP layer.  Additionally, if the network’s)Tj
-T*
-(   bottleneck is on the first hop, queue-buildup will happen at the)Tj
-0 -4.4 TD
+0 -11 TD
 (Paasch, et al.            Expires 24 April 2023                [Page 12])Tj
 ET
 endstream
@@ -1276,7 +1266,7 @@ endobj
 endobj
 43 0 obj
 <<
-/Length 2895
+/Length 3122
 >>
 stream
 BT
@@ -1288,6 +1278,20 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
+(5.1.1.  Client side influence)Tj
+0 -2.2 TD
+(   As the driver of the measurement, the client-side networking stack)Tj
+0 -1.1 TD
+(   can have a large influence on the result.  The biggest influence of)Tj
+T*
+(   the client comes when measuring the responsiveness in the uplink)Tj
+T*
+(   direction.  Load-generation will cause queue-buildup in the transport)Tj
+T*
+(   layer as well as the HTTP layer.  Additionally, if the network’s)Tj
+T*
+(   bottleneck is on the first hop, queue-buildup will happen at the)Tj
+T*
 (   layers below the transport stack \(e.g., NIC firmware\).)Tj
 0 -2.2 TD
 (   Each of these queue build-ups may cause latency and thus low)Tj
@@ -1351,15 +1355,7 @@ T*
 (   the latency probes on the load-generating connections may be)Tj
 T*
 (   influenced differently than the probes on the separate connections.)Tj
-0 -2.2 TD
-(5.1.3.  Server side influence)Tj
-T*
-(   Finally, the server-side introduces the same kind of influence on the)Tj
-0 -1.1 TD
-(   responsiveness as the client-side, with the difference that the)Tj
-T*
-(   responsiveness will be impacted during the downlink load generation.)Tj
-0 -9.9 TD
+0 -7.7 TD
 (Paasch, et al.            Expires 24 April 2023                [Page 13])Tj
 ET
 endstream
@@ -1377,7 +1373,7 @@ endobj
 endobj
 46 0 obj
 <<
-/Length 3221
+/Length 2982
 >>
 stream
 BT
@@ -1389,8 +1385,16 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
-(5.2.  Root-causing Responsiveness)Tj
+(5.1.3.  Server side influence)Tj
 0 -2.2 TD
+(   Finally, the server-side introduces the same kind of influence on the)Tj
+0 -1.1 TD
+(   responsiveness as the client-side, with the difference that the)Tj
+T*
+(   responsiveness will be impacted during the downlink load generation.)Tj
+0 -2.2 TD
+(5.2.  Root-causing Responsiveness)Tj
+T*
 (   Once an RPM result has been generated one might be tempted to try to)Tj
 0 -1.1 TD
 (   localize the source of a potential low responsiveness.  The)Tj
@@ -1454,21 +1458,7 @@ T*
 (   server MUST use a packet scheduling algorithm that minimizes internal)Tj
 T*
 (   queueing to avoid affecting the client’s measurement.)Tj
-0 -2.2 TD
-(   As clients and servers become deployed that use L4S congestion)Tj
-0 -1.1 TD
-(   control \(e.g., TCP Prague with ECT\(1\) packet marking\), for their)Tj
-T*
-(   normal traffic when it is available, and fall back to traditional)Tj
-T*
-(   loss-based congestion controls \(e.g., Reno or CUBIC\) otherwise, the)Tj
-T*
-(   same strategy SHOULD be used for RPM test traffic.  This is)Tj
-T*
-(   RECOMMENDED so that the synthetic traffic generated by the RPM test)Tj
-T*
-(   mimics real-world traffic for that server.)Tj
-0 -5.5 TD
+0 -7.7 TD
 (Paasch, et al.            Expires 24 April 2023                [Page 14])Tj
 ET
 endstream
@@ -1486,7 +1476,7 @@ endobj
 endobj
 49 0 obj
 <<
-/Length 3199
+/Length 3004
 >>
 stream
 BT
@@ -1498,6 +1488,20 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
+(   As clients and servers become deployed that use L4S congestion)Tj
+0 -1.1 TD
+(   control \(e.g., TCP Prague with ECT\(1\) packet marking\), for their)Tj
+T*
+(   normal traffic when it is available, and fall back to traditional)Tj
+T*
+(   loss-based congestion controls \(e.g., Reno or CUBIC\) otherwise, the)Tj
+T*
+(   same strategy SHOULD be used for RPM test traffic.  This is)Tj
+T*
+(   RECOMMENDED so that the synthetic traffic generated by the RPM test)Tj
+T*
+(   mimics real-world traffic for that server.)Tj
+0 -2.2 TD
 (   Delay-based congestion-control algorithms \(e.g., Vegas, FAST, BBR\))Tj
 0 -1.1 TD
 (   SHOULD NOT be used for RPM test traffic because they take much longer)Tj
@@ -1559,7 +1563,36 @@ T*
 (       instead close the connection after reaching working condition and)Tj
 T*
 (       making its measurements.)Tj
-0 -2.2 TD
+0 -11 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 15])Tj
+ET
+endstream
+endobj
+50 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+52 0 obj
+<<
+/Length 2926
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   3.  An "upload" URL/response: The server must handle a POST request)Tj
 0 -1.1 TD
 (       with an arbitrary body size.  The server should discard the)Tj
@@ -1579,36 +1612,7 @@ T*
 (       server SHOULD specify the content-type as application/json.)Tj
 T*
 (       Sample JSON:)Tj
-0 -6.6 TD
-(Paasch, et al.            Expires 24 April 2023                [Page 15])Tj
-ET
-endstream
-endobj
-50 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-52 0 obj
-<<
-/Length 3013
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
+0 -2.2 TD
 (   {)Tj
 0 -1.1 TD
 (     "version": 1,)Tj
@@ -1670,9 +1674,38 @@ T*
 (   configuration, a user may have cable modem service offering 100 Mb/s)Tj
 T*
 (   download speed, connected via gigabit Ethernet to one or more Wi-Fi)Tj
-T*
+0 -4.4 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 16])Tj
+ET
+endstream
+endobj
+53 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+55 0 obj
+<<
+/Length 2689
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   access points in the home, which then offer service to Wi-Fi client)Tj
-T*
+0 -1.1 TD
 (   devices at different rates depending on distance, interference from)Tj
 T*
 (   other traffic, etc.  By having the cable modem itself host an RPM)Tj
@@ -1692,38 +1725,9 @@ T*
 (   instances SHOULD advertise the availability of service type [RFC6335])Tj
 T*
 (   "_nq._tcp" \(Network Quality\), via DNS-Based Service Discovery)Tj
-0 -4.4 TD
-(Paasch, et al.            Expires 24 April 2023                [Page 16])Tj
-ET
-endstream
-endobj
-53 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-55 0 obj
-<<
-/Length 2525
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
+T*
 (   [RFC6763], using Multicast DNS on its local link\(s\) [RFC6762].  Where)Tj
-0 -1.1 TD
+T*
 (   applicable, an RPM Test Server instance SHOULD also advertise the)Tj
 T*
 (   availability of its service via unicast discovery, for discovery by)Tj
@@ -1773,7 +1777,36 @@ T*
 (   feedback on the I-D.)Tj
 0 -2.2 TD
 (11.  Informative References)Tj
-T*
+0 -7.7 TD
+(Paasch, et al.            Expires 24 April 2023                [Page 17])Tj
+ET
+endstream
+endobj
+56 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+58 0 obj
+<<
+/Length 3016
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
 (   [Bufferbloat])Tj
 0 -1.1 TD
 (              Gettys, J. and K. Nichols, "Bufferbloat: Dark Buffers in)Tj
@@ -1793,36 +1826,7 @@ T*
 (              DOI 10.17487/RFC0793, September 1981,)Tj
 T*
 (              <https://www.rfc-editor.org/info/rfc793>.)Tj
-0 -6.6 TD
-(Paasch, et al.            Expires 24 April 2023                [Page 17])Tj
-ET
-endstream
-endobj
-56 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-58 0 obj
-<<
-/Length 2799
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
-0 -3.3 TD
+0 -2.2 TD
 (   [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.)Tj
 0 -1.1 TD
 (              Cheshire, "Internet Assigned Numbers Authority \(IANA\))Tj
@@ -1880,19 +1884,7 @@ T*
 (              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,)Tj
 T*
 (              <https://www.rfc-editor.org/info/rfc8446>.)Tj
-0 -2.2 TD
-(   [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based)Tj
-0 -1.1 TD
-(              Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June)Tj
-T*
-(              2020, <https://www.rfc-editor.org/info/rfc8766>.)Tj
-0 -2.2 TD
-(Appendix A.  Example Server Configuration)Tj
-T*
-(   This section shows fragments of sample server configurations to host)Tj
-0 -1.1 TD
-(   an responsiveness measurement endpoint.)Tj
-0 -8.8 TD
+0 -4.4 TD
 (Paasch, et al.            Expires 24 April 2023                [Page 18])Tj
 ET
 endstream
@@ -1910,7 +1902,7 @@ endobj
 endobj
 61 0 obj
 <<
-/Length 1623
+/Length 1854
 >>
 stream
 BT
@@ -1922,8 +1914,20 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
 0 -3.3 TD
-(A.1.  Apache Traffic Server)Tj
+(   [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based)Tj
+0 -1.1 TD
+(              Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June)Tj
+T*
+(              2020, <https://www.rfc-editor.org/info/rfc8766>.)Tj
 0 -2.2 TD
+(Appendix A.  Example Server Configuration)Tj
+T*
+(   This section shows fragments of sample server configurations to host)Tj
+0 -1.1 TD
+(   an responsiveness measurement endpoint.)Tj
+0 -2.2 TD
+(A.1.  Apache Traffic Server)Tj
+T*
 (   Apache Traffic Server starting at version 9.1.0 supports)Tj
 0 -1.1 TD
 (   configuration as a responsiveness server.  It requires the generator)Tj
@@ -1973,19 +1977,7 @@ T*
 (   United States of America)Tj
 T*
 (   Email: cpaasch@apple.com)Tj
-0 -3.3 TD
-(   Randall Meyer)Tj
-0 -1.1 TD
-(   Apple Inc.)Tj
-T*
-(   One Apple Park Way)Tj
-T*
-(   Cupertino, California 95014,)Tj
-T*
-(   United States of America)Tj
-T*
-(   Email: rrm@apple.com)Tj
-0 -11 TD
+0 -9.9 TD
 (Paasch, et al.            Expires 24 April 2023                [Page 19])Tj
 ET
 endstream
@@ -2003,7 +1995,7 @@ endobj
 endobj
 64 0 obj
 <<
-/Length 818
+/Length 1013
 >>
 stream
 BT
@@ -2014,6 +2006,18 @@ BT
 0 Tc
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions    October 2022)Tj
+0 -3.3 TD
+(   Randall Meyer)Tj
+0 -1.1 TD
+(   Apple Inc.)Tj
+T*
+(   One Apple Park Way)Tj
+T*
+(   Cupertino, California 95014,)Tj
+T*
+(   United States of America)Tj
+T*
+(   Email: rrm@apple.com)Tj
 0 -3.3 TD
 (   Stuart Cheshire)Tj
 0 -1.1 TD
@@ -2050,7 +2054,7 @@ T*
 (   United States of America)Tj
 T*
 (   Email: mattmathis@google.com)Tj
-0 -33 TD
+0 -24.2 TD
 (Paasch, et al.            Expires 24 April 2023                [Page 20])Tj
 ET
 endstream
@@ -2310,8 +2314,8 @@ endobj
 endobj
 69 0 obj
 <<
-/CreationDate (D:20221021130256-07'00')
-/ModDate (D:20221021130256-07'00')
+/CreationDate (D:20221021132124-07'00')
+/ModDate (D:20221021132124-07'00')
 /Producer (Apple pstopdf)
 >>
 endobj
@@ -2325,83 +2329,83 @@ endobj
 xref
 0 71
 0000000000 65535 f 
-0000060285 00000 n 
+0000060425 00000 n 
 0000000016 00000 n 
 0000002738 00000 n 
-0000059718 00000 n 
-0000059387 00000 n 
-0000062017 00000 n 
-0000060365 00000 n 
+0000059858 00000 n 
+0000059527 00000 n 
+0000062157 00000 n 
+0000060505 00000 n 
 0000002833 00000 n 
 0000006225 00000 n 
-0000060445 00000 n 
+0000060585 00000 n 
 0000006320 00000 n 
 0000009573 00000 n 
-0000060528 00000 n 
+0000060668 00000 n 
 0000009669 00000 n 
 0000012953 00000 n 
-0000060611 00000 n 
+0000060751 00000 n 
 0000013049 00000 n 
 0000016557 00000 n 
-0000060694 00000 n 
+0000060834 00000 n 
 0000016653 00000 n 
 0000019447 00000 n 
-0000060777 00000 n 
+0000060917 00000 n 
 0000019543 00000 n 
 0000022816 00000 n 
-0000060860 00000 n 
+0000061000 00000 n 
 0000022912 00000 n 
 0000026020 00000 n 
-0000060943 00000 n 
+0000061083 00000 n 
 0000026116 00000 n 
 0000029342 00000 n 
-0000061026 00000 n 
+0000061166 00000 n 
 0000029438 00000 n 
 0000032033 00000 n 
-0000061109 00000 n 
+0000061249 00000 n 
 0000032129 00000 n 
 0000034835 00000 n 
-0000062290 00000 n 
-0000062152 00000 n 
-0000061193 00000 n 
+0000062430 00000 n 
+0000062292 00000 n 
+0000061333 00000 n 
 0000034931 00000 n 
-0000038007 00000 n 
-0000061277 00000 n 
-0000038103 00000 n 
-0000041051 00000 n 
-0000061361 00000 n 
-0000041147 00000 n 
-0000044421 00000 n 
-0000061445 00000 n 
-0000044517 00000 n 
-0000047769 00000 n 
-0000061529 00000 n 
-0000047865 00000 n 
-0000050931 00000 n 
-0000061613 00000 n 
-0000051027 00000 n 
-0000053605 00000 n 
-0000061697 00000 n 
-0000053701 00000 n 
-0000056553 00000 n 
-0000061781 00000 n 
-0000056649 00000 n 
-0000058325 00000 n 
-0000061865 00000 n 
-0000058421 00000 n 
-0000059291 00000 n 
-0000059527 00000 n 
-0000061949 00000 n 
-0000061977 00000 n 
-0000062381 00000 n 
-0000062504 00000 n 
+0000037633 00000 n 
+0000061417 00000 n 
+0000037729 00000 n 
+0000040904 00000 n 
+0000061501 00000 n 
+0000041000 00000 n 
+0000044035 00000 n 
+0000061585 00000 n 
+0000044131 00000 n 
+0000047188 00000 n 
+0000061669 00000 n 
+0000047284 00000 n 
+0000050263 00000 n 
+0000061753 00000 n 
+0000050359 00000 n 
+0000053101 00000 n 
+0000061837 00000 n 
+0000053197 00000 n 
+0000056266 00000 n 
+0000061921 00000 n 
+0000056362 00000 n 
+0000058269 00000 n 
+0000062005 00000 n 
+0000058365 00000 n 
+0000059431 00000 n 
+0000059667 00000 n 
+0000062089 00000 n 
+0000062117 00000 n 
+0000062521 00000 n 
+0000062644 00000 n 
 trailer
 <<
 /Size 71
 /Root 70 0 R
 /Info 69 0 R
-/ID [<6ebadce90fb4cbeced89acfa0597679d><6ebadce90fb4cbeced89acfa0597679d>]
+/ID [<1d53736882fb48a0d837ebc677189aa4><1d53736882fb48a0d837ebc677189aa4>]
 >>
 startxref
-62574
+62714
 %%EOF

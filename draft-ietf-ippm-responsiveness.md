@@ -535,6 +535,8 @@ In {{goals}}, it is mentioned that one of the goals is that the test finishes wi
 within that time-frame. For example, an implementation might gather a provisional
 responsiveness measurement or let the test run for longer.
 
+Finally, if at any point one of these connections terminates with an error, the test should be aborted.
+
 # Interpreting responsiveness results
 
 The described methodology uses a high-level approach to measure responsiveness.
