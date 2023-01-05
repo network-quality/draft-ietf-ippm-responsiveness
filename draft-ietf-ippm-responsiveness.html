@@ -34,26 +34,26 @@ The measurement is expressed as &quot;Round-trips Per Minute&quot; (RPM)
 and should be included with throughput (up and down) and
 idle latency as critical indicators of network quality. 
     " name="description">
-<meta content="xml2rfc 3.15.1" name="generator">
+<meta content="xml2rfc 3.15.2" name="generator">
 <meta content="Internet-Draft" name="keyword">
 <meta content="draft-ietf-ippm-responsiveness-01" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.15.1
-    Python 3.9.6
+  xml2rfc 3.15.2
+    Python 3.11.0
     appdirs 1.4.4
     ConfigArgParse 1.5.3
     google-i18n-address 2.5.2
     html5lib 1.1
     intervaltree 3.1.0
     Jinja2 3.1.2
-    kitchen 1.2.6
     lxml 4.9.1
     MarkupSafe 2.1.1
     pycountry 22.3.5
     PyYAML 6.0
     requests 2.28.1
-    setuptools 58.0.4
-    six 1.15.0
+    setuptools 62.6.0
+    six 1.16.0
+    wcwidth 0.2.5
 -->
 <link href="draft-ietf-ippm-responsiveness.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -65,7 +65,7 @@ idle latency as critical indicators of network quality.
   this can be consolidated so that style settings occur only in one place, but
   for now the contents of this file consists first of the initial CSS work as
   provided to the RFC Formatter (xml2rfc) work, followed by itemized and
-  commented changes found necssary during the development of the v3
+  commented changes found necessary during the development of the v3
   formatters.
 
 */
@@ -746,7 +746,7 @@ hr.addr {
   size: A4;
   margin-bottom: 45mm;
   padding-top: 20px;
-  /* The follwing is commented out here, but set appropriately by in code, as
+  /* The following is commented out here, but set appropriately by in code, as
      the content depends on the document */
   /*
   @top-left {
@@ -887,7 +887,7 @@ table th.text-right {
   text-align: right;
 }
 
-/* Make the alternative author contact informatio look less like just another
+/* Make the alternative author contact information look less like just another
    author, and group it closer with the primary author contact information */
 .alternative-contact {
   margin: 0.5em 0 0.25em 0;
@@ -1084,7 +1084,7 @@ ol.type-A { list-style-type: upper-alpha; }
 ol.type-i { list-style-type: lower-roman; }
 ol.type-I { list-style-type: lower-roman; }
 /* Apply the print table and row borders in general, on request from the RPC,
-and increase the contrast between border and odd row background sligthtly */
+and increase the contrast between border and odd row background slightly */
 table {
   border: 1px solid #ddd;
 }
@@ -1144,7 +1144,7 @@ span.break, dd.break {
     break-before: auto;
   }
 }
-/* Text in compact lists should not get extra bottim margin space,
+/* Text in compact lists should not get extra bottom margin space,
    since that would makes the list not compact */
 ul.compact p, .ulCompact p,
 ol.compact p, .olCompact p {
@@ -1169,7 +1169,7 @@ p tt, p code, li tt, li code {
 pre {
    margin-top: 0.5px;
 }
-/* Tweak the comact list text */
+/* Tweak the compact list text */
 ul.compact, .ulCompact,
 ol.compact, .olCompact,
 dl.compact, .dlCompact {
@@ -1214,11 +1214,11 @@ li > p:last-of-type {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Responsiveness under Working Conditions</td>
-<td class="right">October 2022</td>
+<td class="right">January 2023</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Paasch, et al.</td>
-<td class="center">Expires 24 April 2023</td>
+<td class="center">Expires 9 July 2023</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1231,12 +1231,12 @@ li > p:last-of-type {
 <dd class="internet-draft">draft-ietf-ippm-responsiveness-01</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2022-10-21" class="published">21 October 2022</time>
+<time datetime="2023-01-05" class="published">5 January 2023</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2023-04-24">24 April 2023</time></dd>
+<dd class="expires"><time datetime="2023-07-09">9 July 2023</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1307,7 +1307,7 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 24 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 9 July 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1316,7 +1316,7 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2022 IETF Trust and the persons identified as the
+            Copyright (c) 2023 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -1407,6 +1407,19 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-rpm-test-server-discovery" class="internal xref">RPM Test Server Discovery</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-well-known-uniform-resource" class="internal xref">Well-Known Uniform Resource Identifier (URI) For Test Server Discovery</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-dns-based-service-discovery" class="internal xref">DNS-Based Service Discovery for Test Server Discovery</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2.2.1">
+                    <p id="section-toc.1-1.7.2.2.2.1.1"><a href="#section-7.2.1" class="auto internal xref">7.2.1</a>.  <a href="#name-example" class="internal xref">Example</a></p>
+</li>
+                </ul>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
@@ -2064,13 +2077,63 @@ The client will probably never completely upload the object,
 but will instead close the connection after reaching working condition
 and making its measurements.<a href="#section-6-6.3" class="pilcrow">¶</a>
 </li>
-        <li id="section-6-6.4">A configuration URL that returns a JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> object with the information
-the client uses to run the test (sample below). The server SHOULD specify the
-content-type as application/json.
-Sample JSON:<a href="#section-6-6.4" class="pilcrow">¶</a>
+        <li id="section-6-6.4">A .well-known URL <span>[<a href="#RFC8615" class="cite xref">RFC8615</a>]</span> which contains configuration information for 
+the client to run the test (See <a href="#discovery" class="auto internal xref">Section 7</a>, below.)<a href="#section-6-6.4" class="pilcrow">¶</a>
 </li>
       </ol>
-<div class="alignLeft art-text artwork" id="section-6-7">
+<p id="section-6-7">The client begins the responsiveness measurement by querying for the JSON configuration.
+This supplies the URLs for creating the load-generating connections in
+the upstream and downstream direction as well as the small object
+for the latency measurements.<a href="#section-6-7" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="discovery">
+<section id="section-7">
+      <h2 id="name-rpm-test-server-discovery">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-rpm-test-server-discovery" class="section-name selfRef">RPM Test Server Discovery</a>
+      </h2>
+<p id="section-7-1">It makes sense for a service provider (either an application service provider like a video conferencing service
+or a network access provider like an ISP) to host RPM Test Server instances on their
+network so customers can determine what to expect about the the quality of their connection to 
+the service offered by that provider.
+However, when a user performs an RPM test and determines
+that they are suffering from poor RPM during the connection to that service,
+the logical next questions might be,<a href="#section-7-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-7-2">
+<li id="section-7-2.1">"What's causing my poor performance?"<a href="#section-7-2.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-7-2.2">"Is it poor buffer management by my ISP?"<a href="#section-7-2.2" class="pilcrow">¶</a>
+</li>
+        <li id="section-7-2.3">"Is it poor buffer management in my home Wi-Fi Access point?"<a href="#section-7-2.3" class="pilcrow">¶</a>
+</li>
+        <li id="section-7-2.4">"Something to do with the service provider?"<a href="#section-7-2.4" class="pilcrow">¶</a>
+</li>
+        <li id="section-7-2.5">"Something else entirely?"<a href="#section-7-2.5" class="pilcrow">¶</a>
+</li>
+      </ol>
+<p id="section-7-3">To help an end user answer these questions, it will be useful for test clients
+to be able to easily discover RPM Test Server instances running in various
+places in the network (e.g., their home router, their Wi-Fi access point, their ISP's
+head-end equipment, etc).<a href="#section-7-3" class="pilcrow">¶</a></p>
+<p id="section-7-4">Consider this example scenario: A user has a cable modem
+service offering 100 Mb/s download speed, connected via
+gigabit Ethernet to one or more Wi-Fi access points in their home,
+which then offer service to Wi-Fi client devices at different rates
+depending on distance, interference from other traffic, etc.
+By having the cable modem itself host an RPM Test Server instance,
+the user can then run a test between the cable modem and their computer
+or smartphone, to help isolate whether bufferbloat they are experiencing
+is occurring in equipment inside the home (like their Wi-Fi access points)
+or somewhere outside the home.<a href="#section-7-4" class="pilcrow">¶</a></p>
+<div id="well-known-uniform-resource-identifier-uri-for-test-server-discovery">
+<section id="section-7.1">
+        <h3 id="name-well-known-uniform-resource">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-well-known-uniform-resource" class="section-name selfRef">Well-Known Uniform Resource Identifier (URI) For Test Server Discovery</a>
+        </h3>
+<p id="section-7.1-1">Any organization that wishes to host their own instance of an RPM Test Server can advertise that capability
+by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the 
+following criteria:<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.1-2">
 <pre>
 {
   "version": 1,
@@ -2081,62 +2144,62 @@ Sample JSON:<a href="#section-6-6.4" class="pilcrow">¶</a>
   }
   "test_endpoint": "hostname123.provider.com"
 }
-</pre><a href="#section-6-7" class="pilcrow">¶</a>
+</pre><a href="#section-7.1-2" class="pilcrow">¶</a>
 </div>
-<p id="section-6-8">All of the fields in the sample configuration are required except "test_endpoint".
+<p id="section-7.1-3">The server SHALL specify the content-type of the resource at the well-known URI as application/json.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+<p id="section-7.1-4">The content of the "version" field SHALL be "1". Integer values greater than "1" are reserved
+for future versions of this protocol.
+The content of the "large_https_download_url", "small_https_download_url", and "https_upload_url" SHALL
+all be validly formatted "http" or "https" URLs. See above for the semantics of the fields.
+All of the fields in the sample configuration are required except "test_endpoint".
 If the test server provider can pin all of the requests for a test run to a specific
 host in the service (for a particular run), they can specify that host name in the
-"test_endpoint" field.<a href="#section-6-8" class="pilcrow">¶</a></p>
-<p id="section-6-9">The client begins the responsiveness measurement by querying for the JSON configuration.
-This supplies the URLs for creating the load-generating connections in
-the upstream and downstream direction as well as the small object
-for the latency measurements.<a href="#section-6-9" class="pilcrow">¶</a></p>
+"test_endpoint" field.<a href="#section-7.1-4" class="pilcrow">¶</a></p>
+<p id="section-7.1-5">For purposes of registration of the well-known URI <span>[<a href="#RFC8615" class="cite xref">RFC8615</a>]</span>, the application name is "nq". The media type
+of the resource at the well-known URI is "application/json" and the format of the resource is as specified
+above. The URI scheme is "https". No additional path components, query strings or fragments are valid
+for this well-known URI.<a href="#section-7.1-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="rpm-test-server-discovery">
-<section id="section-7">
-      <h2 id="name-rpm-test-server-discovery">
-<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-rpm-test-server-discovery" class="section-name selfRef">RPM Test Server Discovery</a>
-      </h2>
-<p id="section-7-1">It makes sense to host RPM Test Server instances in Internet
-Data Centers where they can be accessed easily by users
-wishing to test the quality of their Internet connection.
-However, when a user performs an RPM test and determines
-that they are suffering from poor RPM during download,
-the logical next question might be,
-"What's causing my poor performance?
-Is it poor buffer management by my ISP?
-Is it poor buffer management in my home Wi-Fi Access point?
-Something else?"<a href="#section-7-1" class="pilcrow">¶</a></p>
-<p id="section-7-2">To help an end user answer this question, it will be useful for home gateway
-equipment to host RPM Test Server instances.
-In an example configuration, a user may have cable modem
-service offering 100 Mb/s download speed, connected via
-gigabit Ethernet to one or more Wi-Fi access points in the home,
-which then offer service to Wi-Fi client devices at different rates
-depending on distance, interference from other traffic, etc.
-By having the cable modem itself host an RPM Test Server instance,
-the user can then run a test between the cable modem and their computer
-or smartphone, to help isolate whether bufferbloat they are experiencing
-is occurring in equipment inside the home (like their Wi-Fi access points)
-or somewhere outside the home.<a href="#section-7-2" class="pilcrow">¶</a></p>
-<p id="section-7-3">To aid in discoverability of these facilities,
-local RPM Test Server instances SHOULD advertise the availability
-of service type <span>[<a href="#RFC6335" class="cite xref">RFC6335</a>]</span> "_nq._tcp" (Network Quality),
-via DNS-Based Service Discovery <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span>,
-using Multicast DNS on its local link(s) <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span>.
-Where applicable, an RPM Test Server instance SHOULD also advertise
-the availability of its service via unicast discovery,
-for discovery by client devices not directly attached to the same link.
-Population of the appropriate DNS zone with the
+<div id="dns-based-service-discovery-for-test-server-discovery">
+<section id="section-7.2">
+        <h3 id="name-dns-based-service-discovery">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-dns-based-service-discovery" class="section-name selfRef">DNS-Based Service Discovery for Test Server Discovery</a>
+        </h3>
+<p id="section-7.2-1">To further aid the test client in discovering instances of the RPM Test Server, organizations
+wishing to host their own instances of the Test Server MAY advertise their availability using
+DNS-Based Service Discovery <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span> using conventional, unicast DNS <span>[<a href="#RFC1034" class="cite xref">RFC1034</a>]</span> or multicast DNS <span>[<a href="#RFC6762" class="cite xref">RFC6762</a>]</span>
+on the organization network's local link(s).<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">The RPM Test Service instances should advertise using the service type <span>[<a href="#RFC6335" class="cite xref">RFC6335</a>]</span> 
+"_nq._tcp".  Population of the appropriate DNS zone with the
 relevant unicast discovery records can be performed
 automatically using a Discovery Proxy <span>[<a href="#RFC8766" class="cite xref">RFC8766</a>]</span>,
 or in some scenarios simply by having a human
-administrator manually enter the required records.
-Similarly, a "cloud" service, providing Internet hosting service for
-"example.com" could choose to include the relevant DNS-SD records
-within the "example.com" domain <span>[<a href="#RFC6763" class="cite xref">RFC6763</a>]</span> to communicate
-to clients the list of available RPM Test Server instances.<a href="#section-7-3" class="pilcrow">¶</a></p>
+administrator manually enter the required records.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<div id="example">
+<section id="section-7.2.1">
+          <h4 id="name-example">
+<a href="#section-7.2.1" class="section-number selfRef">7.2.1. </a><a href="#name-example" class="section-name selfRef">Example</a>
+          </h4>
+<p id="section-7.2.1-1">An obscure service provider hosting an RPM Test Server instance for their
+organization (obs.cr) on the "rpm.obs.cr" host would return the following answers
+to PTR and SRV conventional DNS queries:<a href="#section-7.2.1-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-7.2.1-2">
+<pre>
+$ nslookup -q=ptr _nq._tcp.obs.cr.
+Non-authoritative answer:
+_nq._tcp.obs.crname = rpm._nq._tcp.obs.cr.
+$ nslookup -q=srv rpm._nq._tcp.obs.cr.
+Non-authoritative answer:
+rpm._nq._tcp.obs.crservice = 0 0 443 rpm.obs.cr.
+</pre><a href="#section-7.2.1-2" class="pilcrow">¶</a>
+</div>
+<p id="section-7.2.1-3">Given those conventional DNS query responses, the client would proceed to access the rpm.obs.cr
+host on port 443 at the .well-known/nq well-known URI to begin the test.<a href="#section-7.2.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
 </section>
 </div>
 <div id="security-considerations">
@@ -2186,6 +2249,10 @@ We also thank Erik Auerswald for his constructive feedback on the I-D.<a href="#
       <dd>
 <span class="refAuthor">Postel, J.</span>, <span class="refTitle">"Transmission Control Protocol"</span>, <span class="seriesInfo">RFC 793</span>, <span class="seriesInfo">DOI 10.17487/RFC0793</span>, <time datetime="1981-09" class="refDate">September 1981</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc793">https://www.rfc-editor.org/info/rfc793</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC1034">[RFC1034]</dt>
+      <dd>
+<span class="refAuthor">Mockapetris, P.</span>, <span class="refTitle">"Domain names - concepts and facilities"</span>, <span class="seriesInfo">STD 13</span>, <span class="seriesInfo">RFC 1034</span>, <span class="seriesInfo">DOI 10.17487/RFC1034</span>, <time datetime="1987-11" class="refDate">November 1987</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc1034">https://www.rfc-editor.org/info/rfc1034</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC6335">[RFC6335]</dt>
       <dd>
 <span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Eggert, L.</span>, <span class="refAuthor">Touch, J.</span>, <span class="refAuthor">Westerlund, M.</span>, and <span class="refAuthor">S. Cheshire</span>, <span class="refTitle">"Internet Assigned Numbers Authority (IANA) Procedures for the Management of the Service Name and Transport Protocol Port Number Registry"</span>, <span class="seriesInfo">BCP 165</span>, <span class="seriesInfo">RFC 6335</span>, <span class="seriesInfo">DOI 10.17487/RFC6335</span>, <time datetime="2011-08" class="refDate">August 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6335">https://www.rfc-editor.org/info/rfc6335</a>&gt;</span>. </dd>
@@ -2202,17 +2269,13 @@ We also thank Erik Auerswald for his constructive feedback on the I-D.<a href="#
       <dd>
 <span class="refAuthor">Pan, R.</span>, <span class="refAuthor">Natarajan, P.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">G. White</span>, <span class="refTitle">"Proportional Integral Controller Enhanced (PIE): A Lightweight Control Scheme to Address the Bufferbloat Problem"</span>, <span class="seriesInfo">RFC 8033</span>, <span class="seriesInfo">DOI 10.17487/RFC8033</span>, <time datetime="2017-02" class="refDate">February 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8033">https://www.rfc-editor.org/info/rfc8033</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8259">[RFC8259]</dt>
-      <dd>
-<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8259">https://www.rfc-editor.org/info/rfc8259</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC8290">[RFC8290]</dt>
       <dd>
 <span class="refAuthor">Hoeiland-Joergensen, T.</span>, <span class="refAuthor">McKenney, P.</span>, <span class="refAuthor">Taht, D.</span>, <span class="refAuthor">Gettys, J.</span>, and <span class="refAuthor">E. Dumazet</span>, <span class="refTitle">"The Flow Queue CoDel Packet Scheduler and Active Queue Management Algorithm"</span>, <span class="seriesInfo">RFC 8290</span>, <span class="seriesInfo">DOI 10.17487/RFC8290</span>, <time datetime="2018-01" class="refDate">January 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8290">https://www.rfc-editor.org/info/rfc8290</a>&gt;</span>. </dd>
 <dd class="break"></dd>
-<dt id="RFC8446">[RFC8446]</dt>
+<dt id="RFC8615">[RFC8615]</dt>
       <dd>
-<span class="refAuthor">Rescorla, E.</span>, <span class="refTitle">"The Transport Layer Security (TLS) Protocol Version 1.3"</span>, <span class="seriesInfo">RFC 8446</span>, <span class="seriesInfo">DOI 10.17487/RFC8446</span>, <time datetime="2018-08" class="refDate">August 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8446">https://www.rfc-editor.org/info/rfc8446</a>&gt;</span>. </dd>
+<span class="refAuthor">Nottingham, M.</span>, <span class="refTitle">"Well-Known Uniform Resource Identifiers (URIs)"</span>, <span class="seriesInfo">RFC 8615</span>, <span class="seriesInfo">DOI 10.17487/RFC8615</span>, <time datetime="2019-05" class="refDate">May 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8615">https://www.rfc-editor.org/info/rfc8615</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8766">[RFC8766]</dt>
     <dd>
