@@ -5,11 +5,11 @@
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
 Intended status: Standards Track                             S. Cheshire
-Expires: 24 April 2023                                        O. Shapira
+Expires: 9 July 2023                                          O. Shapira
                                                               Apple Inc.
                                                                M. Mathis
                                                              Google, Inc
-                                                         21 October 2022
+                                                          5 January 2023
 
 
                 Responsiveness under Working Conditions
@@ -53,9 +53,9 @@ Status of This Memo
 
 
 
-Paasch, et al.            Expires 24 April 2023                 [Page 1]
+Paasch, et al.             Expires 9 July 2023                  [Page 1]
 
-Internet-Draft   Responsiveness under Working Conditions    October 2022
+Internet-Draft   Responsiveness under Working Conditions    January 2023
 
 
    Internet-Drafts are working documents of the Internet Engineering
@@ -68,11 +68,11 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 April 2023.
+   This Internet-Draft will expire on 9 July 2023.
 
 Copyright Notice
 
-   Copyright (c) 2022 IETF Trust and the persons identified as the
+   Copyright (c) 2023 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -91,36 +91,40 @@ Table of Contents
    2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4
    3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   6
    4.  Measuring Responsiveness Under Working Conditions . . . . . .   6
-     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   6
+     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   7
        4.1.1.  From single-flow to multi-flow  . . . . . . . . . . .   7
        4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   8
-       4.1.3.  Reaching full buffer utilization  . . . . . . . . . .   8
+       4.1.3.  Reaching full buffer utilization  . . . . . . . . . .   9
      4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   9
        4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .  10
-     4.3.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  10
+     4.3.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  11
    5.  Interpreting responsiveness results . . . . . . . . . . . . .  12
      5.1.  Elements influencing responsiveness . . . . . . . . . . .  12
-       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  12
+       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  13
        5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  13
-       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  13
+       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  14
      5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  14
    6.  RPM Test Server API . . . . . . . . . . . . . . . . . . . . .  14
    7.  RPM Test Server Discovery . . . . . . . . . . . . . . . . . .  16
 
 
 
-Paasch, et al.            Expires 24 April 2023                 [Page 2]
+Paasch, et al.             Expires 9 July 2023                  [Page 2]
 
-Internet-Draft   Responsiveness under Working Conditions    October 2022
+Internet-Draft   Responsiveness under Working Conditions    January 2023
 
 
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  17
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  17
-   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  17
-   11. Informative References  . . . . . . . . . . . . . . . . . . .  17
-   Appendix A.  Example Server Configuration . . . . . . . . . . . .  18
-     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  19
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  19
+     7.1.  Well-Known Uniform Resource Identifier (URI) For Test
+           Server Discovery  . . . . . . . . . . . . . . . . . . . .  17
+     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  18
+       7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  18
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  18
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  18
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  19
+   11. Informative References  . . . . . . . . . . . . . . . . . . .  19
+   Appendix A.  Example Server Configuration . . . . . . . . . . . .  20
+     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  20
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20
 
 1.  Introduction
 
@@ -158,17 +162,18 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    data.  This document uses the term as a general description of bad
    latency, using more precise wording where warranted.
 
+
+
+
+Paasch, et al.             Expires 9 July 2023                  [Page 3]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    "Latency" is a poor measure of responsiveness, since it can be hard
    for the general public to understand.  The units are unfamiliar
    ("what is a millisecond?") and counterintuitive ("100 msec -- that
    sounds good -- it's only a tenth of a second!").
-
-
-
-Paasch, et al.            Expires 24 April 2023                 [Page 3]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
    Instead, we create the term "Responsiveness under working conditions"
    to make it clear that we are measuring all, not just idle,
@@ -211,6 +216,16 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    artificial latency, and affects user experience the same way as
    "traditional" bufferbloat.
 
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                  [Page 4]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    Finally, it is crucial to recognize that significant queueing only
    happens on entry to the lowest-capacity (or "bottleneck") hop on a
    network path.  For any flow of data between two communicating
@@ -218,14 +233,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    available to that flow at that hop is the lowest among all the hops
    of that flow's path at that moment in time.  It is important to
    understand that the existence of a lowest-capacity hop on a network
-
-
-
-Paasch, et al.            Expires 24 April 2023                 [Page 4]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
    path is not itself a problem.  In a heterogeneous network like the
    Internet it is inevitable that there must necessarily be some hop
    along the path with the lowest capacity for that path.  If that hop
@@ -266,6 +273,15 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    packets sitting in that queue awaiting transmission, significantly
    degrading overall user experience.
 
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                  [Page 5]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    In order to discover the depth of the buffer at the bottleneck hop,
    the RPM Test mimics normal network operations and data transfers, to
    cause this bottleneck buffer to fill to capacity, and then measures
@@ -274,13 +290,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    control, resulting in consistently low round-trip time and
    consistently good responsiveness.  A poorly managed bottleneck queue
    will not.
-
-
-
-Paasch, et al.            Expires 24 April 2023                 [Page 5]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
 3.  Goals
 
@@ -316,6 +325,19 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    network.  The following explains how the former and the latter are
    achieved.
 
+
+
+
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                  [Page 6]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
 4.1.  Working Conditions
 
    There are many different ways to define the state of "working
@@ -329,14 +351,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    building a queue on the bottleneck.  Thus, in order to measure the
    worst-case responsiveness we need to ensure that a queue is building
    up on the bottleneck, meaning that responsiveness is at its worst.
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                 [Page 6]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
    In this document we aim to generate a realistic traffic pattern by
    using standard HTTP transactions but exploring the worst-case
@@ -371,6 +385,15 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    actively fill the bottleneck's buffer to achieve maximum working
    conditions.
 
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                  [Page 7]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    Even if a single TCP connection would be able to fill the
    bottleneck's buffer, it may take some time for a single TCP
    connection to ramp up to full speed.  One of the goals of the RPM
@@ -386,14 +409,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    purpose of the RPM Test is, as quickly as possible, to simulate a
    representative traffic load as if real applications were doing
    sustained data transfers, measure the resulting round-trip time
-
-
-
-Paasch, et al.            Expires 24 April 2023                 [Page 7]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
    occurring under those realistic conditions, and then end the test.
    Because of this, using multiple simultaneous parallel connections
    allows the RPM test to complete its task more quickly, in a way that
@@ -427,6 +442,14 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    Thus, we recommend testing uplink and downlink sequentially.
    Parallel testing is considered a future extension.
 
+
+
+
+Paasch, et al.             Expires 9 July 2023                  [Page 8]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
 4.1.3.  Reaching full buffer utilization
 
    The RPM Test gradually increases the number of TCP connections and
@@ -442,14 +465,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    throughput eventually stalls, often due to receive window
    limitations, particularly in cases of high network bandwidth, high
    network round-trip time, low receive window size, or a combination of
-
-
-
-Paasch, et al.            Expires 24 April 2023                 [Page 8]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
-
    all three.  The only means to further increase throughput is by
    adding more TCP connections to the pool of load-generating
    connections.  If new connections leave the throughput the same, full
@@ -481,6 +496,16 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
        connection should take less time than creating a brand new TLS
        connection from scratch to do the same thing.
 
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                  [Page 9]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    Foreign probes will provide 3 sets of data-points.  First, the
    duration of the TCP-handshake (noted hereafter as tcp_foreign).
    Second, the TLS round-trip-time (noted tls_foreign).  For this, it is
@@ -498,13 +523,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
    tcp_foreign, tls_foreign, http_foreign and http_self are all measured
    in milliseconds.
-
-
-
-Paasch, et al.            Expires 24 April 2023                 [Page 9]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
    The more probes that are sent, the more data is available for
    calculation.  In order to generate as much data as possible, the
@@ -535,6 +553,15 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
    This responsiveness value presents round-trips per minute (RPM).
 
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 10]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
 4.3.  Final Algorithm
 
    Considering the previous two sections, where we explain what the
@@ -548,19 +575,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    We need to continuously measure goodput and responsiveness and as
    soon as we detect stability for both metrics we can ensure that the
    full working conditions have been reached.
-
-
-
-
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 10]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
    The following algorithm reaches working conditions of a network by
    using HTTP/2 upload (POST) or download (GET) requests of infinitely
@@ -596,6 +610,14 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
    *  At each interval:
 
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 11]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
       -  Create an additional load-generating connection.
 
       -  Compute the instantaneous aggregate goodput at interval i.
@@ -608,15 +630,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
          than a 5% increase over the moving average aggregate goodput at
          interval i - 1, the network has not yet reached full link
          utilization.  Continue for 4 more iterations.
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 11]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
       -  If the responsiveness at interval i is more than a 5% reduction
          over the responsiveness at interval i - 1, the network has not
@@ -654,6 +667,13 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    stack.  The following outlines how each of these contributes to the
    responsiveness.
 
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 12]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
 5.1.1.  Client side influence
 
    As the driver of the measurement, the client-side networking stack
@@ -663,16 +683,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    layer as well as the HTTP layer.  Additionally, if the network's
    bottleneck is on the first hop, queue-buildup will happen at the
    layers below the transport stack (e.g., NIC firmware).
-
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 12]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
    Each of these queue build-ups may cause latency and thus low
    responsiveness.  A well designed networking stack would ensure that
@@ -710,25 +720,21 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    the latency probes on the load-generating connections may be
    influenced differently than the probes on the separate connections.
 
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 13]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
 5.1.3.  Server side influence
 
    Finally, the server-side introduces the same kind of influence on the
    responsiveness as the client-side, with the difference that the
    responsiveness will be impacted during the downlink load generation.
-
-
-
-
-
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 13]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
 5.2.  Root-causing Responsiveness
 
@@ -770,6 +776,16 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    server MUST use a packet scheduling algorithm that minimizes internal
    queueing to avoid affecting the client's measurement.
 
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 14]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    As clients and servers become deployed that use L4S congestion
    control (e.g., TCP Prague with ECT(1) packet marking), for their
    normal traffic when it is available, and fall back to traditional
@@ -777,14 +793,6 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    same strategy SHOULD be used for RPM test traffic.  This is
    RECOMMENDED so that the synthetic traffic generated by the RPM test
    mimics real-world traffic for that server.
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 14]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
    Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
    SHOULD NOT be used for RPM test traffic because they take much longer
@@ -821,6 +829,19 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
        instead close the connection after reaching working condition and
        making its measurements.
 
+
+
+
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 15]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    3.  An "upload" URL/response: The server must handle a POST request
        with an arbitrary body size.  The server should discard the
        payload.  The actual POST message content is irrelevant.  The
@@ -828,19 +849,67 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
        instead close the connection after reaching working condition and
        making its measurements.
 
-   4.  A configuration URL that returns a JSON [RFC8259] object with the
-       information the client uses to run the test (sample below).  The
-       server SHOULD specify the content-type as application/json.
-       Sample JSON:
+   4.  A .well-known URL [RFC8615] which contains configuration
+       information for the client to run the test (See Section 7,
+       below.)
+
+   The client begins the responsiveness measurement by querying for the
+   JSON configuration.  This supplies the URLs for creating the load-
+   generating connections in the upstream and downstream direction as
+   well as the small object for the latency measurements.
+
+7.  RPM Test Server Discovery
+
+   It makes sense for a service provider (either an application service
+   provider like a video conferencing service or a network access
+   provider like an ISP) to host RPM Test Server instances on their
+   network so customers can determine what to expect about the the
+   quality of their connection to the service offered by that provider.
+   However, when a user performs an RPM test and determines that they
+   are suffering from poor RPM during the connection to that service,
+   the logical next questions might be,
+
+   1.  "What's causing my poor performance?"
+
+   2.  "Is it poor buffer management by my ISP?"
+
+   3.  "Is it poor buffer management in my home Wi-Fi Access point?"
+
+   4.  "Something to do with the service provider?"
+
+   5.  "Something else entirely?"
+
+   To help an end user answer these questions, it will be useful for
+   test clients to be able to easily discover RPM Test Server instances
+   running in various places in the network (e.g., their home router,
+   their Wi-Fi access point, their ISP's head-end equipment, etc).
+
+   Consider this example scenario: A user has a cable modem service
+   offering 100 Mb/s download speed, connected via gigabit Ethernet to
+   one or more Wi-Fi access points in their home, which then offer
+   service to Wi-Fi client devices at different rates depending on
+   distance, interference from other traffic, etc.  By having the cable
+   modem itself host an RPM Test Server instance, the user can then run
 
 
 
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 15]
+Paasch, et al.             Expires 9 July 2023                 [Page 16]
 
-Internet-Draft   Responsiveness under Working Conditions    October 2022
+Internet-Draft   Responsiveness under Working Conditions    January 2023
 
+
+   a test between the cable modem and their computer or smartphone, to
+   help isolate whether bufferbloat they are experiencing is occurring
+   in equipment inside the home (like their Wi-Fi access points) or
+   somewhere outside the home.
+
+7.1.  Well-Known Uniform Resource Identifier (URI) For Test Server
+      Discovery
+
+   Any organization that wishes to host their own instance of an RPM
+   Test Server can advertise that capability by hosting at the network
+   quality well-known URI a resource whose content type is application/
+   json and contains a valid JSON object meeting the following criteria:
 
    {
      "version": 1,
@@ -852,64 +921,70 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
      "test_endpoint": "hostname123.provider.com"
    }
 
-   All of the fields in the sample configuration are required except
-   "test_endpoint".  If the test server provider can pin all of the
-   requests for a test run to a specific host in the service (for a
-   particular run), they can specify that host name in the
-   "test_endpoint" field.
+   The server SHALL specify the content-type of the resource at the
+   well-known URI as application/json.
 
-   The client begins the responsiveness measurement by querying for the
-   JSON configuration.  This supplies the URLs for creating the load-
-   generating connections in the upstream and downstream direction as
-   well as the small object for the latency measurements.
+   The content of the "version" field SHALL be "1".  Integer values
+   greater than "1" are reserved for future versions of this protocol.
+   The content of the "large_https_download_url",
+   "small_https_download_url", and "https_upload_url" SHALL all be
+   validly formatted "http" or "https" URLs.  See above for the
+   semantics of the fields.  All of the fields in the sample
+   configuration are required except "test_endpoint".  If the test
+   server provider can pin all of the requests for a test run to a
+   specific host in the service (for a particular run), they can specify
+   that host name in the "test_endpoint" field.
 
-7.  RPM Test Server Discovery
-
-   It makes sense to host RPM Test Server instances in Internet Data
-   Centers where they can be accessed easily by users wishing to test
-   the quality of their Internet connection.  However, when a user
-   performs an RPM test and determines that they are suffering from poor
-   RPM during download, the logical next question might be, "What's
-   causing my poor performance?  Is it poor buffer management by my ISP?
-   Is it poor buffer management in my home Wi-Fi Access point?
-   Something else?"
-
-   To help an end user answer this question, it will be useful for home
-   gateway equipment to host RPM Test Server instances.  In an example
-   configuration, a user may have cable modem service offering 100 Mb/s
-   download speed, connected via gigabit Ethernet to one or more Wi-Fi
-   access points in the home, which then offer service to Wi-Fi client
-   devices at different rates depending on distance, interference from
-   other traffic, etc.  By having the cable modem itself host an RPM
-   Test Server instance, the user can then run a test between the cable
-   modem and their computer or smartphone, to help isolate whether
-   bufferbloat they are experiencing is occurring in equipment inside
-   the home (like their Wi-Fi access points) or somewhere outside the
-   home.
-
-   To aid in discoverability of these facilities, local RPM Test Server
-   instances SHOULD advertise the availability of service type [RFC6335]
-   "_nq._tcp" (Network Quality), via DNS-Based Service Discovery
+   For purposes of registration of the well-known URI [RFC8615], the
+   application name is "nq".  The media type of the resource at the
+   well-known URI is "application/json" and the format of the resource
+   is as specified above.  The URI scheme is "https".  No additional
+   path components, query strings or fragments are valid for this well-
+   known URI.
 
 
 
-Paasch, et al.            Expires 24 April 2023                [Page 16]
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 17]
 
-Internet-Draft   Responsiveness under Working Conditions    October 2022
+Internet-Draft   Responsiveness under Working Conditions    January 2023
 
 
-   [RFC6763], using Multicast DNS on its local link(s) [RFC6762].  Where
-   applicable, an RPM Test Server instance SHOULD also advertise the
-   availability of its service via unicast discovery, for discovery by
-   client devices not directly attached to the same link.  Population of
-   the appropriate DNS zone with the relevant unicast discovery records
-   can be performed automatically using a Discovery Proxy [RFC8766], or
-   in some scenarios simply by having a human administrator manually
-   enter the required records.  Similarly, a "cloud" service, providing
-   Internet hosting service for "example.com" could choose to include
-   the relevant DNS-SD records within the "example.com" domain [RFC6763]
-   to communicate to clients the list of available RPM Test Server
-   instances.
+7.2.  DNS-Based Service Discovery for Test Server Discovery
+
+   To further aid the test client in discovering instances of the RPM
+   Test Server, organizations wishing to host their own instances of the
+   Test Server MAY advertise their availability using DNS-Based Service
+   Discovery [RFC6763] using conventional, unicast DNS [RFC1034] or
+   multicast DNS [RFC6762] on the organization network's local link(s).
+
+   The RPM Test Service instances should advertise using the service
+   type [RFC6335] "_nq._tcp".  Population of the appropriate DNS zone
+   with the relevant unicast discovery records can be performed
+   automatically using a Discovery Proxy [RFC8766], or in some scenarios
+   simply by having a human administrator manually enter the required
+   records.
+
+7.2.1.  Example
+
+   An obscure service provider hosting an RPM Test Server instance for
+   their organization (obs.cr) on the "rpm.obs.cr" host would return the
+   following answers to PTR and SRV conventional DNS queries:
+
+   $ nslookup -q=ptr _nq._tcp.obs.cr.
+   Non-authoritative answer:
+   _nq._tcp.obs.crname = rpm._nq._tcp.obs.cr.
+   $ nslookup -q=srv rpm._nq._tcp.obs.cr.
+   Non-authoritative answer:
+   rpm._nq._tcp.obs.crservice = 0 0 443 rpm.obs.cr.
+
+   Given those conventional DNS query responses, the client would
+   proceed to access the rpm.obs.cr host on port 443 at the .well-known/
+   nq well-known URI to begin the test.
 
 8.  Security Considerations
 
@@ -920,6 +995,20 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
    IANA has been requested to record the service type "_nq._tcp"
    (Network Quality) for advertising and discovery of RPM Test Server
    instances.
+
+
+
+
+
+
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 18]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
 
 10.  Acknowledgments
 
@@ -945,14 +1034,9 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
               DOI 10.17487/RFC0793, September 1981,
               <https://www.rfc-editor.org/info/rfc793>.
 
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 17]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
+   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
+              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
+              <https://www.rfc-editor.org/info/rfc1034>.
 
    [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.
               Cheshire, "Internet Assigned Numbers Authority (IANA)
@@ -975,10 +1059,12 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
               Problem", RFC 8033, DOI 10.17487/RFC8033, February 2017,
               <https://www.rfc-editor.org/info/rfc8033>.
 
-   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
-              Interchange Format", STD 90, RFC 8259,
-              DOI 10.17487/RFC8259, December 2017,
-              <https://www.rfc-editor.org/info/rfc8259>.
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 19]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
 
    [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,
               J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler
@@ -986,9 +1072,9 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
               DOI 10.17487/RFC8290, January 2018,
               <https://www.rfc-editor.org/info/rfc8290>.
 
-   [RFC8446]  Rescorla, E., "The Transport Layer Security (TLS) Protocol
-              Version 1.3", RFC 8446, DOI 10.17487/RFC8446, August 2018,
-              <https://www.rfc-editor.org/info/rfc8446>.
+   [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers
+              (URIs)", RFC 8615, DOI 10.17487/RFC8615, May 2019,
+              <https://www.rfc-editor.org/info/rfc8615>.
 
    [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based
               Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June
@@ -998,17 +1084,6 @@ Appendix A.  Example Server Configuration
 
    This section shows fragments of sample server configurations to host
    an responsiveness measurement endpoint.
-
-
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 18]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
-
 
 A.1.  Apache Traffic Server
 
@@ -1038,6 +1113,15 @@ A.1.  Apache Traffic Server
 
 Authors' Addresses
 
+
+
+
+
+Paasch, et al.             Expires 9 July 2023                 [Page 20]
+
+Internet-Draft   Responsiveness under Working Conditions    January 2023
+
+
    Christoph Paasch
    Apple Inc.
    One Apple Park Way
@@ -1052,18 +1136,6 @@ Authors' Addresses
    Cupertino, California 95014,
    United States of America
    Email: rrm@apple.com
-
-
-
-
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 19]
-
-Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
    Stuart Cheshire
@@ -1101,20 +1173,4 @@ Internet-Draft   Responsiveness under Working Conditions    October 2022
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Paasch, et al.            Expires 24 April 2023                [Page 20]
+Paasch, et al.             Expires 9 July 2023                 [Page 21]

@@ -74,14 +74,14 @@ informative:
     title: "Transmission Control Protocol (TCP) Specification"
     seriesinfo: Internet Engineering Task Force
   RFC0793:
+  RFC1034:
   RFC6335:
   RFC6762:
   RFC6763:
+  RFC8615:
   RFC8766:
   RFC8290:
   RFC8033:
-  RFC8259:
-  RFC8446:
 
 --- abstract
 
@@ -688,10 +688,51 @@ The client will probably never completely upload the object,
 but will instead close the connection after reaching working condition
 and making its measurements.
 
-4. A configuration URL that returns a JSON {{RFC8259}} object with the information
-the client uses to run the test (sample below). The server SHOULD specify the
-content-type as application/json.
-Sample JSON:
+4. A .well-known URL {{RFC8615}} which contains configuration information for 
+the client to run the test (See {{discovery}}, below.)
+
+The client begins the responsiveness measurement by querying for the JSON configuration.
+This supplies the URLs for creating the load-generating connections in
+the upstream and downstream direction as well as the small object
+for the latency measurements.
+
+# RPM Test Server Discovery {#discovery}
+
+It makes sense for a service provider (either an application service provider like a video conferencing service
+or a network access provider like an ISP) to host RPM Test Server instances on their
+network so customers can determine what to expect about the the quality of their connection to 
+the service offered by that provider.
+However, when a user performs an RPM test and determines
+that they are suffering from poor RPM during the connection to that service,
+the logical next questions might be,
+
+1. "What’s causing my poor performance?"
+1. "Is it poor buffer management by my ISP?"
+1. "Is it poor buffer management in my home Wi-Fi Access point?"
+1. "Something to do with the service provider?"
+1. "Something else entirely?”
+
+To help an end user answer these questions, it will be useful for test clients
+to be able to easily discover RPM Test Server instances running in various
+places in the network (e.g., their home router, their Wi-Fi access point, their ISP's
+head-end equipment, etc).
+
+Consider this example scenario: A user has a cable modem
+service offering 100 Mb/s download speed, connected via
+gigabit Ethernet to one or more Wi-Fi access points in their home,
+which then offer service to Wi-Fi client devices at different rates
+depending on distance, interference from other traffic, etc.
+By having the cable modem itself host an RPM Test Server instance,
+the user can then run a test between the cable modem and their computer
+or smartphone, to help isolate whether bufferbloat they are experiencing
+is occurring in equipment inside the home (like their Wi-Fi access points)
+or somewhere outside the home.
+
+## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
+
+Any organization that wishes to host their own instance of an RPM Test Server can advertise that capability
+by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the 
+following criteria:
 
 ~~~
 {
@@ -705,59 +746,53 @@ Sample JSON:
 }
 ~~~
 
+The server SHALL specify the content-type of the resource at the well-known URI as application/json.
+
+The content of the "version" field SHALL be "1". Integer values greater than "1" are reserved
+for future versions of this protocol.
+The content of the "large_https_download_url", "small_https_download_url", and "https_upload_url" SHALL
+all be validly formatted "http" or "https" URLs. See above for the semantics of the fields.
 All of the fields in the sample configuration are required except "test\_endpoint".
 If the test server provider can pin all of the requests for a test run to a specific
 host in the service (for a particular run), they can specify that host name in the
 "test\_endpoint" field.
 
-The client begins the responsiveness measurement by querying for the JSON configuration.
-This supplies the URLs for creating the load-generating connections in
-the upstream and downstream direction as well as the small object
-for the latency measurements.
+For purposes of registration of the well-known URI {{RFC8615}}, the application name is "nq". The media type
+of the resource at the well-known URI is "application/json" and the format of the resource is as specified
+above. The URI scheme is "https". No additional path components, query strings or fragments are valid
+for this well-known URI.
 
-# RPM Test Server Discovery
+## DNS-Based Service Discovery for Test Server Discovery
 
-It makes sense to host RPM Test Server instances in Internet
-Data Centers where they can be accessed easily by users
-wishing to test the quality of their Internet connection.
-However, when a user performs an RPM test and determines
-that they are suffering from poor RPM during download,
-the logical next question might be,
-“What’s causing my poor performance?
-Is it poor buffer management by my ISP?
-Is it poor buffer management in my home Wi-Fi Access point?
-Something else?”
+To further aid the test client in discovering instances of the RPM Test Server, organizations
+wishing to host their own instances of the Test Server MAY advertise their availability using
+DNS-Based Service Discovery {{RFC6763}} using conventional, unicast DNS {{RFC1034}} or multicast DNS {{RFC6762}}
+on the organization network's local link(s).
 
-To help an end user answer this question, it will be useful for home gateway
-equipment to host RPM Test Server instances.
-In an example configuration, a user may have cable modem
-service offering 100 Mb/s download speed, connected via
-gigabit Ethernet to one or more Wi-Fi access points in the home,
-which then offer service to Wi-Fi client devices at different rates
-depending on distance, interference from other traffic, etc.
-By having the cable modem itself host an RPM Test Server instance,
-the user can then run a test between the cable modem and their computer
-or smartphone, to help isolate whether bufferbloat they are experiencing
-is occurring in equipment inside the home (like their Wi-Fi access points)
-or somewhere outside the home.
-
-To aid in discoverability of these facilities,
-local RPM Test Server instances SHOULD advertise the availability
-of service type {{RFC6335}} “_nq._tcp” (Network Quality),
-via DNS-Based Service Discovery {{RFC6763}},
-using Multicast DNS on its local link(s) {{RFC6762}}.
-Where applicable, an RPM Test Server instance SHOULD also advertise
-the availability of its service via unicast discovery,
-for discovery by client devices not directly attached to the same link.
-Population of the appropriate DNS zone with the
+The RPM Test Service instances should advertise using the service type {{RFC6335}} 
+"_nq._tcp".  Population of the appropriate DNS zone with the
 relevant unicast discovery records can be performed
 automatically using a Discovery Proxy {{RFC8766}},
 or in some scenarios simply by having a human
 administrator manually enter the required records.
-Similarly, a “cloud” service, providing Internet hosting service for
-“example.com” could choose to include the relevant DNS-SD records
-within the “example.com” domain {{RFC6763}} to communicate
-to clients the list of available RPM Test Server instances.
+
+### Example
+
+An obscure service provider hosting an RPM Test Server instance for their
+organization (obs.cr) on the "rpm.obs.cr" host would return the following answers
+to PTR and SRV conventional DNS queries:
+
+~~~
+$ nslookup -q=ptr _nq._tcp.obs.cr.
+Non-authoritative answer:
+_nq._tcp.obs.crname = rpm._nq._tcp.obs.cr.
+$ nslookup -q=srv rpm._nq._tcp.obs.cr.
+Non-authoritative answer:
+rpm._nq._tcp.obs.crservice = 0 0 443 rpm.obs.cr.
+~~~
+
+Given those conventional DNS query responses, the client would proceed to access the rpm.obs.cr
+host on port 443 at the .well-known/nq well-known URI to begin the test.
 
 # Security Considerations
 
