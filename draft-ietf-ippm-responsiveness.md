@@ -697,9 +697,9 @@ Sample JSON:
 {
   "version": 1,
   "urls": {
-    "large_https_download_url":"https://nq.example.com/api/v1/large",
-    "small_https_download_url":"https://nq.example.com/api/v1/small",
-    "https_upload_url":        "https://nq.example.com/api/v1/upload"
+    "large_download_url":"https://nq.example.com/api/v1/large",
+    "small_download_url":"https://nq.example.com/api/v1/small",
+    "upload_url":        "https://nq.example.com/api/v1/upload"
   }
   "test_endpoint": "hostname123.provider.com"
 }
