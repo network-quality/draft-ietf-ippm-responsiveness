@@ -750,7 +750,7 @@ The server SHALL specify the content-type of the resource at the well-known URI 
 
 The content of the "version" field SHALL be "1". Integer values greater than "1" are reserved
 for future versions of this protocol.
-The content of the "large_https_download_url", "small_https_download_url", and "https_upload_url" SHALL
+The content of the "large_download_url", "small_download_url", and "upload_url" SHALL
 all be validly formatted "http" or "https" URLs. See above for the semantics of the fields.
 All of the fields in the sample configuration are required except "test\_endpoint".
 If the test server provider can pin all of the requests for a test run to a specific
