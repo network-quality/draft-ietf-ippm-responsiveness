@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: Christoph Paasch
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Wed Feb 22 15:05:35 2023
+%%CreationDate: Wed Feb 22 15:11:24 2023
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -445,64 +445,68 @@ _S
 5 693 M
 (                                                              Apple Inc.) s
 5 682 M
-(                                                               M. Mathis) s
+(                                                              W. Hawkins) s
 5 671 M
-(                                                             Google, Inc) s
+(                                                University of Cincinnati) s
 5 660 M
+(                                                               M. Mathis) s
+5 649 M
+(                                                             Google, Inc) s
+5 638 M
 (                                                        22 February 2023) s
-5 627 M
+5 605 M
 (                Responsiveness under Working Conditions) s
-5 616 M
-(                   draft-ietf-ippm-responsiveness-01) s
 5 594 M
-(Abstract) s
+(                   draft-ietf-ippm-responsiveness-01) s
 5 572 M
-(   For many years, a lack of responsiveness, variously called lag,) s
-5 561 M
-(   latency, or bufferbloat, has been recognized as an unfortunate, but) s
+(Abstract) s
 5 550 M
-(   common, symptom in today's networks.  Even after a decade of work on) s
+(   For many years, a lack of responsiveness, variously called lag,) s
 5 539 M
-(   standardizing technical solutions, it remains a common problem for) s
+(   latency, or bufferbloat, has been recognized as an unfortunate, but) s
 5 528 M
-(   the end users.) s
+(   common, symptom in today's networks.  Even after a decade of work on) s
+5 517 M
+(   standardizing technical solutions, it remains a common problem for) s
 5 506 M
-(   Everyone "knows" that it is "normal" for a video conference to have) s
-5 495 M
-(   problems when somebody else at home is watching a 4K movie or) s
+(   the end users.) s
 5 484 M
-(   uploading photos from their phone.  However, there is no technical) s
+(   Everyone "knows" that it is "normal" for a video conference to have) s
 5 473 M
-(   reason for this to be the case.  In fact, various queue management) s
+(   problems when somebody else at home is watching a 4K movie or) s
 5 462 M
-(   solutions \(fq_codel, cake, PIE\) have solved the problem.) s
+(   uploading photos from their phone.  However, there is no technical) s
+5 451 M
+(   reason for this to be the case.  In fact, various queue management) s
 5 440 M
-(   Our networks remain unresponsive, not from a lack of technical) s
-5 429 M
-(   solutions, but rather a lack of awareness of the problem and its) s
+(   solutions \(fq_codel, cake, PIE\) have solved the problem.) s
 5 418 M
-(   solutions.  We believe that creating a tool whose measurement matches) s
+(   Our networks remain unresponsive, not from a lack of technical) s
 5 407 M
-(   people's everyday experience will create the necessary awareness, and) s
+(   solutions, but rather a lack of awareness of the problem and its) s
 5 396 M
-(   result in a demand for products that solve the problem.) s
+(   solutions.  We believe that creating a tool whose measurement matches) s
+5 385 M
+(   people's everyday experience will create the necessary awareness, and) s
 5 374 M
-(   This document specifies the "RPM Test" for measuring responsiveness.) s
-5 363 M
-(   It uses common protocols and mechanisms to measure user experience) s
+(   result in a demand for products that solve the problem.) s
 5 352 M
-(   specifically when the network is under working conditions.  The) s
+(   This document specifies the "RPM Test" for measuring responsiveness.) s
 5 341 M
-(   measurement is expressed as "Round-trips Per Minute" \(RPM\) and should) s
+(   It uses common protocols and mechanisms to measure user experience) s
 5 330 M
-(   be included with throughput \(up and down\) and idle latency as) s
+(   specifically when the network is under working conditions.  The) s
 5 319 M
-(   critical indicators of network quality.) s
+(   measurement is expressed as "Round-trips Per Minute" \(RPM\) and should) s
+5 308 M
+(   be included with throughput \(up and down\) and idle latency as) s
 5 297 M
-(Status of This Memo) s
+(   critical indicators of network quality.) s
 5 275 M
+(Status of This Memo) s
+5 253 M
 (   This Internet-Draft is submitted in full conformance with the) s
-5 264 M
+5 242 M
 (   provisions of BCP 78 and BCP 79.) s
 5 176 M
 (Paasch, et al.           Expires 26 August 2023                 [Page 1]) s
@@ -641,7 +645,7 @@ _S
 5 638 M
 (     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  20) s
 5 627 M
-(   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20) s
+(   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21) s
 5 605 M
 (1.  Introduction) s
 5 583 M
@@ -1850,11 +1854,11 @@ _S
 5 616 M
 (   The client begins the responsiveness measurement by querying for the) s
 5 605 M
-(   JSON configuration.  This supplies the URLs for creating the load-) s
+(   JSON [RFC8259] configuration.  This supplies the URLs for creating) s
 5 594 M
-(   generating connections in the upstream and downstream direction as) s
+(   the load-generating connections in the upstream and downstream) s
 5 583 M
-(   well as the small object for the latency measurements.) s
+(   direction as well as the small object for the latency measurements.) s
 5 561 M
 (7.  RPM Test Server Discovery) s
 5 539 M
@@ -1864,9 +1868,9 @@ _S
 5 517 M
 (   provider like an ISP\) to host RPM Test Server instances on their) s
 5 506 M
-(   network so customers can determine what to expect about the the) s
+(   network so customers can determine what to expect about the quality) s
 5 495 M
-(   quality of their connection to the service offered by that provider.) s
+(   of their connection to the service offered by that provider.) s
 5 484 M
 (   However, when a user performs an RPM test and determines that they) s
 5 473 M
@@ -2182,73 +2186,51 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions   February 2023) s
 5 737 M
-(   [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,) s
+(   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation \(JSON\) Data) s
 5 726 M
-(              J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler) s
+(              Interchange Format", STD 90, RFC 8259,) s
 5 715 M
-(              and Active Queue Management Algorithm", RFC 8290,) s
+(              DOI 10.17487/RFC8259, December 2017,) s
 5 704 M
-(              DOI 10.17487/RFC8290, January 2018,) s
-5 693 M
-(              <https://www.rfc-editor.org/info/rfc8290>.) s
+(              <https://www.rfc-editor.org/info/rfc8259>.) s
+5 682 M
+(   [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,) s
 5 671 M
-(   [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers) s
+(              J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler) s
 5 660 M
-(              \(URIs\)", RFC 8615, DOI 10.17487/RFC8615, May 2019,) s
+(              and Active Queue Management Algorithm", RFC 8290,) s
 5 649 M
-(              <https://www.rfc-editor.org/info/rfc8615>.) s
-5 627 M
-(   [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based) s
+(              DOI 10.17487/RFC8290, January 2018,) s
+5 638 M
+(              <https://www.rfc-editor.org/info/rfc8290>.) s
 5 616 M
-(              Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June) s
+(   [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers) s
 5 605 M
-(              2020, <https://www.rfc-editor.org/info/rfc8766>.) s
-5 583 M
-(Appendix A.  Example Server Configuration) s
+(              \(URIs\)", RFC 8615, DOI 10.17487/RFC8615, May 2019,) s
+5 594 M
+(              <https://www.rfc-editor.org/info/rfc8615>.) s
+5 572 M
+(   [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based) s
 5 561 M
-(   This section shows fragments of sample server configurations to host) s
+(              Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June) s
 5 550 M
-(   an responsiveness measurement endpoint.) s
+(              2020, <https://www.rfc-editor.org/info/rfc8766>.) s
 5 528 M
-(A.1.  Apache Traffic Server) s
+(Appendix A.  Example Server Configuration) s
 5 506 M
-(   Apache Traffic Server starting at version 9.1.0 supports) s
+(   This section shows fragments of sample server configurations to host) s
 5 495 M
-(   configuration as a responsiveness server.  It requires the generator) s
-5 484 M
-(   and the statichit plugin.) s
-5 462 M
-(   The sample remap configuration file then is:) s
+(   an responsiveness measurement endpoint.) s
+5 473 M
+(A.1.  Apache Traffic Server) s
+5 451 M
+(   Apache Traffic Server starting at version 9.1.0 supports) s
 5 440 M
-(   map https://nq.example.com/api/v1/config \\) s
+(   configuration as a responsiveness server.  It requires the generator) s
 5 429 M
-(       http://localhost/ \\) s
-5 418 M
-(       @plugin=statichit.so \\) s
+(   and the statichit plugin.) s
 5 407 M
-(       @pparam=--file-path=config.example.com.json \\) s
-5 396 M
-(       @pparam=--mime-type=application/json) s
-5 374 M
-(   map https://nq.example.com/api/v1/large \\) s
-5 363 M
-(       http://localhost/cache/8589934592/ \\) s
-5 352 M
-(       @plugin=generator.so) s
-5 330 M
-(   map https://nq.example.com/api/v1/small \\) s
-5 319 M
-(       http://localhost/cache/1/ \\) s
-5 308 M
-(       @plugin=generator.so) s
-5 286 M
-(   map https://nq.example.com/api/v1/upload \\) s
-5 275 M
-(       http://localhost/ \\) s
-5 264 M
-(       @plugin=generator.so) s
-5 242 M
-(Authors' Addresses) s
+(   The sample remap configuration file then is:) s
 5 176 M
 (Paasch, et al.           Expires 26 August 2023                [Page 20]) s
 _R
@@ -2267,7 +2249,90 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions   February 2023) s
 5 737 M
+(   map https://nq.example.com/api/v1/config \\) s
+5 726 M
+(       http://localhost/ \\) s
+5 715 M
+(       @plugin=statichit.so \\) s
+5 704 M
+(       @pparam=--file-path=config.example.com.json \\) s
+5 693 M
+(       @pparam=--mime-type=application/json) s
+5 671 M
+(   map https://nq.example.com/api/v1/large \\) s
+5 660 M
+(       http://localhost/cache/8589934592/ \\) s
+5 649 M
+(       @plugin=generator.so) s
+5 627 M
+(   map https://nq.example.com/api/v1/small \\) s
+5 616 M
+(       http://localhost/cache/1/ \\) s
+5 605 M
+(       @plugin=generator.so) s
+5 583 M
+(   map https://nq.example.com/api/v1/upload \\) s
+5 572 M
+(       http://localhost/ \\) s
+5 561 M
+(       @plugin=generator.so) s
+5 539 M
+(Authors' Addresses) s
+5 517 M
 (   Christoph Paasch) s
+5 506 M
+(   Apple Inc.) s
+5 495 M
+(   One Apple Park Way) s
+5 484 M
+(   Cupertino, California 95014,) s
+5 473 M
+(   United States of America) s
+5 462 M
+(   Email: cpaasch@apple.com) s
+5 429 M
+(   Randall Meyer) s
+5 418 M
+(   Apple Inc.) s
+5 407 M
+(   One Apple Park Way) s
+5 396 M
+(   Cupertino, California 95014,) s
+5 385 M
+(   United States of America) s
+5 374 M
+(   Email: rrm@apple.com) s
+5 341 M
+(   Stuart Cheshire) s
+5 330 M
+(   Apple Inc.) s
+5 319 M
+(   One Apple Park Way) s
+5 308 M
+(   Cupertino, California 95014,) s
+5 297 M
+(   United States of America) s
+5 286 M
+(   Email: cheshire@apple.com) s
+5 176 M
+(Paasch, et al.           Expires 26 August 2023                [Page 21]) s
+_R
+S
+%%Page: (22) 22
+%%BeginPageSetup
+_S
+24 24 translate
+/pagenum 22 def
+/fname (draft-ietf-ippm-responsiveness.txt) def
+/fdir (.) def
+/ftail (draft-ietf-ippm-responsiveness.txt) def
+/user_header_p false def
+/user_footer_p false def
+%%EndPageSetup
+5 770 M
+(Internet-Draft   Responsiveness under Working Conditions   February 2023) s
+5 737 M
+(   Omer Shapira) s
 5 726 M
 (   Apple Inc.) s
 5 715 M
@@ -2277,60 +2342,30 @@ _S
 5 693 M
 (   United States of America) s
 5 682 M
-(   Email: cpaasch@apple.com) s
-5 649 M
-(   Randall Meyer) s
-5 638 M
-(   Apple Inc.) s
-5 627 M
-(   One Apple Park Way) s
-5 616 M
-(   Cupertino, California 95014,) s
-5 605 M
-(   United States of America) s
-5 594 M
-(   Email: rrm@apple.com) s
-5 561 M
-(   Stuart Cheshire) s
-5 550 M
-(   Apple Inc.) s
-5 539 M
-(   One Apple Park Way) s
-5 528 M
-(   Cupertino, California 95014,) s
-5 517 M
-(   United States of America) s
-5 506 M
-(   Email: cheshire@apple.com) s
-5 473 M
-(   Omer Shapira) s
-5 462 M
-(   Apple Inc.) s
-5 451 M
-(   One Apple Park Way) s
-5 440 M
-(   Cupertino, California 95014,) s
-5 429 M
-(   United States of America) s
-5 418 M
 (   Email: oesh@apple.com) s
-5 385 M
+5 649 M
+(   Will Hawkins) s
+5 638 M
+(   University of Cincinnati) s
+5 627 M
+(   Email: hawkinwh@ucmail.uc.edu) s
+5 594 M
 (   Matt Mathis) s
-5 374 M
+5 583 M
 (   Google, Inc) s
-5 363 M
+5 572 M
 (   1600 Amphitheatre Parkway) s
-5 352 M
+5 561 M
 (   Mountain View, CA  94043,) s
-5 341 M
+5 550 M
 (   United States of America) s
-5 330 M
+5 539 M
 (   Email: mattmathis@google.com) s
 5 176 M
-(Paasch, et al.           Expires 26 August 2023                [Page 21]) s
+(Paasch, et al.           Expires 26 August 2023                [Page 22]) s
 _R
 S
 %%Trailer
-%%Pages: 21
+%%Pages: 22
 %%DocumentNeededResources: font Courier-Bold Courier 
 %%EOF

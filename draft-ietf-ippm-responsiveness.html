@@ -9,6 +9,7 @@
 <meta content="Randall Meyer" name="author">
 <meta content="Stuart Cheshire" name="author">
 <meta content="Omer Shapira" name="author">
+<meta content="Will Hawkins" name="author">
 <meta content="Matt Mathis" name="author">
 <meta content="
        For many years, a lack of responsiveness, variously called
@@ -1256,6 +1257,10 @@ li > p:last-of-type {
 <div class="org">Apple Inc.</div>
 </div>
 <div class="author">
+      <div class="author-name">W. Hawkins</div>
+<div class="org">University of Cincinnati</div>
+</div>
+<div class="author">
       <div class="author-name">M. Mathis</div>
 <div class="org">Google, Inc</div>
 </div>
@@ -2081,7 +2086,7 @@ and making its measurements.<a href="#section-6-6.3" class="pilcrow">¶</a>
 the client to run the test (See <a href="#discovery" class="auto internal xref">Section 7</a>, below.)<a href="#section-6-6.4" class="pilcrow">¶</a>
 </li>
       </ol>
-<p id="section-6-7">The client begins the responsiveness measurement by querying for the JSON configuration.
+<p id="section-6-7">The client begins the responsiveness measurement by querying for the JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> configuration.
 This supplies the URLs for creating the load-generating connections in
 the upstream and downstream direction as well as the small object
 for the latency measurements.<a href="#section-6-7" class="pilcrow">¶</a></p>
@@ -2094,7 +2099,7 @@ for the latency measurements.<a href="#section-6-7" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-7-1">It makes sense for a service provider (either an application service provider like a video conferencing service
 or a network access provider like an ISP) to host RPM Test Server instances on their
-network so customers can determine what to expect about the the quality of their connection to 
+network so customers can determine what to expect about the quality of their connection to 
 the service offered by that provider.
 However, when a user performs an RPM test and determines
 that they are suffering from poor RPM during the connection to that service,
@@ -2269,6 +2274,10 @@ We also thank Erik Auerswald for his constructive feedback on the I-D.<a href="#
       <dd>
 <span class="refAuthor">Pan, R.</span>, <span class="refAuthor">Natarajan, P.</span>, <span class="refAuthor">Baker, F.</span>, and <span class="refAuthor">G. White</span>, <span class="refTitle">"Proportional Integral Controller Enhanced (PIE): A Lightweight Control Scheme to Address the Bufferbloat Problem"</span>, <span class="seriesInfo">RFC 8033</span>, <span class="seriesInfo">DOI 10.17487/RFC8033</span>, <time datetime="2017-02" class="refDate">February 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8033">https://www.rfc-editor.org/info/rfc8033</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8259">[RFC8259]</dt>
+      <dd>
+<span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8259">https://www.rfc-editor.org/info/rfc8259</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC8290">[RFC8290]</dt>
       <dd>
 <span class="refAuthor">Hoeiland-Joergensen, T.</span>, <span class="refAuthor">McKenney, P.</span>, <span class="refAuthor">Taht, D.</span>, <span class="refAuthor">Gettys, J.</span>, and <span class="refAuthor">E. Dumazet</span>, <span class="refTitle">"The Flow Queue CoDel Packet Scheduler and Active Queue Management Algorithm"</span>, <span class="seriesInfo">RFC 8290</span>, <span class="seriesInfo">DOI 10.17487/RFC8290</span>, <time datetime="2018-01" class="refDate">January 2018</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8290">https://www.rfc-editor.org/info/rfc8290</a>&gt;</span>. </dd>
@@ -2374,6 +2383,14 @@ map https://nq.example.com/api/v1/upload \
 <div class="email">
 <span>Email:</span>
 <a href="mailto:oesh@apple.com" class="email">oesh@apple.com</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Will Hawkins</span></div>
+<div dir="auto" class="left"><span class="org">University of Cincinnati</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:hawkinwh@ucmail.uc.edu" class="email">hawkinwh@ucmail.uc.edu</a>
 </div>
 </address>
 <address class="vcard">

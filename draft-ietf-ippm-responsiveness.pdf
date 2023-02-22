@@ -2,7 +2,7 @@
 %‚„œ”
 2 0 obj
 <<
-/Length 2670
+/Length 2830
 >>
 stream
 BT
@@ -21,6 +21,10 @@ T*
 (Expires: 26 August 2023                                       O. Shapira)Tj
 T*
 (                                                              Apple Inc.)Tj
+T*
+(                                                              W. Hawkins)Tj
+T*
+(                                                University of Cincinnati)Tj
 T*
 (                                                               M. Mathis)Tj
 T*
@@ -81,7 +85,7 @@ T*
 (   This Internet-Draft is submitted in full conformance with the)Tj
 0 -1.1 TD
 (   provisions of BCP 78 and BCP 79.)Tj
-0 -8.8 TD
+0 -6.6 TD
 (Paasch, et al.           Expires 26 August 2023                 [Page 1])Tj
 ET
 endstream
@@ -242,7 +246,7 @@ T*
 T*
 (     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  20)Tj
 T*
-(   Authorsí Addresses  . . . . . . . . . . . . . . . . . . . . . . .  20)Tj
+(   Authorsí Addresses  . . . . . . . . . . . . . . . . . . . . . . .  21)Tj
 0 -2.2 TD
 (1.  Introduction)Tj
 T*
@@ -1575,7 +1579,7 @@ endobj
 endobj
 52 0 obj
 <<
-/Length 2870
+/Length 2875
 >>
 stream
 BT
@@ -1607,11 +1611,11 @@ T*
 0 -2.2 TD
 (   The client begins the responsiveness measurement by querying for the)Tj
 0 -1.1 TD
-(   JSON configuration.  This supplies the URLs for creating the load-)Tj
+(   JSON [RFC8259] configuration.  This supplies the URLs for creating)Tj
 T*
-(   generating connections in the upstream and downstream direction as)Tj
+(   the load-generating connections in the upstream and downstream)Tj
 T*
-(   well as the small object for the latency measurements.)Tj
+(   direction as well as the small object for the latency measurements.)Tj
 0 -2.2 TD
 (7.  RPM Test Server Discovery)Tj
 T*
@@ -1621,9 +1625,9 @@ T*
 T*
 (   provider like an ISP\) to host RPM Test Server instances on their)Tj
 T*
-(   network so customers can determine what to expect about the the)Tj
+(   network so customers can determine what to expect about the quality)Tj
 T*
-(   quality of their connection to the service offered by that provider.)Tj
+(   of their connection to the service offered by that provider.)Tj
 T*
 (   However, when a user performs an RPM test and determines that they)Tj
 T*
@@ -1975,7 +1979,7 @@ endobj
 endobj
 64 0 obj
 <<
-/Length 2255
+/Length 1818
 >>
 stream
 BT
@@ -1987,6 +1991,14 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions   February 2023)Tj
 0 -3.3 TD
+(   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation \(JSON\) Data)Tj
+0 -1.1 TD
+(              Interchange Format", STD 90, RFC 8259,)Tj
+T*
+(              DOI 10.17487/RFC8259, December 2017,)Tj
+T*
+(              <https://www.rfc-editor.org/info/rfc8259>.)Tj
+0 -2.2 TD
 (   [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,)Tj
 0 -1.1 TD
 (              J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler)Tj
@@ -2024,7 +2036,36 @@ T*
 (   and the statichit plugin.)Tj
 0 -2.2 TD
 (   The sample remap configuration file then is:)Tj
-T*
+0 -23.1 TD
+(Paasch, et al.           Expires 26 August 2023                [Page 20])Tj
+ET
+endstream
+endobj
+65 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+67 0 obj
+<<
+/Length 1530
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions   February 2023)Tj
+0 -3.3 TD
 (   map https://nq.example.com/api/v1/config \\)Tj
 0 -1.1 TD
 (       http://localhost/ \\)Tj
@@ -2054,36 +2095,7 @@ T*
 (       @plugin=generator.so)Tj
 0 -2.2 TD
 (Authorsí Addresses)Tj
-0 -6.6 TD
-(Paasch, et al.           Expires 26 August 2023                [Page 20])Tj
-ET
-endstream
-endobj
-65 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-67 0 obj
-<<
-/Length 1213
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions   February 2023)Tj
-0 -3.3 TD
+T*
 (   Christoph Paasch)Tj
 0 -1.1 TD
 (   Apple Inc.)Tj
@@ -2119,6 +2131,35 @@ T*
 (   United States of America)Tj
 T*
 (   Email: cheshire@apple.com)Tj
+0 -11 TD
+(Paasch, et al.           Expires 26 August 2023                [Page 21])Tj
+ET
+endstream
+endobj
+68 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+71 0 obj
+<<
+/Length 732
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions   February 2023)Tj
 0 -3.3 TD
 (   Omer Shapira)Tj
 0 -1.1 TD
@@ -2132,6 +2173,12 @@ T*
 T*
 (   Email: oesh@apple.com)Tj
 0 -3.3 TD
+(   Will Hawkins)Tj
+0 -1.1 TD
+(   University of Cincinnati)Tj
+T*
+(   Email: hawkinwh@ucmail.uc.edu)Tj
+0 -3.3 TD
 (   Matt Mathis)Tj
 0 -1.1 TD
 (   Google, Inc)Tj
@@ -2143,12 +2190,12 @@ T*
 (   United States of America)Tj
 T*
 (   Email: mattmathis@google.com)Tj
-0 -15.4 TD
-(Paasch, et al.           Expires 26 August 2023                [Page 21])Tj
+0 -36.3 TD
+(Paasch, et al.           Expires 26 August 2023                [Page 22])Tj
 ET
 endstream
 endobj
-68 0 obj
+72 0 obj
 <<
 /ProcSet [/PDF /Text ]
 /Font <<
@@ -2173,7 +2220,7 @@ endobj
 /TR2 /Default
 >>
 endobj
-70 0 obj
+73 0 obj
 <<
 /Type /FontDescriptor
 /Ascent 753
@@ -2204,7 +2251,7 @@ endobj
 0 0 600 ]
 /Encoding /WinAnsiEncoding
 /BaseFont /Courier
-/FontDescriptor 70 0 R
+/FontDescriptor 73 0 R
 >>
 endobj
 1 0 obj
@@ -2375,14 +2422,22 @@ endobj
 /Contents 67 0 R
 >>
 endobj
-71 0 obj
+70 0 obj
+<<
+/Type /Page
+/Parent 69 0 R
+/Resources 72 0 R
+/Contents 71 0 R
+>>
+endobj
+74 0 obj
 <<
 /S /D
 >>
 endobj
-72 0 obj
+75 0 obj
 <<
-/Nums [0 71 0 R ]
+/Nums [0 74 0 R ]
 >>
 endobj
 6 0 obj
@@ -2404,8 +2459,8 @@ endobj
 69 0 obj
 <<
 /Type /Pages
-/Kids [66 0 R]
-/Count 1
+/Kids [66 0 R 70 0 R]
+/Count 2
 /Parent 37 0 R
 >>
 endobj
@@ -2413,108 +2468,111 @@ endobj
 <<
 /Type /Pages
 /Kids [6 0 R 38 0 R 69 0 R ]
-/Count 21
+/Count 22
 /MediaBox [0 0 595 842]
 >>
 endobj
-73 0 obj
+76 0 obj
 <<
-/CreationDate (D:20230222150536-08'00')
-/ModDate (D:20230222150536-08'00')
+/CreationDate (D:20230222151124-08'00')
+/ModDate (D:20230222151124-08'00')
 /Producer (Apple pstopdf)
 >>
 endobj
-74 0 obj
+77 0 obj
 <<
 /Type /Catalog
 /Pages 37 0 R
-/PageLabels 72 0 R
+/PageLabels 75 0 R
 >>
 endobj
 xref
-0 75
+0 78
 0000000000 65535 f 
-0000062752 00000 n 
+0000063677 00000 n 
 0000000016 00000 n 
-0000002738 00000 n 
-0000062181 00000 n 
-0000061850 00000 n 
-0000064568 00000 n 
-0000062832 00000 n 
-0000002833 00000 n 
-0000006226 00000 n 
-0000062912 00000 n 
-0000006321 00000 n 
-0000009582 00000 n 
-0000062995 00000 n 
-0000009678 00000 n 
-0000012719 00000 n 
-0000063078 00000 n 
-0000012815 00000 n 
-0000016289 00000 n 
-0000063161 00000 n 
-0000016385 00000 n 
-0000018924 00000 n 
-0000063244 00000 n 
-0000019020 00000 n 
-0000022053 00000 n 
-0000063327 00000 n 
-0000022149 00000 n 
-0000025351 00000 n 
-0000063410 00000 n 
-0000025447 00000 n 
-0000028517 00000 n 
-0000063493 00000 n 
-0000028613 00000 n 
-0000031472 00000 n 
-0000063576 00000 n 
-0000031568 00000 n 
-0000034356 00000 n 
-0000064915 00000 n 
-0000064703 00000 n 
-0000063660 00000 n 
-0000034452 00000 n 
-0000037371 00000 n 
-0000063744 00000 n 
-0000037467 00000 n 
-0000040642 00000 n 
-0000063828 00000 n 
-0000040738 00000 n 
-0000043773 00000 n 
-0000063912 00000 n 
-0000043869 00000 n 
-0000046926 00000 n 
-0000063996 00000 n 
-0000047022 00000 n 
-0000049945 00000 n 
-0000064080 00000 n 
-0000050041 00000 n 
-0000052665 00000 n 
-0000064164 00000 n 
-0000052761 00000 n 
-0000054969 00000 n 
-0000064248 00000 n 
-0000055065 00000 n 
-0000057988 00000 n 
-0000064332 00000 n 
-0000058084 00000 n 
-0000060392 00000 n 
-0000064416 00000 n 
-0000060488 00000 n 
-0000061754 00000 n 
-0000064841 00000 n 
-0000061990 00000 n 
-0000064500 00000 n 
-0000064528 00000 n 
-0000065013 00000 n 
-0000065136 00000 n 
+0000002898 00000 n 
+0000063106 00000 n 
+0000062775 00000 n 
+0000065577 00000 n 
+0000063757 00000 n 
+0000002993 00000 n 
+0000006386 00000 n 
+0000063837 00000 n 
+0000006481 00000 n 
+0000009742 00000 n 
+0000063920 00000 n 
+0000009838 00000 n 
+0000012879 00000 n 
+0000064003 00000 n 
+0000012975 00000 n 
+0000016449 00000 n 
+0000064086 00000 n 
+0000016545 00000 n 
+0000019084 00000 n 
+0000064169 00000 n 
+0000019180 00000 n 
+0000022213 00000 n 
+0000064252 00000 n 
+0000022309 00000 n 
+0000025511 00000 n 
+0000064335 00000 n 
+0000025607 00000 n 
+0000028677 00000 n 
+0000064418 00000 n 
+0000028773 00000 n 
+0000031632 00000 n 
+0000064501 00000 n 
+0000031728 00000 n 
+0000034516 00000 n 
+0000065931 00000 n 
+0000065712 00000 n 
+0000064585 00000 n 
+0000034612 00000 n 
+0000037531 00000 n 
+0000064669 00000 n 
+0000037627 00000 n 
+0000040802 00000 n 
+0000064753 00000 n 
+0000040898 00000 n 
+0000043933 00000 n 
+0000064837 00000 n 
+0000044029 00000 n 
+0000047086 00000 n 
+0000064921 00000 n 
+0000047182 00000 n 
+0000050110 00000 n 
+0000065005 00000 n 
+0000050206 00000 n 
+0000052830 00000 n 
+0000065089 00000 n 
+0000052926 00000 n 
+0000055134 00000 n 
+0000065173 00000 n 
+0000055230 00000 n 
+0000058153 00000 n 
+0000065257 00000 n 
+0000058249 00000 n 
+0000060120 00000 n 
+0000065341 00000 n 
+0000060216 00000 n 
+0000061799 00000 n 
+0000065850 00000 n 
+0000065425 00000 n 
+0000061895 00000 n 
+0000062679 00000 n 
+0000062915 00000 n 
+0000065509 00000 n 
+0000065537 00000 n 
+0000066029 00000 n 
+0000066152 00000 n 
 trailer
 <<
-/Size 75
-/Root 74 0 R
-/Info 73 0 R
-/ID [<7a87145288d775d060cb796f704b323f><7a87145288d775d060cb796f704b323f>]
+/Size 78
+/Root 77 0 R
+/Info 76 0 R
+/ID [<e84c8c67271dba753bce1f7f2500fff2><e84c8c67271dba753bce1f7f2500fff2>]
 >>
 startxref
-65206
+66222
 %%EOF

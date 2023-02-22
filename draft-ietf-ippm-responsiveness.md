@@ -53,6 +53,12 @@ author:
     email: oesh@apple.com
 
   -
+    ins: W. Hawkins
+    name: Will Hawkins
+    org: University of Cincinnati
+    email: hawkinwh@ucmail.uc.edu
+
+  -
     ins: M. Mathis
     name: Matt Mathis
     org: Google, Inc
@@ -82,6 +88,7 @@ informative:
   RFC8766:
   RFC8290:
   RFC8033:
+  RFC8259:
 
 --- abstract
 
@@ -691,7 +698,7 @@ and making its measurements.
 4. A .well-known URL {{RFC8615}} which contains configuration information for 
 the client to run the test (See {{discovery}}, below.)
 
-The client begins the responsiveness measurement by querying for the JSON configuration.
+The client begins the responsiveness measurement by querying for the JSON {{RFC8259}} configuration.
 This supplies the URLs for creating the load-generating connections in
 the upstream and downstream direction as well as the small object
 for the latency measurements.
@@ -700,7 +707,7 @@ for the latency measurements.
 
 It makes sense for a service provider (either an application service provider like a video conferencing service
 or a network access provider like an ISP) to host RPM Test Server instances on their
-network so customers can determine what to expect about the the quality of their connection to 
+network so customers can determine what to expect about the quality of their connection to 
 the service offered by that provider.
 However, when a user performs an RPM test and determines
 that they are suffering from poor RPM during the connection to that service,
