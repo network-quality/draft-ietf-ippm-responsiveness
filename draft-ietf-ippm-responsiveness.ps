@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: Christoph Paasch
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Mon Mar 13 13:54:42 2023
+%%CreationDate: Mon Mar 13 13:56:25 2023
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -1628,9 +1628,9 @@ _S
 5 726 M
 (            as current_average.) s
 5 704 M
-(         o  If the standard deviation of the past 4 average goodput) s
+(         o  If the standard deviation of the past MAD average goodput) s
 5 693 M
-(            values is less than 5% of the current_average, declare) s
+(            values is less than SDT of the current_average, declare) s
 5 682 M
 (            saturation and move on to probe responsiveness.) s
 5 660 M
@@ -1640,9 +1640,9 @@ _S
 5 627 M
 (            current_responsiveness.) s
 5 605 M
-(         o  If the standard deviation of the past 4 responsiveness) s
+(         o  If the standard deviation of the past MAD responsiveness) s
 5 594 M
-(            values is less than 5% of the current_responsiveness,) s
+(            values is less than SDT of the current_responsiveness,) s
 5 583 M
 (            declare saturation and report current_responsiveness.) s
 5 561 M

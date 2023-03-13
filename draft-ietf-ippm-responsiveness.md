@@ -561,10 +561,10 @@ the steps of the algorithm are:
   - Create an additional load-generating connection.
   - If goodput has not saturated:
     - Compute the moving average aggregate goodput at interval i as current_average.
-    - If the standard deviation of the past 4 average goodput values is less than 5% of the current_average, declare saturation and move on to probe responsiveness.
+    - If the standard deviation of the past MAD average goodput values is less than SDT of the current_average, declare saturation and move on to probe responsiveness.
   - If goodput has saturated:
     - Compute the responsiveness at interval i as current_responsiveness.
-    - If the standard deviation of the past 4 responsiveness values is less than 5% of the current_responsiveness, declare saturation and report current_responsiveness.
+    - If the standard deviation of the past MAD responsiveness values is less than SDT of the current_responsiveness, declare saturation and report current_responsiveness.
 
 In {{goals}}, it is mentioned that one of the goals is that the test finishes within
 20 seconds. It is left to the implementation what to do when stability is not reached
