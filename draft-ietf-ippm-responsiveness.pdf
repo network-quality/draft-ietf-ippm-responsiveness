@@ -2,7 +2,7 @@
 %‚„œ”
 2 0 obj
 <<
-/Length 2842
+/Length 2846
 >>
 stream
 BT
@@ -60,13 +60,13 @@ T*
 0 -2.2 TD
 (   Our networks remain unresponsive, not from a lack of technical)Tj
 0 -1.1 TD
-(   solutions, but rather a lack of awareness of the problem and its)Tj
+(   solutions, but rather a lack of awareness of the problem and)Tj
 T*
-(   solutions.  We believe that creating a tool whose measurement matches)Tj
+(   deployment of its solutions.  We believe that creating a tool that)Tj
 T*
-(   peopleís everyday experience will create the necessary awareness, and)Tj
+(   measures the problem and matches peopleís everyday experience will)Tj
 T*
-(   result in a demand for products that solve the problem.)Tj
+(   create the necessary awareness, and result in a demand for solutions.)Tj
 0 -2.2 TD
 (   This document specifies the "Responsiveness Test" for measuring)Tj
 0 -1.1 TD
@@ -159,21 +159,21 @@ T*
 T*
 (   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3)Tj
 0 -1.1 TD
-(     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   4)Tj
+(     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3)Tj
 T*
 (   2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4)Tj
 T*
 (   3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   6)Tj
 T*
-(   4.  Measuring Responsiveness Under Working Conditions . . . . . .   7)Tj
+(   4.  Measuring Responsiveness Under Working Conditions . . . . . .   6)Tj
 T*
-(     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   7)Tj
+(     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   6)Tj
 T*
 (       4.1.1.  Single-flow vs multi-flow . . . . . . . . . . . . . .   7)Tj
 T*
 (       4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   8)Tj
 T*
-(       4.1.3.  Reaching full buffer utilization  . . . . . . . . . .   9)Tj
+(       4.1.3.  Achieving Full Buffer Utilization . . . . . . . . . .   9)Tj
 T*
 (     4.2.  Test parameters . . . . . . . . . . . . . . . . . . . . .   9)Tj
 T*
@@ -181,7 +181,7 @@ T*
 T*
 (       4.3.1.  Aggregating the Measurements  . . . . . . . . . . . .  12)Tj
 T*
-(     4.4.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  12)Tj
+(     4.4.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  13)Tj
 T*
 (       4.4.1.  Confidence of test-results  . . . . . . . . . . . . .  14)Tj
 T*
@@ -214,7 +214,7 @@ endobj
 endobj
 11 0 obj
 <<
-/Length 3034
+/Length 3212
 >>
 stream
 BT
@@ -288,18 +288,26 @@ T*
 T*
 (   measure and express responsiveness.)Tj
 0 -2.2 TD
-(   Existing network measurement tools could incorporate a responsiveness)Tj
+(   Including the responsiveness-under-working-conditions test among)Tj
 0 -1.1 TD
-(   measurement into their set of metrics.  Doing so would also raise the)Tj
+(   other measurements of network quality \(e.g., throughput and idle)Tj
 T*
-(   awareness of the problem and would help establish a new expectation)Tj
+(   latency\) would raise awareness of the problem and establish the)Tj
 T*
-(   that the standard measures of network quality should -- in addition)Tj
+(   expectation among users that their network providers deploy)Tj
 T*
-(   to throughput and idle latency -- also include latency under load,)Tj
+(   solutions.)Tj
+0 -2.2 TD
+(1.1.  Terminology)Tj
 T*
-(   or, as we prefer to call it, responsiveness under working conditions.)Tj
-0 -11 TD
+(   A word about the term "bufferbloat" -- the undesirable latency that)Tj
+0 -1.1 TD
+(   comes from a router or other network equipment buffering too much)Tj
+T*
+(   data.  This document uses the term as a general description of bad)Tj
+T*
+(   latency, using more precise wording where warranted.)Tj
+0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 3])Tj
 ET
 endstream
@@ -317,7 +325,7 @@ endobj
 endobj
 14 0 obj
 <<
-/Length 2900
+/Length 3235
 >>
 stream
 BT
@@ -329,17 +337,7 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(1.1.  Terminology)Tj
-0 -2.2 TD
-(   A word about the term "bufferbloat" -- the undesirable latency that)Tj
-0 -1.1 TD
-(   comes from a router or other network equipment buffering too much)Tj
-T*
-(   data.  This document uses the term as a general description of bad)Tj
-T*
-(   latency, using more precise wording where warranted.)Tj
-0 -2.2 TD
-(   "Latency" is a poor measure of responsiveness, since it can be hard)Tj
+(   "Latency" is a poor measure of responsiveness, because it can be hard)Tj
 0 -1.1 TD
 (   for the general public to understand.  The units are unfamiliar)Tj
 T*
@@ -347,25 +345,25 @@ T*
 T*
 (   sounds good -- itís only a tenth of a second!"\).)Tj
 0 -2.2 TD
-(   Instead, we create the term "Responsiveness under working conditions")Tj
+(   Instead, we define the term "responsiveness under working conditions")Tj
 0 -1.1 TD
 (   to make it clear that we are measuring all, not just idle,)Tj
 T*
 (   conditions, and use "round-trips per minute" as the unit.  The)Tj
 T*
-(   advantage of round-trips per minute are two-fold: First, it allows)Tj
+(   advantage of using round-trips per minute as the unit are two-fold:)Tj
 T*
-(   for a unit that is "the higher the better".  This kind of unit is)Tj
+(   First, it allows for a unit that is "the higher the better".  This)Tj
 T*
-(   often more intuitive for end-users.  Second, the range of the values)Tj
+(   kind of unit is often more intuitive for end-users.  Second, the)Tj
 T*
-(   tends to be around the 4-digit integer range which is also a value)Tj
+(   range of the values tends to be around the 4-digit integer range)Tj
 T*
-(   easy to compare and read, again allowing for a more intuitive use.)Tj
+(   which is also a value easy to compare and read, again allowing for a)Tj
 T*
-(   Finally, we abbreviate the unit to "RPM", a wink to the "revolutions)Tj
+(   more intuitive use.  Finally, we abbreviate the unit to "RPM", a wink)Tj
 T*
-(   per minute" that we use for car engines.)Tj
+(   to the "revolutions per minute" that we use for car engines.)Tj
 0 -2.2 TD
 (   This document defines an algorithm for the "Responsiveness Test" that)Tj
 0 -1.1 TD
@@ -373,36 +371,52 @@ T*
 0 -2.2 TD
 (2.  Design Constraints)Tj
 T*
-(   There are many challenges around measurements on the Internet.  They)Tj
+(   There are many challenges to defining measurements of the Internet:)Tj
 0 -1.1 TD
-(   include the dynamic nature of the Internet, the diverse nature of the)Tj
+(   the dynamic nature of the Internet, the diverse nature of the)Tj
 T*
-(   traffic, the large number of devices that affect traffic, and the)Tj
+(   traffic, the large number of devices that affect traffic, the)Tj
 T*
-(   difficulty of attaining appropriate measurement conditions.)Tj
+(   difficulty of attaining appropriate measurement conditions, diurnal)Tj
+T*
+(   traffic patterns, and changing routes.)Tj
 0 -2.2 TD
-(   Internet paths are changing all the time.  Daily fluctuations in the)Tj
+(   In order to minimize the effects of these challenges, itís best to)Tj
 0 -1.1 TD
-(   demand make the bottlenecks ebb and flow.  To minimize the)Tj
-T*
-(   variability of routing changes, itís best to keep the test duration)Tj
-T*
-(   relatively short.)Tj
+(   keep the test duration relatively short.)Tj
 0 -2.2 TD
 (   TCP and UDP traffic, or traffic on ports 80 and 443, may take)Tj
 0 -1.1 TD
-(   significantly different paths on the Internet and be subject to)Tj
+(   significantly different paths over the network between source and)Tj
 T*
-(   entirely different Quality of Service \(QoS\) treatment.  A good test)Tj
+(   destination and be subject to entirely different Quality of Service)Tj
 T*
-(   will use standard transport-layer traffic -- typical for peopleís use)Tj
+(   \(QoS\) treatment.  A good test will use standard transport-layer)Tj
 T*
-(   of the network -- that is subject to the transportís congestion)Tj
+(   traffic -- typical for peopleís use of the network -- that is subject)Tj
 T*
-(   control that might reduce the trafficís rate and thus its buffering)Tj
+(   to the transport layerís congestion control algorithms that might)Tj
 T*
-(   in the network.)Tj
-0 -7.7 TD
+(   reduce the trafficís rate and thus its buffering in the network.)Tj
+0 -2.2 TD
+(   Traditionally, one thinks of bufferbloat happening in the network,)Tj
+0 -1.1 TD
+(   i.e., on routers and switches of the Internet.  However, the)Tj
+T*
+(   networking stacks of the clients and servers can have huge buffers.)Tj
+T*
+(   Data sitting in TCP sockets or waiting for the application to send or)Tj
+T*
+(   read causes artificial latency, and affects user experience the same)Tj
+T*
+(   way as in-network bufferbloat.)Tj
+0 -2.2 TD
+(   Finally, it is crucial to recognize that significant queueing only)Tj
+0 -1.1 TD
+(   happens on entry to the lowest-capacity \(or "bottleneck"\) hop on a)Tj
+T*
+(   network path.  For any flow of data between two endpoints there is)Tj
+0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 4])Tj
 ET
 endstream
@@ -420,7 +434,7 @@ endobj
 endobj
 17 0 obj
 <<
-/Length 3327
+/Length 3501
 >>
 stream
 BT
@@ -432,65 +446,47 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   Traditionally, one thinks of bufferbloat happening on the routers and)Tj
+(   always one hop along the path where the capacity available to that)Tj
 0 -1.1 TD
-(   switches of the Internet.  However, the networking stacks of the)Tj
+(   flow at that hop is the lowest among all the hops of that flowís path)Tj
 T*
-(   clients and servers can have huge buffers.  Data sitting in TCP)Tj
+(   at that moment in time.  It is important to understand that the)Tj
 T*
-(   sockets or waiting for the application to send or read causes)Tj
+(   existence of a lowest-capacity hop on a network path and a buffer to)Tj
 T*
-(   artificial latency, and affects user experience the same way as)Tj
+(   smooth bursts of data is not itself a problem.  In a heterogeneous)Tj
 T*
-(   "traditional" bufferbloat.)Tj
-0 -2.2 TD
-(   Finally, it is crucial to recognize that significant queueing only)Tj
-0 -1.1 TD
-(   happens on entry to the lowest-capacity \(or "bottleneck"\) hop on a)Tj
+(   network like the Internet it is inevitable that there must)Tj
 T*
-(   network path.  For any flow of data between two communicating)Tj
+(   necessarily be some hop along the path with the lowest capacity for)Tj
 T*
-(   devices, there is always one hop along the path where the capacity)Tj
+(   that path.  If that hop were to be improved, then some other hop)Tj
 T*
-(   available to that flow at that hop is the lowest among all the hops)Tj
+(   would become the new lowest-capacity hop for that path.  In this)Tj
 T*
-(   of that flowís path at that moment in time.  It is important to)Tj
+(   context a "bottleneck" should not be seen as a problem to be fixed,)Tj
 T*
-(   understand that the existence of a lowest-capacity hop on a network)Tj
+(   because any attempt to "fix" the bottleneck is futile -- such a "fix")Tj
 T*
-(   path is not itself a problem.  In a heterogeneous network like the)Tj
+(   can never remove the existence of a bottleneck on a path; it just)Tj
 T*
-(   Internet it is inevitable that there must necessarily be some hop)Tj
+(   moves the bottleneck somewhere else.  Arguably, this heterogeneity of)Tj
 T*
-(   along the path with the lowest capacity for that path.  If that hop)Tj
+(   the Internet is one of its greatest strengths.  Allowing individual)Tj
 T*
-(   were to be improved to make it no longer the lowest-capacity hop,)Tj
+(   technologies to evolve and improve at their own pace, without)Tj
 T*
-(   then some other hop would become the new lowest-capacity hop for that)Tj
+(   requiring the entire Internet to change in lock-step, has enabled)Tj
 T*
-(   path.  In this context a "bottleneck" should not be seen as a problem)Tj
+(   enormous improvements over the years in technologies like DSL, cable)Tj
 T*
-(   to be fixed, because any attempt to "fix" the bottleneck is futile --)Tj
+(   modems, Ethernet, and Wi-Fi, each advancing independently as new)Tj
 T*
-(   such a "fix" can never remove the existence of a bottleneck on a)Tj
+(   developments became ready.  As a result of this flexibility we have)Tj
 T*
-(   path; it just moves the bottleneck somewhere else.  Arguably, this)Tj
+(   moved incrementally, one step at a time, from 56kb/s dial-up modems)Tj
 T*
-(   heterogeneity of the Internet is one of its greatest strengths.)Tj
-T*
-(   Allowing individual technologies to evolve and improve at their own)Tj
-T*
-(   pace, without requiring the entire Internet to change in lock-step,)Tj
-T*
-(   has enabled enormous improvements over the years in technologies like)Tj
-T*
-(   DSL, cable modems, Ethernet, and Wi-Fi, each advancing independently)Tj
-T*
-(   as new developments became ready.  As a result of this flexibility we)Tj
-T*
-(   have moved incrementally, one step at a time, from 56kb/s dial-up)Tj
-T*
-(   modems in the 1990s to Gb/s home Internet service and Gb/s wireless)Tj
+(   in the 1990s to Gb/s home Internet service and Gb/s wireless)Tj
 T*
 (   connectivity today.)Tj
 0 -2.2 TD
@@ -498,15 +494,15 @@ T*
 0 -1.1 TD
 (   static.  The hop that is the current bottleneck may change from)Tj
 T*
-(   moment to moment.  For example, changes in other traffic may result)Tj
+(   moment to moment.  For example, changes in simultaneous traffic may)Tj
 T*
-(   in changes to a flowís share of a given hop.  A user moving around)Tj
+(   result in changes to a flowís share of a given hop.  A user moving)Tj
 T*
-(   may cause the Wi-Fi transmission rate to vary widely, from a few Mb/s)Tj
+(   around may cause the Wi-Fi transmission rate to vary widely, from a)Tj
 T*
-(   when far from the Access Point, all the way up to Gb/s or more when)Tj
+(   few Mb/s when far from the Access Point, all the way up to Gb/s or)Tj
 T*
-(   close to the Access Point.)Tj
+(   more when close to the Access Point.)Tj
 0 -2.2 TD
 (   Consequently, if we wish to enjoy the benefits of the Internetís)Tj
 0 -1.1 TD
@@ -515,7 +511,29 @@ T*
 (   diversity and adapts intelligently to the varying conditions it)Tj
 T*
 (   encounters.)Tj
-0 -7.7 TD
+0 -2.2 TD
+(   Because significant queueing only happens on entry to the bottleneck)Tj
+0 -1.1 TD
+(   hop, the queue management at this critical hop of the path almost)Tj
+T*
+(   entirely determines the responsiveness of the entire flow.  If the)Tj
+T*
+(   bottleneck hopís queue management algorithm allows an excessively)Tj
+T*
+(   large queue to form, this results in excessively large delays for)Tj
+T*
+(   packets sitting in that queue awaiting transmission, significantly)Tj
+T*
+(   degrading overall user experience.)Tj
+0 -2.2 TD
+(   In order to discover the depth of the buffer at the bottleneck hop,)Tj
+0 -1.1 TD
+(   the proposed Responsiveness Test mimics normal network operations and)Tj
+T*
+(   data transfers, with the goal of filling the bottleneck buffer to)Tj
+T*
+(   capacity, and then measures the resulting end-to-end latency under)Tj
+0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 5])Tj
 ET
 endstream
@@ -533,7 +551,7 @@ endobj
 endobj
 20 0 obj
 <<
-/Length 2634
+/Length 2544
 >>
 stream
 BT
@@ -545,45 +563,23 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   Because significant queueing only happens on entry to the bottleneck)Tj
+(   these so-called working conditions.  A well-managed bottleneck queue)Tj
 0 -1.1 TD
-(   hop, the queue management at this critical hop of the path almost)Tj
+(   keeps its occupancy under control, resulting in consistently low)Tj
 T*
-(   entirely determines the responsiveness of the entire flow.  If the)Tj
+(   round-trip times and consistently good responsiveness.  A poorly)Tj
 T*
-(   bottleneck hopís queue management algorithm allows an excessively)Tj
-T*
-(   large queue to form, this results in excessively large delays for)Tj
-T*
-(   packets sitting in that queue awaiting transmission, significantly)Tj
-T*
-(   degrading overall user experience.)Tj
-0 -2.2 TD
-(   In order to discover the depth of the buffer at the bottleneck hop,)Tj
-0 -1.1 TD
-(   the Responsiveness Test mimics normal network operations and data)Tj
-T*
-(   transfers, to cause this bottleneck buffer to fill to capacity, and)Tj
-T*
-(   then measures the resulting end-to-end latency under these operating)Tj
-T*
-(   conditions.  A well managed bottleneck queue keeps its queue)Tj
-T*
-(   occupancy under control, resulting in consistently low round-trip)Tj
-T*
-(   time and consistently good responsiveness.  A poorly managed)Tj
-T*
-(   bottleneck queue will not.)Tj
+(   managed bottleneck queue will not.)Tj
 0 -2.2 TD
 (3.  Goals)Tj
 T*
 (   The algorithm described here defines a Responsiveness Test that)Tj
 0 -1.1 TD
-(   serves as a good proxy for user experience.  This means:)Tj
+(   serves as a good proxy for user experience.  Therefore:)Tj
 0 -2.2 TD
-(   1.  Todayís Internet traffic primarily uses HTTP/2 over TLS.  Thus,)Tj
+(   1.  Because todayís Internet traffic primarily uses HTTP/2 over TLS,)Tj
 0 -1.1 TD
-(       the algorithm should use that protocol.)Tj
+(       the testís algorithm should use that protocol.)Tj
 0 -2.2 TD
 (       As a side note: other types of traffic are gaining in popularity)Tj
 0 -1.1 TD
@@ -595,24 +591,46 @@ T*
 T*
 (       separately.)Tj
 0 -2.2 TD
-(   2.  The Internet is marked by the deployment of countless middleboxes)Tj
+(   2.  Because the Internet is marked by the deployment of countless)Tj
 0 -1.1 TD
-(       like transparent TCP proxies or traffic prioritization for)Tj
+(       middleboxes like transparent TCP proxies or traffic)Tj
 T*
-(       certain types of traffic.  The Responsiveness Test must take into)Tj
+(       prioritization for certain types of traffic, the Responsiveness)Tj
 T*
-(       account their effect on TCP-handshake [RFC0793], TLS-handshake,)Tj
+(       Test algorithm must take into account their effect on TCP-)Tj
 T*
-(       and request/response.)Tj
+(       handshake [RFC0793], TLS-handshake, and request/response.)Tj
 0 -2.2 TD
-(   3.  The test result should be expressed in an intuitive, nontechnical)Tj
+(   3.  Because the goal of the test is to educate end users, the results)Tj
 0 -1.1 TD
-(       form.)Tj
+(       should be expressed in an intuitive, nontechnical form and not)Tj
+T*
+(       commit the user to spend a significant amount of their time \(we)Tj
+T*
+(       target 20 seconds\).)Tj
 0 -2.2 TD
-(   4.  Finally, to be useful to a wide audience, the measurement should)Tj
+(4.  Measuring Responsiveness Under Working Conditions)Tj
+T*
+(   Overall, the test to measure responsiveness under working conditions)Tj
 0 -1.1 TD
-(       finish within a short time frame.  Our target is 20 seconds.)Tj
-0 -11 TD
+(   proceeds in two steps:)Tj
+0 -2.2 TD
+(   1.  Put the network connection into "working conditions")Tj
+T*
+(   2.  Measure responsiveness of the network.)Tj
+T*
+(   The following explains how the former and the latter are achieved.)Tj
+T*
+(4.1.  Working Conditions)Tj
+T*
+(   What are _the_ conditions that best emulate how a network connection)Tj
+0 -1.1 TD
+(   is used?  There is no one true answer to this question.  It is a)Tj
+T*
+(   tradeoff between using realistic traffic patterns and pushing the)Tj
+T*
+(   network to its limits.)Tj
+0 -5.5 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 6])Tj
 ET
 endstream
@@ -630,7 +648,7 @@ endobj
 endobj
 23 0 obj
 <<
-/Length 3013
+/Length 2933
 >>
 stream
 BT
@@ -642,49 +660,23 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(4.  Measuring Responsiveness Under Working Conditions)Tj
-0 -2.2 TD
-(   To make an accurate measurement, the algorithm must reliably put the)Tj
+(   The Responsiveness Test defines working conditions as the condition)Tj
 0 -1.1 TD
-(   network in a state that represents those "working conditions".)Tj
+(   where the path between the measuring endpoints is utilized at its)Tj
 T*
-(   During this process, the algorithm measures the responsiveness of the)Tj
+(   end-to-end capacity and the queue at the bottleneck link is at \(or)Tj
 T*
-(   network.  The following explains how the former and the latter are)Tj
+(   beyond\) its maximum occupancy.  Under these conditions, the network)Tj
 T*
-(   achieved.)Tj
+(   connectionís responsiveness will be at its worst.)Tj
 0 -2.2 TD
-(4.1.  Working Conditions)Tj
-T*
-(   There are many different ways to define the state of "working)Tj
+(   The Responsiveness Test algorithm for reaching working conditions)Tj
 0 -1.1 TD
-(   conditions" to measure responsiveness.  There is no one true answer)Tj
+(   combines multiple standard HTTP transactions with very large data)Tj
 T*
-(   to this question.  It is a tradeoff between using realistic traffic)Tj
+(   objects according to realistic traffic patterns to create these)Tj
 T*
-(   patterns and pushing the network to its limits.)Tj
-0 -2.2 TD
-(   The working conditions we try to achieve is a scenario where the path)Tj
-0 -1.1 TD
-(   between the measuring endpoints is utilized at its full end-to-end)Tj
-T*
-(   capacity and its full buffer occupancy.  An ideal sender could send)Tj
-T*
-(   at just this link-speed without building a queue on the bottleneck.)Tj
-T*
-(   Thus, in order to measure the worst-case responsiveness we need to)Tj
-T*
-(   ensure that a queue is building up on the bottleneck, meaning that)Tj
-T*
-(   responsiveness is at its worst.)Tj
-0 -2.2 TD
-(   In this document we aim to generate a realistic traffic pattern by)Tj
-0 -1.1 TD
-(   using standard HTTP transactions but exploring the worst-case)Tj
-T*
-(   scenario by creating multiple of these transactions and using very)Tj
-T*
-(   large data objects in these HTTP transactions.)Tj
+(   conditions.)Tj
 0 -2.2 TD
 (   This allows to create a stable state of working conditions during)Tj
 0 -1.1 TD
@@ -719,7 +711,31 @@ T*
 (   buffers along the path between the two endpoints may be significantly)Tj
 T*
 (   larger than 4MB.  TCP allows larger receive window sizes, up to 1GB.)Tj
-0 -4.4 TD
+T*
+(   However, most transport stacks aggressively limit the size of the)Tj
+T*
+(   receive window to avoid consuming too much memory.)Tj
+0 -2.2 TD
+(   Thus, the only way to achieve full capacity and full buffer occupancy)Tj
+0 -1.1 TD
+(   on those networks is by creating multiple connections, allowing to)Tj
+T*
+(   actively fill the bottleneckís buffer to achieve maximum working)Tj
+T*
+(   conditions.)Tj
+0 -2.2 TD
+(   Even if a single TCP connection would be able to fill the)Tj
+0 -1.1 TD
+(   bottleneckís buffer, it may take some time for a single TCP)Tj
+T*
+(   connection to ramp up to full speed.  One of the goals of the)Tj
+T*
+(   Responsiveness Test is to help the user quickly measure their)Tj
+T*
+(   network.  As a result, the test must load the network, take its)Tj
+T*
+(   measurements, and then finish as fast as possible.)Tj
+0 -7.7 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 7])Tj
 ET
 endstream
@@ -737,7 +753,7 @@ endobj
 endobj
 26 0 obj
 <<
-/Length 3090
+/Length 3003
 >>
 stream
 BT
@@ -749,35 +765,15 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   However, most transport stacks aggressively limit the size of the)Tj
+(   Finally, traditional loss-based TCP congestion control algorithms)Tj
 0 -1.1 TD
-(   receive window to avoid consuming too much memory.)Tj
-0 -2.2 TD
-(   Thus, the only way to achieve full capacity and full buffer occupancy)Tj
-0 -1.1 TD
-(   on those networks is by creating multiple connections, allowing to)Tj
+(   react aggressively to packet loss by reducing the congestion window.)Tj
 T*
-(   actively fill the bottleneckís buffer to achieve maximum working)Tj
+(   This reaction \(intended by the protocol design\) decreases the)Tj
 T*
-(   conditions.)Tj
-0 -2.2 TD
-(   Even if a single TCP connection would be able to fill the)Tj
-0 -1.1 TD
-(   bottleneckís buffer, it may take some time for a single TCP)Tj
+(   queueing within the network, making it harder to determine the depth)Tj
 T*
-(   connection to ramp up to full speed.  One of the goals of the)Tj
-T*
-(   Responsiveness test is to quickly load the network, take its)Tj
-T*
-(   measurements, and then finish.  Finally, traditional loss-based TCP)Tj
-T*
-(   congestion control algorithms react aggressively to packet loss by)Tj
-T*
-(   reducing the congestion window.  This reaction \(intended by the)Tj
-T*
-(   protocol design\) decreases the queueing within the network, making it)Tj
-T*
-(   harder to determine the depth of the bottleneck queue reliably.)Tj
+(   of the bottleneck queue reliably.)Tj
 0 -2.2 TD
 (   The purpose of the Responsiveness Test is not to productively move)Tj
 0 -1.1 TD
@@ -789,19 +785,17 @@ T*
 T*
 (   applications were doing sustained data transfers, measure the)Tj
 T*
-(   resulting round-trip time occurring under those realistic conditions,)Tj
+(   resulting round-trip time occurring under those realistic conditions.)Tj
 T*
-(   and then end the test.  Because of this, using multiple simultaneous)Tj
+(   Because of this, using multiple simultaneous parallel connections)Tj
 T*
-(   parallel connections allows the Responsiveness test to complete its)Tj
+(   allows the Responsiveness Test to complete its task more quickly, in)Tj
 T*
-(   task more quickly, in a way that overall is less disruptive and less)Tj
+(   a way that overall is less disruptive and less wasteful of network)Tj
 T*
-(   wasteful of network capacity than a test using a single TCP)Tj
+(   capacity than a test using a single TCP connection that would take)Tj
 T*
-(   connection that would take longer to bring the bottleneck hop to a)Tj
-T*
-(   stable saturated state.)Tj
+(   longer to bring the bottleneck hop to a stable saturated state.)Tj
 0 -2.2 TD
 (   In this document, we impose an upper bound on the number of parallel)Tj
 0 -1.1 TD
@@ -815,18 +809,36 @@ T*
 T*
 (   differ significantly due to access link conditions \(e.g., 5G)Tj
 T*
-(   downstream and LTE upstream\) or the routing changes within the ISPs.)Tj
+(   downstream and LTE upstream\) or routing changes within the ISPs.  To)Tj
 T*
-(   To measure responsiveness under working conditions, the algorithm)Tj
+(   measure responsiveness under working conditions, the algorithm must)Tj
 T*
-(   must explore both directions.)Tj
+(   explore both directions.)Tj
 0 -2.2 TD
 (   One approach could be to measure responsiveness in the uplink and)Tj
 0 -1.1 TD
 (   downlink in parallel.  It would allow for a shorter test run-time.)Tj
 0 -2.2 TD
 (   However, a number of caveats come with measuring in parallel:)Tj
-0 -5.5 TD
+T*
+(   *  Half-duplex links may not permit simultaneous uplink and downlink)Tj
+0 -1.1 TD
+(      traffic.  This restriction means the test might not reach the)Tj
+T*
+(      pathís capacity in both directions at once and thus not expose all)Tj
+T*
+(      the potential sources of low responsiveness.)Tj
+0 -2.2 TD
+(   *  Debuggability of the results becomes harder: During parallel)Tj
+0 -1.1 TD
+(      measurement it is impossible to differentiate whether the observed)Tj
+T*
+(      latency happens in the uplink or the downlink direction.)Tj
+0 -2.2 TD
+(   Thus, we recommend testing uplink and downlink sequentially.)Tj
+0 -1.1 TD
+(   Parallel testing is considered a future extension.)Tj
+0 -6.6 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 8])Tj
 ET
 endstream
@@ -844,7 +856,7 @@ endobj
 endobj
 29 0 obj
 <<
-/Length 2643
+/Length 2146
 >>
 stream
 BT
@@ -856,43 +868,25 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   *  Half-duplex links may not permit simultaneous uplink and downlink)Tj
-0 -1.1 TD
-(      traffic.  This means the test might not reach the pathís capacity)Tj
-T*
-(      in both directions at once and thus not expose all the potential)Tj
-T*
-(      sources of low responsiveness.)Tj
+(4.1.3.  Achieving Full Buffer Utilization)Tj
 0 -2.2 TD
-(   *  Debuggability of the results becomes harder: During parallel)Tj
-0 -1.1 TD
-(      measurement it is impossible to differentiate whether the observed)Tj
-T*
-(      latency happens in the uplink or the downlink direction.)Tj
-0 -2.2 TD
-(   Thus, we recommend testing uplink and downlink sequentially.)Tj
-0 -1.1 TD
-(   Parallel testing is considered a future extension.)Tj
-0 -2.2 TD
-(4.1.3.  Reaching full buffer utilization)Tj
-T*
 (   The Responsiveness Test gradually increases the number of TCP)Tj
 0 -1.1 TD
-(   connections and measures "goodput" \(the sum of actual data)Tj
+(   connections \(known as load-generating connections\) and measures)Tj
 T*
-(   transferred across all connections in a unit of time\) continuously.)Tj
+(   "goodput" \(the sum of actual data transferred across all connections)Tj
 T*
-(   Once goodput reaches saturation, buffers will start filling up,)Tj
+(   in a unit of time\) continuously.  By definition, once goodput is)Tj
 T*
-(   creating the well-known "standing queue" that is known as)Tj
+(   maximized, buffers will start filling up, creating the "standing)Tj
 T*
-(   bufferbloat.  This is the moment the test starts measuring the)Tj
+(   queue" that is characteristic of bufferbloat.  At this moment the)Tj
 T*
-(   responsiveness until the responsiveness reaches saturation as well.)Tj
+(   test starts measuring the responsiveness until it, too, reaches)Tj
 T*
-(   At this point we are creating the worst-case scenario within the)Tj
+(   saturation.  At this point we are creating the worst-case scenario)Tj
 T*
-(   limits of the realistic traffic pattern.)Tj
+(   within the limits of the realistic traffic pattern.)Tj
 0 -2.2 TD
 (   The algorithm notes that throughput increases rapidly until TCP)Tj
 0 -1.1 TD
@@ -922,8 +916,12 @@ T*
 T*
 (   Hereafter the detailed description of the methodology will explain)Tj
 T*
-(   how these parameters are being used.)Tj
-0 -12.1 TD
+(   how these parameters are being used.  Experience has shown that these)Tj
+T*
+(   parameters allow for a low runtime and accurate results among a wide)Tj
+T*
+(   range of environments.)Tj
+0 -23.1 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 9])Tj
 ET
 endstream
@@ -941,7 +939,7 @@ endobj
 endobj
 32 0 obj
 <<
-/Length 2951
+/Length 2880
 >>
 stream
 BT
@@ -993,9 +991,9 @@ T*
 T*
 (     +------+----------------------------------------------+---------+)Tj
 T*
-(     | PTC  | Maximum percentage of total capacity the     | 5%      |)Tj
+(     | PTC  | Percentage of Total Capacity the probes are  | 5%      |)Tj
 T*
-(     |      | probes are allowed to consume                |         |)Tj
+(     |      | allowed to consume                           |         |)Tj
 T*
 (     +------+----------------------------------------------+---------+)Tj
 0 -2.2 TD
@@ -1003,17 +1001,15 @@ T*
 T*
 (4.3.  Measuring Responsiveness)Tj
 T*
-(   Measuring responsiveness during the previously explained working)Tj
+(   Measuring responsiveness while achieving working conditions is a)Tj
 0 -1.1 TD
-(   conditions creation is a continuous process during the duration of)Tj
+(   process of continuous measurement.  It requires a sufficiently large)Tj
 T*
-(   the test.  It requires a sufficiently large sample-size to have)Tj
-T*
-(   confidence in the results.)Tj
+(   sample-size to have confidence in the results.)Tj
 0 -2.2 TD
 (   The measurement of the responsiveness happens by sending probe-)Tj
 0 -1.1 TD
-(   requests for a small object.  There are two types of probe requests:)Tj
+(   requests.  There are two types of probe requests:)Tj
 0 -2.2 TD
 (   1.  A HTTP GET request on a separate connection \("foreign probes"\).)Tj
 0 -1.1 TD
@@ -1024,7 +1020,7 @@ T*
 (       \(e.g., "index.html"\), or the startup time for a video streaming)Tj
 T*
 (       client to launch and begin fetching media.)Tj
-0 -12.1 TD
+0 -13.2 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 10])Tj
 ET
 endstream
@@ -1042,7 +1038,7 @@ endobj
 endobj
 35 0 obj
 <<
-/Length 2915
+/Length 3020
 >>
 stream
 BT
@@ -1094,38 +1090,40 @@ T*
 T*
 (   the load-generating connection and the full HTTP response has been)Tj
 T*
-(   received \(noted http_l\).)Tj
+(   received \(noted http_s\).)Tj
 0 -2.2 TD
-(   tcp_f, tls_f, http_f and http_l are all measured in milliseconds.)Tj
+(   tcp_f, tls_f, http_f and http_s are all measured in milliseconds.)Tj
 T*
-(   The more probes that are sent, the more data is available for)Tj
+(   The more probes that are sent, the more data available for)Tj
 0 -1.1 TD
 (   calculation.  In order to generate as much data as possible, the)Tj
 T*
-(   methodology requires a client to issue these probes regularly.  There)Tj
+(   Responsiveness Test specifies that a client issue these probes)Tj
 T*
-(   is however a risk that on low-capacity networks the responsiveness)Tj
+(   regularly.  There is, however, a risk that on low-capacity networks)Tj
 T*
-(   probes themselves will consume a significant amount of the capacity.)Tj
+(   the responsiveness probes themselves will consume a significant)Tj
 T*
-(   As the test mandates to first saturate capacity before probing for)Tj
+(   amount of the capacity.  Because the test mandates first saturating)Tj
 T*
-(   responsiveness, we are able to accurately estimate how much of the)Tj
+(   capacity before probing for responsiveness, we are able to accurately)Tj
 T*
-(   capacity the responsiveness probes will consume.)Tj
+(   estimate how much of the capacity the responsiveness probes will)Tj
+T*
+(   consume and never send more probes than the network can handle.)Tj
 0 -2.2 TD
-(   This can be done by providing an estimate of the number of bytes)Tj
+(   Limiting the data used by probes can be done by providing an estimate)Tj
 0 -1.1 TD
-(   exchanged for a responsiveness probe.  Taking TCP and TLS overheads)Tj
+(   of the number of bytes exchanged for a responsiveness probe.  Taking)Tj
 T*
-(   into account, we can estimate the amount of data exchanged for a)Tj
+(   TCP and TLS overheads into account, we can estimate the amount of)Tj
 T*
-(   probe on a foreign connection to be around 5000 bytes.  On load-)Tj
+(   data exchanged for a probe on a foreign connection to be around 5000)Tj
 T*
-(   generating connections we can expect an overhead of no more than 1000)Tj
+(   bytes.  On load-generating connections we can expect an overhead of)Tj
 T*
-(   bytes.)Tj
-0 -12.1 TD
+(   no more than 1000 bytes.)Tj
+0 -11 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 11])Tj
 ET
 endstream
@@ -1143,7 +1141,7 @@ endobj
 endobj
 40 0 obj
 <<
-/Length 2956
+/Length 2823
 >>
 stream
 BT
@@ -1157,17 +1155,23 @@ BT
 0 -3.3 TD
 (   Given this information, we recommend that at each responsiveness)Tj
 0 -1.1 TD
-(   probing round, we send no more than 6 probes on different load-)Tj
+(   probing interval does not send more than MPS \(Maximum responsiveness)Tj
 T*
-(   generating connections \(choosing randomly among the available load-)Tj
+(   Probes per Second - default to 100\) probes per second.  The probes)Tj
 T*
-(   generating connections\) and 3 probes on foreign connections, every)Tj
+(   should be spread out equally over the duration of the interval with)Tj
 T*
-(   100ms for each type of probe.  This would result in a total amount of)Tj
+(   an equal split between foreign and different load-generating)Tj
 T*
-(   data per second of 210 KB or 1680Kb, meaning a total capacity)Tj
+(   connections.  For the probes on load-generating connections, the)Tj
 T*
-(   utilization of 1680 Kbps for the probing.)Tj
+(   connection should be selected randomly for each probe.)Tj
+0 -2.2 TD
+(   This would result in a total amount of data per second of 300 KB or)Tj
+0 -1.1 TD
+(   2400Kb, meaning a total capacity utilization of 2400 Kbps for the)Tj
+T*
+(   probing.)Tj
 0 -2.2 TD
 (   On high-speed networks, this will provide a significant amount of)Tj
 0 -1.1 TD
@@ -1177,11 +1181,11 @@ T*
 T*
 (   traffic could consume a significant portion of the available)Tj
 T*
-(   capacity.  We recommend to increase the probing interval beyond 100ms)Tj
+(   capacity.  The Responsiveness Test must adjust its probing frequency)Tj
 T*
-(   and reduce the number of parallel probes appropriately so that the)Tj
+(   and in such a way that the probing traffic does not consume more than)Tj
 T*
-(   probing traffic does not consume more than 5% of the available)Tj
+(   PTC \(Percentage of Total Capacity - default to 5%\) of the available)Tj
 T*
 (   capacity.)Tj
 0 -2.2 TD
@@ -1197,42 +1201,32 @@ T*
 T*
 (   over time.  Thus, the aggregation of the measurements considers the)Tj
 T*
-(   last 4 seconds worth of completed responsiveness probes.)Tj
+(   last MAD \(Moving Average Distance - default to 4\) intervals worth of)Tj
+T*
+(   completed responsiveness probes.)Tj
 0 -2.2 TD
-(   Over the timeframe of 4 seconds a potentially large number of samples)Tj
+(   Over the timeframe of these intervals a potentially large number of)Tj
 0 -1.1 TD
-(   has been collected.  These may be affected by noise in the)Tj
+(   samples has been collected.  These may be affected by noise in the)Tj
 T*
 (   measurements, and outliers.  Thus, to aggregate these we suggest to)Tj
 T*
-(   use a trimmed mean at 95th percentile, thus providing the following)Tj
+(   use a trimmed mean at the TMP \(Trimmed Mean Percentage - default to)Tj
 T*
-(   numbers: tcp_f_t95, tls_f_t95, http_f_t95, http_l_t95.)Tj
+(   95%\) percentile, thus providing the following numbers: TM\(tcp_f\),)Tj
+T*
+(   TM\(tls_f\), TM\(http_f\), TM\(http_l\).)Tj
 0 -2.2 TD
 (   The responsiveness is then calculated as the weighted mean:)Tj
 T*
 (   Responsiveness = 60000 /)Tj
 0 -1.1 TD
-(   \(1/6*\(tcp_f_t95 + tls_f_t95 + http_f_t95\) +)Tj
+(   \(1/6*\(TM\(tcp_f\) + TM\(tls_f\) + TM\(http_f\)\) +)Tj
 T*
-(     1/2*http_s_t95\))Tj
+(     1/2*TM\(http_s\)\))Tj
 0 -2.2 TD
 (   This responsiveness value presents round-trips per minute \(RPM\).)Tj
-T*
-(4.4.  Final Algorithm)Tj
-T*
-(   Considering the previous two sections, where we explain what the)Tj
-0 -1.1 TD
-(   meaning of working conditions is and the definition of)Tj
-T*
-(   responsiveness, we can design the final algorithm.  In order to)Tj
-T*
-(   measure the worst-case latency we need to transmit traffic at the)Tj
-T*
-(   full capacity of the path as well as ensure the buffers are filled to)Tj
-T*
-(   the maximum.  We can achieve this by continuously adding HTTP)Tj
-0 -4.4 TD
+0 -7.7 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 12])Tj
 ET
 endstream
@@ -1250,7 +1244,7 @@ endobj
 endobj
 43 0 obj
 <<
-/Length 2405
+/Length 2585
 >>
 stream
 BT
@@ -1262,21 +1256,39 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   sessions to the pool of connections in a 1-second interval.  This)Tj
+(4.4.  Final Algorithm)Tj
+0 -2.2 TD
+(   Considering the previous two sections, where we explain what the)Tj
 0 -1.1 TD
-(   will ensure that we quickly reach capacity and full buffer occupancy.)Tj
+(   meaning of working conditions is and the definition of)Tj
 T*
-(   First, the algorithm reaches stability for the goodput.  Once goodput)Tj
+(   responsiveness, we can design the final algorithm.  In order to)Tj
 T*
-(   stability has been achieved, responsiveness probes are being)Tj
+(   measure the worst-case latency we need to transmit traffic at the)Tj
 T*
-(   transmitted until responsiveness stability is reached.)Tj
+(   full capacity of the path as well as ensure the buffers are filled to)Tj
+T*
+(   the maximum.  We can achieve this by continuously adding HTTP)Tj
+T*
+(   sessions to the pool of connections in a ID \(Interval duration -)Tj
+T*
+(   default to 1 second\) interval.  This will ensure that we quickly)Tj
+T*
+(   reach capacity and full buffer occupancy.  First, the algorithm)Tj
+T*
+(   reaches stability for the goodput.  Once goodput stability has been)Tj
+T*
+(   achieved, responsiveness probes are being transmitted until)Tj
+T*
+(   responsiveness stability is reached.)Tj
 0 -2.2 TD
 (   We consider both, goodput and responsiveness to be stable, when the)Tj
 0 -1.1 TD
-(   standard deviation of the past 4 moving averages is within 5% of the)Tj
+(   standard deviation of the past MAD intervals is within SDT \(Standard)Tj
 T*
-(   last of the moving averages.)Tj
+(   Deviation Tolerance - default to 5%\) of the last of the moving)Tj
+T*
+(   averages.)Tj
 0 -2.2 TD
 (   The following algorithm reaches working conditions of a network by)Tj
 0 -1.1 TD
@@ -1315,19 +1327,7 @@ T*
 (      -  Create an additional load-generating connection.)Tj
 T*
 (      -  If goodput has not saturated:)Tj
-T*
-(         o  Compute the moving average aggregate goodput at interval i)Tj
-0 -1.1 TD
-(            as current_average.)Tj
-0 -2.2 TD
-(         o  If the standard deviation of the past 4 average goodput)Tj
-0 -1.1 TD
-(            values is less than 5% of the current_average, declare)Tj
-T*
-(            saturation and move on to probe responsiveness.)Tj
-0 -2.2 TD
-(      -  If goodput has saturated:)Tj
-0 -6.6 TD
+0 -5.5 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 13])Tj
 ET
 endstream
@@ -1345,7 +1345,7 @@ endobj
 endobj
 46 0 obj
 <<
-/Length 2493
+/Length 2732
 >>
 stream
 BT
@@ -1357,6 +1357,18 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
+(         o  Compute the moving average aggregate goodput at interval i)Tj
+0 -1.1 TD
+(            as current_average.)Tj
+0 -2.2 TD
+(         o  If the standard deviation of the past 4 average goodput)Tj
+0 -1.1 TD
+(            values is less than 5% of the current_average, declare)Tj
+T*
+(            saturation and move on to probe responsiveness.)Tj
+0 -2.2 TD
+(      -  If goodput has saturated:)Tj
+T*
 (         o  Compute the responsiveness at interval i as)Tj
 0 -1.1 TD
 (            current_responsiveness.)Tj
@@ -1414,11 +1426,7 @@ T*
 (   least 4 iterations, but did not reach stability based on standard)Tj
 T*
 (   deviation tolerance.)Tj
-0 -2.2 TD
-(   We define "High" confidence if the algorithm was able to fully reach)Tj
-0 -1.1 TD
-(   stability based on the define standard deviation tolerance.)Tj
-0 -13.2 TD
+0 -6.6 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 14])Tj
 ET
 endstream
@@ -1436,7 +1444,7 @@ endobj
 endobj
 49 0 obj
 <<
-/Length 2843
+/Length 3000
 >>
 stream
 BT
@@ -1448,8 +1456,12 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(5.  Interpreting responsiveness results)Tj
+(   We define "High" confidence if the algorithm was able to fully reach)Tj
+0 -1.1 TD
+(   stability based on the define standard deviation tolerance.)Tj
 0 -2.2 TD
+(5.  Interpreting responsiveness results)Tj
+T*
 (   The described methodology uses a high-level approach to measure)Tj
 0 -1.1 TD
 (   responsiveness.  By executing the test with regular HTTP requests a)Tj
@@ -1519,7 +1531,7 @@ T*
 (   buildup at these layers would only influence latency on the probes)Tj
 T*
 (   that are sent on the load-generating connections.)Tj
-0 -11 TD
+0 -7.7 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 15])Tj
 ET
 endstream
@@ -1613,7 +1625,7 @@ T*
 T*
 (   involves however a set of different tools and methodologies.)Tj
 0 -2.2 TD
-(   Nevertheless, the responsiveness test allows to gain some insight)Tj
+(   Nevertheless, the Responsiveness Test allows to gain some insight)Tj
 0 -1.1 TD
 (   into what the source of the latency is.  The previous section)Tj
 T*
@@ -1702,15 +1714,15 @@ T*
 T*
 (   loss-based congestion controls \(e.g., Reno or CUBIC\) otherwise, the)Tj
 T*
-(   same strategy SHOULD be used for responsiveness test traffic.  This)Tj
+(   same strategy SHOULD be used for Responsiveness Test traffic.  This)Tj
 T*
 (   is RECOMMENDED so that the synthetic traffic generated by the)Tj
 T*
-(   responsiveness test mimics real-world traffic for that server.)Tj
+(   Responsiveness Test mimics real-world traffic for that server.)Tj
 0 -2.2 TD
 (   Delay-based congestion-control algorithms \(e.g., Vegas, FAST, BBR\))Tj
 0 -1.1 TD
-(   SHOULD NOT be used for responsiveness test traffic because they take)Tj
+(   SHOULD NOT be used for Responsiveness Test traffic because they take)Tj
 T*
 (   much longer to discover the depth of the bottleneck buffers.  Delay-)Tj
 T*
@@ -1837,7 +1849,7 @@ T*
 T*
 (   quality of their connection to the service offered by that provider.)Tj
 T*
-(   However, when a user performs a Responsiveness test and determines)Tj
+(   However, when a user performs a Responsiveness Test and determines)Tj
 T*
 (   that they are suffering from poor responsiveness during the)Tj
 T*
@@ -2706,8 +2718,8 @@ endobj
 endobj
 82 0 obj
 <<
-/CreationDate (D:20230313134241-07'00')
-/ModDate (D:20230313134241-07'00')
+/CreationDate (D:20230313135442-07'00')
+/ModDate (D:20230313135442-07'00')
 /Producer (Apple pstopdf)
 >>
 endobj
@@ -2721,96 +2733,96 @@ endobj
 xref
 0 84
 0000000000 65535 f 
-0000070207 00000 n 
+0000070621 00000 n 
 0000000016 00000 n 
-0000002910 00000 n 
-0000069634 00000 n 
-0000069303 00000 n 
-0000072275 00000 n 
-0000070287 00000 n 
-0000003005 00000 n 
-0000006401 00000 n 
-0000070367 00000 n 
-0000006496 00000 n 
-0000009583 00000 n 
-0000070450 00000 n 
-0000009679 00000 n 
-0000012632 00000 n 
-0000070533 00000 n 
-0000012728 00000 n 
-0000016108 00000 n 
-0000070616 00000 n 
-0000016204 00000 n 
-0000018891 00000 n 
-0000070699 00000 n 
-0000018987 00000 n 
-0000022053 00000 n 
-0000070782 00000 n 
-0000022149 00000 n 
-0000025292 00000 n 
-0000070865 00000 n 
-0000025388 00000 n 
-0000028084 00000 n 
-0000070948 00000 n 
-0000028180 00000 n 
-0000031184 00000 n 
-0000071031 00000 n 
-0000031280 00000 n 
-0000034248 00000 n 
-0000072643 00000 n 
-0000072410 00000 n 
-0000071115 00000 n 
-0000034344 00000 n 
-0000037353 00000 n 
-0000071199 00000 n 
-0000037449 00000 n 
-0000039907 00000 n 
-0000071283 00000 n 
-0000040003 00000 n 
-0000042549 00000 n 
-0000071367 00000 n 
-0000042645 00000 n 
-0000045541 00000 n 
-0000071451 00000 n 
-0000045637 00000 n 
-0000048725 00000 n 
-0000071535 00000 n 
-0000048821 00000 n 
-0000052379 00000 n 
-0000071619 00000 n 
-0000052475 00000 n 
-0000055554 00000 n 
-0000071703 00000 n 
-0000055650 00000 n 
-0000058421 00000 n 
-0000071787 00000 n 
-0000058517 00000 n 
-0000061385 00000 n 
-0000071871 00000 n 
-0000061481 00000 n 
-0000064077 00000 n 
-0000072548 00000 n 
-0000071955 00000 n 
-0000064173 00000 n 
-0000066648 00000 n 
-0000072039 00000 n 
-0000066744 00000 n 
-0000068327 00000 n 
-0000072123 00000 n 
-0000068423 00000 n 
-0000069207 00000 n 
-0000069443 00000 n 
-0000072207 00000 n 
-0000072235 00000 n 
-0000072741 00000 n 
-0000072864 00000 n 
+0000002914 00000 n 
+0000070048 00000 n 
+0000069717 00000 n 
+0000072689 00000 n 
+0000070701 00000 n 
+0000003009 00000 n 
+0000006405 00000 n 
+0000070781 00000 n 
+0000006500 00000 n 
+0000009765 00000 n 
+0000070864 00000 n 
+0000009861 00000 n 
+0000013149 00000 n 
+0000070947 00000 n 
+0000013245 00000 n 
+0000016799 00000 n 
+0000071030 00000 n 
+0000016895 00000 n 
+0000019492 00000 n 
+0000071113 00000 n 
+0000019588 00000 n 
+0000022574 00000 n 
+0000071196 00000 n 
+0000022670 00000 n 
+0000025726 00000 n 
+0000071279 00000 n 
+0000025822 00000 n 
+0000028021 00000 n 
+0000071362 00000 n 
+0000028117 00000 n 
+0000031050 00000 n 
+0000071445 00000 n 
+0000031146 00000 n 
+0000034219 00000 n 
+0000073057 00000 n 
+0000072824 00000 n 
+0000071529 00000 n 
+0000034315 00000 n 
+0000037191 00000 n 
+0000071613 00000 n 
+0000037287 00000 n 
+0000039925 00000 n 
+0000071697 00000 n 
+0000040021 00000 n 
+0000042806 00000 n 
+0000071781 00000 n 
+0000042902 00000 n 
+0000045955 00000 n 
+0000071865 00000 n 
+0000046051 00000 n 
+0000049139 00000 n 
+0000071949 00000 n 
+0000049235 00000 n 
+0000052793 00000 n 
+0000072033 00000 n 
+0000052889 00000 n 
+0000055968 00000 n 
+0000072117 00000 n 
+0000056064 00000 n 
+0000058835 00000 n 
+0000072201 00000 n 
+0000058931 00000 n 
+0000061799 00000 n 
+0000072285 00000 n 
+0000061895 00000 n 
+0000064491 00000 n 
+0000072962 00000 n 
+0000072369 00000 n 
+0000064587 00000 n 
+0000067062 00000 n 
+0000072453 00000 n 
+0000067158 00000 n 
+0000068741 00000 n 
+0000072537 00000 n 
+0000068837 00000 n 
+0000069621 00000 n 
+0000069857 00000 n 
+0000072621 00000 n 
+0000072649 00000 n 
+0000073155 00000 n 
+0000073278 00000 n 
 trailer
 <<
 /Size 84
 /Root 83 0 R
 /Info 82 0 R
-/ID [<3daa178f6ba81d564be0930228fbec1f><3daa178f6ba81d564be0930228fbec1f>]
+/ID [<f305b2d813f82986e99d6084c1daae58><f305b2d813f82986e99d6084c1daae58>]
 >>
 startxref
-72934
+73348
 %%EOF

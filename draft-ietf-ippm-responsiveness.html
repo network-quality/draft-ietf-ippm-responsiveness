@@ -24,10 +24,10 @@ However, there is no technical reason for this to be the case.
 In fact, various queue management solutions (fq_codel, cake, PIE)
 have solved the problem. 
        Our networks remain unresponsive, not from a lack of technical solutions,
-but rather a lack of awareness of the problem and its solutions.
-We believe that creating a tool whose measurement matches people's
+but rather a lack of awareness of the problem and deployment of its solutions.
+We believe that creating a tool that measures the problem and matches people's
 everyday experience will create the necessary awareness,
-and result in a demand for products that solve the problem. 
+and result in a demand for solutions. 
        This document specifies the &quot;Responsiveness Test&quot; for measuring responsiveness.
 It uses common protocols and mechanisms to measure user
 experience specifically when the network is under working conditions.
@@ -1282,10 +1282,10 @@ However, there is no technical reason for this to be the case.
 In fact, various queue management solutions (fq_codel, cake, PIE)
 have solved the problem.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3">Our networks remain unresponsive, not from a lack of technical solutions,
-but rather a lack of awareness of the problem and its solutions.
-We believe that creating a tool whose measurement matches people's
+but rather a lack of awareness of the problem and deployment of its solutions.
+We believe that creating a tool that measures the problem and matches people's
 everyday experience will create the necessary awareness,
-and result in a demand for products that solve the problem.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
+and result in a demand for solutions.<a href="#section-abstract-3" class="pilcrow">¶</a></p>
 <p id="section-abstract-4">This document specifies the "Responsiveness Test" for measuring responsiveness.
 It uses common protocols and mechanisms to measure user
 experience specifically when the network is under working conditions.
@@ -1368,7 +1368,7 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
                     <p id="section-toc.1-1.4.2.1.2.2.1"><a href="#section-4.1.2" class="auto internal xref">4.1.2</a>.  <a href="#name-parallel-vs-sequential-upli" class="internal xref">Parallel vs Sequential Uplink and Downlink</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.1.2.3">
-                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-reaching-full-buffer-utiliz" class="internal xref">Reaching full buffer utilization</a></p>
+                    <p id="section-toc.1-1.4.2.1.2.3.1"><a href="#section-4.1.3" class="auto internal xref">4.1.3</a>.  <a href="#name-achieving-full-buffer-utili" class="internal xref">Achieving Full Buffer Utilization</a></p>
 </li>
                 </ul>
 </li>
@@ -1485,14 +1485,11 @@ where a connection is briefly shown as unstable.<a href="#section-1-2" class="pi
 <p id="section-1-3">These short-lived disruptions make it hard to narrow down the cause.
 We believe that it is necessary to create a standardized way to
 measure and express responsiveness.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">Existing network measurement tools could incorporate a
-responsiveness measurement into their set of metrics.
-Doing so would also raise the awareness of the problem and
-would help establish a new expectation
-that the standard measures of network quality should
--- in addition to throughput and idle latency --
-also include latency under load, or, as we prefer to call it,
-responsiveness under working conditions.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-4">Including the responsiveness-under-working-conditions test
+among other measurements of network quality (e.g., throughput
+and idle latency) would raise awareness of the problem and
+establish the expectation among users that their network providers deploy
+solutions.<a href="#section-1-4" class="pilcrow">¶</a></p>
 <div id="terminology">
 <section id="section-1.1">
         <h3 id="name-terminology">
@@ -1504,14 +1501,14 @@ buffering too much data.
 This document uses the term as a general description of bad latency,
 using more precise wording where warranted.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
 <p id="section-1.1-2">"Latency" is a poor measure of responsiveness,
-since it can be hard for the general public to understand.
+because it can be hard for the general public to understand.
 The units are unfamiliar ("what is a millisecond?") and
 counterintuitive ("100 msec -- that sounds good --
 it's only a tenth of a second!").<a href="#section-1.1-2" class="pilcrow">¶</a></p>
-<p id="section-1.1-3">Instead, we create the term "Responsiveness under working conditions"
+<p id="section-1.1-3">Instead, we define the term "responsiveness under working conditions"
 to make it clear that we are measuring all, not just idle, conditions,
 and use "round-trips per minute" as the unit.
-The advantage of round-trips per minute are two-fold: First, it allows for a unit
+The advantage of using round-trips per minute as the unit are two-fold: First, it allows for a unit
 that is "the higher the better". This kind of unit is often more intuitive for end-users.
 Second, the range of the values tends to be around the 4-digit integer range which
 is also a value easy to compare and read, again allowing for a more intuitive use.
@@ -1528,43 +1525,43 @@ that explicitly measures responsiveness under working conditions.<a href="#secti
       <h2 id="name-design-constraints">
 <a href="#section-2" class="section-number selfRef">2. </a><a href="#name-design-constraints" class="section-name selfRef">Design Constraints</a>
       </h2>
-<p id="section-2-1">There are many challenges around measurements on the Internet.
-They include the dynamic nature of the Internet,
+<p id="section-2-1">There are many challenges to defining measurements of the Internet:
+the dynamic nature of the Internet,
 the diverse nature of the traffic,
 the large number of devices that affect traffic,
-and the difficulty of attaining appropriate measurement conditions.<a href="#section-2-1" class="pilcrow">¶</a></p>
-<p id="section-2-2">Internet paths are changing all the time.
-Daily fluctuations in the demand make the bottlenecks ebb and flow.
-To minimize the variability of routing changes,
+the difficulty of attaining appropriate measurement conditions,
+diurnal traffic patterns,
+and changing routes.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">In order to minimize the effects of these challenges, 
 it's best to keep the test duration relatively short.<a href="#section-2-2" class="pilcrow">¶</a></p>
 <p id="section-2-3">TCP and UDP traffic, or traffic on ports 80 and 443, may take
-significantly different paths on the Internet and
-be subject to entirely different Quality of Service (QoS) treatment.
+significantly different paths over the network between source and destination
+and be subject to entirely different Quality of Service (QoS) treatment.
 A good test will use standard transport-layer traffic -- typical
 for people's use of the network --
-that is subject to the transport's congestion control that might
-reduce the traffic's rate and thus its buffering in the network.<a href="#section-2-3" class="pilcrow">¶</a></p>
-<p id="section-2-4">Traditionally, one thinks of bufferbloat happening on the
+that is subject to the transport layer's congestion control algorithms 
+that might reduce the traffic's rate and thus its buffering in the network.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">Traditionally, one thinks of bufferbloat happening in the network, i.e., on
 routers and switches of the Internet.
 However, the networking stacks of the clients and servers can
 have huge buffers.
 Data sitting in TCP sockets or waiting for the application
 to send or read causes artificial latency, and affects user experience
-the same way as "traditional" bufferbloat.<a href="#section-2-4" class="pilcrow">¶</a></p>
+the same way as in-network bufferbloat.<a href="#section-2-4" class="pilcrow">¶</a></p>
 <p id="section-2-5">Finally, it is crucial to recognize that significant
 queueing only happens on entry to the lowest-capacity
 (or "bottleneck") hop on a network path.
-For any flow of data between two communicating devices,
+For any flow of data between two endpoints
 there is always one hop along the path where the capacity
 available to that flow at that hop is the lowest among
 all the hops of that flow's path at that moment in time.
 It is important to understand that the existence of a
-lowest-capacity hop on a network path is not itself a problem.
+lowest-capacity hop on a network path and a buffer to smooth bursts
+of data is not itself a problem.
 In a heterogeneous network like the Internet it is
 inevitable that there must necessarily be some hop
 along the path with the lowest capacity for that path.
-If that hop were to be improved to make it no longer
-the lowest-capacity hop, then some other hop would
+If that hop were to be improved, then some other hop would
 become the new lowest-capacity hop for that path.
 In this context a "bottleneck" should not be seen as a problem to
 be fixed, because any attempt to "fix" the bottleneck is futile --
@@ -1581,7 +1578,7 @@ one step at a time, from 56kb/s dial-up modems in the 1990s to
 Gb/s home Internet service and Gb/s wireless connectivity today.<a href="#section-2-5" class="pilcrow">¶</a></p>
 <p id="section-2-6">Note that in a shared datagram network, conditions do not remain static.
 The hop that is the current bottleneck may change from moment to moment.
-For example, changes in other traffic may result in changes
+For example, changes in simultaneous traffic may result in changes
 to a flow's share of a given hop. A user moving around
 may cause the Wi-Fi transmission rate to vary widely,
 from a few Mb/s when far from the Access Point,
@@ -1597,11 +1594,11 @@ excessively large queue to form, this results in excessively large
 delays for packets sitting in that queue awaiting transmission,
 significantly degrading overall user experience.<a href="#section-2-8" class="pilcrow">¶</a></p>
 <p id="section-2-9">In order to discover the depth of the buffer at the bottleneck hop,
-the Responsiveness Test mimics normal network operations and data transfers,
-to cause this bottleneck buffer to fill to capacity, and then
-measures the resulting end-to-end latency under these operating conditions.
-A well managed bottleneck queue keeps its queue occupancy
-under control, resulting in consistently low round-trip time
+the proposed Responsiveness Test mimics normal network operations and data transfers,
+with the goal of filling the bottleneck buffer to capacity, and then
+measures the resulting end-to-end latency under these so-called working conditions.
+A well-managed bottleneck queue keeps its occupancy
+under control, resulting in consistently low round-trip times
 and consistently good responsiveness.
 A poorly managed bottleneck queue will not.<a href="#section-2-9" class="pilcrow">¶</a></p>
 </section>
@@ -1612,11 +1609,11 @@ A poorly managed bottleneck queue will not.<a href="#section-2-9" class="pilcrow
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-goals" class="section-name selfRef">Goals</a>
       </h2>
 <p id="section-3-1">The algorithm described here defines a Responsiveness Test that serves as a good
-proxy for user experience. This means:<a href="#section-3-1" class="pilcrow">¶</a></p>
+proxy for user experience. Therefore:<a href="#section-3-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-3-2">
 <li id="section-3-2.1">
-          <p id="section-3-2.1.1">Today's Internet traffic primarily uses HTTP/2 over TLS.
-Thus, the algorithm should use that protocol.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
+          <p id="section-3-2.1.1">Because today's Internet traffic primarily uses HTTP/2 over TLS, the test's
+algorithm should use that protocol.<a href="#section-3-2.1.1" class="pilcrow">¶</a></p>
 <p id="section-3-2.1.2">
 As a side note: other types of traffic are gaining in popularity (HTTP/3)
 and/or are already being used widely (RTP).
@@ -1624,16 +1621,13 @@ Traffic prioritization and QoS rules on the Internet may
 subject traffic to completely different paths:
 these could also be measured separately.<a href="#section-3-2.1.2" class="pilcrow">¶</a></p>
 </li>
-        <li id="section-3-2.2">The Internet is marked by the deployment of countless middleboxes like
-transparent TCP proxies or traffic prioritization for certain types of traffic.
-The Responsiveness Test must take into account their effect on
+        <li id="section-3-2.2">Because the Internet is marked by the deployment of countless middleboxes like
+transparent TCP proxies or traffic prioritization for certain types of traffic,
+the Responsiveness Test algorithm must take into account their effect on
 TCP-handshake <span>[<a href="#RFC0793" class="cite xref">RFC0793</a>]</span>, TLS-handshake, and request/response.<a href="#section-3-2.2" class="pilcrow">¶</a>
 </li>
-        <li id="section-3-2.3">The test result should be expressed in an intuitive, nontechnical form.<a href="#section-3-2.3" class="pilcrow">¶</a>
-</li>
-        <li id="section-3-2.4">Finally, to be useful to a wide audience, the measurement
-should finish within a short time frame.
-Our target is 20 seconds.<a href="#section-3-2.4" class="pilcrow">¶</a>
+        <li id="section-3-2.3">Because the goal of the test is to educate end users, the results should be expressed in an intuitive, nontechnical form
+and not commit the user to spend a significant amount of their time (we target 20 seconds).<a href="#section-3-2.3" class="pilcrow">¶</a>
 </li>
       </ol>
 </section>
@@ -1643,32 +1637,30 @@ Our target is 20 seconds.<a href="#section-3-2.4" class="pilcrow">¶</a>
       <h2 id="name-measuring-responsiveness-un">
 <a href="#section-4" class="section-number selfRef">4. </a><a href="#name-measuring-responsiveness-un" class="section-name selfRef">Measuring Responsiveness Under Working Conditions</a>
       </h2>
-<p id="section-4-1">To make an accurate measurement,
-the algorithm must reliably put the network in a state
-that represents those "working conditions".
-During this process, the algorithm measures the responsiveness of the network.
-The following explains how
-the former and the latter are achieved.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-1">Overall, the test to measure responsiveness under working conditions proceeds in two steps:<a href="#section-4-1" class="pilcrow">¶</a></p>
+<ol start="1" type="1" class="normal type-1" id="section-4-2">
+<li id="section-4-2.1">Put the network connection into "working conditions"<a href="#section-4-2.1" class="pilcrow">¶</a>
+</li>
+        <li id="section-4-2.2">Measure responsiveness of the network.<a href="#section-4-2.2" class="pilcrow">¶</a>
+</li>
+      </ol>
+<p id="section-4-3">The following explains how the former and the latter are achieved.<a href="#section-4-3" class="pilcrow">¶</a></p>
 <div id="working-conditions">
 <section id="section-4.1">
         <h3 id="name-working-conditions">
 <a href="#section-4.1" class="section-number selfRef">4.1. </a><a href="#name-working-conditions" class="section-name selfRef">Working Conditions</a>
         </h3>
-<p id="section-4.1-1">There are many different ways to define the state of "working conditions" to
-measure responsiveness. There is no one true answer to this question. It is a
+<p id="section-4.1-1">What are <em>the</em> conditions that best emulate how a network
+connection is used? There is no one true answer to this question. It is a
 tradeoff between using realistic traffic patterns and pushing the network to
 its limits.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">The working conditions we try to achieve is a scenario where the path between the
-measuring endpoints is utilized at its full end-to-end capacity and its full
-buffer occupancy. An ideal
-sender could send at just this link-speed without building a queue on the
-bottleneck. Thus, in order to measure the worst-case responsiveness we need to
-ensure that a queue is building up on the bottleneck, meaning that responsiveness
-is at its worst.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
-<p id="section-4.1-3">In this document we aim to generate a realistic traffic pattern by
-using standard HTTP transactions but exploring the worst-case scenario by creating
-multiple of these transactions and using very large data objects in these HTTP
-transactions.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1-2">The Responsiveness Test defines working conditions as the condition where the path between the
+measuring endpoints is utilized at its end-to-end capacity and the queue at the bottleneck link
+is at (or beyond) its maximum occupancy. Under these conditions, the network connection's responsiveness
+will be at its worst.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
+<p id="section-4.1-3">The Responsiveness Test algorithm for reaching working conditions combines 
+multiple standard HTTP transactions with very large data objects according to realistic traffic patterns
+to create these conditions.<a href="#section-4.1-3" class="pilcrow">¶</a></p>
 <p id="section-4.1-4">This allows to create a stable state of working conditions during which the
 bottleneck of the path between client and server has its buffer filled
 up entirely, without generating DoS-like traffic
@@ -1696,26 +1688,27 @@ networks is by creating multiple connections, allowing to actively fill the
 bottleneck's buffer to achieve maximum working conditions.<a href="#section-4.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1.1-3">Even if a single TCP connection would be able to fill the bottleneck's buffer,
 it may take some time for a single TCP connection to ramp
-up to full speed. One of the goals of the Responsiveness test is to quickly
-load the network, take its measurements, and then finish.
-Finally, traditional loss-based TCP congestion control algorithms
+up to full speed. One of the goals of the Responsiveness Test is to help the user 
+quickly measure their network. As a result, the test must load the network, take its measurements, and then finish
+as fast as possible.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-4">Finally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
 This reaction (intended by the protocol design) decreases the
 queueing within the network, making it harder to determine the
-depth of the bottleneck queue reliably.<a href="#section-4.1.1-3" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-4">The purpose of the Responsiveness Test is not to productively move data
+depth of the bottleneck queue reliably.<a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-5">The purpose of the Responsiveness Test is not to productively move data
 across the network in a useful way, the way a normal application does.
 The purpose of the Responsiveness Test is, as quickly as possible, to simulate
 a representative traffic load as if real applications were doing
 sustained data transfers, measure the resulting round-trip time
-occurring under those realistic conditions, and then end the test.
+occurring under those realistic conditions.
 Because of this, using multiple simultaneous parallel connections
-allows the Responsiveness test to complete its task more quickly, in a way that
+allows the Responsiveness Test to complete its task more quickly, in a way that
 overall is less disruptive and less wasteful of network capacity
 than a test using a single TCP connection that would take longer
-to bring the bottleneck hop to a stable saturated state.<a href="#section-4.1.1-4" class="pilcrow">¶</a></p>
-<p id="section-4.1.1-5">In this document, we impose an upper bound on the number of parallel load-generating
-connections to 16.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
+to bring the bottleneck hop to a stable saturated state.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-6">In this document, we impose an upper bound on the number of parallel load-generating
+connections to 16.<a href="#section-4.1.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="parallel-vs-sequential-uplink-and-downlink">
@@ -1726,7 +1719,7 @@ connections to 16.<a href="#section-4.1.1-5" class="pilcrow">¶</a></p>
 <p id="section-4.1.2-1">Poor responsiveness can be caused by queues in either (or both)
 the upstream and the downstream direction.
 Furthermore, both paths may differ significantly due to access link
-conditions (e.g., 5G downstream and LTE upstream) or the routing changes
+conditions (e.g., 5G downstream and LTE upstream) or routing changes
 within the ISPs.
 To measure responsiveness under working conditions,
 the algorithm must explore both directions.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
@@ -1735,7 +1728,7 @@ in parallel. It would allow for a shorter test run-time.<a href="#section-4.1.2-
 <p id="section-4.1.2-3">However, a number of caveats come with measuring in parallel:<a href="#section-4.1.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4.1.2-4.1">Half-duplex links may not permit simultaneous uplink and downlink traffic.
-This means the test might not reach the path's capacity in both directions at once and thus not expose
+This restriction means the test might not reach the path's capacity in both directions at once and thus not expose
 all the potential sources of low responsiveness.<a href="#section-4.1.2-4.1" class="pilcrow">¶</a>
 </li>
             <li class="normal" id="section-4.1.2-4.2">Debuggability of the results becomes harder:
@@ -1747,17 +1740,17 @@ the observed latency happens in the uplink or the downlink direction.<a href="#s
 is considered a future extension.<a href="#section-4.1.2-5" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="reaching-full-buffer-utilization">
+<div id="achieving-full-buffer-utilization">
 <section id="section-4.1.3">
-          <h4 id="name-reaching-full-buffer-utiliz">
-<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-reaching-full-buffer-utiliz" class="section-name selfRef">Reaching full buffer utilization</a>
+          <h4 id="name-achieving-full-buffer-utili">
+<a href="#section-4.1.3" class="section-number selfRef">4.1.3. </a><a href="#name-achieving-full-buffer-utili" class="section-name selfRef">Achieving Full Buffer Utilization</a>
           </h4>
-<p id="section-4.1.3-1">The Responsiveness Test gradually increases the number of TCP connections
+<p id="section-4.1.3-1">The Responsiveness Test gradually increases the number of TCP connections (known as load-generating connections)
 and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
 continuously.
-Once goodput reaches saturation, buffers will start filling up, creating the well-known
-"standing queue" that is known as bufferbloat. This is the moment the test starts
-measuring the responsiveness until the responsiveness reaches saturation as well.
+By definition, once goodput is maximized, buffers will start filling up, creating the
+"standing queue" that is characteristic of bufferbloat. At this moment the test starts
+measuring the responsiveness until it, too, reaches saturation.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-4.1.3-2">The algorithm notes that throughput increases rapidly until TCP
@@ -1782,7 +1775,8 @@ the working condition is stable.<a href="#section-4.1.3-2" class="pilcrow">¶</a
         </h3>
 <p id="section-4.2-1">A number of parameters serve as input to the test methodology. The following lists
 their names, default values and explanation. Hereafter the detailed description of the
-methodology will explain how these parameters are being used.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+methodology will explain how these parameters are being used. Experience has shown
+that these parameters allow for a low runtime and accurate results among a wide range of environments.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
           <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
@@ -1825,7 +1819,7 @@ methodology will explain how these parameters are being used.<a href="#section-4
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">PTC</td>
-              <td class="text-left" rowspan="1" colspan="1">Maximum percentage of total capacity the probes are allowed to consume</td>
+              <td class="text-left" rowspan="1" colspan="1">Percentage of Total Capacity the probes are allowed to consume</td>
               <td class="text-left" rowspan="1" colspan="1">5%</td>
             </tr>
           </tbody>
@@ -1837,11 +1831,10 @@ methodology will explain how these parameters are being used.<a href="#section-4
         <h3 id="name-measuring-responsiveness">
 <a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-measuring-responsiveness" class="section-name selfRef">Measuring Responsiveness</a>
         </h3>
-<p id="section-4.3-1">Measuring responsiveness during the previously explained working conditions creation
-is a continuous process during the duration of the test. It requires a sufficiently
-large sample-size to have confidence in the results.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
-<p id="section-4.3-2">The measurement of the responsiveness happens by sending probe-requests for a small
-object. There are two types of probe requests:<a href="#section-4.3-2" class="pilcrow">¶</a></p>
+<p id="section-4.3-1">Measuring responsiveness while achieving working conditions is a process of continuous measurement.
+It requires a sufficiently large sample-size to have confidence in the results.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">The measurement of the responsiveness happens by sending probe-requests.
+There are two types of probe requests:<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-4.3-3">
 <li id="section-4.3-3.1">A HTTP GET request on a separate connection ("foreign probes").
 This test mimics the time it takes for a web browser to connect to a new
@@ -1859,38 +1852,40 @@ creating a brand new TLS connection from scratch to do the same thing.<a href="#
 </li>
         </ol>
 <p id="section-4.3-4">Foreign probes will provide 3 sets of data-points. First, the duration of the TCP-handshake
-(noted hereafter as tcp_f).
-Second, the TLS round-trip-time (noted tls_f). For this, it is important to note that different TLS versions
+(noted hereafter as <code>tcp_f</code>).
+Second, the TLS round-trip-time (noted <code>tls_f</code>). For this, it is important to note that different TLS versions
 have a different number of round-trips. Thus, the TLS establishment time needs to be
 normalized to the number of round-trips the TLS handshake takes until the connection
 is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
-request for a 1-byte object and receiving the entire response (noted http_f).<a href="#section-4.3-4" class="pilcrow">¶</a></p>
+request for a 1-byte object and receiving the entire response (noted <code>http_f</code>).<a href="#section-4.3-4" class="pilcrow">¶</a></p>
 <p id="section-4.3-5">Self probes will provide a single data-point for the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
-full HTTP response has been received (noted http_l).<a href="#section-4.3-5" class="pilcrow">¶</a></p>
-<p id="section-4.3-6">tcp_f, tls_f, http_f and http_l are all measured in milliseconds.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
-<p id="section-4.3-7">The more probes that are sent, the more data is available for calculation. In order to generate
-as much data as possible, the methodology requires a client to issue these probes regularly.
-There is however a risk that on low-capacity networks the responsiveness probes
-themselves will consume a significant amount of the capacity. As the test mandates to
-first saturate capacity before probing for responsiveness, we are able to
-accurately estimate how much of the capacity the responsiveness probes will consume.<a href="#section-4.3-7" class="pilcrow">¶</a></p>
-<p id="section-4.3-8">This can be done by providing an estimate of the number of bytes exchanged for a
+full HTTP response has been received (noted <code>http_s</code>).<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-6"><code>tcp_f</code>, <code>tls_f</code>, <code>http_f</code> and <code>http_s</code> are all measured in milliseconds.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
+<p id="section-4.3-7">The more probes that are sent, the more data available for calculation. In order to generate
+as much data as possible, the Responsiveness Test specifies that a client issue these probes regularly.
+There is, however, a risk that on low-capacity networks the responsiveness probes
+themselves will consume a significant amount of the capacity. Because the test mandates
+first saturating capacity before probing for responsiveness, we are able to
+accurately estimate how much of the capacity the responsiveness probes will consume and never
+send more probes than the network can handle.<a href="#section-4.3-7" class="pilcrow">¶</a></p>
+<p id="section-4.3-8">Limiting the data used by probes can be done by providing an estimate of the number of bytes exchanged for a
 responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
 the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
 On load-generating connections we can expect an overhead of no more than 1000 bytes.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
-<p id="section-4.3-9">Given this information, we recommend that at each responsiveness probing round, we
-send no more than 6 probes on different load-generating connections (choosing randomly among the available load-generating connections)
-and 3 probes on foreign connections,
-every 100ms for each type of probe.
-This would result in a total amount of data per second of 210 KB or 1680Kb, meaning
-a total capacity utilization of 1680 Kbps for the probing.<a href="#section-4.3-9" class="pilcrow">¶</a></p>
-<p id="section-4.3-10">On high-speed networks, this will provide a significant amount of samples, while at
+<p id="section-4.3-9">Given this information, we recommend that at each responsiveness probing interval does
+not send more than MPS (Maximum responsiveness Probes per Second - default to 100) probes per second.
+The probes should be spread out equally over the duration of the interval with an
+equal split between foreign and different load-generating connections. For the probes on
+load-generating connections, the connection should be selected randomly for each probe.<a href="#section-4.3-9" class="pilcrow">¶</a></p>
+<p id="section-4.3-10">This would result in a total amount of data per second of 300 KB or 2400Kb, meaning
+a total capacity utilization of 2400 Kbps for the probing.<a href="#section-4.3-10" class="pilcrow">¶</a></p>
+<p id="section-4.3-11">On high-speed networks, this will provide a significant amount of samples, while at
 the same time minimizing the probing overhead.
 However, on severely capacity-constrained networks the probing traffic could consume
-a significant portion of the available capacity. We recommend to increase the probing
-interval beyond 100ms and reduce the number of parallel probes appropriately
-so that the probing traffic does not consume more than 5% of the available capacity.<a href="#section-4.3-10" class="pilcrow">¶</a></p>
+a significant portion of the available capacity. The Responsiveness Test must
+adjust its probing frequency and in such a way that the probing traffic does not consume
+more than PTC (Percentage of Total Capacity - default to 5%) of the available capacity.<a href="#section-4.3-11" class="pilcrow">¶</a></p>
 <div id="aggregating-the-measurements">
 <section id="section-4.3.1">
           <h4 id="name-aggregating-the-measurement">
@@ -1900,17 +1895,17 @@ so that the probing traffic does not consume more than 5% of the available capac
 tcp_f, tls_f, http_f, http_l (from the previous section).
 The responsiveness evolves over time as buffers gradually reach saturation. Once
 the buffers are saturated responsiveness is stable over time. Thus, the aggregation
-of the measurements considers the last 4 seconds worth of completed responsiveness probes.<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.3.1-2">Over the timeframe of 4 seconds a potentially large number of samples has been collected.
+of the measurements considers the last MAD (Moving Average Distance - default to 4) intervals worth of completed responsiveness probes.<a href="#section-4.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.3.1-2">Over the timeframe of these intervals a potentially large number of samples has been collected.
 These may be affected by noise in the measurements, and outliers. Thus, to aggregate these
-we suggest to use a trimmed mean at 95th percentile, thus providing the following numbers:
-tcp_f_t95, tls_f_t95, http_f_t95, http_l_t95.<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
+we suggest to use a trimmed mean at the TMP (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
+TM(tcp_f), TM(tls_f), TM(http_f), TM(http_l).<a href="#section-4.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.3.1-3">The responsiveness is then calculated as the weighted mean:<a href="#section-4.3.1-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-4.3.1-4">
 <pre>
 Responsiveness = 60000 /
-(1/6*(tcp_f_t95 + tls_f_t95 + http_f_t95) +
-  1/2*http_s_t95)
+(1/6*(TM(tcp_f) + TM(tls_f) + TM(http_f)) +
+  1/2*TM(http_s))
 </pre><a href="#section-4.3.1-4" class="pilcrow">¶</a>
 </div>
 <p id="section-4.3.1-5">This responsiveness value presents round-trips per minute (RPM).<a href="#section-4.3.1-5" class="pilcrow">¶</a></p>
@@ -1929,12 +1924,12 @@ final algorithm. In order to measure the worst-case latency we need to transmit
 traffic at the full capacity of the path as well as ensure the buffers are filled
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
-in a 1-second interval. This will ensure that we quickly reach capacity and full
+in a ID (Interval duration - default to 1 second) interval. This will ensure that we quickly reach capacity and full
 buffer occupancy. First, the algorithm reaches stability for the goodput. Once
 goodput stability has been achieved, responsiveness probes are being transmitted
 until responsiveness stability is reached.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
 <p id="section-4.4-2">We consider both, goodput and responsiveness to be stable, when the standard deviation
-of the past 4 moving averages is within 5% of the last of the moving averages.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+of the past MAD intervals is within SDT (Standard Deviation Tolerance - default to 5%) of the last of the moving averages.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 <p id="section-4.4-3">The following algorithm reaches working conditions of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
 files.
@@ -2102,7 +2097,7 @@ is however aimed at providing a quick, top-level view of the responsiveness
 under working conditions the way end-users experience it.
 Localizing the source of low responsiveness involves however a set of different
 tools and methodologies.<a href="#section-5.2-1" class="pilcrow">¶</a></p>
-<p id="section-5.2-2">Nevertheless, the responsiveness test allows to gain some insight into what the
+<p id="section-5.2-2">Nevertheless, the Responsiveness Test allows to gain some insight into what the
 source of the latency is. The previous section described the elements that influence
 the responsiveness. From there it became apparent that the latency measured
 on the load-generating connections and the latency measured on separate connections
@@ -2140,11 +2135,11 @@ to avoid affecting the client's measurement.<a href="#section-6-2" class="pilcro
 (e.g., TCP Prague with ECT(1) packet marking),
 for their normal traffic when it is available, and fall back
 to traditional loss-based congestion controls (e.g., Reno or CUBIC)
-otherwise, the same strategy SHOULD be used for responsiveness test traffic.
+otherwise, the same strategy SHOULD be used for Responsiveness Test traffic.
 This is RECOMMENDED so that the synthetic traffic generated
-by the responsiveness test mimics real-world traffic for that server.<a href="#section-6-3" class="pilcrow">¶</a></p>
+by the Responsiveness Test mimics real-world traffic for that server.<a href="#section-6-3" class="pilcrow">¶</a></p>
 <p id="section-6-4">Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
-SHOULD NOT be used for responsiveness test traffic because they take
+SHOULD NOT be used for Responsiveness Test traffic because they take
 much longer to discover the depth of the bottleneck buffers.
 Delay-based congestion-control algorithms seek to mitigate the
 effects of bufferbloat, by detecting and responding to early signs
@@ -2203,7 +2198,7 @@ for the latency measurements.<a href="#section-6-7" class="pilcrow">¶</a></p>
 or a network access provider like an ISP) to host Responsiveness Test Server instances on their
 network so customers can determine what to expect about the quality of their connection to 
 the service offered by that provider.
-However, when a user performs a Responsiveness test and determines
+However, when a user performs a Responsiveness Test and determines
 that they are suffering from poor responsiveness during the connection to that service,
 the logical next questions might be,<a href="#section-7-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-7-2">
