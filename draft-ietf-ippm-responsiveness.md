@@ -106,10 +106,10 @@ In fact, various queue management solutions (fq_codel, cake, PIE)
 have solved the problem.
 
 Our networks remain unresponsive, not from a lack of technical solutions,
-but rather a lack of awareness of the problem and its solutions.
-We believe that creating a tool whose measurement matches people's
+but rather a lack of awareness of the problem and deployment of its solutions.
+We believe that creating a tool that measures the problem and matches people's
 everyday experience will create the necessary awareness,
-and result in a demand for products that solve the problem.
+and result in a demand for solutions.
 
 This document specifies the "Responsiveness Test" for measuring responsiveness.
 It uses common protocols and mechanisms to measure user
@@ -144,14 +144,11 @@ These short-lived disruptions make it hard to narrow down the cause.
 We believe that it is necessary to create a standardized way to
 measure and express responsiveness.
 
-Existing network measurement tools could incorporate a
-responsiveness measurement into their set of metrics.
-Doing so would also raise the awareness of the problem and
-would help establish a new expectation
-that the standard measures of network quality should
--- in addition to throughput and idle latency --
-also include latency under load, or, as we prefer to call it,
-responsiveness under working conditions.
+Including the responsiveness-under-working-conditions test
+among other measurements of network quality (e.g., throughput
+and idle latency) would raise awareness of the problem and
+establish the expectation among users that their network providers deploy
+solutions.
 
 ## Terminology
 
@@ -162,15 +159,15 @@ This document uses the term as a general description of bad latency,
 using more precise wording where warranted.
 
 "Latency" is a poor measure of responsiveness,
-since it can be hard for the general public to understand.
+because it can be hard for the general public to understand.
 The units are unfamiliar ("what is a millisecond?") and
 counterintuitive ("100 msec -- that sounds good --
 it's only a tenth of a second!").
 
-Instead, we create the term "Responsiveness under working conditions"
+Instead, we define the term "responsiveness under working conditions"
 to make it clear that we are measuring all, not just idle, conditions,
 and use "round-trips per minute" as the unit.
-The advantage of round-trips per minute are two-fold: First, it allows for a unit
+The advantage of using round-trips per minute as the unit are two-fold: First, it allows for a unit
 that is "the higher the better". This kind of unit is often more intuitive for end-users.
 Second, the range of the values tends to be around the 4-digit integer range which
 is also a value easy to compare and read, again allowing for a more intuitive use.
@@ -182,47 +179,47 @@ that explicitly measures responsiveness under working conditions.
 
 # Design Constraints
 
-There are many challenges around measurements on the Internet.
-They include the dynamic nature of the Internet,
+There are many challenges to defining measurements of the Internet:
+the dynamic nature of the Internet,
 the diverse nature of the traffic,
 the large number of devices that affect traffic,
-and the difficulty of attaining appropriate measurement conditions.
+the difficulty of attaining appropriate measurement conditions,
+diurnal traffic patterns,
+and changing routes.
 
-Internet paths are changing all the time.
-Daily fluctuations in the demand make the bottlenecks ebb and flow.
-To minimize the variability of routing changes,
+In order to minimize the effects of these challenges, 
 it's best to keep the test duration relatively short.
 
 TCP and UDP traffic, or traffic on ports 80 and 443, may take
-significantly different paths on the Internet and
-be subject to entirely different Quality of Service (QoS) treatment.
+significantly different paths over the network between source and destination
+and be subject to entirely different Quality of Service (QoS) treatment.
 A good test will use standard transport-layer traffic -- typical
 for people's use of the network --
-that is subject to the transport's congestion control that might
-reduce the traffic's rate and thus its buffering in the network.
+that is subject to the transport layer's congestion control algorithms 
+that might reduce the traffic's rate and thus its buffering in the network.
 
-Traditionally, one thinks of bufferbloat happening on the
+Traditionally, one thinks of bufferbloat happening in the network, i.e., on
 routers and switches of the Internet.
 However, the networking stacks of the clients and servers can
 have huge buffers.
 Data sitting in TCP sockets or waiting for the application
 to send or read causes artificial latency, and affects user experience
-the same way as "traditional" bufferbloat.
+the same way as in-network bufferbloat.
 
 Finally, it is crucial to recognize that significant
 queueing only happens on entry to the lowest-capacity
 (or “bottleneck”) hop on a network path.
-For any flow of data between two communicating devices,
+For any flow of data between two endpoints
 there is always one hop along the path where the capacity
 available to that flow at that hop is the lowest among
 all the hops of that flow’s path at that moment in time.
 It is important to understand that the existence of a
-lowest-capacity hop on a network path is not itself a problem.
+lowest-capacity hop on a network path and a buffer to smooth bursts
+of data is not itself a problem.
 In a heterogeneous network like the Internet it is
 inevitable that there must necessarily be some hop
 along the path with the lowest capacity for that path.
-If that hop were to be improved to make it no longer
-the lowest-capacity hop, then some other hop would
+If that hop were to be improved, then some other hop would
 become the new lowest-capacity hop for that path.
 In this context a “bottleneck” should not be seen as a problem to
 be fixed, because any attempt to “fix” the bottleneck is futile --
@@ -240,7 +237,7 @@ Gb/s home Internet service and Gb/s wireless connectivity today.
 
 Note that in a shared datagram network, conditions do not remain static.
 The hop that is the current bottleneck may change from moment to moment.
-For example, changes in other traffic may result in changes
+For example, changes in simultaneous traffic may result in changes
 to a flow’s share of a given hop. A user moving around
 may cause the Wi-Fi transmission rate to vary widely,
 from a few Mb/s when far from the Access Point,
@@ -259,21 +256,21 @@ delays for packets sitting in that queue awaiting transmission,
 significantly degrading overall user experience.
 
 In order to discover the depth of the buffer at the bottleneck hop,
-the Responsiveness Test mimics normal network operations and data transfers,
-to cause this bottleneck buffer to fill to capacity, and then
-measures the resulting end-to-end latency under these operating conditions.
-A well managed bottleneck queue keeps its queue occupancy
-under control, resulting in consistently low round-trip time
+the proposed Responsiveness Test mimics normal network operations and data transfers,
+with the goal of filling the bottleneck buffer to capacity, and then
+measures the resulting end-to-end latency under these so-called working conditions.
+A well-managed bottleneck queue keeps its occupancy
+under control, resulting in consistently low round-trip times
 and consistently good responsiveness.
 A poorly managed bottleneck queue will not.
 
 # Goals
 
 The algorithm described here defines an Responsiveness Test that serves as a good
-proxy for user experience. This means:
+proxy for user experience. Therefore:
 
-1. Today's Internet traffic primarily uses HTTP/2 over TLS.
-   Thus, the algorithm should use that protocol.
+1. Because today's Internet traffic primarily uses HTTP/2 over TLS, the test's
+algorithm should use that protocol.
 
    As a side note: other types of traffic are gaining in popularity (HTTP/3)
 and/or are already being used widely (RTP).
@@ -281,45 +278,38 @@ Traffic prioritization and QoS rules on the Internet may
 subject traffic to completely different paths:
 these could also be measured separately.
 
-2. The Internet is marked by the deployment of countless middleboxes like
-transparent TCP proxies or traffic prioritization for certain types of traffic.
-The Responsiveness Test must take into account their effect on
+1. Because the Internet is marked by the deployment of countless middleboxes like
+transparent TCP proxies or traffic prioritization for certain types of traffic,
+the Responsiveness Test algorithm must take into account their effect on
 TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
 
-3. The test result should be expressed in an intuitive, nontechnical form.
-
-4. Finally, to be useful to a wide audience, the measurement
-should finish within a short time frame.
-Our target is 20 seconds.
+1. Because the goal of the test is to educate end users, the results should be expressed in an intuitive, nontechnical form
+and not commit the user to spend a significant amount of their time (we target 20 seconds).
 
 # Measuring Responsiveness Under Working Conditions
 
-To make an accurate measurement,
-the algorithm must reliably put the network in a state
-that represents those "working conditions".
-During this process, the algorithm measures the responsiveness of the network.
-The following explains how
-the former and the latter are achieved.
+Overall, the test to measure responsiveness under working conditions proceeds in two steps:
+
+1. Put the network connection into "working conditions"
+2. Measure responsiveness of the network.
+
+The following explains how the former and the latter are achieved.
 
 ## Working Conditions
 
-There are many different ways to define the state of "working conditions" to
-measure responsiveness. There is no one true answer to this question. It is a
+What are *the* conditions that best emulate how a network
+connection is used? There is no one true answer to this question. It is a
 tradeoff between using realistic traffic patterns and pushing the network to
 its limits.
 
-The working conditions we try to achieve is a scenario where the path between the
-measuring endpoints is utilized at its full end-to-end capacity and its full
-buffer occupancy. An ideal
-sender could send at just this link-speed without building a queue on the
-bottleneck. Thus, in order to measure the worst-case responsiveness we need to
-ensure that a queue is building up on the bottleneck, meaning that responsiveness
-is at its worst.
+The Responsiveness Test defines working conditions as the condition where the path between the
+measuring endpoints is utilized at its end-to-end capacity and the queue at the bottleneck link
+is at (or beyond) its maximum occupancy. Under these conditions, the network connection's responsiveness
+will be at its worst.
 
-In this document we aim to generate a realistic traffic pattern by
-using standard HTTP transactions but exploring the worst-case scenario by creating
-multiple of these transactions and using very large data objects in these HTTP
-transactions.
+The Responsiveness Test algorithm for reaching working conditions combines 
+multiple standard HTTP transactions with very large data objects according to realistic traffic patterns
+to create these conditions.
 
 This allows to create a stable state of working conditions during which the
 bottleneck of the path between client and server has its buffer filled
@@ -365,7 +355,7 @@ a representative traffic load as if real applications were doing
 sustained data transfers, measure the resulting round-trip time
 occurring under those realistic conditions, and then end the test.
 Because of this, using multiple simultaneous parallel connections
-allows the Responsiveness test to complete its task more quickly, in a way that
+allows the Responsiveness Test to complete its task more quickly, in a way that
 overall is less disruptive and less wasteful of network capacity
 than a test using a single TCP connection that would take longer
 to bring the bottleneck hop to a stable saturated state.
@@ -657,7 +647,7 @@ under working conditions the way end-users experience it.
 Localizing the source of low responsiveness involves however a set of different
 tools and methodologies.
 
-Nevertheless, the responsiveness test allows to gain some insight into what the
+Nevertheless, the Responsiveness Test allows to gain some insight into what the
 source of the latency is. The previous section described the elements that influence
 the responsiveness. From there it became apparent that the latency measured
 on the load-generating connections and the latency measured on separate connections
@@ -692,12 +682,12 @@ As clients and servers become deployed that use L4S congestion control
 (e.g., TCP Prague with ECT(1) packet marking),
 for their normal traffic when it is available, and fall back
 to traditional loss-based congestion controls (e.g., Reno or CUBIC)
-otherwise, the same strategy SHOULD be used for responsiveness test traffic.
+otherwise, the same strategy SHOULD be used for Responsiveness Test traffic.
 This is RECOMMENDED so that the synthetic traffic generated
-by the responsiveness test mimics real-world traffic for that server.
+by the Responsiveness Test mimics real-world traffic for that server.
 
 Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
-SHOULD NOT be used for responsiveness test traffic because they take
+SHOULD NOT be used for Responsiveness Test traffic because they take
 much longer to discover the depth of the bottleneck buffers.
 Delay-based congestion-control algorithms seek to mitigate the
 effects of bufferbloat, by detecting and responding to early signs
@@ -752,7 +742,7 @@ It makes sense for a service provider (either an application service provider li
 or a network access provider like an ISP) to host Responsiveness Test Server instances on their
 network so customers can determine what to expect about the quality of their connection to 
 the service offered by that provider.
-However, when a user performs an Responsiveness test and determines
+However, when a user performs an Responsiveness Test and determines
 that they are suffering from poor responsiveness during the connection to that service,
 the logical next questions might be,
 
