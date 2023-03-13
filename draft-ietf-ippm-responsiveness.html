@@ -19,7 +19,7 @@ it remains a common problem for the end users.
 have problems when somebody else at home is
 watching a 4K movie or uploading photos from their phone.
 However, there is no technical reason for this to be the case.
-In fact, various queue management solutions (fq_codel, cake, PIE)
+In fact, various queue management solutions
 have solved the problem. 
        Our networks remain unresponsive, not from a lack of technical solutions,
 but rather a lack of awareness of the problem and deployment of its solutions.
@@ -35,7 +35,7 @@ idle latency as critical indicators of network quality.
     " name="description">
 <meta content="xml2rfc 3.15.1" name="generator">
 <meta content="Internet-Draft" name="keyword">
-<meta content="draft-ietf-ippm-responsiveness-01" name="ietf.draft">
+<meta content="draft-ietf-ippm-responsiveness-02" name="ietf.draft">
 <!-- Generator version information:
   xml2rfc 3.15.1
     Python 3.9.6
@@ -1227,7 +1227,7 @@ li > p:last-of-type {
 <dt class="label-workgroup">Workgroup:</dt>
 <dd class="workgroup">IP Performance Measurement</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
-<dd class="internet-draft">draft-ietf-ippm-responsiveness-01</dd>
+<dd class="internet-draft">draft-ietf-ippm-responsiveness-02</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
 <time datetime="2023-03-13" class="published">13 March 2023</time>
@@ -1269,7 +1269,7 @@ it remains a common problem for the end users.<a href="#section-abstract-1" clas
 have problems when somebody else at home is
 watching a 4K movie or uploading photos from their phone.
 However, there is no technical reason for this to be the case.
-In fact, various queue management solutions (fq_codel, cake, PIE)
+In fact, various queue management solutions
 have solved the problem.<a href="#section-abstract-2" class="pilcrow">¶</a></p>
 <p id="section-abstract-3">Our networks remain unresponsive, not from a lack of technical solutions,
 but rather a lack of awareness of the problem and deployment of its solutions.
@@ -1459,7 +1459,7 @@ idle latency as critical indicators of network quality.<a href="#section-abstrac
 <p id="section-1-1">For many years, a lack of responsiveness, variously called
 lag, latency, or bufferbloat, has been recognized
 as an unfortunate, but common, symptom in today's networks <span>[<a href="#Bufferbloat" class="cite xref">Bufferbloat</a>]</span>.
-Solutions like fq_codel <span>[<a href="#RFC8290" class="cite xref">RFC8290</a>]</span> or PIE <span>[<a href="#RFC8033" class="cite xref">RFC8033</a>]</span> have been standardized
+Solutions like fq_codel <span>[<a href="#RFC8290" class="cite xref">RFC8290</a>]</span>, PIE <span>[<a href="#RFC8033" class="cite xref">RFC8033</a>]</span> or L4S <span>[<a href="#RFC9330" class="cite xref">RFC9330</a>]</span> have been standardized
 and are to some extent widely implemented.
 Nevertheless, people still suffer from bufferbloat.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">Although significant, the impact on user experience can be transitory --
@@ -1752,8 +1752,10 @@ low receive window size, or a combination of all three.
 The only means to further increase throughput is by
 adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
-full link utilization has been reached and -- more importantly --
-the working condition is stable.<a href="#section-4.1.3-2" class="pilcrow">¶</a></p>
+full link utilization has been reached.
+At this point, adding ore connections will allow to achieve full buffer occupancy.
+Responsiveness will gradually decrease from now on, until the buffers
+are entirely full and reach stability of the responsiveness as well.<a href="#section-4.1.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1764,7 +1766,7 @@ the working condition is stable.<a href="#section-4.1.3-2" class="pilcrow">¶</a
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-test-parameters" class="section-name selfRef">Test parameters</a>
         </h3>
 <p id="section-4.2-1">A number of parameters serve as input to the test methodology. The following lists
-their names, default values and explanation. Hereafter the detailed description of the
+their acronyms and default values. Hereafter the detailed description of the
 methodology will explain how these parameters are being used. Experience has shown
 that these parameters allow for a low runtime and accurate results among a wide range of environments.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
@@ -1779,23 +1781,23 @@ that these parameters allow for a low runtime and accurate results among a wide 
           <tbody>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">MAD</td>
-              <td class="text-left" rowspan="1" colspan="1">Moving average distance (number of intervals to take into account for the moving average)</td>
+              <td class="text-left" rowspan="1" colspan="1">Moving Average Distance (number of intervals to take into account for the moving average)</td>
               <td class="text-left" rowspan="1" colspan="1">4</td>
             </tr>
             <tr>
+              <td class="text-left" rowspan="1" colspan="1">ID</td>
+              <td class="text-left" rowspan="1" colspan="1">Interval duration at which the algorithm reevaluates stability</td>
+              <td class="text-left" rowspan="1" colspan="1">1 second</td>
+            </tr>
+            <tr>
               <td class="text-left" rowspan="1" colspan="1">TMP</td>
-              <td class="text-left" rowspan="1" colspan="1">Trimmed Mean Percentage to be removed</td>
+              <td class="text-left" rowspan="1" colspan="1">Trimmed Mean Percentage to be trimmed</td>
               <td class="text-left" rowspan="1" colspan="1">95%</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">SDT</td>
               <td class="text-left" rowspan="1" colspan="1">Standard Deviation Tolerance for stability detection</td>
               <td class="text-left" rowspan="1" colspan="1">5%</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1">ID</td>
-              <td class="text-left" rowspan="1" colspan="1">Interval duration at which the algorithm reevaluates stability</td>
-              <td class="text-left" rowspan="1" colspan="1">1 second</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">MNP</td>
@@ -1863,7 +1865,7 @@ send more probes than the network can handle.<a href="#section-4.3-7" class="pil
 responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
 the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
 On load-generating connections we can expect an overhead of no more than 1000 bytes.<a href="#section-4.3-8" class="pilcrow">¶</a></p>
-<p id="section-4.3-9">Given this information, we recommend that at each responsiveness probing interval does
+<p id="section-4.3-9">Given this information, we recommend that each responsiveness probing interval does
 not send more than MPS (Maximum responsiveness Probes per Second - default to 100) probes per second.
 The probes should be spread out equally over the duration of the interval with an
 equal split between foreign and different load-generating connections. For the probes on
@@ -1874,7 +1876,7 @@ a total capacity utilization of 2400 Kbps for the probing.<a href="#section-4.3-
 the same time minimizing the probing overhead.
 However, on severely capacity-constrained networks the probing traffic could consume
 a significant portion of the available capacity. The Responsiveness Test must
-adjust its probing frequency and in such a way that the probing traffic does not consume
+adjust its probing frequency in such a way that the probing traffic does not consume
 more than PTC (Percentage of Total Capacity - default to 5%) of the available capacity.<a href="#section-4.3-11" class="pilcrow">¶</a></p>
 <div id="aggregating-the-measurements">
 <section id="section-4.3.1">
@@ -1894,8 +1896,7 @@ TM(tcp_f), TM(tls_f), TM(http_f), TM(http_l).<a href="#section-4.3.1-2" class="p
 <div class="alignLeft art-text artwork" id="section-4.3.1-4">
 <pre>
 Responsiveness = 60000 /
-(1/6*(TM(tcp_f) + TM(tls_f) + TM(http_f)) +
-  1/2*TM(http_s))
+(1/6*(TM(tcp_f) + TM(tls_f) + TM(http_f)) + 1/2*TM(http_s))
 </pre><a href="#section-4.3.1-4" class="pilcrow">¶</a>
 </div>
 <p id="section-4.3.1-5">This responsiveness value presents round-trips per minute (RPM).<a href="#section-4.3.1-5" class="pilcrow">¶</a></p>
@@ -1988,7 +1989,14 @@ not taking the full window into account.<a href="#section-4.4.1-3" class="pilcro
 <p id="section-4.4.1-4">We define "Medium" confidence if the algorithm was able to execute at least 4
 iterations, but did not reach stability based on standard deviation tolerance.<a href="#section-4.4.1-4" class="pilcrow">¶</a></p>
 <p id="section-4.4.1-5">We define "High" confidence if the algorithm was able to fully reach stability
-based on the define standard deviation tolerance.<a href="#section-4.4.1-5" class="pilcrow">¶</a></p>
+based on the defined standard deviation tolerance.<a href="#section-4.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-4.4.1-6">It must be noted that depending on the chosen standard deviation tolerance or
+other paramenters of the methodology and the network-environment it may be that a
+measurement never converges to a stable point.
+This is expected and part of the dynamic nature of networking and the accompanying
+measurement inaccuracies. Which is why the importance of imposing a time-limit
+is so crucial, together with an accurate depiction of the "confidence" the methodology
+was able to generate.<a href="#section-4.4.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2374,8 +2382,12 @@ We also thank Erik Auerswald, Matt Matthis and Omer Shapira for their constructi
 <span class="refAuthor">Nottingham, M.</span>, <span class="refTitle">"Well-Known Uniform Resource Identifiers (URIs)"</span>, <span class="seriesInfo">RFC 8615</span>, <span class="seriesInfo">DOI 10.17487/RFC8615</span>, <time datetime="2019-05" class="refDate">May 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8615">https://www.rfc-editor.org/info/rfc8615</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8766">[RFC8766]</dt>
-    <dd>
+      <dd>
 <span class="refAuthor">Cheshire, S.</span>, <span class="refTitle">"Discovery Proxy for Multicast DNS-Based Service Discovery"</span>, <span class="seriesInfo">RFC 8766</span>, <span class="seriesInfo">DOI 10.17487/RFC8766</span>, <time datetime="2020-06" class="refDate">June 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8766">https://www.rfc-editor.org/info/rfc8766</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9330">[RFC9330]</dt>
+    <dd>
+<span class="refAuthor">Briscoe, B., Ed.</span>, <span class="refAuthor">De Schepper, K.</span>, <span class="refAuthor">Bagnulo, M.</span>, and <span class="refAuthor">G. White</span>, <span class="refTitle">"Low Latency, Low Loss, and Scalable Throughput (L4S) Internet Service: Architecture"</span>, <span class="seriesInfo">RFC 9330</span>, <span class="seriesInfo">DOI 10.17487/RFC9330</span>, <time datetime="2023-01" class="refDate">January 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9330">https://www.rfc-editor.org/info/rfc9330</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>

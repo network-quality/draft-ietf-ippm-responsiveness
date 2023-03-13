@@ -1,7 +1,7 @@
 ---
 title: Responsiveness under Working Conditions
 abbrev: Responsiveness under Working Conditions
-docname: draft-ietf-ippm-responsiveness-01
+docname: draft-ietf-ippm-responsiveness-02
 date:
 category: std
 
@@ -71,6 +71,7 @@ informative:
   RFC8290:
   RFC8033:
   RFC8259:
+  RFC9330:
 
 --- abstract
 
@@ -84,7 +85,7 @@ Everyone "knows" that it is "normal" for a video conference to
 have problems when somebody else at home is
 watching a 4K movie or uploading photos from their phone.
 However, there is no technical reason for this to be the case.
-In fact, various queue management solutions (fq_codel, cake, PIE)
+In fact, various queue management solutions
 have solved the problem.
 
 Our networks remain unresponsive, not from a lack of technical solutions,
@@ -107,7 +108,7 @@ idle latency as critical indicators of network quality.
 For many years, a lack of responsiveness, variously called
 lag, latency, or bufferbloat, has been recognized
 as an unfortunate, but common, symptom in today's networks {{Bufferbloat}}.
-Solutions like fq_codel {{RFC8290}} or PIE {{RFC8033}} have been standardized
+Solutions like fq_codel {{RFC8290}}, PIE {{RFC8033}} or L4S {{RFC9330}} have been standardized
 and are to some extent widely implemented.
 Nevertheless, people still suffer from bufferbloat.
 
@@ -393,23 +394,25 @@ low receive window size, or a combination of all three.
 The only means to further increase throughput is by
 adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
-full link utilization has been reached and -- more importantly --
-the working condition is stable.
+full link utilization has been reached.
+At this point, adding ore connections will allow to achieve full buffer occupancy.
+Responsiveness will gradually decrease from now on, until the buffers
+are entirely full and reach stability of the responsiveness as well.
 
 
 ## Test parameters
 
 A number of parameters serve as input to the test methodology. The following lists
-their names, default values and explanation. Hereafter the detailed description of the
+their acronyms and default values. Hereafter the detailed description of the
 methodology will explain how these parameters are being used. Experience has shown
 that these parameters allow for a low runtime and accurate results among a wide range of environments.
 
 | Name | Explanation | Default Value |
 | ---- | ----------- | ------------- |
-| MAD  | Moving average distance (number of intervals to take into account for the moving average) | 4 |
-| TMP  | Trimmed Mean Percentage to be removed | 95% |
-| SDT  | Standard Deviation Tolerance for stability detection | 5% |
+| MAD  | Moving Average Distance (number of intervals to take into account for the moving average) | 4 |
 | ID   | Interval duration at which the algorithm reevaluates stability | 1 second |
+| TMP  | Trimmed Mean Percentage to be trimmed | 95% |
+| SDT  | Standard Deviation Tolerance for stability detection | 5% |
 | MNP  | Maximum number of parallel transport-layer connections | 16 |
 | MPS  | Maximum responsiveness probes per second | 100 |
 | PTC  | Percentage of Total Capacity the probes are allowed to consume | 5% |
@@ -464,7 +467,7 @@ responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
 the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
 On load-generating connections we can expect an overhead of no more than 1000 bytes.
 
-Given this information, we recommend that at each responsiveness probing interval does
+Given this information, we recommend that each responsiveness probing interval does
 not send more than MPS (Maximum responsiveness Probes per Second - default to 100) probes per second.
 The probes should be spread out equally over the duration of the interval with an
 equal split between foreign and different load-generating connections. For the probes on
@@ -477,7 +480,7 @@ On high-speed networks, this will provide a significant amount of samples, while
 the same time minimizing the probing overhead.
 However, on severely capacity-constrained networks the probing traffic could consume
 a significant portion of the available capacity. The Responsiveness Test must
-adjust its probing frequency and in such a way that the probing traffic does not consume
+adjust its probing frequency in such a way that the probing traffic does not consume
 more than PTC (Percentage of Total Capacity - default to 5%) of the available capacity.
 
 ### Aggregating the Measurements
@@ -497,8 +500,7 @@ The responsiveness is then calculated as the weighted mean:
 
 ~~~
 Responsiveness = 60000 /
-(1/6*(TM(tcp_f) + TM(tls_f) + TM(http_f)) +
-  1/2*TM(http_s))
+(1/6*(TM(tcp_f) + TM(tls_f) + TM(http_f)) + 1/2*TM(http_s))
 ~~~
 
 This responsiveness value presents round-trips per minute (RPM).
@@ -573,7 +575,15 @@ We define "Medium" confidence if the algorithm was able to execute at least 4
 iterations, but did not reach stability based on standard deviation tolerance.
 
 We define "High" confidence if the algorithm was able to fully reach stability
-based on the define standard deviation tolerance.
+based on the defined standard deviation tolerance.
+
+It must be noted that depending on the chosen standard deviation tolerance or
+other paramenters of the methodology and the network-environment it may be that a
+measurement never converges to a stable point.
+This is expected and part of the dynamic nature of networking and the accompanying
+measurement inaccuracies. Which is why the importance of imposing a time-limit
+is so crucial, together with an accurate depiction of the "confidence" the methodology
+was able to generate.
 
 
 # Interpreting responsiveness results

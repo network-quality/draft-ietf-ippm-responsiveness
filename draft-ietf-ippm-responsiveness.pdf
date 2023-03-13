@@ -2,7 +2,7 @@
 %‚„œ”
 2 0 obj
 <<
-/Length 2919
+/Length 2895
 >>
 stream
 BT
@@ -28,7 +28,7 @@ T*
 0 -3.3 TD
 (                Responsiveness under Working Conditions)Tj
 0 -1.1 TD
-(                   draft-ietf-ippm-responsiveness-01)Tj
+(                   draft-ietf-ippm-responsiveness-02)Tj
 0 -2.2 TD
 (Abstract)Tj
 T*
@@ -50,7 +50,7 @@ T*
 T*
 (   reason for this to be the case.  In fact, various queue management)Tj
 T*
-(   solutions \(fq_codel, cake, PIE\) have solved the problem.)Tj
+(   solutions have solved the problem.)Tj
 0 -2.2 TD
 (   Our networks remain unresponsive, not from a lack of technical)Tj
 0 -1.1 TD
@@ -193,7 +193,7 @@ T*
 T*
 (   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17)Tj
 T*
-(   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18)Tj
+(   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  19)Tj
 T*
 (     7.1.  Well-Known Uniform Resource Identifier \(URI\) For Test)Tj
 T*
@@ -218,7 +218,7 @@ endobj
 endobj
 11 0 obj
 <<
-/Length 3126
+/Length 3140
 >>
 stream
 BT
@@ -230,7 +230,7 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(       7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  20)Tj
+(       7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  21)Tj
 0 -1.1 TD
 (   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  21)Tj
 T*
@@ -240,9 +240,9 @@ T*
 T*
 (   11. Informative References  . . . . . . . . . . . . . . . . . . .  21)Tj
 T*
-(   Appendix A.  Example Server Configuration . . . . . . . . . . . .  22)Tj
+(   Appendix A.  Example Server Configuration . . . . . . . . . . . .  23)Tj
 T*
-(     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  22)Tj
+(     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  23)Tj
 T*
 (   Authorsí Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23)Tj
 0 -2.2 TD
@@ -254,11 +254,11 @@ T*
 T*
 (   common, symptom in todayís networks [Bufferbloat].  Solutions like)Tj
 T*
-(   fq_codel [RFC8290] or PIE [RFC8033] have been standardized and are to)Tj
+(   fq_codel [RFC8290], PIE [RFC8033] or L4S [RFC9330] have been)Tj
 T*
-(   some extent widely implemented.  Nevertheless, people still suffer)Tj
+(   standardized and are to some extent widely implemented.)Tj
 T*
-(   from bufferbloat.)Tj
+(   Nevertheless, people still suffer from bufferbloat.)Tj
 0 -2.2 TD
 (   Although significant, the impact on user experience can be transitory)Tj
 0 -1.1 TD
@@ -850,7 +850,7 @@ endobj
 endobj
 29 0 obj
 <<
-/Length 2146
+/Length 2321
 >>
 stream
 BT
@@ -898,24 +898,28 @@ T*
 T*
 (   connections.  If new connections leave the throughput the same, full)Tj
 T*
-(   link utilization has been reached and -- more importantly -- the)Tj
+(   link utilization has been reached.  At this point, adding ore)Tj
 T*
-(   working condition is stable.)Tj
+(   connections will allow to achieve full buffer occupancy.)Tj
+T*
+(   Responsiveness will gradually decrease from now on, until the buffers)Tj
+T*
+(   are entirely full and reach stability of the responsiveness as well.)Tj
 0 -2.2 TD
 (4.2.  Test parameters)Tj
 T*
 (   A number of parameters serve as input to the test methodology.  The)Tj
 0 -1.1 TD
-(   following lists their names, default values and explanation.)Tj
+(   following lists their acronyms and default values.  Hereafter the)Tj
 T*
-(   Hereafter the detailed description of the methodology will explain)Tj
+(   detailed description of the methodology will explain how these)Tj
 T*
-(   how these parameters are being used.  Experience has shown that these)Tj
+(   parameters are being used.  Experience has shown that these)Tj
 T*
 (   parameters allow for a low runtime and accurate results among a wide)Tj
 T*
 (   range of environments.)Tj
-0 -23.1 TD
+0 -20.9 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 9])Tj
 ET
 endstream
@@ -953,25 +957,25 @@ T*
 T*
 (     +======+==============================================+=========+)Tj
 T*
-(     | MAD  | Moving average distance \(number of intervals | 4       |)Tj
+(     | MAD  | Moving Average Distance \(number of intervals | 4       |)Tj
 T*
 (     |      | to take into account for the moving average\) |         |)Tj
-T*
-(     +------+----------------------------------------------+---------+)Tj
-T*
-(     | TMP  | Trimmed Mean Percentage to be removed        | 95%     |)Tj
-T*
-(     +------+----------------------------------------------+---------+)Tj
-T*
-(     | SDT  | Standard Deviation Tolerance for stability   | 5%      |)Tj
-T*
-(     |      | detection                                    |         |)Tj
 T*
 (     +------+----------------------------------------------+---------+)Tj
 T*
 (     | ID   | Interval duration at which the algorithm     | 1       |)Tj
 T*
 (     |      | reevaluates stability                        | second  |)Tj
+T*
+(     +------+----------------------------------------------+---------+)Tj
+T*
+(     | TMP  | Trimmed Mean Percentage to be trimmed        | 95%     |)Tj
+T*
+(     +------+----------------------------------------------+---------+)Tj
+T*
+(     | SDT  | Standard Deviation Tolerance for stability   | 5%      |)Tj
+T*
+(     |      | detection                                    |         |)Tj
 T*
 (     +------+----------------------------------------------+---------+)Tj
 T*
@@ -1135,7 +1139,7 @@ endobj
 endobj
 40 0 obj
 <<
-/Length 2823
+/Length 2804
 >>
 stream
 BT
@@ -1147,19 +1151,19 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   Given this information, we recommend that at each responsiveness)Tj
+(   Given this information, we recommend that each responsiveness probing)Tj
 0 -1.1 TD
-(   probing interval does not send more than MPS \(Maximum responsiveness)Tj
+(   interval does not send more than MPS \(Maximum responsiveness Probes)Tj
 T*
-(   Probes per Second - default to 100\) probes per second.  The probes)Tj
+(   per Second - default to 100\) probes per second.  The probes should be)Tj
 T*
-(   should be spread out equally over the duration of the interval with)Tj
+(   spread out equally over the duration of the interval with an equal)Tj
 T*
-(   an equal split between foreign and different load-generating)Tj
+(   split between foreign and different load-generating connections.  For)Tj
 T*
-(   connections.  For the probes on load-generating connections, the)Tj
+(   the probes on load-generating connections, the connection should be)Tj
 T*
-(   connection should be selected randomly for each probe.)Tj
+(   selected randomly for each probe.)Tj
 0 -2.2 TD
 (   This would result in a total amount of data per second of 300 KB or)Tj
 0 -1.1 TD
@@ -1177,9 +1181,9 @@ T*
 T*
 (   capacity.  The Responsiveness Test must adjust its probing frequency)Tj
 T*
-(   and in such a way that the probing traffic does not consume more than)Tj
+(   in such a way that the probing traffic does not consume more than PTC)Tj
 T*
-(   PTC \(Percentage of Total Capacity - default to 5%\) of the available)Tj
+(   \(Percentage of Total Capacity - default to 5%\) of the available)Tj
 T*
 (   capacity.)Tj
 0 -2.2 TD
@@ -1215,12 +1219,10 @@ T*
 T*
 (   Responsiveness = 60000 /)Tj
 0 -1.1 TD
-(   \(1/6*\(TM\(tcp_f\) + TM\(tls_f\) + TM\(http_f\)\) +)Tj
-T*
-(     1/2*TM\(http_s\)\))Tj
+(   \(1/6*\(TM\(tcp_f\) + TM\(tls_f\) + TM\(http_f\)\) + 1/2*TM\(http_s\)\))Tj
 0 -2.2 TD
 (   This responsiveness value presents round-trips per minute \(RPM\).)Tj
-0 -7.7 TD
+0 -8.8 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 12])Tj
 ET
 endstream
@@ -1438,7 +1440,7 @@ endobj
 endobj
 49 0 obj
 <<
-/Length 3000
+/Length 3135
 >>
 stream
 BT
@@ -1452,7 +1454,23 @@ BT
 0 -3.3 TD
 (   We define "High" confidence if the algorithm was able to fully reach)Tj
 0 -1.1 TD
-(   stability based on the define standard deviation tolerance.)Tj
+(   stability based on the defined standard deviation tolerance.)Tj
+0 -2.2 TD
+(   It must be noted that depending on the chosen standard deviation)Tj
+0 -1.1 TD
+(   tolerance or other paramenters of the methodology and the network-)Tj
+T*
+(   environment it may be that a measurement never converges to a stable)Tj
+T*
+(   point.  This is expected and part of the dynamic nature of networking)Tj
+T*
+(   and the accompanying measurement inaccuracies.  Which is why the)Tj
+T*
+(   importance of imposing a time-limit is so crucial, together with an)Tj
+T*
+(   accurate depiction of the "confidence" the methodology was able to)Tj
+T*
+(   generate.)Tj
 0 -2.2 TD
 (5.  Interpreting responsiveness results)Tj
 T*
@@ -1513,19 +1531,7 @@ T*
 (   queue-buildup in the TCP layer is kept at a bare minimum with)Tj
 T*
 (   solutions like TCP_NOTSENT_LOWAT [draft-ietf-tcpm-rfc793bis].  At the)Tj
-T*
-(   HTTP/2 layer it is important that the load-generating data is not)Tj
-T*
-(   interfering with the latency-measuring probes.  For example, the)Tj
-T*
-(   different streams should not be stacked one after the other but)Tj
-T*
-(   rather be allowed to be multiplexed for optimal latency.  The queue-)Tj
-T*
-(   buildup at these layers would only influence latency on the probes)Tj
-T*
-(   that are sent on the load-generating connections.)Tj
-0 -7.7 TD
+0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 15])Tj
 ET
 endstream
@@ -1543,7 +1549,7 @@ endobj
 endobj
 52 0 obj
 <<
-/Length 3035
+/Length 3041
 >>
 stream
 BT
@@ -1555,6 +1561,18 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
+(   HTTP/2 layer it is important that the load-generating data is not)Tj
+0 -1.1 TD
+(   interfering with the latency-measuring probes.  For example, the)Tj
+T*
+(   different streams should not be stacked one after the other but)Tj
+T*
+(   rather be allowed to be multiplexed for optimal latency.  The queue-)Tj
+T*
+(   buildup at these layers would only influence latency on the probes)Tj
+T*
+(   that are sent on the load-generating connections.)Tj
+0 -2.2 TD
 (   Below the transport layer many places have a potential queue build-)Tj
 0 -1.1 TD
 (   up.  It is important to keep these queues at reasonable sizes or that)Tj
@@ -1618,18 +1636,6 @@ T*
 (   end-users experience it.  Localizing the source of low responsiveness)Tj
 T*
 (   involves however a set of different tools and methodologies.)Tj
-0 -2.2 TD
-(   Nevertheless, the Responsiveness Test allows to gain some insight)Tj
-0 -1.1 TD
-(   into what the source of the latency is.  The previous section)Tj
-T*
-(   described the elements that influence the responsiveness.  From there)Tj
-T*
-(   it became apparent that the latency measured on the load-generating)Tj
-T*
-(   connections and the latency measured on separate connections may be)Tj
-T*
-(   different due to the different elements.)Tj
 0 -6.6 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 16])Tj
 ET
@@ -1648,7 +1654,7 @@ endobj
 endobj
 55 0 obj
 <<
-/Length 3505
+/Length 3469
 >>
 stream
 BT
@@ -1660,6 +1666,18 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
+(   Nevertheless, the Responsiveness Test allows to gain some insight)Tj
+0 -1.1 TD
+(   into what the source of the latency is.  The previous section)Tj
+T*
+(   described the elements that influence the responsiveness.  From there)Tj
+T*
+(   it became apparent that the latency measured on the load-generating)Tj
+T*
+(   connections and the latency measured on separate connections may be)Tj
+T*
+(   different due to the different elements.)Tj
+0 -2.2 TD
 (   For example, if the latency measured on separate connections is much)Tj
 0 -1.1 TD
 (   less than the latency measured on the load-generating connections, it)Tj
@@ -1731,20 +1749,6 @@ T*
 (   where bufferbloat is common, this is a pragmatic mitigation to allow)Tj
 T*
 (   software to work better in that environment.  However, that approach)Tj
-T*
-(   does not fix the underlying problem of bufferbloat; it merely avoids)Tj
-T*
-(   it in some cases, and allows the problem in the network to persist.)Tj
-T*
-(   For a diagnostic tool made to identify symptoms of bufferbloat in the)Tj
-T*
-(   network so that they can be fixed, using a transport protocol)Tj
-T*
-(   explicitly designed to mask those symptoms would be a poor choice,)Tj
-T*
-(   and would require the test to run for much longer to deliver the same)Tj
-T*
-(   results.)Tj
 0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 17])Tj
 ET
@@ -1763,7 +1767,7 @@ endobj
 endobj
 58 0 obj
 <<
-/Length 3026
+/Length 2731
 >>
 stream
 BT
@@ -1775,8 +1779,22 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   The server MUST respond to 4 URLs:)Tj
+(   does not fix the underlying problem of bufferbloat; it merely avoids)Tj
+0 -1.1 TD
+(   it in some cases, and allows the problem in the network to persist.)Tj
+T*
+(   For a diagnostic tool made to identify symptoms of bufferbloat in the)Tj
+T*
+(   network so that they can be fixed, using a transport protocol)Tj
+T*
+(   explicitly designed to mask those symptoms would be a poor choice,)Tj
+T*
+(   and would require the test to run for much longer to deliver the same)Tj
+T*
+(   results.)Tj
 0 -2.2 TD
+(   The server MUST respond to 4 URLs:)Tj
+T*
 (   1.  A "small" URL/response: The server must respond with a status)Tj
 0 -1.1 TD
 (       code of 200 and 1 byte in the body.  The actual message content)Tj
@@ -1830,9 +1848,38 @@ T*
 (   the load-generating connections in the upstream and downstream)Tj
 T*
 (   direction as well as the small object for the latency measurements.)Tj
-0 -2.2 TD
+0 -12.1 TD
+(Paasch, et al.          Expires 14 September 2023              [Page 18])Tj
+ET
+endstream
+endobj
+59 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+61 0 obj
+<<
+/Length 2742
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
+0 -3.3 TD
 (7.  Responsiveness Test Server Discovery)Tj
-T*
+0 -2.2 TD
 (   It makes sense for a service provider \(either an application service)Tj
 0 -1.1 TD
 (   provider like a video conferencing service or a network access)Tj
@@ -1852,38 +1899,9 @@ T*
 (   1.  "Whatís causing my poor performance?")Tj
 T*
 (   2.  "Is it poor buffer management by my ISP?")Tj
-0 -4.4 TD
-(Paasch, et al.          Expires 14 September 2023              [Page 18])Tj
-ET
-endstream
-endobj
-59 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-61 0 obj
-<<
-/Length 2718
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
-0 -3.3 TD
+T*
 (   3.  "Is it poor buffer management in my home Wi-Fi Access point?")Tj
-0 -2.2 TD
+T*
 (   4.  "Something to do with the service provider?")Tj
 T*
 (   5.  "Something else entirely?")Tj
@@ -1931,7 +1949,36 @@ T*
 (   is application/json and contains a valid JSON object meeting the)Tj
 T*
 (   following criteria:)Tj
-0 -2.2 TD
+0 -6.6 TD
+(Paasch, et al.          Expires 14 September 2023              [Page 19])Tj
+ET
+endstream
+endobj
+62 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+64 0 obj
+<<
+/Length 2766
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
+0 -3.3 TD
 (   {)Tj
 0 -1.1 TD
 (     "version": 1,)Tj
@@ -1959,38 +2006,9 @@ T*
 (   greater than "1" are reserved for future versions of this protocol.)Tj
 T*
 (   The content of the "large_download_url", "small_download_url", and)Tj
-0 -4.4 TD
-(Paasch, et al.          Expires 14 September 2023              [Page 19])Tj
-ET
-endstream
-endobj
-62 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-64 0 obj
-<<
-/Length 2815
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
-0 -3.3 TD
+T*
 (   "upload_url" SHALL all be validly formatted "http" or "https" URLs.)Tj
-0 -1.1 TD
+T*
 (   See above for the semantics of the fields.  All of the fields in the)Tj
 T*
 (   sample configuration are required except "test_endpoint".  If the)Tj
@@ -2038,9 +2056,38 @@ T*
 (   simply by having a human administrator manually enter the required)Tj
 T*
 (   records.)Tj
-0 -2.2 TD
+0 -7.7 TD
+(Paasch, et al.          Expires 14 September 2023              [Page 20])Tj
+ET
+endstream
+endobj
+65 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+67 0 obj
+<<
+/Length 2240
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
+0 -3.3 TD
 (7.2.1.  Example)Tj
-T*
+0 -2.2 TD
 (   An obscure service provider hosting a Responsiveness Test Server)Tj
 0 -1.1 TD
 (   instance for their organization \(obs.cr\) on the "rpm.obs.cr" host)Tj
@@ -2066,38 +2113,9 @@ T*
 (   proceed to access the rpm.obs.cr host on port 443 at the .well-known/)Tj
 T*
 (   nq well-known URI to begin the test.)Tj
-0 -5.5 TD
-(Paasch, et al.          Expires 14 September 2023              [Page 20])Tj
-ET
-endstream
-endobj
-65 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-67 0 obj
-<<
-/Length 2554
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
-0 -3.3 TD
-(8.  Security Considerations)Tj
 0 -2.2 TD
+(8.  Security Considerations)Tj
+T*
 (   TBD)Tj
 T*
 (9.  IANA Considerations)Tj
@@ -2137,7 +2155,36 @@ T*
 (              Eddy, W., "Transmission Control Protocol \(TCP\))Tj
 T*
 (              Specification", Internet Engineering Task Force , n.d..)Tj
-0 -2.2 TD
+0 -5.5 TD
+(Paasch, et al.          Expires 14 September 2023              [Page 21])Tj
+ET
+endstream
+endobj
+68 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+71 0 obj
+<<
+/Length 3042
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
+0 -3.3 TD
 (   [RFC0793]  Postel, J., "Transmission Control Protocol", RFC 793,)Tj
 0 -1.1 TD
 (              DOI 10.17487/RFC0793, September 1981,)Tj
@@ -2167,36 +2214,7 @@ T*
 (              DOI 10.17487/RFC6762, February 2013,)Tj
 T*
 (              <https://www.rfc-editor.org/info/rfc6762>.)Tj
-0 -4.4 TD
-(Paasch, et al.          Expires 14 September 2023              [Page 21])Tj
-ET
-endstream
-endobj
-68 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-71 0 obj
-<<
-/Length 2422
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
-0 -3.3 TD
+0 -2.2 TD
 (   [RFC6763]  Cheshire, S. and M. Krochmal, "DNS-Based Service)Tj
 0 -1.1 TD
 (              Discovery", RFC 6763, DOI 10.17487/RFC6763, February 2013,)Tj
@@ -2242,23 +2260,7 @@ T*
 (              Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June)Tj
 T*
 (              2020, <https://www.rfc-editor.org/info/rfc8766>.)Tj
-0 -2.2 TD
-(Appendix A.  Example Server Configuration)Tj
-T*
-(   This section shows fragments of sample server configurations to host)Tj
-0 -1.1 TD
-(   an responsiveness measurement endpoint.)Tj
-0 -2.2 TD
-(A.1.  Apache Traffic Server)Tj
-T*
-(   Apache Traffic Server starting at version 9.1.0 supports)Tj
-0 -1.1 TD
-(   configuration as a responsiveness server.  It requires the generator)Tj
-T*
-(   and the statichit plugin.)Tj
-0 -2.2 TD
-(   The sample remap configuration file then is:)Tj
-0 -12.1 TD
+0 -5.5 TD
 (Paasch, et al.          Expires 14 September 2023              [Page 22])Tj
 ET
 endstream
@@ -2276,7 +2278,7 @@ endobj
 endobj
 74 0 obj
 <<
-/Length 1643
+/Length 1975
 >>
 stream
 BT
@@ -2288,6 +2290,32 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
+(   [RFC9330]  Briscoe, B., Ed., De Schepper, K., Bagnulo, M., and G.)Tj
+0 -1.1 TD
+(              White, "Low Latency, Low Loss, and Scalable Throughput)Tj
+T*
+(              \(L4S\) Internet Service: Architecture", RFC 9330,)Tj
+T*
+(              DOI 10.17487/RFC9330, January 2023,)Tj
+T*
+(              <https://www.rfc-editor.org/info/rfc9330>.)Tj
+0 -2.2 TD
+(Appendix A.  Example Server Configuration)Tj
+T*
+(   This section shows fragments of sample server configurations to host)Tj
+0 -1.1 TD
+(   an responsiveness measurement endpoint.)Tj
+0 -2.2 TD
+(A.1.  Apache Traffic Server)Tj
+T*
+(   Apache Traffic Server starting at version 9.1.0 supports)Tj
+0 -1.1 TD
+(   configuration as a responsiveness server.  It requires the generator)Tj
+T*
+(   and the statichit plugin.)Tj
+0 -2.2 TD
+(   The sample remap configuration file then is:)Tj
+T*
 (   map https://nq.example.com/api/v1/config \\)Tj
 0 -1.1 TD
 (       http://localhost/ \\)Tj
@@ -2329,6 +2357,35 @@ T*
 (   United States of America)Tj
 T*
 (   Email: cpaasch@apple.com)Tj
+0 -7.7 TD
+(Paasch, et al.          Expires 14 September 2023              [Page 23])Tj
+ET
+endstream
+endobj
+75 0 obj
+<<
+/ProcSet [/PDF /Text ]
+/Font <<
+/TT2 4 0 R
+>>
+/ExtGState <<
+/GS1 5 0 R
+>>
+>>
+endobj
+77 0 obj
+<<
+/Length 728
+>>
+stream
+BT
+/TT2 1 Tf
+10 0 0 10 29 794 Tm
+0 g
+/GS1 gs
+0 Tc
+0 Tw
+(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
 (   Randall Meyer)Tj
 0 -1.1 TD
@@ -2359,12 +2416,12 @@ T*
 (   University of Cincinnati)Tj
 T*
 (   Email: hawkinwh@ucmail.uc.edu)Tj
-0 -5.5 TD
-(Paasch, et al.          Expires 14 September 2023              [Page 23])Tj
+0 -36.3 TD
+(Paasch, et al.          Expires 14 September 2023              [Page 24])Tj
 ET
 endstream
 endobj
-75 0 obj
+78 0 obj
 <<
 /ProcSet [/PDF /Text ]
 /Font <<
@@ -2389,7 +2446,7 @@ endobj
 /TR2 /Default
 >>
 endobj
-76 0 obj
+79 0 obj
 <<
 /Type /FontDescriptor
 /Ascent 753
@@ -2420,7 +2477,7 @@ endobj
 0 0 600 ]
 /Encoding /WinAnsiEncoding
 /BaseFont /Courier
-/FontDescriptor 76 0 R
+/FontDescriptor 79 0 R
 >>
 endobj
 1 0 obj
@@ -2607,14 +2664,22 @@ endobj
 /Contents 74 0 R
 >>
 endobj
-77 0 obj
+76 0 obj
+<<
+/Type /Page
+/Parent 69 0 R
+/Resources 78 0 R
+/Contents 77 0 R
+>>
+endobj
+80 0 obj
 <<
 /S /D
 >>
 endobj
-78 0 obj
+81 0 obj
 <<
-/Nums [0 77 0 R ]
+/Nums [0 80 0 R ]
 >>
 endobj
 6 0 obj
@@ -2636,8 +2701,8 @@ endobj
 69 0 obj
 <<
 /Type /Pages
-/Kids [66 0 R 70 0 R 73 0 R]
-/Count 3
+/Kids [66 0 R 70 0 R 73 0 R 76 0 R]
+/Count 4
 /Parent 37 0 R
 >>
 endobj
@@ -2645,114 +2710,117 @@ endobj
 <<
 /Type /Pages
 /Kids [6 0 R 38 0 R 69 0 R ]
-/Count 23
+/Count 24
 /MediaBox [0 0 595 842]
 >>
 endobj
-79 0 obj
+82 0 obj
 <<
-/CreationDate (D:20230313141329-07'00')
-/ModDate (D:20230313141329-07'00')
+/CreationDate (D:20230313163648-07'00')
+/ModDate (D:20230313163648-07'00')
 /Producer (Apple pstopdf)
 >>
 endobj
-80 0 obj
+83 0 obj
 <<
 /Type /Catalog
 /Pages 37 0 R
-/PageLabels 78 0 R
+/PageLabels 81 0 R
 >>
 endobj
 xref
-0 81
+0 84
 0000000000 65535 f 
-0000069625 00000 n 
+0000071070 00000 n 
 0000000016 00000 n 
-0000002987 00000 n 
-0000069052 00000 n 
-0000068721 00000 n 
-0000071609 00000 n 
-0000069705 00000 n 
-0000003082 00000 n 
-0000006559 00000 n 
-0000069785 00000 n 
-0000006654 00000 n 
-0000009833 00000 n 
-0000069868 00000 n 
-0000009929 00000 n 
-0000013296 00000 n 
-0000069951 00000 n 
-0000013392 00000 n 
-0000016833 00000 n 
-0000070034 00000 n 
-0000016929 00000 n 
-0000019630 00000 n 
-0000070117 00000 n 
-0000019726 00000 n 
-0000022693 00000 n 
-0000070200 00000 n 
-0000022789 00000 n 
-0000025480 00000 n 
-0000070283 00000 n 
-0000025576 00000 n 
-0000027775 00000 n 
-0000070366 00000 n 
-0000027871 00000 n 
-0000030804 00000 n 
-0000070449 00000 n 
-0000030900 00000 n 
-0000033973 00000 n 
-0000071970 00000 n 
-0000071744 00000 n 
-0000070533 00000 n 
-0000034069 00000 n 
-0000036945 00000 n 
-0000070617 00000 n 
-0000037041 00000 n 
-0000039679 00000 n 
-0000070701 00000 n 
-0000039775 00000 n 
-0000042566 00000 n 
-0000070785 00000 n 
-0000042662 00000 n 
-0000045715 00000 n 
-0000070869 00000 n 
-0000045811 00000 n 
-0000048899 00000 n 
-0000070953 00000 n 
-0000048995 00000 n 
-0000052553 00000 n 
-0000071037 00000 n 
-0000052649 00000 n 
-0000055728 00000 n 
-0000071121 00000 n 
-0000055824 00000 n 
-0000058595 00000 n 
-0000071205 00000 n 
-0000058691 00000 n 
-0000061559 00000 n 
-0000071289 00000 n 
-0000061655 00000 n 
-0000064262 00000 n 
-0000071882 00000 n 
-0000071373 00000 n 
-0000064358 00000 n 
-0000066833 00000 n 
-0000071457 00000 n 
-0000066929 00000 n 
-0000068625 00000 n 
-0000068861 00000 n 
-0000071541 00000 n 
-0000071569 00000 n 
-0000072068 00000 n 
-0000072191 00000 n 
+0000002963 00000 n 
+0000070497 00000 n 
+0000070166 00000 n 
+0000073138 00000 n 
+0000071150 00000 n 
+0000003058 00000 n 
+0000006535 00000 n 
+0000071230 00000 n 
+0000006630 00000 n 
+0000009823 00000 n 
+0000071313 00000 n 
+0000009919 00000 n 
+0000013286 00000 n 
+0000071396 00000 n 
+0000013382 00000 n 
+0000016823 00000 n 
+0000071479 00000 n 
+0000016919 00000 n 
+0000019620 00000 n 
+0000071562 00000 n 
+0000019716 00000 n 
+0000022683 00000 n 
+0000071645 00000 n 
+0000022779 00000 n 
+0000025470 00000 n 
+0000071728 00000 n 
+0000025566 00000 n 
+0000027940 00000 n 
+0000071811 00000 n 
+0000028036 00000 n 
+0000030969 00000 n 
+0000071894 00000 n 
+0000031065 00000 n 
+0000034138 00000 n 
+0000073506 00000 n 
+0000073273 00000 n 
+0000071978 00000 n 
+0000034234 00000 n 
+0000037091 00000 n 
+0000072062 00000 n 
+0000037187 00000 n 
+0000039825 00000 n 
+0000072146 00000 n 
+0000039921 00000 n 
+0000042712 00000 n 
+0000072230 00000 n 
+0000042808 00000 n 
+0000045996 00000 n 
+0000072314 00000 n 
+0000046092 00000 n 
+0000049186 00000 n 
+0000072398 00000 n 
+0000049282 00000 n 
+0000052804 00000 n 
+0000072482 00000 n 
+0000052900 00000 n 
+0000055684 00000 n 
+0000072566 00000 n 
+0000055780 00000 n 
+0000058575 00000 n 
+0000072650 00000 n 
+0000058671 00000 n 
+0000061490 00000 n 
+0000072734 00000 n 
+0000061586 00000 n 
+0000063879 00000 n 
+0000073411 00000 n 
+0000072818 00000 n 
+0000063975 00000 n 
+0000067070 00000 n 
+0000072902 00000 n 
+0000067166 00000 n 
+0000069194 00000 n 
+0000072986 00000 n 
+0000069290 00000 n 
+0000070070 00000 n 
+0000070306 00000 n 
+0000073070 00000 n 
+0000073098 00000 n 
+0000073604 00000 n 
+0000073727 00000 n 
 trailer
 <<
-/Size 81
-/Root 80 0 R
-/Info 79 0 R
-/ID [<4dc5d88dec338f01a40aeb480074da7c><4dc5d88dec338f01a40aeb480074da7c>]
+/Size 84
+/Root 83 0 R
+/Info 82 0 R
+/ID [<b953229be16e9677b42601770d829d19><b953229be16e9677b42601770d829d19>]
 >>
 startxref
-72261
+73797
 %%EOF
