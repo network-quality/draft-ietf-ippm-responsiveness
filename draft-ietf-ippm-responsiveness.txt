@@ -87,25 +87,25 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
-     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   4
    2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4
    3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   6
-   4.  Measuring Responsiveness Under Working Conditions . . . . . .   6
+   4.  Measuring Responsiveness Under Working Conditions . . . . . .   7
      4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   7
-       4.1.1.  From single-flow to multi-flow  . . . . . . . . . . .   7
+       4.1.1.  Single-flow vs multi-flow . . . . . . . . . . . . . .   7
        4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   8
        4.1.3.  Reaching full buffer utilization  . . . . . . . . . .   9
-     4.2.  Measuring Responsiveness  . . . . . . . . . . . . . . . .   9
-       4.2.1.  Aggregating the Measurements  . . . . . . . . . . . .  11
-     4.3.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  11
-       4.3.1.  Confidence of test-results  . . . . . . . . . . . . .  13
-   5.  Interpreting responsiveness results . . . . . . . . . . . . .  13
-     5.1.  Elements influencing responsiveness . . . . . . . . . . .  14
-       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  14
-       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  14
-       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  15
-     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  15
-   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  15
+     4.2.  Test parameters . . . . . . . . . . . . . . . . . . . . .   9
+     4.3.  Measuring Responsiveness  . . . . . . . . . . . . . . . .  10
+       4.3.1.  Aggregating the Measurements  . . . . . . . . . . . .  12
+     4.4.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  12
+       4.4.1.  Confidence of test-results  . . . . . . . . . . . . .  14
+   5.  Interpreting responsiveness results . . . . . . . . . . . . .  15
+     5.1.  Elements influencing responsiveness . . . . . . . . . . .  15
+       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  15
+       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  16
+       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  16
+     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  16
 
 
 
@@ -114,18 +114,19 @@ Paasch, et al.          Expires 14 September 2023               [Page 2]
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
-   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  17
+   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17
+   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18
      7.1.  Well-Known Uniform Resource Identifier (URI) For Test
-           Server Discovery  . . . . . . . . . . . . . . . . . . . .  18
-     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  19
-       7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  19
-   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  19
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  20
-   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  20
-   11. Informative References  . . . . . . . . . . . . . . . . . . .  20
-   Appendix A.  Example Server Configuration . . . . . . . . . . . .  21
-     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  21
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  22
+           Server Discovery  . . . . . . . . . . . . . . . . . . . .  19
+     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20
+       7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  20
+   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
+   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  21
+   11. Informative References  . . . . . . . . . . . . . . . . . . .  21
+   Appendix A.  Example Server Configuration . . . . . . . . . . . .  22
+     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  22
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23
 
 1.  Introduction
 
@@ -156,12 +157,11 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    to throughput and idle latency -- also include latency under load,
    or, as we prefer to call it, responsiveness under working conditions.
 
-1.1.  Terminology
 
-   A word about the term "bufferbloat" -- the undesirable latency that
-   comes from a router or other network equipment buffering too much
-   data.  This document uses the term as a general description of bad
-   latency, using more precise wording where warranted.
+
+
+
+
 
 
 
@@ -169,6 +169,13 @@ Paasch, et al.          Expires 14 September 2023               [Page 3]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+1.1.  Terminology
+
+   A word about the term "bufferbloat" -- the undesirable latency that
+   comes from a router or other network equipment buffering too much
+   data.  This document uses the term as a general description of bad
+   latency, using more precise wording where warranted.
 
    "Latency" is a poor measure of responsiveness, since it can be hard
    for the general public to understand.  The units are unfamiliar
@@ -209,13 +216,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    control that might reduce the traffic's rate and thus its buffering
    in the network.
 
-   Traditionally, one thinks of bufferbloat happening on the routers and
-   switches of the Internet.  However, the networking stacks of the
-   clients and servers can have huge buffers.  Data sitting in TCP
-   sockets or waiting for the application to send or read causes
-   artificial latency, and affects user experience the same way as
-   "traditional" bufferbloat.
-
 
 
 
@@ -225,6 +225,13 @@ Paasch, et al.          Expires 14 September 2023               [Page 4]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+   Traditionally, one thinks of bufferbloat happening on the routers and
+   switches of the Internet.  However, the networking stacks of the
+   clients and servers can have huge buffers.  Data sitting in TCP
+   sockets or waiting for the application to send or read causes
+   artificial latency, and affects user experience the same way as
+   "traditional" bufferbloat.
 
    Finally, it is crucial to recognize that significant queueing only
    happens on entry to the lowest-capacity (or "bottleneck") hop on a
@@ -265,13 +272,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    diversity and adapts intelligently to the varying conditions it
    encounters.
 
-   Because significant queueing only happens on entry to the bottleneck
-   hop, the queue management at this critical hop of the path almost
-   entirely determines the responsiveness of the entire flow.  If the
-   bottleneck hop's queue management algorithm allows an excessively
-   large queue to form, this results in excessively large delays for
-   packets sitting in that queue awaiting transmission, significantly
-   degrading overall user experience.
 
 
 
@@ -281,6 +281,14 @@ Paasch, et al.          Expires 14 September 2023               [Page 5]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+   Because significant queueing only happens on entry to the bottleneck
+   hop, the queue management at this critical hop of the path almost
+   entirely determines the responsiveness of the entire flow.  If the
+   bottleneck hop's queue management algorithm allows an excessively
+   large queue to form, this results in excessively large delays for
+   packets sitting in that queue awaiting transmission, significantly
+   degrading overall user experience.
 
    In order to discover the depth of the buffer at the bottleneck hop,
    the Responsiveness Test mimics normal network operations and data
@@ -293,7 +301,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 3.  Goals
 
-   The algorithm described here defines an Responsiveness Test that
+   The algorithm described here defines a Responsiveness Test that
    serves as a good proxy for user experience.  This means:
 
    1.  Today's Internet traffic primarily uses HTTP/2 over TLS.  Thus,
@@ -317,14 +325,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    4.  Finally, to be useful to a wide audience, the measurement should
        finish within a short time frame.  Our target is 20 seconds.
 
-4.  Measuring Responsiveness Under Working Conditions
-
-   To make an accurate measurement, the algorithm must reliably put the
-   network in a state that represents those "working conditions".
-   During this process, the algorithm measures the responsiveness of the
-   network.  The following explains how the former and the latter are
-   achieved.
-
 
 
 
@@ -337,6 +337,14 @@ Paasch, et al.          Expires 14 September 2023               [Page 6]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+4.  Measuring Responsiveness Under Working Conditions
+
+   To make an accurate measurement, the algorithm must reliably put the
+   network in a state that represents those "working conditions".
+   During this process, the algorithm measures the responsiveness of the
+   network.  The following explains how the former and the latter are
+   achieved.
 
 4.1.  Working Conditions
 
@@ -370,7 +378,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    conditions also can evolve to continuously represent a realistic
    traffic pattern.
 
-4.1.1.  From single-flow to multi-flow
+4.1.1.  Single-flow vs multi-flow
 
    A single TCP connection may not be sufficient to reach the capacity
    and full buffer occupancy of a path quickly.  Using a 4MB receive
@@ -378,14 +386,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    connection can achieve up to 1Gb/s throughput.  Additionally, deep
    buffers along the path between the two endpoints may be significantly
    larger than 4MB.  TCP allows larger receive window sizes, up to 1GB.
-   However, most transport stacks aggressively limit the size of the
-   receive window to avoid consuming too much memory.
-
-   Thus, the only way to achieve full capacity and full buffer occupancy
-   on those networks is by creating multiple connections, allowing to
-   actively fill the bottleneck's buffer to achieve maximum working
-   conditions.
-
 
 
 
@@ -393,6 +393,14 @@ Paasch, et al.          Expires 14 September 2023               [Page 7]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+   However, most transport stacks aggressively limit the size of the
+   receive window to avoid consuming too much memory.
+
+   Thus, the only way to achieve full capacity and full buffer occupancy
+   on those networks is by creating multiple connections, allowing to
+   actively fill the bottleneck's buffer to achieve maximum working
+   conditions.
 
    Even if a single TCP connection would be able to fill the
    bottleneck's buffer, it may take some time for a single TCP
@@ -434,6 +442,14 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
    However, a number of caveats come with measuring in parallel:
 
+
+
+
+Paasch, et al.          Expires 14 September 2023               [Page 8]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
    *  Half-duplex links may not permit simultaneous uplink and downlink
       traffic.  This means the test might not reach the path's capacity
       in both directions at once and thus not expose all the potential
@@ -442,13 +458,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    *  Debuggability of the results becomes harder: During parallel
       measurement it is impossible to differentiate whether the observed
       latency happens in the uplink or the downlink direction.
-
-
-
-Paasch, et al.          Expires 14 September 2023               [Page 8]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
    Thus, we recommend testing uplink and downlink sequentially.
    Parallel testing is considered a future extension.
@@ -476,7 +485,54 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    link utilization has been reached and -- more importantly -- the
    working condition is stable.
 
-4.2.  Measuring Responsiveness
+4.2.  Test parameters
+
+   A number of parameters serve as input to the test methodology.  The
+   following lists their names, default values and explanation.
+   Hereafter the detailed description of the methodology will explain
+   how these parameters are being used.
+
+
+
+
+
+
+
+
+
+
+Paasch, et al.          Expires 14 September 2023               [Page 9]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
+     +======+==============================================+=========+
+     | Name | Explanation                                  | Default |
+     |      |                                              | Value   |
+     +======+==============================================+=========+
+     | MAD  | Moving average distance (number of intervals | 4       |
+     |      | to take into account for the moving average) |         |
+     +------+----------------------------------------------+---------+
+     | TMP  | Trimmed Mean Percentage to be removed        | 95%     |
+     +------+----------------------------------------------+---------+
+     | SDT  | Standard Deviation Tolerance for stability   | 5%      |
+     |      | detection                                    |         |
+     +------+----------------------------------------------+---------+
+     | ID   | Interval duration at which the algorithm     | 1       |
+     |      | reevaluates stability                        | second  |
+     +------+----------------------------------------------+---------+
+     | MNP  | Maximum number of parallel transport-layer   | 16      |
+     |      | connections                                  |         |
+     +------+----------------------------------------------+---------+
+     | MPS  | Maximum responsiveness probes per second     | 100     |
+     +------+----------------------------------------------+---------+
+     | PTC  | Maximum percentage of total capacity the     | 5%      |
+     |      | probes are allowed to consume                |         |
+     +------+----------------------------------------------+---------+
+
+                                  Table 1
+
+4.3.  Measuring Responsiveness
 
    Measuring responsiveness during the previously explained working
    conditions creation is a continuous process during the duration of
@@ -501,7 +557,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 9]
+Paasch, et al.          Expires 14 September 2023              [Page 10]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -548,19 +604,27 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    generating connections we can expect an overhead of no more than 1000
    bytes.
 
-   Given this information, we recommend that at each responsiveness
-   probing round, we send no more than 6 probes on load-generating
-   connections and 3 probes on foreign connections, every 100ms for each
-   type of probe.  This would result in a total amount of data per
-   second of 210 KB or 1680Kb, meaning a total capacity utilization of
-   1680 Kbps for the probing.
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 10]
+
+
+
+
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 11]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+   Given this information, we recommend that at each responsiveness
+   probing round, we send no more than 6 probes on different load-
+   generating connections (choosing randomly among the available load-
+   generating connections) and 3 probes on foreign connections, every
+   100ms for each type of probe.  This would result in a total amount of
+   data per second of 210 KB or 1680Kb, meaning a total capacity
+   utilization of 1680 Kbps for the probing.
 
    On high-speed networks, this will provide a significant amount of
    samples, while at the same time minimizing the probing overhead.
@@ -571,7 +635,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    probing traffic does not consume more than 5% of the available
    capacity.
 
-4.2.1.  Aggregating the Measurements
+4.3.1.  Aggregating the Measurements
 
    The algorithm produces sets of 4 times for each probe, namely: tcp_f,
    tls_f, http_f, http_l (from the previous section).  The
@@ -594,7 +658,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
    This responsiveness value presents round-trips per minute (RPM).
 
-4.3.  Final Algorithm
+4.4.  Final Algorithm
 
    Considering the previous two sections, where we explain what the
    meaning of working conditions is and the definition of
@@ -602,21 +666,19 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    measure the worst-case latency we need to transmit traffic at the
    full capacity of the path as well as ensure the buffers are filled to
    the maximum.  We can achieve this by continuously adding HTTP
+
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 12]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
    sessions to the pool of connections in a 1-second interval.  This
    will ensure that we quickly reach capacity and full buffer occupancy.
    First, the algorithm reaches stability for the goodput.  Once goodput
    stability has been achieved, responsiveness probes are being
    transmitted until responsiveness stability is reached.
-
-
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 11]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
    We consider both, goodput and responsiveness to be stable, when the
    standard deviation of the past 4 moving averages is within 5% of the
@@ -659,20 +721,21 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
       -  If goodput has saturated:
 
+
+
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 13]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
          o  Compute the responsiveness at interval i as
             current_responsiveness.
 
          o  If the standard deviation of the past 4 responsiveness
             values is less than 5% of the current_responsiveness,
             declare saturation and report current_responsiveness.
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 12]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
    In Section 3, it is mentioned that one of the goals is that the test
    finishes within 20 seconds.  It is left to the implementation what to
@@ -683,7 +746,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    Finally, if at any point one of these connections terminates with an
    error, the test should be aborted.
 
-4.3.1.  Confidence of test-results
+4.4.1.  Confidence of test-results
 
    As described above, a tool running the algorithm typically defines a
    time-limit for the execution of each of the stages.  For example, if
@@ -708,6 +771,21 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    We define "High" confidence if the algorithm was able to fully reach
    stability based on the define standard deviation tolerance.
 
+
+
+
+
+
+
+
+
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 14]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
 5.  Interpreting responsiveness results
 
    The described methodology uses a high-level approach to measure
@@ -719,16 +797,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    the server implementations.  This section describes how the different
    elements influence responsiveness and how a user may differentiate
    them when debugging a network.
-
-
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 13]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
 5.1.  Elements influencing responsiveness
 
@@ -761,6 +829,19 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    buildup at these layers would only influence latency on the probes
    that are sent on the load-generating connections.
 
+
+
+
+
+
+
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 15]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
    Below the transport layer many places have a potential queue build-
    up.  It is important to keep these queues at reasonable sizes or that
    they implement techniques like FQ-Codel.  Depending on the techniques
@@ -778,14 +859,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    results as well.  Many networks deploy transparent TCP Proxies,
    firewalls doing deep packet-inspection, HTTP "accelerators",... As
    the methodology relies on the use of HTTP/2, the responsiveness
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 14]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
-
    metric will be influenced by such devices as well.
 
    The network will influence both kinds of latency probes that the
@@ -816,6 +889,15 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    connections and the latency measured on separate connections may be
    different due to the different elements.
 
+
+
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 16]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
    For example, if the latency measured on separate connections is much
    less than the latency measured on the load-generating connections, it
    is possible to narrow down the source of the additional latency on
@@ -832,15 +914,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    protocols: IP, TCP, TLS, HTTP/2.  On top of this foundation, a
    minimal amount of new "protocol" is defined, merely specifying the
    URLs that used for GET and PUT in the process of executing the test.
-
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 15]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
    Both the client and the server MUST support HTTP/2 over TLS.  The
    client MUST be able to send a GET request and a POST.  The server
@@ -874,6 +947,13 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    and would require the test to run for much longer to deliver the same
    results.
 
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 17]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
    The server MUST respond to 4 URLs:
 
    1.  A "small" URL/response: The server must respond with a status
@@ -882,21 +962,6 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
        application/octet-stream.  The server SHOULD minimize the size,
        in bytes, of the response fields that are encoded and sent on the
        wire.
-
-
-
-
-
-
-
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 16]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
    2.  A "large" URL/response: The server must respond with a status
        code of 200 and a body size of at least 8GB.  The server SHOULD
@@ -930,7 +995,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    provider like an ISP) to host Responsiveness Test Server instances on
    their network so customers can determine what to expect about the
    quality of their connection to the service offered by that provider.
-   However, when a user performs an Responsiveness test and determines
+   However, when a user performs a Responsiveness test and determines
    that they are suffering from poor responsiveness during the
    connection to that service, the logical next questions might be,
 
@@ -938,21 +1003,18 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
    2.  "Is it poor buffer management by my ISP?"
 
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 18]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
    3.  "Is it poor buffer management in my home Wi-Fi Access point?"
 
    4.  "Something to do with the service provider?"
 
    5.  "Something else entirely?"
-
-
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 17]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
    To help an end user answer these questions, it will be useful for
    test clients to be able to easily discover Responsiveness Test Server
@@ -965,8 +1027,8 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    one or more Wi-Fi access points in their home, which then offer
    service to Wi-Fi client devices at different rates depending on
    distance, interference from other traffic, etc.  By having the cable
-   modem itself host an Responsiveness Test Server instance, the user
-   can then run a test between the cable modem and their computer or
+   modem itself host a Responsiveness Test Server instance, the user can
+   then run a test between the cable modem and their computer or
    smartphone, to help isolate whether bufferbloat they are experiencing
    is occurring in equipment inside the home (like their Wi-Fi access
    points) or somewhere outside the home.
@@ -974,7 +1036,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 7.1.  Well-Known Uniform Resource Identifier (URI) For Test Server
       Discovery
 
-   Any organization that wishes to host their own instance of an
+   Any organization that wishes to host their own instance of a
    Responsiveness Test Server can advertise that capability by hosting
    at the network quality well-known URI a resource whose content type
    is application/json and contains a valid JSON object meeting the
@@ -996,19 +1058,20 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    The content of the "version" field SHALL be "1".  Integer values
    greater than "1" are reserved for future versions of this protocol.
    The content of the "large_download_url", "small_download_url", and
+
+
+
+Paasch, et al.          Expires 14 September 2023              [Page 19]
+
+Internet-Draft   Responsiveness under Working Conditions      March 2023
+
+
    "upload_url" SHALL all be validly formatted "http" or "https" URLs.
    See above for the semantics of the fields.  All of the fields in the
    sample configuration are required except "test_endpoint".  If the
    test server provider can pin all of the requests for a test run to a
    specific host in the service (for a particular run), they can specify
    that host name in the "test_endpoint" field.
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 18]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
 
    For purposes of registration of the well-known URI [RFC8615], the
    application name is "nq".  The media type of the resource at the
@@ -1035,7 +1098,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 7.2.1.  Example
 
-   An obscure service provider hosting an Responsiveness Test Server
+   An obscure service provider hosting a Responsiveness Test Server
    instance for their organization (obs.cr) on the "rpm.obs.cr" host
    would return the following answers to PTR and SRV conventional DNS
    queries:
@@ -1051,20 +1114,17 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    proceed to access the rpm.obs.cr host on port 443 at the .well-known/
    nq well-known URI to begin the test.
 
-8.  Security Considerations
-
-   TBD
 
 
 
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 19]
+Paasch, et al.          Expires 14 September 2023              [Page 20]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+8.  Security Considerations
+
+   TBD
 
 9.  IANA Considerations
 
@@ -1111,16 +1171,16 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
               DOI 10.17487/RFC6762, February 2013,
               <https://www.rfc-editor.org/info/rfc6762>.
 
-   [RFC6763]  Cheshire, S. and M. Krochmal, "DNS-Based Service
-              Discovery", RFC 6763, DOI 10.17487/RFC6763, February 2013,
-              <https://www.rfc-editor.org/info/rfc6763>.
 
 
-
-Paasch, et al.          Expires 14 September 2023              [Page 20]
+Paasch, et al.          Expires 14 September 2023              [Page 21]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
+
+   [RFC6763]  Cheshire, S. and M. Krochmal, "DNS-Based Service
+              Discovery", RFC 6763, DOI 10.17487/RFC6763, February 2013,
+              <https://www.rfc-editor.org/info/rfc6763>.
 
    [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,
               "Proportional Integral Controller Enhanced (PIE): A
@@ -1169,11 +1229,7 @@ A.1.  Apache Traffic Server
 
 
 
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 21]
+Paasch, et al.          Expires 14 September 2023              [Page 22]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1229,7 +1285,7 @@ Authors' Addresses
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 22]
+Paasch, et al.          Expires 14 September 2023              [Page 23]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1285,4 +1341,4 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 23]
+Paasch, et al.          Expires 14 September 2023              [Page 24]

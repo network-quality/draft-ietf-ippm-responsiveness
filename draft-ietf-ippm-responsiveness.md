@@ -266,7 +266,7 @@ A poorly managed bottleneck queue will not.
 
 # Goals
 
-The algorithm described here defines an Responsiveness Test that serves as a good
+The algorithm described here defines a Responsiveness Test that serves as a good
 proxy for user experience. Therefore:
 
 1. Because today's Internet traffic primarily uses HTTP/2 over TLS, the test's
@@ -322,7 +322,7 @@ control algorithms, it is important that the working conditions also can evolve
 to continuously represent a realistic traffic pattern.
 
 
-### From single-flow to multi-flow
+### Single-flow vs multi-flow
 
 A single TCP connection may not be sufficient
 to reach the capacity and full buffer occupancy of a path quickly.
@@ -414,6 +414,24 @@ If new connections leave the throughput the same,
 full link utilization has been reached and -- more importantly --
 the working condition is stable.
 
+
+## Test parameters
+
+A number of parameters serve as input to the test methodology. The following lists
+their names, default values and explanation. Hereafter the detailed description of the
+methodology will explain how these parameters are being used. Experience has shown
+that these parameters allow for a low runtime and accurate results among a wide range of environments.
+
+| Name | Explanation | Default Value |
+| ---- | ----------- | ------------- |
+| MAD  | Moving average distance (number of intervals to take into account for the moving average) | 4 |
+| TMP  | Trimmed Mean Percentage to be removed | 95% |
+| SDT  | Standard Deviation Tolerance for stability detection | 5% |
+| ID   | Interval duration at which the algorithm reevaluates stability | 1 second |
+| MNP  | Maximum number of parallel transport-layer connections | 16 |
+| MPS  | Maximum responsiveness probes per second | 100 |
+| PTC  | Percentage of Total Capacity the probes are allowed to consume | 5% |
+
 ## Measuring Responsiveness
 
 Measuring responsiveness while achieving working conditions is a process of continuous measurement.
@@ -464,19 +482,21 @@ responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
 the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
 On load-generating connections we can expect an overhead of no more than 1000 bytes.
 
-Given this information, we recommend that at each responsiveness probing round, we
-send no more than 6 probes on different load-generating connections (choosing randomly among the available load-generating connections)
-and 3 probes on foreign connections,
-every 100ms for each type of probe.
-This would result in a total amount of data per second of 210 KB or 1680Kb, meaning
-a total capacity utilization of 1680 Kbps for the probing.
+Given this information, we recommend that at each responsiveness probing interval does
+not send more than MPS (Maximum responsiveness Probes per Second - default to 100) probes per second.
+The probes should be spread out equally over the duration of the interval with an
+equal split between foreign and different load-generating connections. For the probes on
+load-generating connections, the connection should be selected randomly for each probe.
+
+This would result in a total amount of data per second of 300 KB or 2400Kb, meaning
+a total capacity utilization of 2400 Kbps for the probing.
 
 On high-speed networks, this will provide a significant amount of samples, while at
 the same time minimizing the probing overhead.
 However, on severely capacity-constrained networks the probing traffic could consume
-a significant portion of the available capacity. We recommend to increase the probing
-interval beyond 100ms and reduce the number of parallel probes appropriately
-so that the probing traffic does not consume more than 5% of the available capacity.
+a significant portion of the available capacity. The Responsiveness Test must
+adjust its probing frequency and in such a way that the probing traffic does not consume
+more than PTC (Percentage of Total Capacity - default to 5%) of the available capacity.
 
 ### Aggregating the Measurements
 
@@ -484,19 +504,19 @@ The algorithm produces sets of 4 times for each probe, namely:
 tcp_f, tls_f, http_f, http_l (from the previous section).
 The responsiveness evolves over time as buffers gradually reach saturation. Once
 the buffers are saturated responsiveness is stable over time. Thus, the aggregation
-of the measurements considers the last 4 seconds worth of completed responsiveness probes.
+of the measurements considers the last MAD (Moving Average Distance - default to 4) intervals worth of completed responsiveness probes.
 
-Over the timeframe of 4 seconds a potentially large number of samples has been collected.
+Over the timeframe of these intervals a potentially large number of samples has been collected.
 These may be affected by noise in the measurements, and outliers. Thus, to aggregate these
-we suggest to use a trimmed mean at 95th percentile, thus providing the following numbers:
-tcp_f_t95, tls_f_t95, http_f_t95, http_l_t95.
+we suggest to use a trimmed mean at the TMP (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
+TM(tcp_f), TM(tls_f), TM(http_f), TM(http_l).
 
 The responsiveness is then calculated as the weighted mean:
 
 ~~~
 Responsiveness = 60000 /
-(1/6*(tcp_f_t95 + tls_f_t95 + http_f_t95) +
-  1/2*http_s_t95)
+(1/6*(TM(tcp_f) + TM(tls_f) + TM(http_f)) +
+  1/2*TM(http_s))
 ~~~
 
 This responsiveness value presents round-trips per minute (RPM).
@@ -510,13 +530,13 @@ final algorithm. In order to measure the worst-case latency we need to transmit
 traffic at the full capacity of the path as well as ensure the buffers are filled
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
-in a 1-second interval. This will ensure that we quickly reach capacity and full
+in a ID (Interval duration - default to 1 second) interval. This will ensure that we quickly reach capacity and full
 buffer occupancy. First, the algorithm reaches stability for the goodput. Once
 goodput stability has been achieved, responsiveness probes are being transmitted
 until responsiveness stability is reached.
 
 We consider both, goodput and responsiveness to be stable, when the standard deviation
-of the past 4 moving averages is within 5% of the last of the moving averages.
+of the past MAD intervals is within SDT (Standard Deviation Tolerance - default to 5%) of the last of the moving averages.
 
 The following algorithm reaches working conditions of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
@@ -744,7 +764,7 @@ It makes sense for a service provider (either an application service provider li
 or a network access provider like an ISP) to host Responsiveness Test Server instances on their
 network so customers can determine what to expect about the quality of their connection to 
 the service offered by that provider.
-However, when a user performs an Responsiveness Test and determines
+However, when a user performs a Responsiveness Test and determines
 that they are suffering from poor responsiveness during the connection to that service,
 the logical next questions might be,
 
@@ -764,7 +784,7 @@ service offering 100 Mb/s download speed, connected via
 gigabit Ethernet to one or more Wi-Fi access points in their home,
 which then offer service to Wi-Fi client devices at different rates
 depending on distance, interference from other traffic, etc.
-By having the cable modem itself host an Responsiveness Test Server instance,
+By having the cable modem itself host a Responsiveness Test Server instance,
 the user can then run a test between the cable modem and their computer
 or smartphone, to help isolate whether bufferbloat they are experiencing
 is occurring in equipment inside the home (like their Wi-Fi access points)
@@ -772,7 +792,7 @@ or somewhere outside the home.
 
 ## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
 
-Any organization that wishes to host their own instance of an Responsiveness Test Server can advertise that capability
+Any organization that wishes to host their own instance of a Responsiveness Test Server can advertise that capability
 by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the 
 following criteria:
 
@@ -820,7 +840,7 @@ administrator manually enter the required records.
 
 ### Example
 
-An obscure service provider hosting an Responsiveness Test Server instance for their
+An obscure service provider hosting a Responsiveness Test Server instance for their
 organization (obs.cr) on the "rpm.obs.cr" host would return the following answers
 to PTR and SRV conventional DNS queries:
 
