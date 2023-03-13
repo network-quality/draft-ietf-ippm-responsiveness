@@ -1134,12 +1134,12 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 10.  Acknowledgments
 
-   Special thanks go to Will Hawkins and Jeroen Schickendantz for their
-   tireless enthousiasm around the project and their contributions to
-   this I-D and the development of the Go responsiveness measurement
-   tool.  We would also like to thank Rich Brown for his editorial pass
-   over this I-D.  We also thank Erik Auerswald for his constructive
-   feedback on the I-D.
+   Special thanks go to Jeroen Schickendantz for his tireless
+   enthousiasm around the project and his contributions to this I-D and
+   the development of the Go responsiveness measurement tool.  We would
+   also like to thank Rich Brown for his editorial pass over this I-D.
+   We also thank Erik Auerswald, Matt Matthis and Omer Shapira for their
+   constructive feedback on the I-D.
 
 11.  Informative References
 

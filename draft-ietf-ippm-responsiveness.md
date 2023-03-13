@@ -732,7 +732,7 @@ The client will probably never completely upload the object,
 but will instead close the connection after reaching working condition
 and making its measurements.
 
-4. A .well-known URL {{RFC8615}} which contains configuration information for 
+4. A .well-known URL {{RFC8615}} which contains configuration information for
 the client to run the test (See {{discovery}}, below.)
 
 The client begins the responsiveness measurement by querying for the JSON {{RFC8259}} configuration.
@@ -850,11 +850,11 @@ for advertising and discovery of Responsiveness Test Server instances.
 
 # Acknowledgments
 
-Special thanks go to Will Hawkins and Jeroen Schickendantz for their tireless
-enthousiasm around the project and their contributions to this I-D and the development
+Special thanks go to Jeroen Schickendantz for his tireless
+enthousiasm around the project and his contributions to this I-D and the development
 of the Go responsiveness measurement tool.
 We would also like to thank Rich Brown for his editorial pass over this I-D.
-We also thank Erik Auerswald for his constructive feedback on the I-D.
+We also thank Erik Auerswald, Matt Matthis and Omer Shapira for their constructive feedback on the I-D.
 
 --- back
 
