@@ -78,7 +78,7 @@
       </address>
     </author>
 
-    <date year="2023" month="February" day="22"/>
+    <date year="2023" month="March" day="13"/>
 
     <area>Transport</area>
     <workgroup>IP Performance Measurement</workgroup>
@@ -106,7 +106,7 @@ We believe that creating a tool whose measurement matches people's
 everyday experience will create the necessary awareness,
 and result in a demand for products that solve the problem.</t>
 
-<t>This document specifies the "RPM Test" for measuring responsiveness.
+<t>This document specifies the "Responsiveness Test" for measuring responsiveness.
 It uses common protocols and mechanisms to measure user
 experience specifically when the network is under working conditions.
 The measurement is expressed as "Round-trips Per Minute" (RPM)
@@ -173,15 +173,15 @@ it's only a tenth of a second!").</t>
 
 <t>Instead, we create the term "Responsiveness under working conditions"
 to make it clear that we are measuring all, not just idle, conditions,
-and use "round-trips per minute" as the metric.
-The advantage of round-trips per minute are two-fold: First, it allows for a metric
-that is "the higher the better". This kind of metric is often more intuitive for end-users.
+and use "round-trips per minute" as the unit.
+The advantage of round-trips per minute are two-fold: First, it allows for a unit
+that is "the higher the better". This kind of unit is often more intuitive for end-users.
 Second, the range of the values tends to be around the 4-digit integer range which
 is also a value easy to compare and read, again allowing for a more intuitive use.
-Finally, we abbreviate the measurement to "RPM", a wink to the
+Finally, we abbreviate the unit to "RPM", a wink to the
 "revolutions per minute" that we use for car engines.</t>
 
-<t>This document defines an algorithm for the "RPM Test"
+<t>This document defines an algorithm for the "Responsiveness Test"
 that explicitly measures responsiveness under working conditions.</t>
 
 </section>
@@ -265,7 +265,7 @@ delays for packets sitting in that queue awaiting transmission,
 significantly degrading overall user experience.</t>
 
 <t>In order to discover the depth of the buffer at the bottleneck hop,
-the RPM Test mimics normal network operations and data transfers,
+the Responsiveness Test mimics normal network operations and data transfers,
 to cause this bottleneck buffer to fill to capacity, and then
 measures the resulting end-to-end latency under these operating conditions.
 A well managed bottleneck queue keeps its queue occupancy
@@ -276,7 +276,7 @@ A poorly managed bottleneck queue will not.</t>
 </section>
 <section anchor="goals"><name>Goals</name>
 
-<t>The algorithm described here defines an RPM Test that serves as a good
+<t>The algorithm described here defines an Responsiveness Test that serves as a good
 proxy for user experience. This means:</t>
 
 <t><list style="numbers">
@@ -289,7 +289,7 @@ subject traffic to completely different paths:
 these could also be measured separately.</t>
   <t>The Internet is marked by the deployment of countless middleboxes like
 transparent TCP proxies or traffic prioritization for certain types of traffic.
-The RPM Test must take into account their effect on
+The Responsiveness Test must take into account their effect on
 TCP-handshake <xref target="RFC0793"/>, TLS-handshake, and request/response.</t>
   <t>The test result should be expressed in an intuitive, nontechnical form.</t>
   <t>Finally, to be useful to a wide audience, the measurement
@@ -315,7 +315,8 @@ tradeoff between using realistic traffic patterns and pushing the network to
 its limits.</t>
 
 <t>The working conditions we try to achieve is a scenario where the path between the
-measuring endpoints is utilized at its full end-to-end capacity. An ideal
+measuring endpoints is utilized at its full end-to-end capacity and its full
+buffer occupancy. An ideal
 sender could send at just this link-speed without building a queue on the
 bottleneck. Thus, in order to measure the worst-case responsiveness we need to
 ensure that a queue is building up on the bottleneck, meaning that responsiveness
@@ -354,7 +355,7 @@ bottleneck's buffer to achieve maximum working conditions.</t>
 
 <t>Even if a single TCP connection would be able to fill the bottleneck's buffer,
 it may take some time for a single TCP connection to ramp
-up to full speed. One of the goals of the RPM test is to quickly
+up to full speed. One of the goals of the Responsiveness test is to quickly
 load the network, take its measurements, and then finish.
 Finally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
@@ -362,17 +363,20 @@ This reaction (intended by the protocol design) decreases the
 queueing within the network, making it harder to determine the
 depth of the bottleneck queue reliably.</t>
 
-<t>The purpose of the RPM Test is not to productively move data
+<t>The purpose of the Responsiveness Test is not to productively move data
 across the network in a useful way, the way a normal application does.
-The purpose of the RPM Test is, as quickly as possible, to simulate
+The purpose of the Responsiveness Test is, as quickly as possible, to simulate
 a representative traffic load as if real applications were doing
 sustained data transfers, measure the resulting round-trip time
 occurring under those realistic conditions, and then end the test.
 Because of this, using multiple simultaneous parallel connections
-allows the RPM test to complete its task more quickly, in a way that
+allows the Responsiveness test to complete its task more quickly, in a way that
 overall is less disruptive and less wasteful of network capacity
 than a test using a single TCP connection that would take longer
 to bring the bottleneck hop to a stable saturated state.</t>
+
+<t>In this document, we impose an upper bound on the number of parallel load-generating
+connections to 16.</t>
 
 </section>
 <section anchor="parallel-vs-sequential-uplink-and-downlink"><name>Parallel vs Sequential Uplink and Downlink</name>
@@ -405,11 +409,12 @@ is considered a future extension.</t>
 </section>
 <section anchor="reaching-full-buffer-utilization"><name>Reaching full buffer utilization</name>
 
-<t>The RPM Test gradually increases the number of TCP connections
+<t>The Responsiveness Test gradually increases the number of TCP connections
 and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
-as well as responsiveness continuously.
-When both goodput and responsiveness stop changing, it means that the test
-managed to fill the buffer of the bottleneck.
+continuously.
+Once goodput reaches saturation, buffers will start filling up, creating the well-known
+"standing queue" that is known as bufferbloat. This is the moment the test starts
+measuring the responsiveness until the responsiveness reaches saturation as well.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.</t>
 
@@ -452,42 +457,63 @@ creating a brand new TLS connection from scratch to do the same thing.</t>
 </list></t>
 
 <t>Foreign probes will provide 3 sets of data-points. First, the duration of the TCP-handshake
-(noted hereafter as tcp_foreign).
-Second, the TLS round-trip-time (noted tls_foreign). For this, it is important to note that different TLS versions
+(noted hereafter as tcp_f).
+Second, the TLS round-trip-time (noted tls_f). For this, it is important to note that different TLS versions
 have a different number of round-trips. Thus, the TLS establishment time needs to be
 normalized to the number of round-trips the TLS handshake takes until the connection
 is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
-request for a 1-byte object and receiving the entire response (noted http_foreign).</t>
+request for a 1-byte object and receiving the entire response (noted http_f).</t>
 
 <t>Self probes will provide a single data-point for the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
-full HTTP response has been received (noted http_self).</t>
+full HTTP response has been received (noted http_l).</t>
 
-<t>tcp_foreign, tls_foreign, http_foreign and http_self are all measured in milliseconds.</t>
+<t>tcp_f, tls_f, http_f and http_l are all measured in milliseconds.</t>
 
 <t>The more probes that are sent, the more data is available for calculation. In order to generate
-as much data as possible, the methodology requires a client to issue these probes every 100ms.
-For the probes on the load-generating connections, the client needs to use one of the
-initial load-generating connections.
-This means that every 100ms, 2 probes are being evaluated. The total amount of data
-used for these probes would be no more than about 50KB worth of data within one second.</t>
+as much data as possible, the methodology requires a client to issue these probes regularly.
+There is however a risk that on low-capacity networks the responsiveness probes
+themselves will consume a significant amount of the capacity. As the test mandates to
+first saturate capacity before probing for responsiveness, we are able to
+accurately estimate how much of the capacity the responsiveness probes will consume.</t>
+
+<t>This can be done by providing an estimate of the number of bytes exchanged for a
+responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
+the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
+On load-generating connections we can expect an overhead of no more than 1000 bytes.</t>
+
+<t>Given this information, we recommend that at each responsiveness probing round, we
+send no more than 6 probes on load-generating connections and 3 probes on foreign connections,
+every 100ms for each type of probe.
+This would result in a total amount of data per second of 210 KB or 1680Kb, meaning
+a total capacity utilization of 1680 Kbps for the probing.</t>
+
+<t>On high-speed networks, this will provide a significant amount of samples, while at
+the same time minimizing the probing overhead.
+However, on severely capacity-constrained networks the probing traffic could consume
+a significant portion of the available capacity. We recommend to increase the probing
+interval beyond 100ms and reduce the number of parallel probes appropriately
+so that the probing traffic does not consume more than 5% of the available capacity.</t>
 
 <section anchor="aggregating-the-measurements"><name>Aggregating the Measurements</name>
 
 <t>The algorithm produces sets of 4 times for each probe, namely:
-tcp_foreign, tls_foreign, http_foreign, http_self (from the previous section). Each of these sets
-will have a large number of samples. Use the following methodology to calculate a single RPM value
-from these data:</t>
+tcp_f, tls_f, http_f, http_l (from the previous section).
+The responsiveness evolves over time as buffers gradually reach saturation. Once
+the buffers are saturated responsiveness is stable over time. Thus, the aggregation
+of the measurements considers the last 4 seconds worth of completed responsiveness probes.</t>
 
-<t><list style="numbers">
-  <t>Among each set, take the 90th percentile, thus resulting in 4 individual numbers (tcp_foreign_p90, tls_foreign_p90, http_foreign_p90, http_self_p90).</t>
-  <t>Calculate the RPM as the weighted mean:</t>
-</list></t>
+<t>Over the timeframe of 4 seconds a potentially large number of samples has been collected.
+These may be affected by noise in the measurements, and outliers. Thus, to aggregate these
+we suggest to use a trimmed mean at 95th percentile, thus providing the following numbers:
+tcp_f_t95, tls_f_t95, http_f_t95, http_l_t95.</t>
+
+<t>The responsiveness is then calculated as the weighted mean:</t>
 
 <figure><artwork><![CDATA[
 Responsiveness = 60000 /
-((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 +
-  http_self_p90)/2)
+(1/6*(tcp_f_t95 + tls_f_t95 + http_f_t95) +
+  1/2*http_s_t95)
 ]]></artwork></figure>
 
 <t>This responsiveness value presents round-trips per minute (RPM).</t>
@@ -503,9 +529,12 @@ traffic at the full capacity of the path as well as ensure the buffers are fille
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
 in a 1-second interval. This will ensure that we quickly reach capacity and full
-buffer occupancy. We need to continuously measure goodput and responsiveness and
-as soon as we detect stability for both metrics we can ensure that the full
-working conditions have been reached.</t>
+buffer occupancy. First, the algorithm reaches stability for the goodput. Once
+goodput stability has been achieved, responsiveness probes are being transmitted
+until responsiveness stability is reached.</t>
+
+<t>We consider both, goodput and responsiveness to be stable, when the standard deviation
+of the past 4 moving averages is within 5% of the last of the moving averages.</t>
 
 <t>The following algorithm reaches working conditions of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
@@ -520,12 +549,6 @@ the interval is defined as one second.</t>
 <t><list style="symbols">
   <t>i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
 increases by one for each interval.</t>
-  <t>instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
-interval p, divided by the interval duration.
-If p is negative (i.e., a time interval logically prior to the start of the test beginning,
-used in moving average calculations),
-the number of total bytes of data transferred within that
-interval is considered to be 0.</t>
   <t>moving average aggregate goodput at interval p: The number of total bytes of data transferred within
 interval p and the three immediately preceding intervals, divided by four times the interval duration.</t>
 </list></t>
@@ -534,19 +557,19 @@ interval p and the three immediately preceding intervals, divided by four times 
 
 <t><list style="symbols">
   <t>Create a load-generating connection.</t>
-  <t>Start probing for responsiveness every 100ms, as described in the previous section.</t>
   <t>At each interval:
   <list style="symbols">
       <t>Create an additional load-generating connection.</t>
-      <t>Compute the instantaneous aggregate goodput at interval i.</t>
-      <t>Compute the moving average aggregate goodput at interval i.</t>
-      <t>Compute the responsiveness</t>
-      <t>If the moving average aggregate goodput at interval i is more than a 5% increase over
-the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.
-Continue for 4 more iterations.</t>
-      <t>If the responsiveness at interval i is more than a 5% reduction over the responsiveness at interval i - 1, the network
-has not yet reached full buffer occupancy.
-Continue for 4 more iterations.</t>
+      <t>If goodput has not saturated:
+      <list style="symbols">
+          <t>Compute the moving average aggregate goodput at interval i as current_average.</t>
+          <t>If the standard deviation of the past 4 average goodput values is less than 5% of the current_average, declare saturation and move on to probe responsiveness.</t>
+        </list></t>
+      <t>If goodput has saturated:
+      <list style="symbols">
+          <t>Compute the responsiveness at interval i as current_responsiveness.</t>
+          <t>If the standard deviation of the past 4 responsiveness values is less than 5% of the current_responsiveness, declare saturation and report current_responsiveness.</t>
+        </list></t>
     </list></t>
 </list></t>
 
@@ -557,6 +580,27 @@ responsiveness measurement or let the test run for longer.</t>
 
 <t>Finally, if at any point one of these connections terminates with an error, the test should be aborted.</t>
 
+<section anchor="confidence-of-test-results"><name>Confidence of test-results</name>
+
+<t>As described above, a tool running the algorithm typically defines a time-limit for
+the execution of each of the stages. For example, if the tool allocates a total
+run-time of 40 seconds, and it executes a full downlink followed by a uplink test,
+it may allocate 10 seconds to each of the saturation-stages (downlink capacity saturation, downlink responsiveness saturation, uplink capacity saturation, uplink responsiveness saturation).</t>
+
+<t>As the different stages may or may not reach stability, we can define a "confidence score"
+for the different metrics (capacity and responsiveness) the methodology was able to measure.</t>
+
+<t>We define "Low" confidence in the result if the algorithm was not even able to
+execute 4 iterations of the specific stage. Meaning, the moving average is
+not taking the full window into account.</t>
+
+<t>We define "Medium" confidence if the algorithm was able to execute at least 4
+iterations, but did not reach stability based on standard deviation tolerance.</t>
+
+<t>We define "High" confidence if the algorithm was able to fully reach stability
+based on the define standard deviation tolerance.</t>
+
+</section>
 </section>
 </section>
 <section anchor="interpreting-responsiveness-results"><name>Interpreting responsiveness results</name>
@@ -631,7 +675,7 @@ during the downlink load generation.</t>
 </section>
 <section anchor="root-causing-responsiveness"><name>Root-causing Responsiveness</name>
 
-<t>Once an RPM result has been generated one might be tempted to try to localize
+<t>Once a responsiveness result has been generated one might be tempted to try to localize
 the source of a potential low responsiveness. The responsiveness measurement
 is however aimed at providing a quick, top-level view of the responsiveness
 under working conditions the way end-users experience it.
@@ -655,9 +699,9 @@ probing connections in the same way.</t>
 
 </section>
 </section>
-<section anchor="rpm-test-server-api"><name>RPM Test Server API</name>
+<section anchor="responsiveness-test-server-api"><name>Responsiveness Test Server API</name>
 
-<t>The RPM measurement is built upon a foundation of standard protocols:
+<t>The responsiveness measurement is built upon a foundation of standard protocols:
 IP, TCP, TLS, HTTP/2.
 On top of this foundation, a minimal amount of new “protocol” is defined,
 merely specifying the URLs that used for GET and PUT in the process of
@@ -675,12 +719,12 @@ to avoid affecting the client's measurement.</t>
 (e.g., TCP Prague with ECT(1) packet marking),
 for their normal traffic when it is available, and fall back
 to traditional loss-based congestion controls (e.g., Reno or CUBIC)
-otherwise, the same strategy SHOULD be used for RPM test traffic.
+otherwise, the same strategy SHOULD be used for responsiveness test traffic.
 This is RECOMMENDED so that the synthetic traffic generated
-by the RPM test mimics real-world traffic for that server.</t>
+by the responsiveness test mimics real-world traffic for that server.</t>
 
 <t>Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
-SHOULD NOT be used for RPM test traffic because they take
+SHOULD NOT be used for responsiveness test traffic because they take
 much longer to discover the depth of the bottleneck buffers.
 Delay-based congestion-control algorithms seek to mitigate the
 effects of bufferbloat, by detecting and responding to early signs
@@ -729,14 +773,14 @@ the upstream and downstream direction as well as the small object
 for the latency measurements.</t>
 
 </section>
-<section anchor="discovery"><name>RPM Test Server Discovery</name>
+<section anchor="discovery"><name>Responsiveness Test Server Discovery</name>
 
 <t>It makes sense for a service provider (either an application service provider like a video conferencing service
-or a network access provider like an ISP) to host RPM Test Server instances on their
+or a network access provider like an ISP) to host Responsiveness Test Server instances on their
 network so customers can determine what to expect about the quality of their connection to 
 the service offered by that provider.
-However, when a user performs an RPM test and determines
-that they are suffering from poor RPM during the connection to that service,
+However, when a user performs an Responsiveness test and determines
+that they are suffering from poor responsiveness during the connection to that service,
 the logical next questions might be,</t>
 
 <t><list style="numbers">
@@ -748,7 +792,7 @@ the logical next questions might be,</t>
 </list></t>
 
 <t>To help an end user answer these questions, it will be useful for test clients
-to be able to easily discover RPM Test Server instances running in various
+to be able to easily discover Responsiveness Test Server instances running in various
 places in the network (e.g., their home router, their Wi-Fi access point, their ISP's
 head-end equipment, etc).</t>
 
@@ -757,7 +801,7 @@ service offering 100 Mb/s download speed, connected via
 gigabit Ethernet to one or more Wi-Fi access points in their home,
 which then offer service to Wi-Fi client devices at different rates
 depending on distance, interference from other traffic, etc.
-By having the cable modem itself host an RPM Test Server instance,
+By having the cable modem itself host an Responsiveness Test Server instance,
 the user can then run a test between the cable modem and their computer
 or smartphone, to help isolate whether bufferbloat they are experiencing
 is occurring in equipment inside the home (like their Wi-Fi access points)
@@ -765,7 +809,7 @@ or somewhere outside the home.</t>
 
 <section anchor="well-known-uniform-resource-identifier-uri-for-test-server-discovery"><name>Well-Known Uniform Resource Identifier (URI) For Test Server Discovery</name>
 
-<t>Any organization that wishes to host their own instance of an RPM Test Server can advertise that capability
+<t>Any organization that wishes to host their own instance of an Responsiveness Test Server can advertise that capability
 by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the 
 following criteria:</t>
 
@@ -800,12 +844,12 @@ for this well-known URI.</t>
 </section>
 <section anchor="dns-based-service-discovery-for-test-server-discovery"><name>DNS-Based Service Discovery for Test Server Discovery</name>
 
-<t>To further aid the test client in discovering instances of the RPM Test Server, organizations
+<t>To further aid the test client in discovering instances of the Responsiveness Test Server, organizations
 wishing to host their own instances of the Test Server MAY advertise their availability using
 DNS-Based Service Discovery <xref target="RFC6763"/> using conventional, unicast DNS <xref target="RFC1034"/> or multicast DNS <xref target="RFC6762"/>
 on the organization network's local link(s).</t>
 
-<t>The RPM Test Service instances should advertise using the service type <xref target="RFC6335"/> 
+<t>The Responsiveness Test Service instances should advertise using the service type <xref target="RFC6335"/> 
 "_nq._tcp".  Population of the appropriate DNS zone with the
 relevant unicast discovery records can be performed
 automatically using a Discovery Proxy <xref target="RFC8766"/>,
@@ -814,7 +858,7 @@ administrator manually enter the required records.</t>
 
 <section anchor="example"><name>Example</name>
 
-<t>An obscure service provider hosting an RPM Test Server instance for their
+<t>An obscure service provider hosting an Responsiveness Test Server instance for their
 organization (obs.cr) on the "rpm.obs.cr" host would return the following answers
 to PTR and SRV conventional DNS queries:</t>
 
@@ -842,7 +886,7 @@ host on port 443 at the .well-known/nq well-known URI to begin the test.</t>
 
 <t>IANA has been requested to record the service type
 “_nq._tcp” (Network Quality)
-for advertising and discovery of RPM Test Server instances.</t>
+for advertising and discovery of Responsiveness Test Server instances.</t>
 
 </section>
 <section anchor="acknowledgments"><name>Acknowledgments</name>
@@ -1079,314 +1123,333 @@ map https://nq.example.com/api/v1/upload \
   </back>
 
 <!-- ##markdown-source:
-H4sIABqh9mMAA9V965Ib15Hm//MUtdBuqHsHALt5s9gTCrt5kUybpNrslhUb
-OxuKQtUBUGahCqpLg7CCDr3GRHheTk+y+WXmuVQBTVGz3g2v5+ImgDqXPHky
-v7zWbDYzXdGV9iJ5a9ttXbXFra1s2yZ9ldsm+a5u3hXVKnlWV3nRFfS9SReL
-xt5++u/zOqvSDU2QN+mymxW2W86K7XYzawYDzM7OTZ529sJk9P9XdbO/SNou
-N6btF5uibWmsm/2Whnn54uYrk9U5TXOR9DTYF6bYNhdJ1/Rtd//s7MnZfZM2
-Nr1Ibpq0oimazuxoWaum7rf0+FVyZZtl3WzSKrPJa5u2fWM3turMO7unH+b0
-m6qzTWW72XMsmZbQpVX+fVrWFc2/t63ZFhfJ/+zqbJq0NHxjly39td/gj/9l
-TNp367q5MEkyo/9LkqJqL5Jn8+QqTdtszR8JRZ6tm6Lt6u06/qpuaF+X221p
-aR3ZnD9raQ7bXSTfVFa/ukqbd8l36Z6/zoqOqPWs39qmK6p6mjxLy4K2WBVp
-8uTR2flD+VXdVx3I+m1VdDZPrjsidJvUy+RyY5siS/lXdpMW5UWSbXlFv0sx
-2zyrN2a4nbdzIt3eNtFu3hKR0rKMPv/n2ErTbO7cxvWcDsG266Kx0U6uuz5t
-uuE3/xx7yXRJd27om3lyvU63RZNG+/mGBhp8/M+xmZr2cudGvpsnv093JEza
-aCPfFcRf8ce8EZrr1jYtLRATPSuqrKiqtCviudb80G79uz7DB/M+m9u8H835
-mpg67dZFPCV90MWf8oxf1/WqtFMQb0C788dnZ7TT7bro1jalD5mGuwEJX4NE
-aVElfy7sjsh4mSRPHp49fPDr6behpW14Zb9b8YKEjEXF0q0jokAGPe2XS9ss
-yjrtLvjpIJ7oPzPZ+R/myde26/bt4NM/zpM3RbauS/lYFcUkHjF5DiaRT1p6
-KqGNe/k5EeLQwm2LVRH/1JtNX9E+WDdgX/j95bPX0+TPddlvbPLo0TR5028W
-xLHnycn9s/P7pzRKpDu6DLpjmf3myYNF0d69JWKgF3m+H6ycNYJqE+iorqnL
-5KqpSZTTHyc3z65Ok+utzYqlLvFwB25vyYtqVVSWviF1d5O275Kv6iaDrHj7
-1bMzWtyF/Hl+9uCh/vn4wYNH7s/fPL4f/nS//eLxufvBF795/Nj9ef/Jmfvz
-7IH/7f1HTy6Mmc1mSbog/kszUlS0BOKKak9KKm1IJ6VJmWbvQOahsp0mt2lT
-1H1b7pOMZLbNTZmupvTrzlbZfkpcnizCKU/p+rTJwtqKxsnqVVX8lZ6gj9KK
-9D5xW9fTfaP7sOg7YuHNpq5YH267esM8Uefp/vM2IbJBE7dz84LWkdCR0imn
-SW6zNLdYJb5N6GhY4aZNXvwV1O1stgbPlKRty545Z2qKjtZC94C4KNU5k21T
-L0q7SWhFzFe2ypOeDo8mxIzNnhR4MnlX1bt2Qj9Iu4RGKdpkUuHClBN+ME1u
-i9zWNGZF+7cACV1t1umtdeO3yW5Ny2/rjV3U+T6xZWsTGmxNH9BwZpd22RoL
-T5OHf0w29W1hQdB+S7QEbEm2a+K4Nlk2RB5aZ9Hgk8rOze/rnaV1TvFpg7GS
-qo62T6impW3K9ujLrqZD4Z1maUuPv6TviA/86SY/9La34Ih0xRAnEDA5Wf7w
-PaEoW07p4Xd0dlcvX5zKNulHtyR7MK7umOj3Td/481PK09kHtprSUjvZUuC6
-oycHJmlS7DD6ZbojzMZAUmWCO0tiBDqlNgwwN99Z2nZZEKXkEDOiSyf07mq6
-x7t1TQeyCcgOkhKaM9namrTN560BlffElIl9v8XlxinvoFx4LKFpZTNaT9rs
-w+KmBsuhTfdlB8YG727wEY6EVpz3GS2VF8VEHNHwBodGeLiXsxBBY1v+1eTt
-1evkxradcKGsHpsa3lw65A483UY8z9KrZUptiOBpVbQbZg4lAd8BE+20dSKu
-pPvPvCz75dMF1wmY3ymYzzyYn9MWhpSlH9PAtMaWOIYkwuQtabB81jXFtgXQ
-Tl4XVd/ZSXJC+ztl8rXrui9zcC5p6rLP6cEd6UtaAyH01XpL7HHSb3k7eb2r
-TvGXKXICJCqeME/W0IrAWAWtjWR13TDnuD380BM66fZzEZCbIqfHjfkM0ltO
-iXbz/424TH78MVK5Hz7MzbW/xmXxzibuKtMPVV98+IA10ZXWj0hv0Ed8u3ld
-QcBiZURpYnBwDGQaHWiHo92RGKQNFxu6Mjhrm8/NG1wcYpaSqSLXiQbDzWl5
-iSIBImLQEVyWpJ3pZJO2IFqA76qORRzGJnkFiQ8WjS8j/YZlGxR2Qae7T2Cp
-ssimiSEQLE2RdSIjuyQtCWW1JLrbgi4btoLxMSrJC+JwrJvON+JxmpiOlza4
-sGDynhm446GXPSRBSmsjHoLAEnSDNS2xVeVOlRWOK1ksE06hDco9yfuGQYSI
-NMgkHtgNt0kxd7KgHS8vTErXKi/6zazFmWAe3f0S+oCPmaZn5EfL7NJszTbr
-Eb0yNVioLm7RN23HV8Mts93SWHSTL2m09ykOV9ZHJKH/Jb5O6izrG5Y9uYgg
-VYlBI07NjhUUNG9FcpJ3SU/zXoikdMV3Fa5pXxGn0YGw8LNEAfqm6WZlAQWT
-F23Tb4WPN6SDoI3XxJQ4vSptmnrHAkAVXA8NNxb9or+DpKYndePpgMcT4g6o
-cScRcXwqtw4ErHnxnqxy7NtxSyzwoGEgfCHCSH7VzbZueD4zHGcoJSthSNL0
-LUFHovfGkojMaLbnNWZqa5K2GDIt6c8mLVrRHR9Ti0aeoMu4TSyTuWjXzOM7
-vklZx9wntwbPOoK4pR2TmCqdSWyyfstF8Mt98uKZdXIskOlu8sJVoPvPRY+A
-PSEjp+CIHfZgISlwVvAXFN10TLu79Y/57DPSks2GTNCyXu1JuOBnRLdF3csu
-CVNukkkkgSa0PJEGNGpLJvAirFyIQzLYtg670C4BS+li1YxRHIHsD32x5Tsn
-YzMyrUnJ9tk6ydMunY/0O2tpvyKI/2RF22tIadE6SIFtnXBYpLnXJaZvMfKm
-bphQGTgBO8SHcumIJUgusDg2k1fy2IQlWrKtPXSwR9SYoaEzvmYqXvm2ObTs
-FrftiZMyHA8fA3ONCDSy3EiWQFWQGks3RVmkTXIy2YlYpvnpI2JCiwP77UQU
-N1u0oFbXFxC49PtzMpI39Cs5F8ZKNFObkBGbg5WKjpRfXZEcIUBHlFwzQExk
-3P8yOaV9vyS5YsFVxE4RZJOzP+qZPGSmiQFEUrmTlQQBZDU0JLYYEBgxqaDb
-v/Rtx4w/jYYRTEiHnUyaCPuQJiNyCPZJhQ/kzgsp0/yWzpBgOR/T0edEJ+/q
-2bIu84vkq4KOAqoP6yELRo0VGdSpxmSCidbFCpyLPxdk1dtmMk+YN4kCeZA+
-+H1NNlgl3BaOCCOT7TRT2+maCS8amzhvZZ0wuk3LHjxucXpijKS8F/724Swv
-VgULP7ui5ciju3WRrQ24BQIjlTESorUI75oQgcrnhg84XcHS4C3jLHTTw/Wy
-aviqqIBnmSXER104thjKb4baE6A9GvGdQgUzoQc8qooPz/EEThizZymIA9u/
-PYD0uV3ic2jqtFzVhFHXwRoNCF9Oi2Q03bOiIz73AvlXyMHkuQWeghsD5j9R
-o2Ul2yj7AteSMUBolcjeuoOJSIE7NnDXMGfuvRDHV/m+onuekTruVKTED0wN
-/4a9b3b0G0VC8pMybejoK3Hr0A9yOpzMqqWUCpDzD6TKP3mBf5OlxW49YJ6i
-4uu4JSW4bfh045MdkMe7abZkaYrMgmW00vssSyw2xDfPCVEReCvJKOjVLaVu
-LLXtWETwXaq7jqhpM4LkdrFgJl0SXxLdarBLsSGooReDlrcoSnVJQqXwAWIF
-lp0Xn8NAaJkd31m7VelFH3jQ2NgyVYTKoAnM9uyKJ/32+ZUnVxJQJ84T4Y42
-+eKMf/fw4YMpw8yOtmAi9E1jgroAc45CI15g2U33ue0Xf+HTqYnpu6Kxg0f/
-pKCB9nhtG5xpcvKn+vqUVkQyGadCOFPkOm+OTWxcJA9FOhejmZXp3oatQDXs
-t7DwDNvWarjzw8phTjEHwyBerfKgDP45EBtIz5TN1PHHT21IVnaEP8gotDHj
-0iOC65gb+5YNg6D5i4HNjLNpUuE+EULwNBGmrt4xyIrQCOnc7dYyIwvJjQAO
-sd9bsoTZUzG6aUPXkJuWkSOZAu/87zPCxrjZPBadiJot4tdZ9yvrrA/wfUc6
-teg63Q6Yq62zdxaCgYROWnRO4DIS3UJaKaIkQxG+NfoKQlrAOS5ZB/4qCEN4
-y5htS77g7djGY8nQphvL4By+gy7QcDKyIb10F8SfNT3PQyvxJrZiicDlht1f
-QmliWyE8c7qFk91xCd1gYoyZs/fMCW3r55/+Hm77zz/9x2myrrd4MpiQuDZz
-diFA0kIOsGQDVUnp7mBl0w/ZvlePNwwqEXwsFcXBp4Yr+AVTIMi4EqRP4yvi
-EwNIl5feksBKvZFLW+a5GeOzE3KLYcPGknRDQxon9Oh75RZ98uef/r2VydwQ
-m1qNFpWQL5nkZKvTTUpFhQZkmHjzwsJsYuMd4tqMyHqcgM58p8tlS4A87yx7
-iZ+uLbF/DWAKb6Z7kI3hgbBipjCkem+LTkiji4IiBGhzFmLB9r64OWhBZkxu
-8UN50vnFyy1IOz31l8tA7J0V18mC3RlNza7TACyrOsEctjFHeA0D8I0Wb7Ja
-HDwqW2ELC9NEr/zu2NMHK6vElIeMs+/p8A9Y2fnfQHaQAozKxokzLclMps+X
-xXtL8ItWgMvNPE4q2G62fP40KP0Aow0VI85zScqOjoDEcgvTKI1+DLNDXDGk
-s2v1jw75JhrMMLtgX/8KSjL6xlPteFLQTm4KXPGkcppVT2ywnwotAheprhry
-jlw++hgSfsXGBE2EkF61Is1IwznwCV/jbZH3EDzwbMMEZf8tKcdb9veyZSxc
-INeJTH4DHwadGFkN4C/YqQ2MSbEgOUwBxRpWBBzMSIEmpGuUvZsRfbbiVbQV
-+Dun/66bDS6FzqaA7lZhPzs0DW5wvE6+OM+vX8Hlj1uyqQnitNPkBdgOeI7X
-/10x+6qYGpvi8GCmZLp3S+Izt4we0pYZksSZLeutTA5WIWaFRtgT0cBS6il3
-/qVlSWetsGhnxR254QtDmFNQHAt5gwPBnkHDlKXQVMzzR4/fLe4R4CbZP+u3
-ugGnjM+fPDnDYZiv8RuOxniatgpPsEH+egcsA4ztPFi3WBW7XkndvKk752EC
-D7ZkKMNhRcJ91aQbJ4liM5CMAL5SGhpp4XxRWw/X1CEUFuV9w+gp4mCAND1z
-3qeKYMiRWmAUFI3666YOSGJxIjIcbMI4ITyhP4O+ToOs583IXVvB0MD65sml
-qGdEqwCR2VowvCy+/1g3M4aAKhdDZYhEw9/C+SYO46lRR8qSGOQ1kxrybZk2
-PuCVXGYQx8lVTVbL1KsmwAA6VBqOTwiuDNh5/HhWwn+qGjt+nA4LFhBdKOZM
-AghL8NYOvjAGrX+p92oJV2SddQfQimnC195E/MlmZGXp0FsykXdsirPRtlk0
-aWYFYWXEQYuGI/ScH5D7PASGPXm67Vo2f8uyWMnF0R2AXkOTDhKOhKB4S2DB
-PFXJGwGa5NMATSRBnX45jASydCqiQArr52XQhWm5qdvOBNQPKbph85YdAUNL
-VZ9UUSZW0cvlWFDTHEzuw9V4a1mdG4RZ7XucslhAYkDKY7RLJDiocBdu56tw
-8IAhfgS4YgsiFWgbIV4+UBkzdXA35u7p2GSyq0Yc7ZCzqZgyMaJlu5P4Nhfv
-Zl60mZfIJD3FkcUkkViJAqchgcRidr4Csk/I/gZIQoTaQ6CaplRjleNkQJ0u
-WgB0WftrC698GF8nBglhivHvNMyhlo6tjPdG6DkTfbFpeIS6egbgP/TvduzZ
-1yWN/BSXdI9oIjnqPF6KEB7Gr9hW8m/EHrYpPLMyttpq02gdBVtwLYMGHAvQ
-b/CgsbZgH8LgR2yDjj39l+wwhf/lruWxwUpinR0uX9dpKT6WiF/FlbuwcMQ3
-NvYA+SMUuwTWWKtuYFqMIbX9XoDlmIvEV0enULUXxpzTvzUgGBCCivttU2wE
-1LIB9vubm6t79wUF3Ly65ryuG7JdRQSENSsCFAYBdNQY8hz5UAlr7pZkOTZu
-L5yG2W/VLNW5IRJX6pIp4HjY9nTpIPxOeB0PONp7D/YRXFIl44I42KbxxZO3
-N1enc9jPbktYZfFX8YLgIP9UXydNX9pDJwXpJ+Ntfh1AvYgliatDN8eFEWbN
-QrBl4b1IMJm3KeR5CQxwHwcxBIpE7Hdgk7270mW9Z/lFdGHRzYhCws2L+r1C
-LiN+iJSXATMbRw88FrluRttmR6NtOE9sTHkBFUFAABZ3bG0gypRmvBCNNmmQ
-lGx2mndGcCAn7U8/5agwspQ+fJiCVcJXU/W9Ev+33T29MZBsD4QcDI4VYoRI
-fsgBAF6qgm8WjvMqpIFAcNNYD+eJN+jFdCKOWPYskFJmjCTtc74N07EH1+is
-dM+g4wGpFaORecq3n3BGCrsVKSsd9ACf3f0zjSCI9/S1d++PwgXf3pXIzF6+
-VOKwKUKkIwekCO5wy/hgSHUWMEWSrYanfAS6khBlZ8V71VhQkIG0xIonRyIW
-c/O8V7OBdkRslHEcfjTvSHwfUdPebYUTXdbOvoFHmjOq1vWON4Pjgp5Sj2wJ
-C1Dvc7ZGFDaXiNxRag1d0eEisr8D6pFFpYtMdgxJj206jtuOJHhyE+VJscut
-gTKv2p0oOSYTczKNNE/EkZHiPua2Xi69o0ZibiShSkR+s3ArecOqZLd9u3Ym
-mztFWhp0V0lKupNwgD3irgeWVHymdJNwWZuROUcXP3LzMPTy/qO1NSEMRYp3
-C8TLcXrY2BzYjlMWIg3t1DoBe7qNOe3MwGXHGhW3h/13qRrVTKayqMjQ3FpN
-x4GZuuiLMpcEANXOsqagJueqX4oI9riz6oQW7LBoDzjRwWuiIGHY3uFrNxNg
-i5u93zrBHyaesn6U4+DbEw/O4SWhCy9AcFk3CNUgSlTA2aFxT04ZuJMDSORr
-YNZ7rqHkBHOlmZwy0nlwhWpv2Ufb92dNysMlrJkNII3PwIBiGgwogUUMhnQ1
-BcGM9WrWec7ypeewGhM/7GJTiqdHiRGLMrp0RxhWEz84WDc68oGR4DhV/M6R
-25mdFcFlznDT5oaO0hkUwRuiB4AJn9fXM3HvCf2Nv4Endr6aT9maqsRFzGEQ
-sjS4FORUUZNssj16lpvivfFilmMrvHthO402MBhjG8XH/T0wY3IrEPcAPPZN
-s39GwqY0Tro6CFWIl4hPo7KQUcPsvRCjMC5G4cV661zfkR/WeV6PHCBDG7jb
-ZEq2CGjIouoljc3T4WNcT3sj6f5Z8hXsdvBhaWfsbMYtB+vyv5CDIV8yuIky
-guA+cG7GHgODSQz77FPhq+Bh5WBaSI8KhoB4KpjbfuiL7B2w2betpte+fgr/
-v8VRkgbL691U0G/wMrNLN00e3E827dhMmJr0jpVnrONFVItL4px9EiEJhqyH
-PA745IjiudSukVs5kuccEwiSXHLARnYm33P26lbY4VzifnKP9bvhphPkjBGD
-uJU+nSc+XAQjPgTCNFxk0tWqCbYytJfoYYRRlGdHU0B33daFmFX9Js5+IR21
-qZs9SxxnbLCDQpKuPCEHaXUfO/BKIJDxCZDQBkFsJl5shhND9qaDMTylhk7F
-zB0IsM/byAx2a9uk74tNvzkea+ds9YJzUI5yy87BYBeWcbMmR2bl1HUXlBW3
-v4BWzmw4PgGuTLrZGjlgphpr6jlX6+iBrWCeun/APGCoLmnienMMUrFiiTRV
-y6Eb5Ku1wRmgMDtKr4iCdGR6t+1skQL364rHMdYgvwwuPYmbmPNoZeKX4ZFw
-xhyIdeozGk+4UFOseCR8esLqIA8mmZOnMMvpTp2itgBZ84KGQ0BQrYYBJQjb
-sy0rSYjqwnFOL3586MMZ+woc1FcYuO2bbR2i1d5e04gXtq6pyEwKDodAt5s0
-a0CMA2NBTSS6VFPvLk2dPorCs4RxrGZq370GVlbKFfiTfsaZs2yPtXQV4OIx
-aTLSl05BMB9Bwy9Ze8TTtxIRy5HXSMZ5CxvWHrioBigx+HbGfpyQiupcTTVD
-SaewojSswLJWzRXw/9z7UTUIMVVE5WUIb5b0KYcYYf4TUCljyWIchIqvVeRl
-4NvToQKI3dVK1KkcGotA0tPGuQyBtIF/XfKrBo34s13adnzGUV6mj/uyOkhl
-9l713x3SgjOWWCbx7Xbxxxr5uXq1hj5HsbsdLkQeT4rqM0aIc8EAV44yt21y
-Ld52BOC/3cJu4C08r3cV/mHMVc2ZAQO8rxmHfBZ8XfnSiN+2YA8T4u60rPUp
-m579FhG4dOONT6QC60c5AchMwNdXPdLRG1B+yk9rOgsErJicyciJKx7kVEII
-vN4INinKfPR1PB1W8OrmhV/SaaI5EaO8HhNJlZfXV63kBR21XO/M7DrqRBCj
-wsr+/OahmSD+OR8KeCpzaqi7c1pdXR9OLXenBh+enjFbyi4fGXhPdRM8LLiE
-7ALqq5mkB4TUlDRK8crSW9LWXKZiBYQFSzaaCiVsye/TcjnLaVH2PZ9I65Hj
-FtK3G97RI4uPXWPOdepFgKT4aHDO4U5wCbKCHBqhJY2oCwuyrrIoAwgj0FEA
-mbiQ1bbu9CK0dd9k4qdjh/TI1TxLnttFv1pFWWFB8nHslHOQRfNcODePF0eD
-ZHJvBrS+2MF7Vzgrbre2uBTMSvWCDbLgs3dRoyErKEd7gkZXTFHdjiFhvdmw
-eLWSIX/sLFovHUgXBrmhjxhJToB/GR7XFOkCYFQuOmllQsibtzgqTkCKMKJ4
-PSQJaegFRWSm53omDiU7jR8x5FBItiatokT4CVzyhOonyQnjYEKCMDuQElgO
-VRcvWjQ0mCAaUbV0VUjAm+7GqeGEd/pZepDaGVtjUqIiDKgLUS/s4BG0CvBZ
-jGwOOkZPO8/txsUyBjBUIfYYuZARo94ftkdc6rMH2nf5MCJBJ64vHdp8zJQc
-xk0QW/BL95UF4fCadFvkCGwQmUocnolJ7XWvuLk5d42u3Yw0Fhk52zWXQ16q
-icx7m8bTkLiqOmGXFikHJHYlEVq1w8j24T2mCjO2SHPLEOtgZuPSS+zfIOva
-q+0Fnd+uyLv1NBl8fmCBirA4sOY4r5MLWxdF5auIROw01gq8YyNLeQBmAatC
-T8MBXQGuDco5XG3B6Dq42PEWBZQsw9J8Fjlmop9yYBfZH/HjpU01nSeatdME
-v6nhS8zSIbrCcZkcXXZcrAoFAJre7fwcpdZ+HfFzcM6nKzD67G6nvjHhm9Gl
-ynuPibbIGRf3iHrC4Qs99K3I9SARVEjtsbvIziEfjzmsAVNMCvUqKUDsqQq+
-EVho7ORrOdGDa8FwMpwpg/IrkppcwVHF2kPvVqwjgnqJ9+pEP6Ev+H9ZwzT1
-ws403ONqClqyKEojPkbnY9dihBCN4iddoEgDlZfiFf36xY37QlL+XFwtRqkn
-E5rMIoOdR2pR18HxSlisUeSbqQYDuZAwl1vkzi4IzxIw11IiGVmQLHEnxsJP
-1B0ZBbV4xCWqKRJbenLJgFs47RQE/vzT35H09H6+7jYlckCnhvs/uIhF0/Xb
-2HSXsnGBiMwx4hOlBZVpXyGZqgI6I+GdLK1WiKPmL4Wb7f5R4jkj5T0xorrA
-P3IxiaScRfmfo+fx5WMIWITvSGClayT7MoFDNIf00bZjqeOv+2AoRzSZpEpv
-i5VciEAedQzAHwS6sGzZpKAtWUV8jq5EmT2rLWlfEtkSF0zZdrkt6JF4VWgA
-xNvnNFJWwUs6A0zMTvw9GVqbcAycywbbG2sVdpG0xCGFXcBTrCrcKCYkLDM8
-GdWhLxpsB8PevLqOR+AUKNoBCtIZuNWBbNCpqzmXJUf3QnIQkOSHsOgDFBC2
-LtN4Jm7EuSsOOiZxBoFfcwK9K7kK2n6BNpFtv9e7eDqs9sHig8ZivJ/oCF3Z
-hofQ+0Kt6wMnNafFaXQnHBBG5mQpQDEWb/HxBdQWlUbNo1wGPO5rHiVVDmtD
-REkrkYw4RjhGprrt6Kh+uBAcl1shwEPdUHp8RpxPuaRaSapQJ8V/ySWbCUWj
-pOO7bMt0C3OXF+e8wEXb9k490GU37rLLDTmfLfYIy0hSg4gtoINRsqgLzLvj
-WHddfIh0il4QDBnIOw0C//gc/wHrREs2/gIeSCj36HDZXEvc9p8itZx9LxCB
-x/d7i8voLZcMx7uFrMNWI/adxmw5HRCF5/HPaU5KGVI/SH5F1Ytep0oZJpNR
-4pMNUqZd/Tp/zeYBoIBPzJcysRIgUQPPUXjUhRthG/ja0ZELjrV5t65zLnKN
-sUKQmkxgjf7pCrmrRXJ+drZpJWFUXaKLkDrzEfUh8+oE/iax68w7mU1B5g0X
-eHwMHw6M8LSL1zVN7rsVgZSSDmRRBAiPk6aY1B1cihvOY1FJZ9htpNwWduw9
-71UthyFeMi4GfnT2x6eAb+KyZSqr3cLpxXzOamxewim9CjZP1BXuIOFLvLY0
-txPED/muiBpl/wKvbcr9o8r9xSfy5zRizhOfKOsgKZYL4pKofYEpfLwYizB8
-wVWIjkvtBEmS8PxWs3hDukfMYlKMzRwbyQiY11ygadyKWuF3hXuoLJE9t8ge
-71yl3JMzOOJsk0FaCUf3beTmpTN4GGfTy3IJwES0+n775GxAL/kgpln0CeiG
-f5JAICj1zG/FOW21BHdn4QuybPlXtIm//e1vZpT/82Xy+Iz+k9wzJyfn9x78
-99GSkn9J+NPhuvTT8eKSfyFcMFzfvfunPKuLZAzmlmJYnwh0R10wt1KR2Kyk
-USWXjjslGRq+lbFRw+C99VddS8mts3QkDC6CR/IqyKI9YvsUbXDIIn+ncPpi
-3DFlJz08JA4jAp6X6i/SUCrekTTinFYhW8SrXeMTERXRD6KLg0zm4ITxqSY2
-xGqRryzZCYoTNBbI3SbiQLAk0+6HgXS1qVlxtZbzhg+M6djtxE6i85mIH05n
-aOjUNXuBL3KcDrPz8QT1XR6ET804fDpPvgvEGizV0fgjLiZUfaZotlRX2qwB
-EbCM48bquVyqm961sHAnHS/bnccxDgpNaNTqByffDARTELbyk/aYFc42m7pV
-zGKvMRFNgZWeKMnJ1TfXN+yuZ+8kf0To5dSbrVz2UzEfh6xx9F7RAFpYidZu
-MFBf+q4rwfPp/oFE3FDZKA0J7laWE681dL5s0BgvTM+ilW5qxnVFpKzggPLs
-0zoEHopLuGMeL8T9CFuQnDsO3Q2U4HcQB3DFFxesgtnw9UWlOmTMrK7GmZRE
-wXBPcIGD22fBZgt7YNtXeCyJPH2LPa/Fq08/jeFOfrAi1POfqpqOWDisKtnK
-0oPqExwBXOoNpoEbV9AAr8UNMU1YJ4WAsv/KYWNYlS8JWkvfmZWERU+KuZ1P
-tVQpPIOyK2myxem9TiyIkzJyCAllIHVhLfeaRutKcRA4XNkYULbsiuj+E5uV
-WGQy4InIGy+5uGeg/Gj2//uk93qFHZxkQbJvhK8l+qDYXICDMvzgoJY1Mn0Z
-hN1xZkauZGe3R+4WaQAOQz1zCXJ331dQ5lp8zATyXH30SIgO4G7aRiUC6iQZ
-ozqMetkNuZ/bB/slhVY8H8Xec3mo3mx7xT6/5gIVh4//Ki448vwoLxNfa1XQ
-rxuZk+8Dvk8e/bfg5obDRrp8/vphZ8n5oKKeTU7E+fa2817po85raZr7TPSr
-SK+H6rjuXG3OPN7wWNP+wvY4EUbAlSsh+ugI453w8u7czQFo+KTdIIv2xx85
-zwh1A+Lq2Ug+ptVK8HqckFSMAlSaUcR+CRYCUWK+ZmiXdul7OPj2c+KZEJjK
-fjNpwulxiebV6DZNJO9YNMykKCAZ1FGiUmE4vsSKV649JXtNWr52H+vvRWOW
-Ntpi00sJh2ReDNoXLLmmtdprxC2Qq7XDeAznHXEuq6QwEsJqmlobQEiJ8jrk
-nSEyz9as1KuQhOmOBDs0YCB4K4il2BCUTg4ctJqVKO8N+QV3phXMzVOETGzW
-ewta233Qwh1WUdeO4q44VUC98JorgCoWQ0hnrwgYkJggGhlGVRanC82lga92
-fZPbE6WmDdp/8v4Elh2couuEBObhgJqfLM4q47bXvi+H8WG+XnppDXNMuLXl
-Lw7iPOxO72mkYsiQrVoGqin8oXGNhphhzmtqPB0DuQ7hPT+XarFvuh9lDtCA
-G/H25ZyuIN7s0OWELM4X41kO+cyY570v1sW5z+AIAJ09LykJDk9JuDBiD4OW
-tmjv6bkjCdxxjDGIZG/Y9RI7tGaAOO7YfN+UyNPShfJXXrG0o4lLk6UXoVp2
-633L6eL8s1PJ2nFMcSIdlDi85vND4howvgoTpCCVEK60ucmpz19TPji+YIHe
-wVKq+67kekOcqh14hjgDsyAGtd4ePeh0CN/XM3H4ccGfJ6dB/T5zV4Oa5iPH
-dUDcg6Y0fDHEK6VRzXBadTW4ydjUolitODcx/Ci+JtKkT3gzZBIdudHDvJaQ
-x5K8imETp5SSgSq5gZyLNuOCk37rRghJ08oLwY3gXeH8zTwZpIKbYpD0/3k7
-6o+he5cIJBdoD6dXbx5CterbMDwNfOGlXvpRQrcLWb55+QzjblCvDg/R0Fco
-aao8zazfSpKV7N831nWpTsdSmLSUVzw6Nj88b3HGxn6Ao3RF5gFvCNGUd3bb
-SZeHBZeKoYsW0rChOdphl1t67vs339xcv3hz8/2rb767vCEscmdfeHTJvez8
-Qd27r4d4Zw3FGFQ7rz53p4FKlcZPJrSIEZrNAjOKT3oEMQYiWmOibdSDhZts
-gXwcLLHaFB1PSd1t1C17YSUdzxtqcXiY4Iapt4R0QvcluVfDM5Dd8pEzS8mZ
-DfWeb45ZO3PlMP7xCfEE7mFwyLByDlwTyP6M1nmug6wcMqqiQjOIKbqmaY6t
-W3GLoD+6JLGiIiJxvXE67mvnFKu2JQcSMcxZX/1p9gz9k+fJc+5xUvjmXNFP
-fYfgmH5xcwW3Xm6/e0DMpPYBXUe/j4Xyg7AxR5IngJSX3GVhhrnZMv7YAn2f
-5aODicRBEMWuymJVuHSaz5I3Pv/c64WbSNHVC5cvw5kwWp8mGsMFBo8i0Lm5
-IjSUaiYAd2kIzUFCiCtCRZHw9TseFyPSdcpdG/dYrM2Tp3Zfi3Zthygxztp0
-DVjl3jnUASF5FGW4JeGdIcTLvlZFqsJjfc/1O1dS8z2FfLY75JxJirwUDkkV
-xIys9a0cyvQYSJjO53OnmIfxwbIIIT5NdhexNz12CAp6WQEeYFVu2uQaNLo9
-Ds99hMnZG4zWooM+07HUOOIK6NgMaLl1KKGYI1cv6E/d0fUGjpc/8WV7HfUO
-oZMNGa/si+QGlu3wghA/kridxrL747HRQcKhNuuOSOWFerkXsz0SlTqgu2xm
-KBVxs66FrceoK1TZDIEgVJCLO3rnsuvmegxWxaRWwBJhtWnodOa2kdm7jsqL
-B5EiZFvH+W0u65cd4AFdia3wtq4RyBHX/Dgl7xtJrubwnDYU8AF/FyQXnShG
-ORLb0X/MhYHY7ivrjL3O4t/j26wFg16bHMEyrBjvtucBTNaS1I4iYZGqkkDh
-qqELlCCTzaA2MicgHU26M3dl+nu7wnfajfvfFyQjX8neHKnD7g53RDygpaV+
-3a7TeLAPpXW55D074VFwF9thW/8jLMDmfCgl5p68rdhjLR8O22UuhmjCUuPb
-Vijhx+7PyBOBn3szdmjhHbHe51KZ2kkTgM51ICPoLHZWAHe6ApftYT4hmS5q
-ejB4lt9Pc0SLGhURAezlwQgOH7rdSZ5XwInF8lfNxp43SGpJQ1P5Y449/gsb
-dX68uJxAuu8b331/eJ6xKzqAm19Eg5ct+8Oc/SRq1h/2qFI6r6vPO3j5vAy3
-nPQ+nD/sF2Uy7CDwMGIIylyUmLUqjtZbIZquUrSh1yGJOwXfUcffYbmg8Faw
-oNIxCHRCU5qfujv8aZBvoDw8GncRh1HJgVcHO+5c91moiVAdc3n1MhRLjN7d
-guV2ZCtzlu4S6QY+Acw3OvA16hfm5dUUhOOWMVNFGHMS5MF7gi5/fpgpt4Sv
-2CYJ6TzIivz5p7+7YdEXMkQmp2Zjud2YvKNm7wj37dtXKhB8IhDS0HCSV9/e
-hMCKJGDXS3PojoQ9UqvWi/oVRCDz9bfXN4R/tmynHDRTugnP8Q+jel/ppjFI
-jOMOcAniz/JkPEX0pAg0MejqLhjrhhkV5TYpZ6ONh1i7dHvn/pZ6Uk7x496f
-lT/WaFWH4wjvahFuC895Xw5D8NolWbpbSzu7pnJGGmCSrwwfsrqQ6vOBYp2z
-X+lYk2LtdCrg2cUSsLhXD6+P1BUbdXgIsk5XvdaYvXh2c3J+6vaDdk3oDTE1
-ao0UjauXdckj7E8SAejz98QVt4QYWNBARpJOjhU9Hy7MlxC+tWhJ0yTPvn36
-8tmpGBW7olWPAF9YtG3vLOH3699/8+2r59oGSZg7FJoOKtvof9++ePbN69cv
-3jx/8RyvDQlv99hX9F9x6Y0HUUZd0H5QTQVHtc6MpFmZ+2d8O1k5GDqw57DO
-DvY7Oyzwdjv/s12lpFW+ury+mSZPn749Nbq/N9/cfHSPXgCzuc49y0XFcRTl
-FzrqjXvcocP1J6+8tZZfBLChM16pH9xYbVs97N89hY0kSTF8T3wOTa6tBywX
-BsFH1hoG5xymHBU3s8nrWm1FFe/DpEcmhGRHo2igVBi8rF0K00FjPyQyte79
-RKAU1Ger3ZTlpCXzK+5IXriXiWlLRXmVCN0qvEQyM0oU7UMgBaGhKWYtL+2T
-90z4roq2ui2aupI7H7UuhwfJhQBQpi4vjSvei+EKpFzunSsNvYiHtP9Xbp0g
-+oFFDnfNdFCUC7Hk9QFRxbYbaay+a2TUoT+g9vBGT9lVVUvtGvK2NngnIfJs
-0fKWNJF7Q9dBQ3f1Q7iRozu5d1XP2kzZlW0HZ5jvVxBeBmG8g5W7SLeAGih6
-99OHbhPyvpdsXReZCi1pG635wl7zsaLRkOT4RtmycBeqlfa9cU1RrCoiVfWQ
-9bGr+ZlwvdAEn/mGcRfx49oJTR7XhiyoLe/BePLmx/tn8sqCc04acaeF1yv6
-xKieo3ot99VxKg7c2qCRL96mMtBuKnMURohGkodmKGHiRoyhacG9mgxbso3Z
-PXtsnMHrHaRADyXDSHCZjgw/HLct88hhir6uuZa3xc5T9CCea+3PhL1n/xgi
-pkw4382FVlGSCOqSL75++o+lEU+jPM7xm0bYkMu3NQVxhfd4paGfEjcuaaP8
-LxHoXEr+605awZgrb1hwnz1pLx53gHTZeWx0cH2CvINSvVj8IiHXX3g9KFET
-X3zjKpEPbHijrweRtiHDFirSMfGySiaSKfhLJ4vyk9IqZPQo0oX+02ZRSKzb
-n+zgJDWeAP3Ib9WA4Ev3mHdAVB77H0ZZTYH8f07Xh7gvc9hKM7zLtQJl9T2H
-j88fffigbcuwP+5myIWTK1fb4l+PrG02zdDnDDnp5ebJtUWvTAc79sh64SDc
-/NTEhNLMxqOu1mBvSdMLafzs3ON/uP7mjXtt46MntPbBYhX1wSQp3YtC2RLi
-CpO4SvtjhmVRHXbUONZN48AC3bAlzEfrEPTYQeHO5NDsfO6Ilvz4WSCgwdsk
-NlxgRZKw9W2PtD27mjANYUlpCgLej1rbHPxOXow4fmUvxyTlp6aOu4Fp24/R
-4xXadZxyoS26ZY13Ijl0mffrFk2s7DO6vQQ/9P2QoWGQy1SSV/FFL6j7Ibw0
-R0ySYaMn4wzSgj0uS07MXGi+g1t4BKrYgtGEDoI0YG7ffrhzlmho3m0COOFY
-nn+jDTtOGFDgycjFO1yeNw6AOfSdFpzlSjR+3/lmm6132k4ZJUy+o+e4r55z
-B2/2MpuuGQT+7YR/+pJhHX+psDbqFE6UoCfpvD7lx8ii3cubAKR5vXaO59wr
-HeC6hjdUwXteB8/4mNcOfs/vfXbtDH/780//wS1i+X2MaeVfPu3bkbpgZRvc
-bs5JpK2d+I7xe0fEQjYS5nW+ApgR3NJYjaC7+ZSEmOvLrG+uNRprHcFgNdmE
-D5lO8jYi95FQLY2o5r6hE/i8NagI5n6j/u2I08R22ek8FKKITeFeNepaSFy4
-Fw6suSN29D4KM+B97ALvC+QXCXhVzhhi6jiT7sdtkZpVge4qnX+bBUjG6XX6
-HoHDvThy6N7xVlPtd1nJ7J4HaCh5XAW+j4/FNa38JgCTx3EsOis+kqnPIWDv
-Pt+1wZsbmGycR0fmnr95gSruDTksoOLm4qOzlyvJlM3EJ1yxSktdonnoRBiP
-ro6wQvQ7OABys0XAjV9Nzm3BmLOLti6jHjMDS8hLFR/I0IYvoY0X2j05VuHg
-gb5ojnnvxL3Z5yjntae8Jv+uF2LUwePaihiw4I8CC6oCkgWBJ/FfvxRTroB+
-+fbty1PO1Diqs4y5rEhCN6u0cs0qNBuRM1edppClYi5Hf8bbh8fDZUQ5giyF
-a7qOSh7x3cE9g+HYOBx2iXa6YgB2XsqbVWRP8rJzh+UYthdD2P6XVqtsPSDi
-ty4WuYAPLdndWOvBhAkJZng9BB1lqrVyP5okmWjd9uQiOUcdwqRvypb+8SPn
-EIsd8727qt/Tl5OLCWrg2ot796of5ioJ5sRo99Jtce/2/J6YPlN5nlHHr3te
-7E99XlCpPJfof37heUXo9PwH7Ac35XvXo5MGmeBwUM15fv/B3Gtgen5iPrha
-vsimunz16m6TKpiKcnyug+vofA9PUA1yd9A6jj8LsTl1dtIZk/PJnFOBYefr
-ezrl3UbaWJR+wFcVtYboD8UAT3sxucJ879IPLwg4toYjJz49eo5iHMYnJAvm
-dloLK1xZconZBm2Dcjm4CUS4HCFbUe08AS4nRKXvKhVtTXq/g1dTlyVGOL+9
-afhRFDTRHqKRdSAkYfdJzi8U2XbCEP8WOMK/2USysOXcPaTEVd/KK0vDaQ/a
-q/gUcem6x6xSZIYlilube5uiPBF6DuG502lwLgVG49eR4VVn6cb5T8x45UIB
-DT1qc8hWqjdXBbujo8YRI56MDCwNw0W4XCZtk0n1w0SCvFy9w/LIfBrP4+kx
-0098hEZY4uD6FBw2UxLiVfbgCVkAxkRAQxcm7DNP3tRx/JLrQ6HySMdx31M2
-0OCZJ+HH+WNL+EElXNEoh6otVLSjLYgCev7mevaUfc7ulZjBElrerW9uQgOn
-tAj9Kx3gKCqP+0SNepNk1NpTRp4OdBcqxFsHce9QXH6keH2vL//HQG3hIQ2T
-SNSJobz52JaZbR7/5vEDsm0F+NOFu3U9vKcJvxuRZqQx5LfnZw8e0m/ZVVl2
-oy9poPsfPrjw/UA/h3Qhzgnhgp2T9nQ+ahTnVhj2rb6TsE9ZZnwNWXTLAh48
-gIfBTL4nVfJ9l22JpZIrfvdJfHfid9Ri8X8FEHWWhXHOFr95bx9zi70m9+0y
-1TgCZ/dkZaad1hM6T3Kg8xW/TkYu6W8eP6ZLCrTkfOMOduP9RyT19jCjFGim
-ybon0WnSHD5OFgI1G1HSH81WLh/Vi0Vdo2YyvRB9CsSEZoNZ3xyaTgHe3I1c
-Ex+jM4NzPaFB51lz6pymk2a7mctnE2FmcYg3lnSXplaHSmK2vdiQurp5y9Lk
-+u2fByzI54NrX9hWUc5/Taq2rOt3/TaZ/fDltmsSd9o68dy8qasZHckaEaRU
-u7hiqgsz+ilLxi8TLPpgkOE8bXN7/Gd3z3Xk5470XyZn9D8PHz5IAr3mgla+
-5re+dQ44HlJi713Zw6YgQmgOsotvV+E5c4efRRSZvouYV6ACP3LZERAby3+2
-dVdF8L6xV+naEkNB0jhzUgWauXn6nKudLt9cHnzHH0bNY1j7yoqFdw8ut/n5
-p787QiIh4cRlvuobjk9Z5jsR4QJ/4drStb/TGud9XGbYaWnzlTYVuYbOSvkl
-xGh4uqrFxkQPnHT3Tuukkz/YpqYtXGdkmL4jNU5C46/hoiSdvsQQb2kjKdYW
-abuJX8FOR+XbCHlfk1SFhD4FpMdezp5HbR38Ox2d5v66/phbE9Ey7pWwCy9V
-EkOult0lb2FVP21w0lg7+wNIBRM/swpu/YsrZSk8GA8jj79oinfJJfFlu0vL
-3A+BuuWukQbayZI4EsF6/4ooDGNms5mE8I2XU+54nsWwT7txuHw00gi7NtL8
-vo2KA3sDzBjMwbQaJ//FdHIoTGDC5RZ1iol77ZWsioTosY+lYlzNQwXnyZP5
-+fzMZauMndypvn0zXotG9AfNB0Eq9RrX4T0/8vLKNfxqZU9X0gUDhQZ4w+V2
-NB9aJoizoXBCFD/6uNklQyT/JqWq9FP6JetuEPOefv47WcKXfk1z4gv3FTKk
-Nl/OZph+Biz3pYwZzzZn+3f8xAYlobj5X44xp/mElUum+x0Lz3CC97549MWT
-Jw8ePnpyf7wTT2/ayadMJm74j052/n86h4ZyPu0oBoPjqP83b9vb00aYAAA=
+H4sIAP5tD2QAA9V96ZIjx5Hm/3iKXHDXWDUDoKv6ErvGaKPqg1RL3c1SV1G0
+tZ01WiIzAKQqkQnmUWiIRhlfY800L8cnWf/cPY5MoJqtXdmaVnOoOpEZh4eH
+++dHeMxmM9MVXWkvkve23dZVW9zZyrZt0le5bZLv6ua2qFbJi7rKi66g3026
+WDT27tPfz+usSjfUQd6ky25W2G45K7bbzawZNDA7Ozd52tkLk9H/X9XN/iJp
+u9yYtl9siraltm72W2rm9aubr0xW59TNRdJTY1+YYttcJF3Tt93Ds7NnZw9N
+2tj0Irlp0oq6aDqzo2Gtmrrf0udXyZVtlnWzSavMJm9t2vaN3diqM7d2Ty/m
+9E7V2aay3ewlhkxD6NIq/z4t64r639vWbIuL5H90dTZNWmq+scuW/tpv8Mf/
+NCbtu3XdXJgkmdH/JUlRtRfJi3lylaZttuZHQpEX66Zou3q7jn+qG5rX5XZb
+WhpHNudnLfVhu4vkm8rqT1dpc5t8l+7556zoiFov+q1tuqKqp8mLtCxoilWR
+Js+enJ0/lrfqvupA1m+rorN5ct0RodukXiaXG9sUWcpv2U1alBdJtuUR/TZF
+b/Os3pjhdN7PiXR720SzeU9ESssyev7PMZWm2dw7jes5LYJt10Vjo5lcd33a
+dMNf/jnmkumQ7p3QN/Pkep1uiyaN5vMNNTR4/M8xmZrmcu9Evpsnv0t3JEza
+aCLfFcRf8WOeCPV1Z5uWBoiOXhRVVlRV2hVxX2v+aLf+bZ/hwbzP5jbvR32+
+JaZOu3URd0kPuvgp9/h1Xa9KOwXxBrQ7f3p2RjPdrotubVN6yDTcDUj4FiRK
+iyr5U2F3RMbLJHn2+Ozxo7+ffhsa2oZH9tsVD0jIWFQs3ToiCmTQ8365tM2i
+rNPugr8O4on+M5OZ/36efG27bt8Onv5hnrwrsnVdymNVFJO4xeQlmESetPRV
+QhP38nMixKGB2xajIv6pN5u+onmwbsC88P7li7fT5E912W9s8uTJNHnXbxbE
+sefJycOz84en1EqkO7oMumOZ/ebZo0XR3j8lYqBXeb4fjJw1gmoT6Kiuqcvk
+qqlJlNMfJzcvrk6T663NiqUO8XAGbm7Jq2pVVJZ+IXV3k7a3yVd1k0FWvP/q
+xRkN7kL+PD979Fj/fPro0RP352+ePgx/une/eHruXvjiN0+fuj8fPjtzf549
+8u8+fPLswpjZbJakC+K/NCNFRUMgrqj2pKTShnRSmpRpdgsyD5XtNLlLm6Lu
+23KfZCSzbW7KdDWltztbZfspcXmyCKs8pe3TJgtrK2onq1dV8Rf6gh6lFel9
+4raup/1G+2HRd8TCm01dsT7cdvWGeaLO0/3nbUJkgyZu5+YVjSOhJaVVTpPc
+ZmluMUr8mtDSsMJNm7z4C6jb2WwNnilJ25Y9c87UFB2NhfYBcVGqfSbbpl6U
+dpPQiJivbJUnPS0edYgemz0p8GRyW9W7dkIvpF1CrRRtMqmwYcoJf5gmd0Vu
+a2qzovlbgISuNuv0zrr222S3puG39cYu6nyf2LK1CTW2pgfUnNmlXbbGwNPk
+8R+STX1XWBC03xItAVuS7Zo4rk2WDZGHxlk0eFLZufldvbM0zimeNmgrqepo
++oRqWpqmTI9+7GpaFJ5plrb0+Wv6jfjAr27yQ297C45IVwxxAgGTk+UP3xOK
+suWUPr6ltbt6/epUpkkv3ZHsQbs6Y6LfN33j108pT2sf2GpKQ+1kSoHrjq4c
+mKRJMcPozXRHmI2BpMoEt5bECLRKbWhgbr6zNO2yIErJImZEl07o3dW0j3fr
+mhZkE5AdJCU0Z7K1NWmbz1sDKu+JKRP7YYvNjVXeQblwW0LTymY0nrTZh8FN
+DYZDk+7LDowN3t3gEZaERpz3GQ2VB8VEHNHwBotGeLiXtRBBY1t+azLC0ze2
+7YQhZSKY33AT03p3YO82Yn8WZC0TbUO0T6ui3TCfKDV4O5ho0q2TdiWJAmZr
+mTovNBhQcP1OcX3mcf2cZjMkMr1MDdMYW2IeEg6T96TM8lnXFNsWmDt5W1R9
+ZyfJyfurt6dMyXZd92UOJialXfY5fbgj1UljILC+Wm+JU076LU8nr3fVKf4y
+RU7YRCUV+skaGhF4rKCxkdiuG2YiN4cfegIq3X4usnJT5PS5MZ9BkMuC0Wz+
+v5GcyY8/Rtr3p5/m5trv6LK4tYnb1fSiqo6ffsKYaHfrI1Ih9Ig3Oo8ryFqM
+jChNvA6OgXijBe2wtDuSiDThYkO7B2tt87l5hz1EzFIyVWRnUWPYRC0PUYRB
+RAxagsuSFDWtbNIWRAvwXdWxtEPbJLog/MGi8b6kd1jMQXcXtLr7BEYrS2/q
+GLLBUhdZJ+KyS9KSAFdLUrwtaN9hKmgfrZLoIA7HuGl9Ix6njml5aYILCybv
+mYE7bnrZQyikNDbiIcguAToY0xJTVe5UseG4kiU0QRaaoOyTvG8YT4h0g3ji
+hl1zmxR9Jwua8fLCpLSt8qLfzFqsCfrR2S+hGniZqXsGgTTMLs3WbL4eUTFT
+g4Hq4BZ903a8Ndww2y21RTv5klr7kGJxZXxEEvpf4uukzrK+YdmTiwhS7RiU
+49TsWFdBCVckMnmW9DXPhUhKW3xXYZv2FXEaLQjLQUsUoF+ablYW0DV50Tb9
+Vvh4Q+oIinlNTInVq9KmqXcsAFTX9VB2Yy0gqjwIbfpSJ54OeDwh7oBGdxIR
+y6dy60DAmlcfyEDHvB23xAIPygbCFyKM5FfdbOuG+zPDdoZSshKGJKXfEook
+em8siciMentZo6e2JmmLJtOS/mzSohU18jENaeQL2ozbxDKZi3bNPL7jnZR1
+zH2ya/CtI4gb2jGJqdKZxCarulwEv+wnL55ZPccCmfYmD1wFun8uegTsCRk5
+BUfsMAcLSYG1guug6KZj2t2vf8xnn5GWbDZkjZb1ak/CBa8R3RZ1L7MkeLlJ
+JpEEmtDwRBpQqy1Zw4swciEOyWDbOhhDswRCpY1VM1xxBLI/9MWW95y0zSC1
+JiXbZ+skT7t0PlL1rKX9iCD+kxVNryGlReMgBbZ1wmGR5l6XmL5Fy5u6YUJl
+4ATMEA9l0xFLkFxgcWwmb+SzCUu0ZFt76GCPqDFDTWe8zVS88m5zwNkNbtsT
+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
+p23kNDviA+1pTuWxHw6nJOcZypLMOfWDsWXmMsiHEzrizYmEq7gIdQ+ZjxnV
+w6gTwjGtM+b9AY3AJU26LXLEgnhWxCUDdeiRhYQDOAmQtvpMFme75gOml+os
+4LlN425IRFad8GWL3A0S9ZJVrhppZAXyHFPFU1vkC2YIDzFX82FWzN8ggd2D
+kgWt/K7Iu/U0GTw/sMVFQB3YtZwgy0eFF0XlD2OJqGusFUjL5qYKWBhIrH49
+DQd0hW1hcCrGHdEY7TsXhN/iSCrLzQEWiV/lCDnSaOLPS5tqXlTUa6eZklPD
+goMlUiQ24tOG4NCcZReOPXKuvPP4lHqE7ojHh5Nn3Tmtz+4PfhgTfhltjjzs
+py0S8MVRpBEDeIUPvUyyPUjsFXKa28kSF7iI2xwepVPwDZUuuVTsswteIhio
+7O5sOWOGj9RhZTjlCKfYSFLzQZgq1li6t2K9FFRaPFenbgjxwRPOWq2pF3am
+YTF3OKMlK6o04m11sQg91RECePylC6hpbPdS/MNfv7pxP0jupAtFxhj8ZEKd
+WRwF4JZaHI/hEG/ROqjAeQNMNbgKCgkHukHu7ILQOlkgeiJLWhacTtyJtvCK
+Omaj4B+3uMSxlMSWnlzS4BbuSwWev/z8N2SPfZivu02JZNqp4YoaLrLTdP02
+dmLIQXyBpcwx4h2mAZVpXyErrQIiXNHiLa2eucfRyRSw/uFR4jlr7IP1dsNH
+NiaRlNNR/8/oeXz4aAKm7y0JrHSNrGkmcIh6Ed7edix1/HYfNOWIJp1U6V2x
+kg0RyKN+EXjGQBeWLZsUtCWbj9fRnfRmH3NLap5EtujJlC2zu4I+iUeFkko8
+fc7H5QSOJa0BOuZwxp7MyE1YBk4KhL8BYxV2kfzOIYVdYFhsRrZ0C85zTSt8
+GZ3sXzSYDpq9eXMdt8C5ZDQDHPFnsFgHskGnruZ8ujvaF4I6kC2J8PEjnMNs
+Xcr2TByqc3fK6pjEGQTIzQn0rmR6aEELmkS2/X55Ojw0hWEHXcXWRaLfdmWL
+11FBRF0HBy56zinU2FZYFLTJmWbAeSzS4iULkDA6VzaPUj7wuT8uKvAIo0I8
+TY9yGXEAcfxQ9dnRVn1zIXFAdkKAUGHJjPjbcslTkzyrTs5NJpdsjhSNEo33
+ry3TLcxqHpzzgRdt2zuVQBvcuA0uu+J8ttgjKCW5HyKqgAhGmbYuacEtxLrr
+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
+Uv9v1cJn7e+iAAA=
 
 -->
 

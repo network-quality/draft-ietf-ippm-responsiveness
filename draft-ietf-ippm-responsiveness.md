@@ -111,7 +111,7 @@ We believe that creating a tool whose measurement matches people's
 everyday experience will create the necessary awareness,
 and result in a demand for products that solve the problem.
 
-This document specifies the "RPM Test" for measuring responsiveness.
+This document specifies the "Responsiveness Test" for measuring responsiveness.
 It uses common protocols and mechanisms to measure user
 experience specifically when the network is under working conditions.
 The measurement is expressed as "Round-trips Per Minute" (RPM)
@@ -169,15 +169,15 @@ it's only a tenth of a second!").
 
 Instead, we create the term "Responsiveness under working conditions"
 to make it clear that we are measuring all, not just idle, conditions,
-and use "round-trips per minute" as the metric.
-The advantage of round-trips per minute are two-fold: First, it allows for a metric
-that is "the higher the better". This kind of metric is often more intuitive for end-users.
+and use "round-trips per minute" as the unit.
+The advantage of round-trips per minute are two-fold: First, it allows for a unit
+that is "the higher the better". This kind of unit is often more intuitive for end-users.
 Second, the range of the values tends to be around the 4-digit integer range which
 is also a value easy to compare and read, again allowing for a more intuitive use.
-Finally, we abbreviate the measurement to "RPM", a wink to the
+Finally, we abbreviate the unit to "RPM", a wink to the
 "revolutions per minute" that we use for car engines.
 
-This document defines an algorithm for the "RPM Test"
+This document defines an algorithm for the "Responsiveness Test"
 that explicitly measures responsiveness under working conditions.
 
 # Design Constraints
@@ -259,7 +259,7 @@ delays for packets sitting in that queue awaiting transmission,
 significantly degrading overall user experience.
 
 In order to discover the depth of the buffer at the bottleneck hop,
-the RPM Test mimics normal network operations and data transfers,
+the Responsiveness Test mimics normal network operations and data transfers,
 to cause this bottleneck buffer to fill to capacity, and then
 measures the resulting end-to-end latency under these operating conditions.
 A well managed bottleneck queue keeps its queue occupancy
@@ -269,7 +269,7 @@ A poorly managed bottleneck queue will not.
 
 # Goals
 
-The algorithm described here defines an RPM Test that serves as a good
+The algorithm described here defines an Responsiveness Test that serves as a good
 proxy for user experience. This means:
 
 1. Today's Internet traffic primarily uses HTTP/2 over TLS.
@@ -283,7 +283,7 @@ these could also be measured separately.
 
 2. The Internet is marked by the deployment of countless middleboxes like
 transparent TCP proxies or traffic prioritization for certain types of traffic.
-The RPM Test must take into account their effect on
+The Responsiveness Test must take into account their effect on
 TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
 
 3. The test result should be expressed in an intuitive, nontechnical form.
@@ -309,7 +309,8 @@ tradeoff between using realistic traffic patterns and pushing the network to
 its limits.
 
 The working conditions we try to achieve is a scenario where the path between the
-measuring endpoints is utilized at its full end-to-end capacity. An ideal
+measuring endpoints is utilized at its full end-to-end capacity and its full
+buffer occupancy. An ideal
 sender could send at just this link-speed without building a queue on the
 bottleneck. Thus, in order to measure the worst-case responsiveness we need to
 ensure that a queue is building up on the bottleneck, meaning that responsiveness
@@ -349,7 +350,7 @@ bottleneck's buffer to achieve maximum working conditions.
 
 Even if a single TCP connection would be able to fill the bottleneck's buffer,
 it may take some time for a single TCP connection to ramp
-up to full speed. One of the goals of the RPM test is to quickly
+up to full speed. One of the goals of the Responsiveness test is to quickly
 load the network, take its measurements, and then finish.
 Finally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
@@ -357,17 +358,21 @@ This reaction (intended by the protocol design) decreases the
 queueing within the network, making it harder to determine the
 depth of the bottleneck queue reliably.
 
-The purpose of the RPM Test is not to productively move data
+The purpose of the Responsiveness Test is not to productively move data
 across the network in a useful way, the way a normal application does.
-The purpose of the RPM Test is, as quickly as possible, to simulate
+The purpose of the Responsiveness Test is, as quickly as possible, to simulate
 a representative traffic load as if real applications were doing
 sustained data transfers, measure the resulting round-trip time
 occurring under those realistic conditions, and then end the test.
 Because of this, using multiple simultaneous parallel connections
-allows the RPM test to complete its task more quickly, in a way that
+allows the Responsiveness test to complete its task more quickly, in a way that
 overall is less disruptive and less wasteful of network capacity
 than a test using a single TCP connection that would take longer
 to bring the bottleneck hop to a stable saturated state.
+
+In this document, we impose an upper bound on the number of parallel load-generating
+connections to 16.
+
 
 ### Parallel vs Sequential Uplink and Downlink
 
@@ -396,11 +401,12 @@ is considered a future extension.
 
 ### Reaching full buffer utilization
 
-The RPM Test gradually increases the number of TCP connections
+The Responsiveness Test gradually increases the number of TCP connections
 and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
-as well as responsiveness continuously.
-When both goodput and responsiveness stop changing, it means that the test
-managed to fill the buffer of the bottleneck.
+continuously.
+Once goodput reaches saturation, buffers will start filling up, creating the well-known
+"standing queue" that is known as bufferbloat. This is the moment the test starts
+measuring the responsiveness until the responsiveness reaches saturation as well.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.
 
@@ -441,40 +447,64 @@ object. There are two types of probe requests:
    creating a brand new TLS connection from scratch to do the same thing.
 
 Foreign probes will provide 3 sets of data-points. First, the duration of the TCP-handshake
-(noted hereafter as tcp_foreign).
-Second, the TLS round-trip-time (noted tls_foreign). For this, it is important to note that different TLS versions
+(noted hereafter as tcp_f).
+Second, the TLS round-trip-time (noted tls_f). For this, it is important to note that different TLS versions
 have a different number of round-trips. Thus, the TLS establishment time needs to be
 normalized to the number of round-trips the TLS handshake takes until the connection
 is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
-request for a 1-byte object and receiving the entire response (noted http_foreign).
+request for a 1-byte object and receiving the entire response (noted http_f).
 
 Self probes will provide a single data-point for the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
-full HTTP response has been received (noted http_self).
+full HTTP response has been received (noted http_l).
 
-tcp_foreign, tls_foreign, http_foreign and http_self are all measured in milliseconds.
+tcp_f, tls_f, http_f and http_l are all measured in milliseconds.
 
 The more probes that are sent, the more data is available for calculation. In order to generate
-as much data as possible, the methodology requires a client to issue these probes every 100ms.
-For the probes on the load-generating connections, the client needs to use one of the
-initial load-generating connections.
-This means that every 100ms, 2 probes are being evaluated. The total amount of data
-used for these probes would be no more than about 50KB worth of data within one second.
+as much data as possible, the methodology requires a client to issue these probes regularly.
+There is however a risk that on low-capacity networks the responsiveness probes
+themselves will consume a significant amount of the capacity. As the test mandates to
+first saturate capacity before probing for responsiveness, we are able to
+accurately estimate how much of the capacity the responsiveness probes will consume.
+
+This can be done by providing an estimate of the number of bytes exchanged for a
+responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
+the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
+On load-generating connections we can expect an overhead of no more than 1000 bytes.
+
+Given this information, we recommend that at each responsiveness probing round, we
+send no more than 6 probes on different load-generating connections (choosing randomly among the available load-generating connections)
+and 3 probes on foreign connections,
+every 100ms for each type of probe.
+This would result in a total amount of data per second of 210 KB or 1680Kb, meaning
+a total capacity utilization of 1680 Kbps for the probing.
+
+On high-speed networks, this will provide a significant amount of samples, while at
+the same time minimizing the probing overhead.
+However, on severely capacity-constrained networks the probing traffic could consume
+a significant portion of the available capacity. We recommend to increase the probing
+interval beyond 100ms and reduce the number of parallel probes appropriately
+so that the probing traffic does not consume more than 5% of the available capacity.
 
 ### Aggregating the Measurements
 
 The algorithm produces sets of 4 times for each probe, namely:
-tcp_foreign, tls_foreign, http_foreign, http_self (from the previous section). Each of these sets
-will have a large number of samples. Use the following methodology to calculate a single RPM value
-from these data:
+tcp_f, tls_f, http_f, http_l (from the previous section).
+The responsiveness evolves over time as buffers gradually reach saturation. Once
+the buffers are saturated responsiveness is stable over time. Thus, the aggregation
+of the measurements considers the last 4 seconds worth of completed responsiveness probes.
 
-1. Among each set, take the 90th percentile, thus resulting in 4 individual numbers (tcp_foreign_p90, tls_foreign_p90, http_foreign_p90, http_self_p90).
-2. Calculate the RPM as the weighted mean:
+Over the timeframe of 4 seconds a potentially large number of samples has been collected.
+These may be affected by noise in the measurements, and outliers. Thus, to aggregate these
+we suggest to use a trimmed mean at 95th percentile, thus providing the following numbers:
+tcp_f_t95, tls_f_t95, http_f_t95, http_l_t95.
+
+The responsiveness is then calculated as the weighted mean:
 
 ~~~
 Responsiveness = 60000 /
-((1/3*tcp_foreign_p90 + 1/3*tls_foreign_p90 + 1/3*http_foreign_p90 +
-  http_self_p90)/2)
+(1/6*(tcp_f_t95 + tls_f_t95 + http_f_t95) +
+  1/2*http_s_t95)
 ~~~
 
 This responsiveness value presents round-trips per minute (RPM).
@@ -489,10 +519,12 @@ traffic at the full capacity of the path as well as ensure the buffers are fille
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
 in a 1-second interval. This will ensure that we quickly reach capacity and full
-buffer occupancy. We need to continuously measure goodput and responsiveness and
-as soon as we detect stability for both metrics we can ensure that the full
-working conditions have been reached.
+buffer occupancy. First, the algorithm reaches stability for the goodput. Once
+goodput stability has been achieved, responsiveness probes are being transmitted
+until responsiveness stability is reached.
 
+We consider both, goodput and responsiveness to be stable, when the standard deviation
+of the past 4 moving averages is within 5% of the last of the moving averages.
 
 The following algorithm reaches working conditions of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
@@ -506,12 +538,6 @@ Where
 
 - i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
   increases by one for each interval.
-- instantaneous aggregate goodput at interval p: The number of total bytes of data transferred within
-  interval p, divided by the interval duration.
-  If p is negative (i.e., a time interval logically prior to the start of the test beginning,
-  used in moving average calculations),
-  the number of total bytes of data transferred within that
-  interval is considered to be 0.
 - moving average aggregate goodput at interval p: The number of total bytes of data transferred within
   interval p and the three immediately preceding intervals, divided by four times the interval duration.
 
@@ -519,18 +545,14 @@ Where
 the steps of the algorithm are:
 
 - Create a load-generating connection.
-- Start probing for responsiveness every 100ms, as described in the previous section.
 - At each interval:
   - Create an additional load-generating connection.
-  - Compute the instantaneous aggregate goodput at interval i.
-  - Compute the moving average aggregate goodput at interval i.
-  - Compute the responsiveness
-  - If the moving average aggregate goodput at interval i is more than a 5% increase over
-    the moving average aggregate goodput at interval i - 1, the network has not yet reached full link utilization.
-    Continue for 4 more iterations.
-  - If the responsiveness at interval i is more than a 5% reduction over the responsiveness at interval i - 1, the network
-    has not yet reached full buffer occupancy.
-    Continue for 4 more iterations.
+  - If goodput has not saturated:
+    - Compute the moving average aggregate goodput at interval i as current_average.
+    - If the standard deviation of the past 4 average goodput values is less than 5% of the current_average, declare saturation and move on to probe responsiveness.
+  - If goodput has saturated:
+    - Compute the responsiveness at interval i as current_responsiveness.
+    - If the standard deviation of the past 4 responsiveness values is less than 5% of the current_responsiveness, declare saturation and report current_responsiveness.
 
 In {{goals}}, it is mentioned that one of the goals is that the test finishes within
 20 seconds. It is left to the implementation what to do when stability is not reached
@@ -538,6 +560,27 @@ within that time-frame. For example, an implementation might gather a provisiona
 responsiveness measurement or let the test run for longer.
 
 Finally, if at any point one of these connections terminates with an error, the test should be aborted.
+
+### Confidence of test-results
+
+As described above, a tool running the algorithm typically defines a time-limit for
+the execution of each of the stages. For example, if the tool allocates a total
+run-time of 40 seconds, and it executes a full downlink followed by a uplink test,
+it may allocate 10 seconds to each of the saturation-stages (downlink capacity saturation, downlink responsiveness saturation, uplink capacity saturation, uplink responsiveness saturation).
+
+As the different stages may or may not reach stability, we can define a "confidence score"
+for the different metrics (capacity and responsiveness) the methodology was able to measure.
+
+We define "Low" confidence in the result if the algorithm was not even able to
+execute 4 iterations of the specific stage. Meaning, the moving average is
+not taking the full window into account.
+
+We define "Medium" confidence if the algorithm was able to execute at least 4
+iterations, but did not reach stability based on standard deviation tolerance.
+
+We define "High" confidence if the algorithm was able to fully reach stability
+based on the define standard deviation tolerance.
+
 
 # Interpreting responsiveness results
 
@@ -607,7 +650,7 @@ during the downlink load generation.
 
 ## Root-causing Responsiveness
 
-Once an RPM result has been generated one might be tempted to try to localize
+Once a responsiveness result has been generated one might be tempted to try to localize
 the source of a potential low responsiveness. The responsiveness measurement
 is however aimed at providing a quick, top-level view of the responsiveness
 under working conditions the way end-users experience it.
@@ -629,9 +672,9 @@ This is because all other bottlenecks in the network that may cause a queue buil
 will be affecting the load-generating connections as well as the separate latency
 probing connections in the same way.
 
-# RPM Test Server API
+# Responsiveness Test Server API
 
-The RPM measurement is built upon a foundation of standard protocols:
+The responsiveness measurement is built upon a foundation of standard protocols:
 IP, TCP, TLS, HTTP/2.
 On top of this foundation, a minimal amount of new “protocol” is defined,
 merely specifying the URLs that used for GET and PUT in the process of
@@ -649,12 +692,12 @@ As clients and servers become deployed that use L4S congestion control
 (e.g., TCP Prague with ECT(1) packet marking),
 for their normal traffic when it is available, and fall back
 to traditional loss-based congestion controls (e.g., Reno or CUBIC)
-otherwise, the same strategy SHOULD be used for RPM test traffic.
+otherwise, the same strategy SHOULD be used for responsiveness test traffic.
 This is RECOMMENDED so that the synthetic traffic generated
-by the RPM test mimics real-world traffic for that server.
+by the responsiveness test mimics real-world traffic for that server.
 
 Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
-SHOULD NOT be used for RPM test traffic because they take
+SHOULD NOT be used for responsiveness test traffic because they take
 much longer to discover the depth of the bottleneck buffers.
 Delay-based congestion-control algorithms seek to mitigate the
 effects of bufferbloat, by detecting and responding to early signs
@@ -703,14 +746,14 @@ This supplies the URLs for creating the load-generating connections in
 the upstream and downstream direction as well as the small object
 for the latency measurements.
 
-# RPM Test Server Discovery {#discovery}
+# Responsiveness Test Server Discovery {#discovery}
 
 It makes sense for a service provider (either an application service provider like a video conferencing service
-or a network access provider like an ISP) to host RPM Test Server instances on their
+or a network access provider like an ISP) to host Responsiveness Test Server instances on their
 network so customers can determine what to expect about the quality of their connection to 
 the service offered by that provider.
-However, when a user performs an RPM test and determines
-that they are suffering from poor RPM during the connection to that service,
+However, when a user performs an Responsiveness test and determines
+that they are suffering from poor responsiveness during the connection to that service,
 the logical next questions might be,
 
 1. "What’s causing my poor performance?"
@@ -720,7 +763,7 @@ the logical next questions might be,
 1. "Something else entirely?”
 
 To help an end user answer these questions, it will be useful for test clients
-to be able to easily discover RPM Test Server instances running in various
+to be able to easily discover Responsiveness Test Server instances running in various
 places in the network (e.g., their home router, their Wi-Fi access point, their ISP's
 head-end equipment, etc).
 
@@ -729,7 +772,7 @@ service offering 100 Mb/s download speed, connected via
 gigabit Ethernet to one or more Wi-Fi access points in their home,
 which then offer service to Wi-Fi client devices at different rates
 depending on distance, interference from other traffic, etc.
-By having the cable modem itself host an RPM Test Server instance,
+By having the cable modem itself host an Responsiveness Test Server instance,
 the user can then run a test between the cable modem and their computer
 or smartphone, to help isolate whether bufferbloat they are experiencing
 is occurring in equipment inside the home (like their Wi-Fi access points)
@@ -737,7 +780,7 @@ or somewhere outside the home.
 
 ## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
 
-Any organization that wishes to host their own instance of an RPM Test Server can advertise that capability
+Any organization that wishes to host their own instance of an Responsiveness Test Server can advertise that capability
 by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the 
 following criteria:
 
@@ -771,12 +814,12 @@ for this well-known URI.
 
 ## DNS-Based Service Discovery for Test Server Discovery
 
-To further aid the test client in discovering instances of the RPM Test Server, organizations
+To further aid the test client in discovering instances of the Responsiveness Test Server, organizations
 wishing to host their own instances of the Test Server MAY advertise their availability using
 DNS-Based Service Discovery {{RFC6763}} using conventional, unicast DNS {{RFC1034}} or multicast DNS {{RFC6762}}
 on the organization network's local link(s).
 
-The RPM Test Service instances should advertise using the service type {{RFC6335}} 
+The Responsiveness Test Service instances should advertise using the service type {{RFC6335}} 
 "_nq._tcp".  Population of the appropriate DNS zone with the
 relevant unicast discovery records can be performed
 automatically using a Discovery Proxy {{RFC8766}},
@@ -785,7 +828,7 @@ administrator manually enter the required records.
 
 ### Example
 
-An obscure service provider hosting an RPM Test Server instance for their
+An obscure service provider hosting an Responsiveness Test Server instance for their
 organization (obs.cr) on the "rpm.obs.cr" host would return the following answers
 to PTR and SRV conventional DNS queries:
 
@@ -809,7 +852,7 @@ TBD
 
 IANA has been requested to record the service type
 “_nq._tcp” (Network Quality)
-for advertising and discovery of RPM Test Server instances.
+for advertising and discovery of Responsiveness Test Server instances.
 
 # Acknowledgments
 
