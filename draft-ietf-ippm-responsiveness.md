@@ -340,8 +340,10 @@ bottleneck's buffer to achieve maximum working conditions.
 
 Even if a single TCP connection would be able to fill the bottleneck's buffer,
 it may take some time for a single TCP connection to ramp
-up to full speed. One of the goals of the Responsiveness test is to quickly
-load the network, take its measurements, and then finish.
+up to full speed. One of the goals of the Responsiveness Test is to help the user 
+quickly measure their network. As a result, the test must load the network, take its measurements, and then finish
+as fast as possible.
+
 Finally, traditional loss-based TCP congestion control algorithms
 react aggressively to packet loss by reducing the congestion window.
 This reaction (intended by the protocol design) decreases the
@@ -353,7 +355,7 @@ across the network in a useful way, the way a normal application does.
 The purpose of the Responsiveness Test is, as quickly as possible, to simulate
 a representative traffic load as if real applications were doing
 sustained data transfers, measure the resulting round-trip time
-occurring under those realistic conditions, and then end the test.
+occurring under those realistic conditions.
 Because of this, using multiple simultaneous parallel connections
 allows the Responsiveness Test to complete its task more quickly, in a way that
 overall is less disruptive and less wasteful of network capacity
@@ -369,7 +371,7 @@ connections to 16.
 Poor responsiveness can be caused by queues in either (or both)
 the upstream and the downstream direction.
 Furthermore, both paths may differ significantly due to access link
-conditions (e.g., 5G downstream and LTE upstream) or the routing changes
+conditions (e.g., 5G downstream and LTE upstream) or routing changes
 within the ISPs.
 To measure responsiveness under working conditions,
 the algorithm must explore both directions.
@@ -380,7 +382,7 @@ in parallel. It would allow for a shorter test run-time.
 However, a number of caveats come with measuring in parallel:
 
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
-This means the test might not reach the path's capacity in both directions at once and thus not expose
+This restriction means the test might not reach the path's capacity in both directions at once and thus not expose
 all the potential sources of low responsiveness.
 - Debuggability of the results becomes harder:
 During parallel measurement it is impossible to differentiate whether
@@ -389,14 +391,14 @@ the observed latency happens in the uplink or the downlink direction.
 Thus, we recommend testing uplink and downlink sequentially. Parallel testing
 is considered a future extension.
 
-### Reaching full buffer utilization
+### Achieving Full Buffer Utilization
 
-The Responsiveness Test gradually increases the number of TCP connections
+The Responsiveness Test gradually increases the number of TCP connections (known as load-generating connections)
 and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
 continuously.
-Once goodput reaches saturation, buffers will start filling up, creating the well-known
-"standing queue" that is known as bufferbloat. This is the moment the test starts
-measuring the responsiveness until the responsiveness reaches saturation as well.
+By definition, once goodput is maximized, buffers will start filling up, creating the
+"standing queue" that is characteristic of bufferbloat. At this moment the test starts
+measuring the responsiveness until it, too, reaches saturation.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.
 
@@ -414,12 +416,11 @@ the working condition is stable.
 
 ## Measuring Responsiveness
 
-Measuring responsiveness during the previously explained working conditions creation
-is a continuous process during the duration of the test. It requires a sufficiently
-large sample-size to have confidence in the results.
+Measuring responsiveness while achieving working conditions is a process of continuous measurement.
+It requires a sufficiently large sample-size to have confidence in the results.
 
-The measurement of the responsiveness happens by sending probe-requests for a small
-object. There are two types of probe requests:
+The measurement of the responsiveness happens by sending probe-requests.
+There are two types of probe requests:
 
 1. A HTTP GET request on a separate connection ("foreign probes").
    This test mimics the time it takes for a web browser to connect to a new
@@ -437,27 +438,28 @@ object. There are two types of probe requests:
    creating a brand new TLS connection from scratch to do the same thing.
 
 Foreign probes will provide 3 sets of data-points. First, the duration of the TCP-handshake
-(noted hereafter as tcp_f).
-Second, the TLS round-trip-time (noted tls_f). For this, it is important to note that different TLS versions
+(noted hereafter as `tcp_f`).
+Second, the TLS round-trip-time (noted `tls_f`). For this, it is important to note that different TLS versions
 have a different number of round-trips. Thus, the TLS establishment time needs to be
 normalized to the number of round-trips the TLS handshake takes until the connection
 is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
-request for a 1-byte object and receiving the entire response (noted http_f).
+request for a 1-byte object and receiving the entire response (noted `http_f`).
 
 Self probes will provide a single data-point for the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
-full HTTP response has been received (noted http_l).
+full HTTP response has been received (noted `http_s`).
 
-tcp_f, tls_f, http_f and http_l are all measured in milliseconds.
+`tcp_f`, `tls_f`, `http_f` and `http_s` are all measured in milliseconds.
 
-The more probes that are sent, the more data is available for calculation. In order to generate
-as much data as possible, the methodology requires a client to issue these probes regularly.
-There is however a risk that on low-capacity networks the responsiveness probes
-themselves will consume a significant amount of the capacity. As the test mandates to
-first saturate capacity before probing for responsiveness, we are able to
-accurately estimate how much of the capacity the responsiveness probes will consume.
+The more probes that are sent, the more data available for calculation. In order to generate
+as much data as possible, the Responsiveness Test specifies that a client issue these probes regularly.
+There is, however, a risk that on low-capacity networks the responsiveness probes
+themselves will consume a significant amount of the capacity. Because the test mandates
+first saturating capacity before probing for responsiveness, we are able to
+accurately estimate how much of the capacity the responsiveness probes will consume and never
+send more probes than the network can handle.
 
-This can be done by providing an estimate of the number of bytes exchanged for a
+Limiting the data used by probes can be done by providing an estimate of the number of bytes exchanged for a
 responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
 the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
 On load-generating connections we can expect an overhead of no more than 1000 bytes.
