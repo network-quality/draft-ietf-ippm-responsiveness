@@ -3,7 +3,7 @@
 %%Title: Enscript Output
 %%For: Christoph Paasch
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Mon Mar 13 13:56:25 2023
+%%CreationDate: Mon Mar 13 13:57:11 2023
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -441,73 +441,75 @@ _S
 5 715 M
 (Intended status: Standards Track                             S. Cheshire) s
 5 704 M
-(Expires: 14 September 2023                                    O. Shapira) s
+(Expires: 14 September 2023                                    Apple Inc.) s
 5 693 M
-(                                                              Apple Inc.) s
-5 682 M
 (                                                              W. Hawkins) s
-5 671 M
+5 682 M
 (                                                University of Cincinnati) s
-5 660 M
-(                                                               M. Mathis) s
-5 649 M
-(                                                             Google, Inc) s
-5 638 M
+5 671 M
 (                                                           13 March 2023) s
-5 605 M
+5 638 M
 (                Responsiveness under Working Conditions) s
-5 594 M
+5 627 M
 (                   draft-ietf-ippm-responsiveness-01) s
-5 572 M
+5 605 M
 (Abstract) s
-5 550 M
+5 583 M
 (   For many years, a lack of responsiveness, variously called lag,) s
-5 539 M
+5 572 M
 (   latency, or bufferbloat, has been recognized as an unfortunate, but) s
-5 528 M
+5 561 M
 (   common, symptom in today's networks.  Even after a decade of work on) s
-5 517 M
+5 550 M
 (   standardizing technical solutions, it remains a common problem for) s
-5 506 M
+5 539 M
 (   the end users.) s
-5 484 M
+5 517 M
 (   Everyone "knows" that it is "normal" for a video conference to have) s
-5 473 M
+5 506 M
 (   problems when somebody else at home is watching a 4K movie or) s
-5 462 M
+5 495 M
 (   uploading photos from their phone.  However, there is no technical) s
-5 451 M
+5 484 M
 (   reason for this to be the case.  In fact, various queue management) s
-5 440 M
+5 473 M
 (   solutions \(fq_codel, cake, PIE\) have solved the problem.) s
-5 418 M
+5 451 M
 (   Our networks remain unresponsive, not from a lack of technical) s
-5 407 M
+5 440 M
 (   solutions, but rather a lack of awareness of the problem and) s
-5 396 M
+5 429 M
 (   deployment of its solutions.  We believe that creating a tool that) s
-5 385 M
+5 418 M
 (   measures the problem and matches people's everyday experience will) s
-5 374 M
+5 407 M
 (   create the necessary awareness, and result in a demand for solutions.) s
-5 352 M
+5 385 M
 (   This document specifies the "Responsiveness Test" for measuring) s
-5 341 M
+5 374 M
 (   responsiveness.  It uses common protocols and mechanisms to measure) s
-5 330 M
+5 363 M
 (   user experience specifically when the network is under working) s
-5 319 M
+5 352 M
 (   conditions.  The measurement is expressed as "Round-trips Per Minute") s
-5 308 M
+5 341 M
 (   \(RPM\) and should be included with throughput \(up and down\) and idle) s
-5 297 M
+5 330 M
 (   latency as critical indicators of network quality.) s
-5 275 M
+5 308 M
 (Status of This Memo) s
-5 253 M
+5 286 M
 (   This Internet-Draft is submitted in full conformance with the) s
-5 242 M
+5 275 M
 (   provisions of BCP 78 and BCP 79.) s
+5 253 M
+(   Internet-Drafts are working documents of the Internet Engineering) s
+5 242 M
+(   Task Force \(IETF\).  Note that other groups may also distribute) s
+5 231 M
+(   working documents as Internet-Drafts.  The list of current Internet-) s
+5 220 M
+(   Drafts is at https://datatracker.ietf.org/drafts/current/.) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 1]) s
 _R
@@ -526,87 +528,89 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions      March 2023) s
 5 737 M
-(   Internet-Drafts are working documents of the Internet Engineering) s
-5 726 M
-(   Task Force \(IETF\).  Note that other groups may also distribute) s
-5 715 M
-(   working documents as Internet-Drafts.  The list of current Internet-) s
-5 704 M
-(   Drafts is at https://datatracker.ietf.org/drafts/current/.) s
-5 682 M
 (   Internet-Drafts are draft documents valid for a maximum of six months) s
-5 671 M
+5 726 M
 (   and may be updated, replaced, or obsoleted by other documents at any) s
-5 660 M
+5 715 M
 (   time.  It is inappropriate to use Internet-Drafts as reference) s
-5 649 M
+5 704 M
 (   material or to cite them other than as "work in progress.") s
-5 627 M
+5 682 M
 (   This Internet-Draft will expire on 14 September 2023.) s
-5 605 M
+5 660 M
 (Copyright Notice) s
-5 583 M
+5 638 M
 (   Copyright \(c\) 2023 IETF Trust and the persons identified as the) s
-5 572 M
+5 627 M
 (   document authors.  All rights reserved.) s
-5 550 M
+5 605 M
 (   This document is subject to BCP 78 and the IETF Trust's Legal) s
-5 539 M
+5 594 M
 (   Provisions Relating to IETF Documents \(https://trustee.ietf.org/) s
-5 528 M
+5 583 M
 (   license-info\) in effect on the date of publication of this document.) s
-5 517 M
+5 572 M
 (   Please review these documents carefully, as they describe your rights) s
-5 506 M
+5 561 M
 (   and restrictions with respect to this document.  Code Components) s
-5 495 M
+5 550 M
 (   extracted from this document must include Revised BSD License text as) s
-5 484 M
+5 539 M
 (   described in Section 4.e of the Trust Legal Provisions and are) s
-5 473 M
+5 528 M
 (   provided without warranty as described in the Revised BSD License.) s
-5 451 M
+5 506 M
 (Table of Contents) s
-5 429 M
+5 484 M
 (   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3) s
-5 418 M
+5 473 M
 (     1.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3) s
-5 407 M
+5 462 M
 (   2.  Design Constraints  . . . . . . . . . . . . . . . . . . . . .   4) s
-5 396 M
+5 451 M
 (   3.  Goals . . . . . . . . . . . . . . . . . . . . . . . . . . . .   6) s
-5 385 M
+5 440 M
 (   4.  Measuring Responsiveness Under Working Conditions . . . . . .   6) s
-5 374 M
+5 429 M
 (     4.1.  Working Conditions  . . . . . . . . . . . . . . . . . . .   6) s
-5 363 M
+5 418 M
 (       4.1.1.  Single-flow vs multi-flow . . . . . . . . . . . . . .   7) s
-5 352 M
+5 407 M
 (       4.1.2.  Parallel vs Sequential Uplink and Downlink  . . . . .   8) s
-5 341 M
+5 396 M
 (       4.1.3.  Achieving Full Buffer Utilization . . . . . . . . . .   9) s
-5 330 M
+5 385 M
 (     4.2.  Test parameters . . . . . . . . . . . . . . . . . . . . .   9) s
-5 319 M
+5 374 M
 (     4.3.  Measuring Responsiveness  . . . . . . . . . . . . . . . .  10) s
-5 308 M
+5 363 M
 (       4.3.1.  Aggregating the Measurements  . . . . . . . . . . . .  12) s
-5 297 M
+5 352 M
 (     4.4.  Final Algorithm . . . . . . . . . . . . . . . . . . . . .  13) s
-5 286 M
+5 341 M
 (       4.4.1.  Confidence of test-results  . . . . . . . . . . . . .  14) s
-5 275 M
+5 330 M
 (   5.  Interpreting responsiveness results . . . . . . . . . . . . .  15) s
-5 264 M
+5 319 M
 (     5.1.  Elements influencing responsiveness . . . . . . . . . . .  15) s
-5 253 M
+5 308 M
 (       5.1.1.  Client side influence . . . . . . . . . . . . . . . .  15) s
-5 242 M
+5 297 M
 (       5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  16) s
-5 231 M
+5 286 M
 (       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  16) s
-5 220 M
+5 275 M
 (     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  16) s
+5 264 M
+(   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17) s
+5 253 M
+(   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18) s
+5 242 M
+(     7.1.  Well-Known Uniform Resource Identifier \(URI\) For Test) s
+5 231 M
+(           Server Discovery  . . . . . . . . . . . . . . . . . . . .  19) s
+5 220 M
+(     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 2]) s
 _R
@@ -625,87 +629,85 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions      March 2023) s
 5 737 M
-(   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17) s
-5 726 M
-(   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18) s
-5 715 M
-(     7.1.  Well-Known Uniform Resource Identifier \(URI\) For Test) s
-5 704 M
-(           Server Discovery  . . . . . . . . . . . . . . . . . . . .  19) s
-5 693 M
-(     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20) s
-5 682 M
 (       7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  20) s
-5 671 M
+5 726 M
 (   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  21) s
-5 660 M
+5 715 M
 (   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21) s
-5 649 M
+5 704 M
 (   10. Acknowledgments . . . . . . . . . . . . . . . . . . . . . . .  21) s
-5 638 M
+5 693 M
 (   11. Informative References  . . . . . . . . . . . . . . . . . . .  21) s
-5 627 M
+5 682 M
 (   Appendix A.  Example Server Configuration . . . . . . . . . . . .  22) s
-5 616 M
+5 671 M
 (     A.1.  Apache Traffic Server . . . . . . . . . . . . . . . . . .  22) s
-5 605 M
+5 660 M
 (   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  23) s
-5 583 M
+5 638 M
 (1.  Introduction) s
-5 561 M
+5 616 M
 (   For many years, a lack of responsiveness, variously called lag,) s
-5 550 M
+5 605 M
 (   latency, or bufferbloat, has been recognized as an unfortunate, but) s
-5 539 M
+5 594 M
 (   common, symptom in today's networks [Bufferbloat].  Solutions like) s
-5 528 M
+5 583 M
 (   fq_codel [RFC8290] or PIE [RFC8033] have been standardized and are to) s
-5 517 M
+5 572 M
 (   some extent widely implemented.  Nevertheless, people still suffer) s
-5 506 M
+5 561 M
 (   from bufferbloat.) s
-5 484 M
+5 539 M
 (   Although significant, the impact on user experience can be transitory) s
-5 473 M
+5 528 M
 (   -- that is, its effect is not always visible to the user.  Whenever a) s
-5 462 M
+5 517 M
 (   network is actively being used at its full capacity, buffers can fill) s
-5 451 M
+5 506 M
 (   up and create latency for traffic.  The duration of those full) s
-5 440 M
+5 495 M
 (   buffers may be brief: a medium-sized file transfer, like an email) s
-5 429 M
+5 484 M
 (   attachment or uploading photos, can create bursts of latency spikes.) s
-5 418 M
+5 473 M
 (   An example of this is lag occurring during a videoconference, where a) s
-5 407 M
+5 462 M
 (   connection is briefly shown as unstable.) s
-5 385 M
+5 440 M
 (   These short-lived disruptions make it hard to narrow down the cause.) s
-5 374 M
+5 429 M
 (   We believe that it is necessary to create a standardized way to) s
-5 363 M
+5 418 M
 (   measure and express responsiveness.) s
-5 341 M
+5 396 M
 (   Including the responsiveness-under-working-conditions test among) s
-5 330 M
+5 385 M
 (   other measurements of network quality \(e.g., throughput and idle) s
-5 319 M
+5 374 M
 (   latency\) would raise awareness of the problem and establish the) s
-5 308 M
+5 363 M
 (   expectation among users that their network providers deploy) s
-5 297 M
+5 352 M
 (   solutions.) s
-5 275 M
+5 330 M
 (1.1.  Terminology) s
-5 253 M
+5 308 M
 (   A word about the term "bufferbloat" -- the undesirable latency that) s
-5 242 M
+5 297 M
 (   comes from a router or other network equipment buffering too much) s
-5 231 M
+5 286 M
 (   data.  This document uses the term as a general description of bad) s
-5 220 M
+5 275 M
 (   latency, using more precise wording where warranted.) s
+5 253 M
+(   "Latency" is a poor measure of responsiveness, because it can be hard) s
+5 242 M
+(   for the general public to understand.  The units are unfamiliar) s
+5 231 M
+(   \("what is a millisecond?"\) and counterintuitive \("100 msec -- that) s
+5 220 M
+(   sounds good -- it's only a tenth of a second!"\).) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 3]) s
 _R
@@ -724,85 +726,87 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions      March 2023) s
 5 737 M
-(   "Latency" is a poor measure of responsiveness, because it can be hard) s
-5 726 M
-(   for the general public to understand.  The units are unfamiliar) s
-5 715 M
-(   \("what is a millisecond?"\) and counterintuitive \("100 msec -- that) s
-5 704 M
-(   sounds good -- it's only a tenth of a second!"\).) s
-5 682 M
 (   Instead, we define the term "responsiveness under working conditions") s
-5 671 M
+5 726 M
 (   to make it clear that we are measuring all, not just idle,) s
-5 660 M
+5 715 M
 (   conditions, and use "round-trips per minute" as the unit.  The) s
-5 649 M
+5 704 M
 (   advantage of using round-trips per minute as the unit are two-fold:) s
-5 638 M
+5 693 M
 (   First, it allows for a unit that is "the higher the better".  This) s
-5 627 M
+5 682 M
 (   kind of unit is often more intuitive for end-users.  Second, the) s
-5 616 M
+5 671 M
 (   range of the values tends to be around the 4-digit integer range) s
-5 605 M
+5 660 M
 (   which is also a value easy to compare and read, again allowing for a) s
-5 594 M
+5 649 M
 (   more intuitive use.  Finally, we abbreviate the unit to "RPM", a wink) s
-5 583 M
+5 638 M
 (   to the "revolutions per minute" that we use for car engines.) s
-5 561 M
+5 616 M
 (   This document defines an algorithm for the "Responsiveness Test" that) s
-5 550 M
+5 605 M
 (   explicitly measures responsiveness under working conditions.) s
-5 528 M
+5 583 M
 (2.  Design Constraints) s
-5 506 M
+5 561 M
 (   There are many challenges to defining measurements of the Internet:) s
-5 495 M
+5 550 M
 (   the dynamic nature of the Internet, the diverse nature of the) s
-5 484 M
+5 539 M
 (   traffic, the large number of devices that affect traffic, the) s
-5 473 M
+5 528 M
 (   difficulty of attaining appropriate measurement conditions, diurnal) s
-5 462 M
+5 517 M
 (   traffic patterns, and changing routes.) s
-5 440 M
+5 495 M
 (   In order to minimize the effects of these challenges, it's best to) s
-5 429 M
+5 484 M
 (   keep the test duration relatively short.) s
-5 407 M
+5 462 M
 (   TCP and UDP traffic, or traffic on ports 80 and 443, may take) s
-5 396 M
+5 451 M
 (   significantly different paths over the network between source and) s
-5 385 M
+5 440 M
 (   destination and be subject to entirely different Quality of Service) s
-5 374 M
+5 429 M
 (   \(QoS\) treatment.  A good test will use standard transport-layer) s
-5 363 M
+5 418 M
 (   traffic -- typical for people's use of the network -- that is subject) s
-5 352 M
+5 407 M
 (   to the transport layer's congestion control algorithms that might) s
-5 341 M
+5 396 M
 (   reduce the traffic's rate and thus its buffering in the network.) s
-5 319 M
+5 374 M
 (   Traditionally, one thinks of bufferbloat happening in the network,) s
-5 308 M
+5 363 M
 (   i.e., on routers and switches of the Internet.  However, the) s
-5 297 M
+5 352 M
 (   networking stacks of the clients and servers can have huge buffers.) s
-5 286 M
+5 341 M
 (   Data sitting in TCP sockets or waiting for the application to send or) s
-5 275 M
+5 330 M
 (   read causes artificial latency, and affects user experience the same) s
-5 264 M
+5 319 M
 (   way as in-network bufferbloat.) s
-5 242 M
+5 297 M
 (   Finally, it is crucial to recognize that significant queueing only) s
-5 231 M
+5 286 M
 (   happens on entry to the lowest-capacity \(or "bottleneck"\) hop on a) s
-5 220 M
+5 275 M
 (   network path.  For any flow of data between two endpoints there is) s
+5 264 M
+(   always one hop along the path where the capacity available to that) s
+5 253 M
+(   flow at that hop is the lowest among all the hops of that flow's path) s
+5 242 M
+(   at that moment in time.  It is important to understand that the) s
+5 231 M
+(   existence of a lowest-capacity hop on a network path and a buffer to) s
+5 220 M
+(   smooth bursts of data is not itself a problem.  In a heterogeneous) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 4]) s
 _R
@@ -821,93 +825,91 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions      March 2023) s
 5 737 M
-(   always one hop along the path where the capacity available to that) s
-5 726 M
-(   flow at that hop is the lowest among all the hops of that flow's path) s
-5 715 M
-(   at that moment in time.  It is important to understand that the) s
-5 704 M
-(   existence of a lowest-capacity hop on a network path and a buffer to) s
-5 693 M
-(   smooth bursts of data is not itself a problem.  In a heterogeneous) s
-5 682 M
 (   network like the Internet it is inevitable that there must) s
-5 671 M
+5 726 M
 (   necessarily be some hop along the path with the lowest capacity for) s
-5 660 M
+5 715 M
 (   that path.  If that hop were to be improved, then some other hop) s
-5 649 M
+5 704 M
 (   would become the new lowest-capacity hop for that path.  In this) s
-5 638 M
+5 693 M
 (   context a "bottleneck" should not be seen as a problem to be fixed,) s
-5 627 M
+5 682 M
 (   because any attempt to "fix" the bottleneck is futile -- such a "fix") s
-5 616 M
+5 671 M
 (   can never remove the existence of a bottleneck on a path; it just) s
-5 605 M
+5 660 M
 (   moves the bottleneck somewhere else.  Arguably, this heterogeneity of) s
-5 594 M
+5 649 M
 (   the Internet is one of its greatest strengths.  Allowing individual) s
-5 583 M
+5 638 M
 (   technologies to evolve and improve at their own pace, without) s
-5 572 M
+5 627 M
 (   requiring the entire Internet to change in lock-step, has enabled) s
-5 561 M
+5 616 M
 (   enormous improvements over the years in technologies like DSL, cable) s
-5 550 M
+5 605 M
 (   modems, Ethernet, and Wi-Fi, each advancing independently as new) s
-5 539 M
+5 594 M
 (   developments became ready.  As a result of this flexibility we have) s
-5 528 M
+5 583 M
 (   moved incrementally, one step at a time, from 56kb/s dial-up modems) s
-5 517 M
+5 572 M
 (   in the 1990s to Gb/s home Internet service and Gb/s wireless) s
-5 506 M
+5 561 M
 (   connectivity today.) s
-5 484 M
+5 539 M
 (   Note that in a shared datagram network, conditions do not remain) s
-5 473 M
+5 528 M
 (   static.  The hop that is the current bottleneck may change from) s
-5 462 M
+5 517 M
 (   moment to moment.  For example, changes in simultaneous traffic may) s
-5 451 M
+5 506 M
 (   result in changes to a flow's share of a given hop.  A user moving) s
-5 440 M
+5 495 M
 (   around may cause the Wi-Fi transmission rate to vary widely, from a) s
-5 429 M
+5 484 M
 (   few Mb/s when far from the Access Point, all the way up to Gb/s or) s
-5 418 M
+5 473 M
 (   more when close to the Access Point.) s
-5 396 M
+5 451 M
 (   Consequently, if we wish to enjoy the benefits of the Internet's) s
-5 385 M
+5 440 M
 (   great flexibility, we need software that embraces and celebrates this) s
-5 374 M
+5 429 M
 (   diversity and adapts intelligently to the varying conditions it) s
-5 363 M
+5 418 M
 (   encounters.) s
-5 341 M
+5 396 M
 (   Because significant queueing only happens on entry to the bottleneck) s
-5 330 M
+5 385 M
 (   hop, the queue management at this critical hop of the path almost) s
-5 319 M
+5 374 M
 (   entirely determines the responsiveness of the entire flow.  If the) s
-5 308 M
+5 363 M
 (   bottleneck hop's queue management algorithm allows an excessively) s
-5 297 M
+5 352 M
 (   large queue to form, this results in excessively large delays for) s
-5 286 M
+5 341 M
 (   packets sitting in that queue awaiting transmission, significantly) s
-5 275 M
+5 330 M
 (   degrading overall user experience.) s
-5 253 M
+5 308 M
 (   In order to discover the depth of the buffer at the bottleneck hop,) s
-5 242 M
+5 297 M
 (   the proposed Responsiveness Test mimics normal network operations and) s
-5 231 M
+5 286 M
 (   data transfers, with the goal of filling the bottleneck buffer to) s
-5 220 M
+5 275 M
 (   capacity, and then measures the resulting end-to-end latency under) s
+5 264 M
+(   these so-called working conditions.  A well-managed bottleneck queue) s
+5 253 M
+(   keeps its occupancy under control, resulting in consistently low) s
+5 242 M
+(   round-trip times and consistently good responsiveness.  A poorly) s
+5 231 M
+(   managed bottleneck queue will not.) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 5]) s
 _R
@@ -926,73 +928,75 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions      March 2023) s
 5 737 M
-(   these so-called working conditions.  A well-managed bottleneck queue) s
-5 726 M
-(   keeps its occupancy under control, resulting in consistently low) s
-5 715 M
-(   round-trip times and consistently good responsiveness.  A poorly) s
-5 704 M
-(   managed bottleneck queue will not.) s
-5 682 M
 (3.  Goals) s
-5 660 M
+5 715 M
 (   The algorithm described here defines a Responsiveness Test that) s
-5 649 M
+5 704 M
 (   serves as a good proxy for user experience.  Therefore:) s
-5 627 M
+5 682 M
 (   1.  Because today's Internet traffic primarily uses HTTP/2 over TLS,) s
-5 616 M
+5 671 M
 (       the test's algorithm should use that protocol.) s
-5 594 M
+5 649 M
 (       As a side note: other types of traffic are gaining in popularity) s
-5 583 M
+5 638 M
 (       \(HTTP/3\) and/or are already being used widely \(RTP\).  Traffic) s
-5 572 M
+5 627 M
 (       prioritization and QoS rules on the Internet may subject traffic) s
-5 561 M
+5 616 M
 (       to completely different paths: these could also be measured) s
-5 550 M
+5 605 M
 (       separately.) s
-5 528 M
+5 583 M
 (   2.  Because the Internet is marked by the deployment of countless) s
-5 517 M
+5 572 M
 (       middleboxes like transparent TCP proxies or traffic) s
-5 506 M
+5 561 M
 (       prioritization for certain types of traffic, the Responsiveness) s
-5 495 M
+5 550 M
 (       Test algorithm must take into account their effect on TCP-) s
-5 484 M
+5 539 M
 (       handshake [RFC0793], TLS-handshake, and request/response.) s
-5 462 M
+5 517 M
 (   3.  Because the goal of the test is to educate end users, the results) s
-5 451 M
+5 506 M
 (       should be expressed in an intuitive, nontechnical form and not) s
-5 440 M
+5 495 M
 (       commit the user to spend a significant amount of their time \(we) s
-5 429 M
+5 484 M
 (       target 20 seconds\).) s
-5 407 M
+5 462 M
 (4.  Measuring Responsiveness Under Working Conditions) s
-5 385 M
+5 440 M
 (   Overall, the test to measure responsiveness under working conditions) s
-5 374 M
+5 429 M
 (   proceeds in two steps:) s
-5 352 M
+5 407 M
 (   1.  Put the network connection into "working conditions") s
-5 330 M
+5 385 M
 (   2.  Measure responsiveness of the network.) s
-5 308 M
+5 363 M
 (   The following explains how the former and the latter are achieved.) s
-5 286 M
+5 341 M
 (4.1.  Working Conditions) s
-5 264 M
+5 319 M
 (   What are _the_ conditions that best emulate how a network connection) s
-5 253 M
+5 308 M
 (   is used?  There is no one true answer to this question.  It is a) s
-5 242 M
+5 297 M
 (   tradeoff between using realistic traffic patterns and pushing the) s
-5 231 M
+5 286 M
 (   network to its limits.) s
+5 264 M
+(   The Responsiveness Test defines working conditions as the condition) s
+5 253 M
+(   where the path between the measuring endpoints is utilized at its) s
+5 242 M
+(   end-to-end capacity and the queue at the bottleneck link is at \(or) s
+5 231 M
+(   beyond\) its maximum occupancy.  Under these conditions, the network) s
+5 220 M
+(   connection's responsiveness will be at its worst.) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 6]) s
 _R
@@ -1011,81 +1015,81 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions      March 2023) s
 5 737 M
-(   The Responsiveness Test defines working conditions as the condition) s
-5 726 M
-(   where the path between the measuring endpoints is utilized at its) s
-5 715 M
-(   end-to-end capacity and the queue at the bottleneck link is at \(or) s
-5 704 M
-(   beyond\) its maximum occupancy.  Under these conditions, the network) s
-5 693 M
-(   connection's responsiveness will be at its worst.) s
-5 671 M
 (   The Responsiveness Test algorithm for reaching working conditions) s
-5 660 M
+5 726 M
 (   combines multiple standard HTTP transactions with very large data) s
-5 649 M
+5 715 M
 (   objects according to realistic traffic patterns to create these) s
-5 638 M
+5 704 M
 (   conditions.) s
-5 616 M
+5 682 M
 (   This allows to create a stable state of working conditions during) s
-5 605 M
+5 671 M
 (   which the bottleneck of the path between client and server has its) s
-5 594 M
+5 660 M
 (   buffer filled up entirely, without generating DoS-like traffic) s
-5 583 M
+5 649 M
 (   patterns \(e.g., intentional UDP flooding\).  This creates a realistic) s
-5 572 M
+5 638 M
 (   traffic mix representative of what a typical user's network) s
-5 561 M
+5 627 M
 (   experiences in normal operation.) s
-5 539 M
+5 605 M
 (   Finally, as end-user usage of the network evolves to newer protocols) s
-5 528 M
+5 594 M
 (   and congestion control algorithms, it is important that the working) s
-5 517 M
+5 583 M
 (   conditions also can evolve to continuously represent a realistic) s
-5 506 M
+5 572 M
 (   traffic pattern.) s
-5 484 M
+5 550 M
 (4.1.1.  Single-flow vs multi-flow) s
-5 462 M
+5 528 M
 (   A single TCP connection may not be sufficient to reach the capacity) s
-5 451 M
+5 517 M
 (   and full buffer occupancy of a path quickly.  Using a 4MB receive) s
-5 440 M
+5 506 M
 (   window, over a network with a 32 ms round-trip time, a single TCP) s
-5 429 M
+5 495 M
 (   connection can achieve up to 1Gb/s throughput.  Additionally, deep) s
-5 418 M
+5 484 M
 (   buffers along the path between the two endpoints may be significantly) s
-5 407 M
+5 473 M
 (   larger than 4MB.  TCP allows larger receive window sizes, up to 1GB.) s
-5 396 M
+5 462 M
 (   However, most transport stacks aggressively limit the size of the) s
-5 385 M
+5 451 M
 (   receive window to avoid consuming too much memory.) s
-5 363 M
+5 429 M
 (   Thus, the only way to achieve full capacity and full buffer occupancy) s
-5 352 M
+5 418 M
 (   on those networks is by creating multiple connections, allowing to) s
-5 341 M
+5 407 M
 (   actively fill the bottleneck's buffer to achieve maximum working) s
-5 330 M
+5 396 M
 (   conditions.) s
-5 308 M
+5 374 M
 (   Even if a single TCP connection would be able to fill the) s
-5 297 M
+5 363 M
 (   bottleneck's buffer, it may take some time for a single TCP) s
-5 286 M
+5 352 M
 (   connection to ramp up to full speed.  One of the goals of the) s
-5 275 M
+5 341 M
 (   Responsiveness Test is to help the user quickly measure their) s
-5 264 M
+5 330 M
 (   network.  As a result, the test must load the network, take its) s
-5 253 M
+5 319 M
 (   measurements, and then finish as fast as possible.) s
+5 297 M
+(   Finally, traditional loss-based TCP congestion control algorithms) s
+5 286 M
+(   react aggressively to packet loss by reducing the congestion window.) s
+5 275 M
+(   This reaction \(intended by the protocol design\) decreases the) s
+5 264 M
+(   queueing within the network, making it harder to determine the depth) s
+5 253 M
+(   of the bottleneck queue reliably.) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 7]) s
 _R
@@ -1104,78 +1108,68 @@ _S
 5 770 M
 (Internet-Draft   Responsiveness under Working Conditions      March 2023) s
 5 737 M
-(   Finally, traditional loss-based TCP congestion control algorithms) s
-5 726 M
-(   react aggressively to packet loss by reducing the congestion window.) s
-5 715 M
-(   This reaction \(intended by the protocol design\) decreases the) s
-5 704 M
-(   queueing within the network, making it harder to determine the depth) s
-5 693 M
-(   of the bottleneck queue reliably.) s
-5 671 M
 (   The purpose of the Responsiveness Test is not to productively move) s
-5 660 M
+5 726 M
 (   data across the network in a useful way, the way a normal application) s
-5 649 M
+5 715 M
 (   does.  The purpose of the Responsiveness Test is, as quickly as) s
-5 638 M
+5 704 M
 (   possible, to simulate a representative traffic load as if real) s
-5 627 M
+5 693 M
 (   applications were doing sustained data transfers, measure the) s
-5 616 M
+5 682 M
 (   resulting round-trip time occurring under those realistic conditions.) s
-5 605 M
+5 671 M
 (   Because of this, using multiple simultaneous parallel connections) s
-5 594 M
+5 660 M
 (   allows the Responsiveness Test to complete its task more quickly, in) s
-5 583 M
+5 649 M
 (   a way that overall is less disruptive and less wasteful of network) s
-5 572 M
+5 638 M
 (   capacity than a test using a single TCP connection that would take) s
-5 561 M
+5 627 M
 (   longer to bring the bottleneck hop to a stable saturated state.) s
-5 539 M
+5 605 M
 (   In this document, we impose an upper bound on the number of parallel) s
-5 528 M
+5 594 M
 (   load-generating connections to 16.) s
-5 506 M
+5 572 M
 (4.1.2.  Parallel vs Sequential Uplink and Downlink) s
-5 484 M
+5 550 M
 (   Poor responsiveness can be caused by queues in either \(or both\) the) s
-5 473 M
+5 539 M
 (   upstream and the downstream direction.  Furthermore, both paths may) s
-5 462 M
+5 528 M
 (   differ significantly due to access link conditions \(e.g., 5G) s
-5 451 M
+5 517 M
 (   downstream and LTE upstream\) or routing changes within the ISPs.  To) s
-5 440 M
+5 506 M
 (   measure responsiveness under working conditions, the algorithm must) s
-5 429 M
+5 495 M
 (   explore both directions.) s
-5 407 M
+5 473 M
 (   One approach could be to measure responsiveness in the uplink and) s
-5 396 M
+5 462 M
 (   downlink in parallel.  It would allow for a shorter test run-time.) s
-5 374 M
+5 440 M
 (   However, a number of caveats come with measuring in parallel:) s
-5 352 M
+5 418 M
 (   *  Half-duplex links may not permit simultaneous uplink and downlink) s
-5 341 M
+5 407 M
 (      traffic.  This restriction means the test might not reach the) s
-5 330 M
+5 396 M
 (      path's capacity in both directions at once and thus not expose all) s
-5 319 M
+5 385 M
 (      the potential sources of low responsiveness.) s
-5 297 M
+5 363 M
 (   *  Debuggability of the results becomes harder: During parallel) s
-5 286 M
+5 352 M
 (      measurement it is impossible to differentiate whether the observed) s
-5 275 M
+5 341 M
 (      latency happens in the uplink or the downlink direction.) s
-5 253 M
+5 319 M
 (   Thus, we recommend testing uplink and downlink sequentially.) s
-5 242 M
+5 308 M
 (   Parallel testing is considered a future extension.) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023               [Page 8]) s
@@ -2518,58 +2512,17 @@ _S
 (   United States of America) s
 5 286 M
 (   Email: cheshire@apple.com) s
+5 253 M
+(   Will Hawkins) s
+5 242 M
+(   University of Cincinnati) s
+5 231 M
+(   Email: hawkinwh@ucmail.uc.edu) s
 5 176 M
 (Paasch, et al.          Expires 14 September 2023              [Page 23]) s
 _R
 S
-%%Page: (24) 24
-%%BeginPageSetup
-_S
-24 24 translate
-/pagenum 24 def
-/fname (draft-ietf-ippm-responsiveness.txt) def
-/fdir (.) def
-/ftail (draft-ietf-ippm-responsiveness.txt) def
-/user_header_p false def
-/user_footer_p false def
-%%EndPageSetup
-5 770 M
-(Internet-Draft   Responsiveness under Working Conditions      March 2023) s
-5 737 M
-(   Omer Shapira) s
-5 726 M
-(   Apple Inc.) s
-5 715 M
-(   One Apple Park Way) s
-5 704 M
-(   Cupertino, California 95014,) s
-5 693 M
-(   United States of America) s
-5 682 M
-(   Email: oesh@apple.com) s
-5 649 M
-(   Will Hawkins) s
-5 638 M
-(   University of Cincinnati) s
-5 627 M
-(   Email: hawkinwh@ucmail.uc.edu) s
-5 594 M
-(   Matt Mathis) s
-5 583 M
-(   Google, Inc) s
-5 572 M
-(   1600 Amphitheatre Parkway) s
-5 561 M
-(   Mountain View, CA  94043,) s
-5 550 M
-(   United States of America) s
-5 539 M
-(   Email: mattmathis@google.com) s
-5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 24]) s
-_R
-S
 %%Trailer
-%%Pages: 24
+%%Pages: 23
 %%DocumentNeededResources: font Courier-Bold Courier 
 %%EOF

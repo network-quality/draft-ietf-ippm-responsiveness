@@ -2,7 +2,7 @@
 %‚„œ”
 2 0 obj
 <<
-/Length 2846
+/Length 2919
 >>
 stream
 BT
@@ -18,17 +18,11 @@ BT
 T*
 (Intended status: Standards Track                             S. Cheshire)Tj
 T*
-(Expires: 14 September 2023                                    O. Shapira)Tj
-T*
-(                                                              Apple Inc.)Tj
+(Expires: 14 September 2023                                    Apple Inc.)Tj
 T*
 (                                                              W. Hawkins)Tj
 T*
 (                                                University of Cincinnati)Tj
-T*
-(                                                               M. Mathis)Tj
-T*
-(                                                             Google, Inc)Tj
 T*
 (                                                           13 March 2023)Tj
 0 -3.3 TD
@@ -85,7 +79,15 @@ T*
 (   This Internet-Draft is submitted in full conformance with the)Tj
 0 -1.1 TD
 (   provisions of BCP 78 and BCP 79.)Tj
-0 -6.6 TD
+0 -2.2 TD
+(   Internet-Drafts are working documents of the Internet Engineering)Tj
+0 -1.1 TD
+(   Task Force \(IETF\).  Note that other groups may also distribute)Tj
+T*
+(   working documents as Internet-Drafts.  The list of current Internet-)Tj
+T*
+(   Drafts is at https://datatracker.ietf.org/drafts/current/.)Tj
+0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 1])Tj
 ET
 endstream
@@ -103,7 +105,7 @@ endobj
 endobj
 8 0 obj
 <<
-/Length 3344
+/Length 3425
 >>
 stream
 BT
@@ -115,14 +117,6 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   Internet-Drafts are working documents of the Internet Engineering)Tj
-0 -1.1 TD
-(   Task Force \(IETF\).  Note that other groups may also distribute)Tj
-T*
-(   working documents as Internet-Drafts.  The list of current Internet-)Tj
-T*
-(   Drafts is at https://datatracker.ietf.org/drafts/current/.)Tj
-0 -2.2 TD
 (   Internet-Drafts are draft documents valid for a maximum of six months)Tj
 0 -1.1 TD
 (   and may be updated, replaced, or obsoleted by other documents at any)Tj
@@ -196,6 +190,16 @@ T*
 (       5.1.3.  Server side influence . . . . . . . . . . . . . . . .  16)Tj
 T*
 (     5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  16)Tj
+T*
+(   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17)Tj
+T*
+(   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18)Tj
+T*
+(     7.1.  Well-Known Uniform Resource Identifier \(URI\) For Test)Tj
+T*
+(           Server Discovery  . . . . . . . . . . . . . . . . . . . .  19)Tj
+T*
+(     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20)Tj
 0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 2])Tj
 ET
@@ -214,7 +218,7 @@ endobj
 endobj
 11 0 obj
 <<
-/Length 3212
+/Length 3126
 >>
 stream
 BT
@@ -226,18 +230,8 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17)Tj
-0 -1.1 TD
-(   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18)Tj
-T*
-(     7.1.  Well-Known Uniform Resource Identifier \(URI\) For Test)Tj
-T*
-(           Server Discovery  . . . . . . . . . . . . . . . . . . . .  19)Tj
-T*
-(     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20)Tj
-T*
 (       7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  20)Tj
-T*
+0 -1.1 TD
 (   8.  Security Considerations . . . . . . . . . . . . . . . . . . .  21)Tj
 T*
 (   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21)Tj
@@ -307,6 +301,14 @@ T*
 (   data.  This document uses the term as a general description of bad)Tj
 T*
 (   latency, using more precise wording where warranted.)Tj
+0 -2.2 TD
+(   "Latency" is a poor measure of responsiveness, because it can be hard)Tj
+0 -1.1 TD
+(   for the general public to understand.  The units are unfamiliar)Tj
+T*
+(   \("what is a millisecond?"\) and counterintuitive \("100 msec -- that)Tj
+T*
+(   sounds good -- itís only a tenth of a second!"\).)Tj
 0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 3])Tj
 ET
@@ -325,7 +327,7 @@ endobj
 endobj
 14 0 obj
 <<
-/Length 3235
+/Length 3314
 >>
 stream
 BT
@@ -337,14 +339,6 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   "Latency" is a poor measure of responsiveness, because it can be hard)Tj
-0 -1.1 TD
-(   for the general public to understand.  The units are unfamiliar)Tj
-T*
-(   \("what is a millisecond?"\) and counterintuitive \("100 msec -- that)Tj
-T*
-(   sounds good -- itís only a tenth of a second!"\).)Tj
-0 -2.2 TD
 (   Instead, we define the term "responsiveness under working conditions")Tj
 0 -1.1 TD
 (   to make it clear that we are measuring all, not just idle,)Tj
@@ -416,6 +410,16 @@ T*
 (   happens on entry to the lowest-capacity \(or "bottleneck"\) hop on a)Tj
 T*
 (   network path.  For any flow of data between two endpoints there is)Tj
+T*
+(   always one hop along the path where the capacity available to that)Tj
+T*
+(   flow at that hop is the lowest among all the hops of that flowís path)Tj
+T*
+(   at that moment in time.  It is important to understand that the)Tj
+T*
+(   existence of a lowest-capacity hop on a network path and a buffer to)Tj
+T*
+(   smooth bursts of data is not itself a problem.  In a heterogeneous)Tj
 0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 4])Tj
 ET
@@ -434,7 +438,7 @@ endobj
 endobj
 17 0 obj
 <<
-/Length 3501
+/Length 3388
 >>
 stream
 BT
@@ -446,18 +450,8 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   always one hop along the path where the capacity available to that)Tj
-0 -1.1 TD
-(   flow at that hop is the lowest among all the hops of that flowís path)Tj
-T*
-(   at that moment in time.  It is important to understand that the)Tj
-T*
-(   existence of a lowest-capacity hop on a network path and a buffer to)Tj
-T*
-(   smooth bursts of data is not itself a problem.  In a heterogeneous)Tj
-T*
 (   network like the Internet it is inevitable that there must)Tj
-T*
+0 -1.1 TD
 (   necessarily be some hop along the path with the lowest capacity for)Tj
 T*
 (   that path.  If that hop were to be improved, then some other hop)Tj
@@ -533,7 +527,15 @@ T*
 (   data transfers, with the goal of filling the bottleneck buffer to)Tj
 T*
 (   capacity, and then measures the resulting end-to-end latency under)Tj
-0 -4.4 TD
+T*
+(   these so-called working conditions.  A well-managed bottleneck queue)Tj
+T*
+(   keeps its occupancy under control, resulting in consistently low)Tj
+T*
+(   round-trip times and consistently good responsiveness.  A poorly)Tj
+T*
+(   managed bottleneck queue will not.)Tj
+0 -5.5 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 5])Tj
 ET
 endstream
@@ -551,7 +553,7 @@ endobj
 endobj
 20 0 obj
 <<
-/Length 2544
+/Length 2648
 >>
 stream
 BT
@@ -563,16 +565,8 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   these so-called working conditions.  A well-managed bottleneck queue)Tj
-0 -1.1 TD
-(   keeps its occupancy under control, resulting in consistently low)Tj
-T*
-(   round-trip times and consistently good responsiveness.  A poorly)Tj
-T*
-(   managed bottleneck queue will not.)Tj
-0 -2.2 TD
 (3.  Goals)Tj
-T*
+0 -2.2 TD
 (   The algorithm described here defines a Responsiveness Test that)Tj
 0 -1.1 TD
 (   serves as a good proxy for user experience.  Therefore:)Tj
@@ -630,7 +624,17 @@ T*
 (   tradeoff between using realistic traffic patterns and pushing the)Tj
 T*
 (   network to its limits.)Tj
-0 -5.5 TD
+0 -2.2 TD
+(   The Responsiveness Test defines working conditions as the condition)Tj
+0 -1.1 TD
+(   where the path between the measuring endpoints is utilized at its)Tj
+T*
+(   end-to-end capacity and the queue at the bottleneck link is at \(or)Tj
+T*
+(   beyond\) its maximum occupancy.  Under these conditions, the network)Tj
+T*
+(   connectionís responsiveness will be at its worst.)Tj
+0 -4.4 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 6])Tj
 ET
 endstream
@@ -648,7 +652,7 @@ endobj
 endobj
 23 0 obj
 <<
-/Length 2933
+/Length 2914
 >>
 stream
 BT
@@ -660,16 +664,6 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   The Responsiveness Test defines working conditions as the condition)Tj
-0 -1.1 TD
-(   where the path between the measuring endpoints is utilized at its)Tj
-T*
-(   end-to-end capacity and the queue at the bottleneck link is at \(or)Tj
-T*
-(   beyond\) its maximum occupancy.  Under these conditions, the network)Tj
-T*
-(   connectionís responsiveness will be at its worst.)Tj
-0 -2.2 TD
 (   The Responsiveness Test algorithm for reaching working conditions)Tj
 0 -1.1 TD
 (   combines multiple standard HTTP transactions with very large data)Tj
@@ -735,6 +729,16 @@ T*
 (   network.  As a result, the test must load the network, take its)Tj
 T*
 (   measurements, and then finish as fast as possible.)Tj
+0 -2.2 TD
+(   Finally, traditional loss-based TCP congestion control algorithms)Tj
+0 -1.1 TD
+(   react aggressively to packet loss by reducing the congestion window.)Tj
+T*
+(   This reaction \(intended by the protocol design\) decreases the)Tj
+T*
+(   queueing within the network, making it harder to determine the depth)Tj
+T*
+(   of the bottleneck queue reliably.)Tj
 0 -7.7 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 7])Tj
 ET
@@ -753,7 +757,7 @@ endobj
 endobj
 26 0 obj
 <<
-/Length 3003
+/Length 2638
 >>
 stream
 BT
@@ -765,16 +769,6 @@ BT
 0 Tw
 (Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
 0 -3.3 TD
-(   Finally, traditional loss-based TCP congestion control algorithms)Tj
-0 -1.1 TD
-(   react aggressively to packet loss by reducing the congestion window.)Tj
-T*
-(   This reaction \(intended by the protocol design\) decreases the)Tj
-T*
-(   queueing within the network, making it harder to determine the depth)Tj
-T*
-(   of the bottleneck queue reliably.)Tj
-0 -2.2 TD
 (   The purpose of the Responsiveness Test is not to productively move)Tj
 0 -1.1 TD
 (   data across the network in a useful way, the way a normal application)Tj
@@ -838,7 +832,7 @@ T*
 (   Thus, we recommend testing uplink and downlink sequentially.)Tj
 0 -1.1 TD
 (   Parallel testing is considered a future extension.)Tj
-0 -6.6 TD
+0 -13.2 TD
 (Paasch, et al.          Expires 14 September 2023               [Page 8])Tj
 ET
 endstream
@@ -2282,7 +2276,7 @@ endobj
 endobj
 74 0 obj
 <<
-/Length 1530
+/Length 1643
 >>
 stream
 BT
@@ -2359,71 +2353,18 @@ T*
 (   United States of America)Tj
 T*
 (   Email: cheshire@apple.com)Tj
-0 -11 TD
-(Paasch, et al.          Expires 14 September 2023              [Page 23])Tj
-ET
-endstream
-endobj
-75 0 obj
-<<
-/ProcSet [/PDF /Text ]
-/Font <<
-/TT2 4 0 R
->>
-/ExtGState <<
-/GS1 5 0 R
->>
->>
-endobj
-77 0 obj
-<<
-/Length 732
->>
-stream
-BT
-/TT2 1 Tf
-10 0 0 10 29 794 Tm
-0 g
-/GS1 gs
-0 Tc
-0 Tw
-(Internet-Draft   Responsiveness under Working Conditions      March 2023)Tj
-0 -3.3 TD
-(   Omer Shapira)Tj
-0 -1.1 TD
-(   Apple Inc.)Tj
-T*
-(   One Apple Park Way)Tj
-T*
-(   Cupertino, California 95014,)Tj
-T*
-(   United States of America)Tj
-T*
-(   Email: oesh@apple.com)Tj
 0 -3.3 TD
 (   Will Hawkins)Tj
 0 -1.1 TD
 (   University of Cincinnati)Tj
 T*
 (   Email: hawkinwh@ucmail.uc.edu)Tj
-0 -3.3 TD
-(   Matt Mathis)Tj
-0 -1.1 TD
-(   Google, Inc)Tj
-T*
-(   1600 Amphitheatre Parkway)Tj
-T*
-(   Mountain View, CA  94043,)Tj
-T*
-(   United States of America)Tj
-T*
-(   Email: mattmathis@google.com)Tj
-0 -36.3 TD
-(Paasch, et al.          Expires 14 September 2023              [Page 24])Tj
+0 -5.5 TD
+(Paasch, et al.          Expires 14 September 2023              [Page 23])Tj
 ET
 endstream
 endobj
-78 0 obj
+75 0 obj
 <<
 /ProcSet [/PDF /Text ]
 /Font <<
@@ -2448,7 +2389,7 @@ endobj
 /TR2 /Default
 >>
 endobj
-79 0 obj
+76 0 obj
 <<
 /Type /FontDescriptor
 /Ascent 753
@@ -2479,7 +2420,7 @@ endobj
 0 0 600 ]
 /Encoding /WinAnsiEncoding
 /BaseFont /Courier
-/FontDescriptor 79 0 R
+/FontDescriptor 76 0 R
 >>
 endobj
 1 0 obj
@@ -2666,22 +2607,14 @@ endobj
 /Contents 74 0 R
 >>
 endobj
-76 0 obj
-<<
-/Type /Page
-/Parent 69 0 R
-/Resources 78 0 R
-/Contents 77 0 R
->>
-endobj
-80 0 obj
+77 0 obj
 <<
 /S /D
 >>
 endobj
-81 0 obj
+78 0 obj
 <<
-/Nums [0 80 0 R ]
+/Nums [0 77 0 R ]
 >>
 endobj
 6 0 obj
@@ -2703,8 +2636,8 @@ endobj
 69 0 obj
 <<
 /Type /Pages
-/Kids [66 0 R 70 0 R 73 0 R 76 0 R]
-/Count 4
+/Kids [66 0 R 70 0 R 73 0 R]
+/Count 3
 /Parent 37 0 R
 >>
 endobj
@@ -2712,117 +2645,114 @@ endobj
 <<
 /Type /Pages
 /Kids [6 0 R 38 0 R 69 0 R ]
-/Count 24
+/Count 23
 /MediaBox [0 0 595 842]
 >>
 endobj
-82 0 obj
+79 0 obj
 <<
-/CreationDate (D:20230313135625-07'00')
-/ModDate (D:20230313135625-07'00')
+/CreationDate (D:20230313135711-07'00')
+/ModDate (D:20230313135711-07'00')
 /Producer (Apple pstopdf)
 >>
 endobj
-83 0 obj
+80 0 obj
 <<
 /Type /Catalog
 /Pages 37 0 R
-/PageLabels 81 0 R
+/PageLabels 78 0 R
 >>
 endobj
 xref
-0 84
+0 81
 0000000000 65535 f 
-0000070627 00000 n 
+0000069614 00000 n 
 0000000016 00000 n 
-0000002914 00000 n 
-0000070054 00000 n 
-0000069723 00000 n 
-0000072695 00000 n 
-0000070707 00000 n 
-0000003009 00000 n 
-0000006405 00000 n 
-0000070787 00000 n 
-0000006500 00000 n 
-0000009765 00000 n 
-0000070870 00000 n 
-0000009861 00000 n 
-0000013149 00000 n 
-0000070953 00000 n 
-0000013245 00000 n 
-0000016799 00000 n 
-0000071036 00000 n 
-0000016895 00000 n 
-0000019492 00000 n 
-0000071119 00000 n 
-0000019588 00000 n 
-0000022574 00000 n 
-0000071202 00000 n 
-0000022670 00000 n 
-0000025726 00000 n 
-0000071285 00000 n 
-0000025822 00000 n 
-0000028021 00000 n 
-0000071368 00000 n 
-0000028117 00000 n 
-0000031050 00000 n 
-0000071451 00000 n 
-0000031146 00000 n 
-0000034219 00000 n 
-0000073063 00000 n 
-0000072830 00000 n 
-0000071535 00000 n 
-0000034315 00000 n 
-0000037191 00000 n 
-0000071619 00000 n 
-0000037287 00000 n 
-0000039925 00000 n 
-0000071703 00000 n 
-0000040021 00000 n 
-0000042812 00000 n 
-0000071787 00000 n 
-0000042908 00000 n 
-0000045961 00000 n 
+0000002987 00000 n 
+0000069041 00000 n 
+0000068710 00000 n 
+0000071598 00000 n 
+0000069694 00000 n 
+0000003082 00000 n 
+0000006559 00000 n 
+0000069774 00000 n 
+0000006654 00000 n 
+0000009833 00000 n 
+0000069857 00000 n 
+0000009929 00000 n 
+0000013296 00000 n 
+0000069940 00000 n 
+0000013392 00000 n 
+0000016833 00000 n 
+0000070023 00000 n 
+0000016929 00000 n 
+0000019630 00000 n 
+0000070106 00000 n 
+0000019726 00000 n 
+0000022693 00000 n 
+0000070189 00000 n 
+0000022789 00000 n 
+0000025480 00000 n 
+0000070272 00000 n 
+0000025576 00000 n 
+0000027775 00000 n 
+0000070355 00000 n 
+0000027871 00000 n 
+0000030804 00000 n 
+0000070438 00000 n 
+0000030900 00000 n 
+0000033973 00000 n 
+0000071959 00000 n 
+0000071733 00000 n 
+0000070522 00000 n 
+0000034069 00000 n 
+0000036945 00000 n 
+0000070606 00000 n 
+0000037041 00000 n 
+0000039679 00000 n 
+0000070690 00000 n 
+0000039775 00000 n 
+0000042566 00000 n 
+0000070774 00000 n 
+0000042662 00000 n 
+0000045715 00000 n 
+0000070858 00000 n 
+0000045811 00000 n 
+0000048899 00000 n 
+0000070942 00000 n 
+0000048995 00000 n 
+0000052553 00000 n 
+0000071026 00000 n 
+0000052649 00000 n 
+0000055728 00000 n 
+0000071110 00000 n 
+0000055824 00000 n 
+0000058595 00000 n 
+0000071194 00000 n 
+0000058691 00000 n 
+0000061559 00000 n 
+0000071278 00000 n 
+0000061655 00000 n 
+0000064251 00000 n 
 0000071871 00000 n 
-0000046057 00000 n 
-0000049145 00000 n 
-0000071955 00000 n 
-0000049241 00000 n 
-0000052799 00000 n 
-0000072039 00000 n 
-0000052895 00000 n 
-0000055974 00000 n 
-0000072123 00000 n 
-0000056070 00000 n 
-0000058841 00000 n 
-0000072207 00000 n 
-0000058937 00000 n 
-0000061805 00000 n 
-0000072291 00000 n 
-0000061901 00000 n 
-0000064497 00000 n 
-0000072968 00000 n 
-0000072375 00000 n 
-0000064593 00000 n 
-0000067068 00000 n 
-0000072459 00000 n 
-0000067164 00000 n 
-0000068747 00000 n 
-0000072543 00000 n 
-0000068843 00000 n 
-0000069627 00000 n 
-0000069863 00000 n 
-0000072627 00000 n 
-0000072655 00000 n 
-0000073161 00000 n 
-0000073284 00000 n 
+0000071362 00000 n 
+0000064347 00000 n 
+0000066822 00000 n 
+0000071446 00000 n 
+0000066918 00000 n 
+0000068614 00000 n 
+0000068850 00000 n 
+0000071530 00000 n 
+0000071558 00000 n 
+0000072057 00000 n 
+0000072180 00000 n 
 trailer
 <<
-/Size 84
-/Root 83 0 R
-/Info 82 0 R
-/ID [<453bf3d066501d142508f8a6b49940b6><453bf3d066501d142508f8a6b49940b6>]
+/Size 81
+/Root 80 0 R
+/Info 79 0 R
+/ID [<3fb69e84a5ac37f701b2097209a059fc><3fb69e84a5ac37f701b2097209a059fc>]
 >>
 startxref
-73354
+72250
 %%EOF

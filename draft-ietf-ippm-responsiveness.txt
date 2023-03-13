@@ -5,12 +5,9 @@
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
 Intended status: Standards Track                             S. Cheshire
-Expires: 14 September 2023                                    O. Shapira
-                                                              Apple Inc.
+Expires: 14 September 2023                                    Apple Inc.
                                                               W. Hawkins
                                                 University of Cincinnati
-                                                               M. Mathis
-                                                             Google, Inc
                                                            13 March 2023
 
 
@@ -49,7 +46,10 @@ Status of This Memo
    This Internet-Draft is submitted in full conformance with the
    provisions of BCP 78 and BCP 79.
 
-
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
 
 
 
@@ -57,11 +57,6 @@ Paasch, et al.          Expires 14 September 2023               [Page 1]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
-
-   Internet-Drafts are working documents of the Internet Engineering
-   Task Force (IETF).  Note that other groups may also distribute
-   working documents as Internet-Drafts.  The list of current Internet-
-   Drafts is at https://datatracker.ietf.org/drafts/current/.
 
    Internet-Drafts are draft documents valid for a maximum of six months
    and may be updated, replaced, or obsoleted by other documents at any
@@ -106,6 +101,11 @@ Table of Contents
        5.1.2.  Network influence . . . . . . . . . . . . . . . . . .  16
        5.1.3.  Server side influence . . . . . . . . . . . . . . . .  16
      5.2.  Root-causing Responsiveness . . . . . . . . . . . . . . .  16
+   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17
+   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18
+     7.1.  Well-Known Uniform Resource Identifier (URI) For Test
+           Server Discovery  . . . . . . . . . . . . . . . . . . . .  19
+     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20
 
 
 
@@ -114,11 +114,6 @@ Paasch, et al.          Expires 14 September 2023               [Page 2]
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
-   6.  Responsiveness Test Server API  . . . . . . . . . . . . . . .  17
-   7.  Responsiveness Test Server Discovery  . . . . . . . . . . . .  18
-     7.1.  Well-Known Uniform Resource Identifier (URI) For Test
-           Server Discovery  . . . . . . . . . . . . . . . . . . . .  19
-     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20
        7.2.1.  Example . . . . . . . . . . . . . . . . . . . . . . .  20
    8.  Security Considerations . . . . . . . . . . . . . . . . . . .  21
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
@@ -163,17 +158,17 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    data.  This document uses the term as a general description of bad
    latency, using more precise wording where warranted.
 
+   "Latency" is a poor measure of responsiveness, because it can be hard
+   for the general public to understand.  The units are unfamiliar
+   ("what is a millisecond?") and counterintuitive ("100 msec -- that
+   sounds good -- it's only a tenth of a second!").
+
 
 
 Paasch, et al.          Expires 14 September 2023               [Page 3]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
-
-   "Latency" is a poor measure of responsiveness, because it can be hard
-   for the general public to understand.  The units are unfamiliar
-   ("what is a millisecond?") and counterintuitive ("100 msec -- that
-   sounds good -- it's only a tenth of a second!").
 
    Instead, we define the term "responsiveness under working conditions"
    to make it clear that we are measuring all, not just idle,
@@ -218,6 +213,11 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    Finally, it is crucial to recognize that significant queueing only
    happens on entry to the lowest-capacity (or "bottleneck") hop on a
    network path.  For any flow of data between two endpoints there is
+   always one hop along the path where the capacity available to that
+   flow at that hop is the lowest among all the hops of that flow's path
+   at that moment in time.  It is important to understand that the
+   existence of a lowest-capacity hop on a network path and a buffer to
+   smooth bursts of data is not itself a problem.  In a heterogeneous
 
 
 
@@ -226,11 +226,6 @@ Paasch, et al.          Expires 14 September 2023               [Page 4]
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
-   always one hop along the path where the capacity available to that
-   flow at that hop is the lowest among all the hops of that flow's path
-   at that moment in time.  It is important to understand that the
-   existence of a lowest-capacity hop on a network path and a buffer to
-   smooth bursts of data is not itself a problem.  In a heterogeneous
    network like the Internet it is inevitable that there must
    necessarily be some hop along the path with the lowest capacity for
    that path.  If that hop were to be improved, then some other hop
@@ -274,6 +269,11 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    the proposed Responsiveness Test mimics normal network operations and
    data transfers, with the goal of filling the bottleneck buffer to
    capacity, and then measures the resulting end-to-end latency under
+   these so-called working conditions.  A well-managed bottleneck queue
+   keeps its occupancy under control, resulting in consistently low
+   round-trip times and consistently good responsiveness.  A poorly
+   managed bottleneck queue will not.
+
 
 
 
@@ -281,11 +281,6 @@ Paasch, et al.          Expires 14 September 2023               [Page 5]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
-
-   these so-called working conditions.  A well-managed bottleneck queue
-   keeps its occupancy under control, resulting in consistently low
-   round-trip times and consistently good responsiveness.  A poorly
-   managed bottleneck queue will not.
 
 3.  Goals
 
@@ -330,6 +325,11 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    tradeoff between using realistic traffic patterns and pushing the
    network to its limits.
 
+   The Responsiveness Test defines working conditions as the condition
+   where the path between the measuring endpoints is utilized at its
+   end-to-end capacity and the queue at the bottleneck link is at (or
+   beyond) its maximum occupancy.  Under these conditions, the network
+   connection's responsiveness will be at its worst.
 
 
 
@@ -337,12 +337,6 @@ Paasch, et al.          Expires 14 September 2023               [Page 6]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
-
-   The Responsiveness Test defines working conditions as the condition
-   where the path between the measuring endpoints is utilized at its
-   end-to-end capacity and the queue at the bottleneck link is at (or
-   beyond) its maximum occupancy.  Under these conditions, the network
-   connection's responsiveness will be at its worst.
 
    The Responsiveness Test algorithm for reaching working conditions
    combines multiple standard HTTP transactions with very large data
@@ -384,6 +378,12 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    network.  As a result, the test must load the network, take its
    measurements, and then finish as fast as possible.
 
+   Finally, traditional loss-based TCP congestion control algorithms
+   react aggressively to packet loss by reducing the congestion window.
+   This reaction (intended by the protocol design) decreases the
+   queueing within the network, making it harder to determine the depth
+   of the bottleneck queue reliably.
+
 
 
 
@@ -393,12 +393,6 @@ Paasch, et al.          Expires 14 September 2023               [Page 7]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
-
-   Finally, traditional loss-based TCP congestion control algorithms
-   react aggressively to packet loss by reducing the congestion window.
-   This reaction (intended by the protocol design) decreases the
-   queueing within the network, making it harder to determine the depth
-   of the bottleneck queue reliably.
 
    The purpose of the Responsiveness Test is not to productively move
    data across the network in a useful way, the way a normal application
@@ -440,6 +434,12 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
    Thus, we recommend testing uplink and downlink sequentially.
    Parallel testing is considered a future extension.
+
+
+
+
+
+
 
 
 
@@ -1278,67 +1278,11 @@ Authors' Addresses
    Email: cheshire@apple.com
 
 
-
-
-
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 23]
-
-Internet-Draft   Responsiveness under Working Conditions      March 2023
-
-
-   Omer Shapira
-   Apple Inc.
-   One Apple Park Way
-   Cupertino, California 95014,
-   United States of America
-   Email: oesh@apple.com
-
-
    Will Hawkins
    University of Cincinnati
    Email: hawkinwh@ucmail.uc.edu
 
 
-   Matt Mathis
-   Google, Inc
-   1600 Amphitheatre Parkway
-   Mountain View, CA  94043,
-   United States of America
-   Email: mattmathis@google.com
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Paasch, et al.          Expires 14 September 2023              [Page 24]
+Paasch, et al.          Expires 14 September 2023              [Page 23]

@@ -44,28 +44,10 @@ author:
     email: cheshire@apple.com
 
   -
-    ins: O. Shapira
-    name: Omer Shapira
-    org: Apple Inc.
-    street: One Apple Park Way
-    city: Cupertino, California 95014
-    country: United States of America
-    email: oesh@apple.com
-
-  -
     ins: W. Hawkins
     name: Will Hawkins
     org: University of Cincinnati
     email: hawkinwh@ucmail.uc.edu
-
-  -
-    ins: M. Mathis
-    name: Matt Mathis
-    org: Google, Inc
-    street: 1600 Amphitheatre Parkway
-    city: Mountain View, CA  94043
-    country: United States of America
-    email: mattmathis@google.com
 
 informative:
   Bufferbloat:
