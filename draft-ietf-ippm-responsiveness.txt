@@ -5,10 +5,10 @@
 IP Performance Measurement                                     C. Paasch
 Internet-Draft                                                  R. Meyer
 Intended status: Standards Track                             S. Cheshire
-Expires: 14 September 2023                                    Apple Inc.
+Expires: 17 September 2023                                    Apple Inc.
                                                               W. Hawkins
                                                 University of Cincinnati
-                                                           13 March 2023
+                                                           16 March 2023
 
 
                 Responsiveness under Working Conditions
@@ -53,7 +53,7 @@ Status of This Memo
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 1]
+Paasch, et al.          Expires 17 September 2023               [Page 1]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -63,7 +63,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 14 September 2023.
+   This Internet-Draft will expire on 17 September 2023.
 
 Copyright Notice
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 2]
+Paasch, et al.          Expires 17 September 2023               [Page 2]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -165,7 +165,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 3]
+Paasch, et al.          Expires 17 September 2023               [Page 3]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -211,17 +211,17 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    way as in-network bufferbloat.
 
    Finally, it is crucial to recognize that significant queueing only
-   happens on entry to the lowest-capacity (or "bottleneck") hop on a
+   happens on entry to the lowest-capacity (or “bottleneck”) hop on a
    network path.  For any flow of data between two endpoints there is
    always one hop along the path where the capacity available to that
-   flow at that hop is the lowest among all the hops of that flow's path
+   flow at that hop is the lowest among all the hops of that flow’s path
    at that moment in time.  It is important to understand that the
    existence of a lowest-capacity hop on a network path and a buffer to
    smooth bursts of data is not itself a problem.  In a heterogeneous
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 4]
+Paasch, et al.          Expires 17 September 2023               [Page 4]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -230,8 +230,8 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    necessarily be some hop along the path with the lowest capacity for
    that path.  If that hop were to be improved, then some other hop
    would become the new lowest-capacity hop for that path.  In this
-   context a "bottleneck" should not be seen as a problem to be fixed,
-   because any attempt to "fix" the bottleneck is futile -- such a "fix"
+   context a “bottleneck” should not be seen as a problem to be fixed,
+   because any attempt to “fix” the bottleneck is futile -- such a “fix”
    can never remove the existence of a bottleneck on a path; it just
    moves the bottleneck somewhere else.  Arguably, this heterogeneity of
    the Internet is one of its greatest strengths.  Allowing individual
@@ -247,12 +247,12 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    Note that in a shared datagram network, conditions do not remain
    static.  The hop that is the current bottleneck may change from
    moment to moment.  For example, changes in simultaneous traffic may
-   result in changes to a flow's share of a given hop.  A user moving
+   result in changes to a flow’s share of a given hop.  A user moving
    around may cause the Wi-Fi transmission rate to vary widely, from a
    few Mb/s when far from the Access Point, all the way up to Gb/s or
    more when close to the Access Point.
 
-   Consequently, if we wish to enjoy the benefits of the Internet's
+   Consequently, if we wish to enjoy the benefits of the Internet’s
    great flexibility, we need software that embraces and celebrates this
    diversity and adapts intelligently to the varying conditions it
    encounters.
@@ -260,7 +260,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    Because significant queueing only happens on entry to the bottleneck
    hop, the queue management at this critical hop of the path almost
    entirely determines the responsiveness of the entire flow.  If the
-   bottleneck hop's queue management algorithm allows an excessively
+   bottleneck hop’s queue management algorithm allows an excessively
    large queue to form, this results in excessively large delays for
    packets sitting in that queue awaiting transmission, significantly
    degrading overall user experience.
@@ -277,7 +277,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 5]
+Paasch, et al.          Expires 17 September 2023               [Page 5]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -333,7 +333,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 6]
+Paasch, et al.          Expires 17 September 2023               [Page 6]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -347,7 +347,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
    which the bottleneck of the path between client and server has its
    buffer filled up entirely, without generating DoS-like traffic
    patterns (e.g., intentional UDP flooding).  This creates a realistic
-   traffic mix representative of what a typical user's network
+   traffic mix representative of what a typical user’s network
    experiences in normal operation.
 
    Finally, as end-user usage of the network evolves to newer protocols
@@ -389,7 +389,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 7]
+Paasch, et al.          Expires 17 September 2023               [Page 7]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -445,7 +445,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 8]
+Paasch, et al.          Expires 17 September 2023               [Page 8]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -501,7 +501,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023               [Page 9]
+Paasch, et al.          Expires 17 September 2023               [Page 9]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -557,7 +557,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 10]
+Paasch, et al.          Expires 17 September 2023              [Page 10]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -613,7 +613,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 11]
+Paasch, et al.          Expires 17 September 2023              [Page 11]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -669,7 +669,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 12]
+Paasch, et al.          Expires 17 September 2023              [Page 12]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -708,9 +708,9 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
       for each interval.
 
    *  moving average aggregate goodput at interval p: The number of
-      total bytes of data transferred within interval p and the three
-      immediately preceding intervals, divided by four times the
-      interval duration.
+      total bytes of data transferred within interval p and the MAD - 1
+      immediately preceding intervals, divided by MAD times the interval
+      duration.
 
    the steps of the algorithm are:
 
@@ -725,7 +725,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 13]
+Paasch, et al.          Expires 17 September 2023              [Page 13]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -781,7 +781,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 14]
+Paasch, et al.          Expires 17 September 2023              [Page 14]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -837,7 +837,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 15]
+Paasch, et al.          Expires 17 September 2023              [Page 15]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -893,7 +893,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 16]
+Paasch, et al.          Expires 17 September 2023              [Page 16]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -919,7 +919,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
    The responsiveness measurement is built upon a foundation of standard
    protocols: IP, TCP, TLS, HTTP/2.  On top of this foundation, a
-   minimal amount of new "protocol" is defined, merely specifying the
+   minimal amount of new “protocol” is defined, merely specifying the
    URLs that used for GET and PUT in the process of executing the test.
 
    Both the client and the server MUST support HTTP/2 over TLS.  The
@@ -949,7 +949,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 17]
+Paasch, et al.          Expires 17 September 2023              [Page 17]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1005,7 +1005,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 18]
+Paasch, et al.          Expires 17 September 2023              [Page 18]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1061,7 +1061,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 19]
+Paasch, et al.          Expires 17 September 2023              [Page 19]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1117,7 +1117,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 20]
+Paasch, et al.          Expires 17 September 2023              [Page 20]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1146,7 +1146,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 9.  IANA Considerations
 
-   IANA has been requested to record the service type "_nq._tcp"
+   IANA has been requested to record the service type “_nq._tcp”
    (Network Quality) for advertising and discovery of Responsiveness
    Test Server instances.
 
@@ -1173,63 +1173,63 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 21]
+Paasch, et al.          Expires 17 September 2023              [Page 21]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
    [RFC0793]  Postel, J., "Transmission Control Protocol", RFC 793,
               DOI 10.17487/RFC0793, September 1981,
-              <https://www.rfc-editor.org/info/rfc793>.
+              <https://www.rfc-editor.org/rfc/rfc793>.
 
    [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",
               STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,
-              <https://www.rfc-editor.org/info/rfc1034>.
+              <https://www.rfc-editor.org/rfc/rfc1034>.
 
    [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.
               Cheshire, "Internet Assigned Numbers Authority (IANA)
               Procedures for the Management of the Service Name and
               Transport Protocol Port Number Registry", BCP 165,
               RFC 6335, DOI 10.17487/RFC6335, August 2011,
-              <https://www.rfc-editor.org/info/rfc6335>.
+              <https://www.rfc-editor.org/rfc/rfc6335>.
 
    [RFC6762]  Cheshire, S. and M. Krochmal, "Multicast DNS", RFC 6762,
               DOI 10.17487/RFC6762, February 2013,
-              <https://www.rfc-editor.org/info/rfc6762>.
+              <https://www.rfc-editor.org/rfc/rfc6762>.
 
    [RFC6763]  Cheshire, S. and M. Krochmal, "DNS-Based Service
               Discovery", RFC 6763, DOI 10.17487/RFC6763, February 2013,
-              <https://www.rfc-editor.org/info/rfc6763>.
+              <https://www.rfc-editor.org/rfc/rfc6763>.
 
    [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,
               "Proportional Integral Controller Enhanced (PIE): A
               Lightweight Control Scheme to Address the Bufferbloat
               Problem", RFC 8033, DOI 10.17487/RFC8033, February 2017,
-              <https://www.rfc-editor.org/info/rfc8033>.
+              <https://www.rfc-editor.org/rfc/rfc8033>.
 
    [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation (JSON) Data
               Interchange Format", STD 90, RFC 8259,
               DOI 10.17487/RFC8259, December 2017,
-              <https://www.rfc-editor.org/info/rfc8259>.
+              <https://www.rfc-editor.org/rfc/rfc8259>.
 
    [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,
               J., and E. Dumazet, "The Flow Queue CoDel Packet Scheduler
               and Active Queue Management Algorithm", RFC 8290,
               DOI 10.17487/RFC8290, January 2018,
-              <https://www.rfc-editor.org/info/rfc8290>.
+              <https://www.rfc-editor.org/rfc/rfc8290>.
 
    [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers
               (URIs)", RFC 8615, DOI 10.17487/RFC8615, May 2019,
-              <https://www.rfc-editor.org/info/rfc8615>.
+              <https://www.rfc-editor.org/rfc/rfc8615>.
 
    [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based
               Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June
-              2020, <https://www.rfc-editor.org/info/rfc8766>.
+              2020, <https://www.rfc-editor.org/rfc/rfc8766>.
 
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 22]
+Paasch, et al.          Expires 17 September 2023              [Page 22]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1238,7 +1238,7 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
               White, "Low Latency, Low Loss, and Scalable Throughput
               (L4S) Internet Service: Architecture", RFC 9330,
               DOI 10.17487/RFC9330, January 2023,
-              <https://www.rfc-editor.org/info/rfc9330>.
+              <https://www.rfc-editor.org/rfc/rfc9330>.
 
 Appendix A.  Example Server Configuration
 
@@ -1285,7 +1285,7 @@ Authors' Addresses
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 23]
+Paasch, et al.          Expires 17 September 2023              [Page 23]
 
 Internet-Draft   Responsiveness under Working Conditions      March 2023
 
@@ -1341,4 +1341,4 @@ Internet-Draft   Responsiveness under Working Conditions      March 2023
 
 
 
-Paasch, et al.          Expires 14 September 2023              [Page 24]
+Paasch, et al.          Expires 17 September 2023              [Page 24]
