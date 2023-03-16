@@ -1,9 +1,9 @@
 %!PS-Adobe-3.0
 %%BoundingBox: 24 24 571 818
 %%Title: Enscript Output
-%%For: Christoph Paasch
+%%For: felix,,,
 %%Creator: GNU Enscript 1.6.6
-%%CreationDate: Mon Mar 13 16:36:48 2023
+%%CreationDate: Thu Mar 16 16:40:05 2023
 %%Orientation: Portrait
 %%Pages: (atend)
 %%DocumentMedia: A4 595 842 0 () ()
@@ -441,13 +441,13 @@ _S
 5 715 M
 (Intended status: Standards Track                             S. Cheshire) s
 5 704 M
-(Expires: 14 September 2023                                    Apple Inc.) s
+(Expires: 17 September 2023                                    Apple Inc.) s
 5 693 M
 (                                                              W. Hawkins) s
 5 682 M
 (                                                University of Cincinnati) s
 5 671 M
-(                                                           13 March 2023) s
+(                                                           16 March 2023) s
 5 638 M
 (                Responsiveness under Working Conditions) s
 5 627 M
@@ -511,7 +511,7 @@ _S
 5 220 M
 (   Drafts is at https://datatracker.ietf.org/drafts/current/.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 1]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 1]) s
 _R
 S
 %%Page: (2) 2
@@ -536,7 +536,7 @@ _S
 5 704 M
 (   material or to cite them other than as "work in progress.") s
 5 682 M
-(   This Internet-Draft will expire on 14 September 2023.) s
+(   This Internet-Draft will expire on 17 September 2023.) s
 5 660 M
 (Copyright Notice) s
 5 638 M
@@ -612,7 +612,7 @@ _S
 5 220 M
 (     7.2.  DNS-Based Service Discovery for Test Server Discovery . .  20) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 2]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 2]) s
 _R
 S
 %%Page: (3) 3
@@ -709,7 +709,7 @@ _S
 5 220 M
 (   sounds good -- it's only a tenth of a second!"\).) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 3]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 3]) s
 _R
 S
 %%Page: (4) 4
@@ -794,13 +794,13 @@ _S
 5 297 M
 (   Finally, it is crucial to recognize that significant queueing only) s
 5 286 M
-(   happens on entry to the lowest-capacity \(or "bottleneck"\) hop on a) s
+(   happens on entry to the lowest-capacity \(or \342\\200\\234bottleneck\342\\200\\235\) hop on a) s
 5 275 M
 (   network path.  For any flow of data between two endpoints there is) s
 5 264 M
 (   always one hop along the path where the capacity available to that) s
 5 253 M
-(   flow at that hop is the lowest among all the hops of that flow's path) s
+(   flow at that hop is the lowest among all the hops of that flow\342\\200\\231s path) s
 5 242 M
 (   at that moment in time.  It is important to understand that the) s
 5 231 M
@@ -808,7 +808,7 @@ _S
 5 220 M
 (   smooth bursts of data is not itself a problem.  In a heterogeneous) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 4]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 4]) s
 _R
 S
 %%Page: (5) 5
@@ -833,85 +833,87 @@ _S
 5 704 M
 (   would become the new lowest-capacity hop for that path.  In this) s
 5 693 M
-(   context a "bottleneck" should not be seen as a problem to be fixed,) s
+(   context a \342\\200\\234bottleneck\342\\200\\235 should not be seen as a problem to be fixed,) s
 5 682 M
-(   because any attempt to "fix" the bottleneck is futile -- such a "fix") s
+(   because any attempt to \342\\200\\234fix\342\\200\\235 the bottleneck is futile -- such a \342\\200) s
 5 671 M
-(   can never remove the existence of a bottleneck on a path; it just) s
+(\\234fix\342\\200\\235) s
 5 660 M
-(   moves the bottleneck somewhere else.  Arguably, this heterogeneity of) s
+(   can never remove the existence of a bottleneck on a path; it just) s
 5 649 M
-(   the Internet is one of its greatest strengths.  Allowing individual) s
+(   moves the bottleneck somewhere else.  Arguably, this heterogeneity of) s
 5 638 M
-(   technologies to evolve and improve at their own pace, without) s
+(   the Internet is one of its greatest strengths.  Allowing individual) s
 5 627 M
-(   requiring the entire Internet to change in lock-step, has enabled) s
+(   technologies to evolve and improve at their own pace, without) s
 5 616 M
-(   enormous improvements over the years in technologies like DSL, cable) s
+(   requiring the entire Internet to change in lock-step, has enabled) s
 5 605 M
-(   modems, Ethernet, and Wi-Fi, each advancing independently as new) s
+(   enormous improvements over the years in technologies like DSL, cable) s
 5 594 M
-(   developments became ready.  As a result of this flexibility we have) s
+(   modems, Ethernet, and Wi-Fi, each advancing independently as new) s
 5 583 M
-(   moved incrementally, one step at a time, from 56kb/s dial-up modems) s
+(   developments became ready.  As a result of this flexibility we have) s
 5 572 M
-(   in the 1990s to Gb/s home Internet service and Gb/s wireless) s
+(   moved incrementally, one step at a time, from 56kb/s dial-up modems) s
 5 561 M
+(   in the 1990s to Gb/s home Internet service and Gb/s wireless) s
+5 550 M
 (   connectivity today.) s
-5 539 M
-(   Note that in a shared datagram network, conditions do not remain) s
 5 528 M
-(   static.  The hop that is the current bottleneck may change from) s
+(   Note that in a shared datagram network, conditions do not remain) s
 5 517 M
-(   moment to moment.  For example, changes in simultaneous traffic may) s
+(   static.  The hop that is the current bottleneck may change from) s
 5 506 M
-(   result in changes to a flow's share of a given hop.  A user moving) s
+(   moment to moment.  For example, changes in simultaneous traffic may) s
 5 495 M
-(   around may cause the Wi-Fi transmission rate to vary widely, from a) s
+(   result in changes to a flow\342\\200\\231s share of a given hop.  A user moving) s
 5 484 M
-(   few Mb/s when far from the Access Point, all the way up to Gb/s or) s
+(   around may cause the Wi-Fi transmission rate to vary widely, from a) s
 5 473 M
+(   few Mb/s when far from the Access Point, all the way up to Gb/s or) s
+5 462 M
 (   more when close to the Access Point.) s
-5 451 M
-(   Consequently, if we wish to enjoy the benefits of the Internet's) s
 5 440 M
-(   great flexibility, we need software that embraces and celebrates this) s
+(   Consequently, if we wish to enjoy the benefits of the Internet\342\\200\\231s) s
 5 429 M
-(   diversity and adapts intelligently to the varying conditions it) s
+(   great flexibility, we need software that embraces and celebrates this) s
 5 418 M
+(   diversity and adapts intelligently to the varying conditions it) s
+5 407 M
 (   encounters.) s
-5 396 M
-(   Because significant queueing only happens on entry to the bottleneck) s
 5 385 M
-(   hop, the queue management at this critical hop of the path almost) s
+(   Because significant queueing only happens on entry to the bottleneck) s
 5 374 M
-(   entirely determines the responsiveness of the entire flow.  If the) s
+(   hop, the queue management at this critical hop of the path almost) s
 5 363 M
-(   bottleneck hop's queue management algorithm allows an excessively) s
+(   entirely determines the responsiveness of the entire flow.  If the) s
 5 352 M
-(   large queue to form, this results in excessively large delays for) s
+(   bottleneck hop\342\\200\\231s queue management algorithm allows an excessively) s
 5 341 M
-(   packets sitting in that queue awaiting transmission, significantly) s
+(   large queue to form, this results in excessively large delays for) s
 5 330 M
+(   packets sitting in that queue awaiting transmission, significantly) s
+5 319 M
 (   degrading overall user experience.) s
-5 308 M
-(   In order to discover the depth of the buffer at the bottleneck hop,) s
 5 297 M
-(   the proposed Responsiveness Test mimics normal network operations and) s
+(   In order to discover the depth of the buffer at the bottleneck hop,) s
 5 286 M
-(   data transfers, with the goal of filling the bottleneck buffer to) s
+(   the proposed Responsiveness Test mimics normal network operations and) s
 5 275 M
-(   capacity, and then measures the resulting end-to-end latency under) s
+(   data transfers, with the goal of filling the bottleneck buffer to) s
 5 264 M
-(   these so-called working conditions.  A well-managed bottleneck queue) s
+(   capacity, and then measures the resulting end-to-end latency under) s
 5 253 M
-(   keeps its occupancy under control, resulting in consistently low) s
+(   these so-called working conditions.  A well-managed bottleneck queue) s
 5 242 M
-(   round-trip times and consistently good responsiveness.  A poorly) s
+(   keeps its occupancy under control, resulting in consistently low) s
 5 231 M
+(   round-trip times and consistently good responsiveness.  A poorly) s
+5 220 M
 (   managed bottleneck queue will not.) s
-5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 5]) s
+5 165 M
+(Paasch, et al.          Expires 17 September 2023               [Page 5]) s
 _R
 S
 %%Page: (6) 6
@@ -998,7 +1000,7 @@ _S
 5 220 M
 (   connection's responsiveness will be at its worst.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 6]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 6]) s
 _R
 S
 %%Page: (7) 7
@@ -1031,7 +1033,7 @@ _S
 5 649 M
 (   patterns \(e.g., intentional UDP flooding\).  This creates a realistic) s
 5 638 M
-(   traffic mix representative of what a typical user's network) s
+(   traffic mix representative of what a typical user\342\\200\\231s network) s
 5 627 M
 (   experiences in normal operation.) s
 5 605 M
@@ -1091,7 +1093,7 @@ _S
 5 253 M
 (   of the bottleneck queue reliably.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 7]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 7]) s
 _R
 S
 %%Page: (8) 8
@@ -1172,7 +1174,7 @@ _S
 5 308 M
 (   Parallel testing is considered a future extension.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 8]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 8]) s
 _R
 S
 %%Page: (9) 9
@@ -1247,7 +1249,7 @@ _S
 5 385 M
 (   range of environments.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023               [Page 9]) s
+(Paasch, et al.          Expires 17 September 2023               [Page 9]) s
 _R
 S
 %%Page: (10) 10
@@ -1334,7 +1336,7 @@ _S
 5 308 M
 (       client to launch and begin fetching media.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 10]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 10]) s
 _R
 S
 %%Page: (11) 11
@@ -1425,7 +1427,7 @@ _S
 5 286 M
 (   no more than 1000 bytes.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 11]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 11]) s
 _R
 S
 %%Page: (12) 12
@@ -1514,7 +1516,7 @@ _S
 5 264 M
 (   This responsiveness value presents round-trips per minute \(RPM\).) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 12]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 12]) s
 _R
 S
 %%Page: (13) 13
@@ -1587,11 +1589,11 @@ _S
 5 374 M
 (   *  moving average aggregate goodput at interval p: The number of) s
 5 363 M
-(      total bytes of data transferred within interval p and the three) s
+(      total bytes of data transferred within interval p and the MAD - 1) s
 5 352 M
-(      immediately preceding intervals, divided by four times the) s
+(      immediately preceding intervals, divided by MAD times the interval) s
 5 341 M
-(      interval duration.) s
+(      duration.) s
 5 319 M
 (   the steps of the algorithm are:) s
 5 297 M
@@ -1603,7 +1605,7 @@ _S
 5 231 M
 (      -  If goodput has not saturated:) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 13]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 13]) s
 _R
 S
 %%Page: (14) 14
@@ -1690,7 +1692,7 @@ _S
 5 242 M
 (   deviation tolerance.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 14]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 14]) s
 _R
 S
 %%Page: (15) 15
@@ -1787,7 +1789,7 @@ _S
 5 220 M
 (   solutions like TCP_NOTSENT_LOWAT [draft-ietf-tcpm-rfc793bis].  At the) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 15]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 15]) s
 _R
 S
 %%Page: (16) 16
@@ -1880,7 +1882,7 @@ _S
 5 242 M
 (   involves however a set of different tools and methodologies.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 16]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 16]) s
 _R
 S
 %%Page: (17) 17
@@ -1933,7 +1935,7 @@ _S
 5 517 M
 (   protocols: IP, TCP, TLS, HTTP/2.  On top of this foundation, a) s
 5 506 M
-(   minimal amount of new "protocol" is defined, merely specifying the) s
+(   minimal amount of new \342\\200\\234protocol\342\\200\\235 is defined, merely specifying the) s
 5 495 M
 (   URLs that used for GET and PUT in the process of executing the test.) s
 5 473 M
@@ -1981,7 +1983,7 @@ _S
 5 220 M
 (   software to work better in that environment.  However, that approach) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 17]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 17]) s
 _R
 S
 %%Page: (18) 18
@@ -2068,7 +2070,7 @@ _S
 5 297 M
 (   direction as well as the small object for the latency measurements.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 18]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 18]) s
 _R
 S
 %%Page: (19) 19
@@ -2157,7 +2159,7 @@ _S
 5 242 M
 (   following criteria:) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 19]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 19]) s
 _R
 S
 %%Page: (20) 20
@@ -2252,7 +2254,7 @@ _S
 5 253 M
 (   records.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 20]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 20]) s
 _R
 S
 %%Page: (21) 21
@@ -2303,7 +2305,7 @@ _S
 5 495 M
 (9.  IANA Considerations) s
 5 473 M
-(   IANA has been requested to record the service type "_nq._tcp") s
+(   IANA has been requested to record the service type \342\\200\\234_nq._tcp\342\\200\\235) s
 5 462 M
 (   \(Network Quality\) for advertising and discovery of Responsiveness) s
 5 451 M
@@ -2339,7 +2341,7 @@ _S
 5 231 M
 (              Specification", Internet Engineering Task Force , n.d..) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 21]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 21]) s
 _R
 S
 %%Page: (22) 22
@@ -2360,13 +2362,13 @@ _S
 5 726 M
 (              DOI 10.17487/RFC0793, September 1981,) s
 5 715 M
-(              <https://www.rfc-editor.org/info/rfc793>.) s
+(              <https://www.rfc-editor.org/rfc/rfc793>.) s
 5 693 M
 (   [RFC1034]  Mockapetris, P., "Domain names - concepts and facilities",) s
 5 682 M
 (              STD 13, RFC 1034, DOI 10.17487/RFC1034, November 1987,) s
 5 671 M
-(              <https://www.rfc-editor.org/info/rfc1034>.) s
+(              <https://www.rfc-editor.org/rfc/rfc1034>.) s
 5 649 M
 (   [RFC6335]  Cotton, M., Eggert, L., Touch, J., Westerlund, M., and S.) s
 5 638 M
@@ -2378,19 +2380,19 @@ _S
 5 605 M
 (              RFC 6335, DOI 10.17487/RFC6335, August 2011,) s
 5 594 M
-(              <https://www.rfc-editor.org/info/rfc6335>.) s
+(              <https://www.rfc-editor.org/rfc/rfc6335>.) s
 5 572 M
 (   [RFC6762]  Cheshire, S. and M. Krochmal, "Multicast DNS", RFC 6762,) s
 5 561 M
 (              DOI 10.17487/RFC6762, February 2013,) s
 5 550 M
-(              <https://www.rfc-editor.org/info/rfc6762>.) s
+(              <https://www.rfc-editor.org/rfc/rfc6762>.) s
 5 528 M
 (   [RFC6763]  Cheshire, S. and M. Krochmal, "DNS-Based Service) s
 5 517 M
 (              Discovery", RFC 6763, DOI 10.17487/RFC6763, February 2013,) s
 5 506 M
-(              <https://www.rfc-editor.org/info/rfc6763>.) s
+(              <https://www.rfc-editor.org/rfc/rfc6763>.) s
 5 484 M
 (   [RFC8033]  Pan, R., Natarajan, P., Baker, F., and G. White,) s
 5 473 M
@@ -2400,7 +2402,7 @@ _S
 5 451 M
 (              Problem", RFC 8033, DOI 10.17487/RFC8033, February 2017,) s
 5 440 M
-(              <https://www.rfc-editor.org/info/rfc8033>.) s
+(              <https://www.rfc-editor.org/rfc/rfc8033>.) s
 5 418 M
 (   [RFC8259]  Bray, T., Ed., "The JavaScript Object Notation \(JSON\) Data) s
 5 407 M
@@ -2408,7 +2410,7 @@ _S
 5 396 M
 (              DOI 10.17487/RFC8259, December 2017,) s
 5 385 M
-(              <https://www.rfc-editor.org/info/rfc8259>.) s
+(              <https://www.rfc-editor.org/rfc/rfc8259>.) s
 5 363 M
 (   [RFC8290]  Hoeiland-Joergensen, T., McKenney, P., Taht, D., Gettys,) s
 5 352 M
@@ -2418,21 +2420,21 @@ _S
 5 330 M
 (              DOI 10.17487/RFC8290, January 2018,) s
 5 319 M
-(              <https://www.rfc-editor.org/info/rfc8290>.) s
+(              <https://www.rfc-editor.org/rfc/rfc8290>.) s
 5 297 M
 (   [RFC8615]  Nottingham, M., "Well-Known Uniform Resource Identifiers) s
 5 286 M
 (              \(URIs\)", RFC 8615, DOI 10.17487/RFC8615, May 2019,) s
 5 275 M
-(              <https://www.rfc-editor.org/info/rfc8615>.) s
+(              <https://www.rfc-editor.org/rfc/rfc8615>.) s
 5 253 M
 (   [RFC8766]  Cheshire, S., "Discovery Proxy for Multicast DNS-Based) s
 5 242 M
 (              Service Discovery", RFC 8766, DOI 10.17487/RFC8766, June) s
 5 231 M
-(              2020, <https://www.rfc-editor.org/info/rfc8766>.) s
+(              2020, <https://www.rfc-editor.org/rfc/rfc8766>.) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 22]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 22]) s
 _R
 S
 %%Page: (23) 23
@@ -2457,7 +2459,7 @@ _S
 5 704 M
 (              DOI 10.17487/RFC9330, January 2023,) s
 5 693 M
-(              <https://www.rfc-editor.org/info/rfc9330>.) s
+(              <https://www.rfc-editor.org/rfc/rfc9330>.) s
 5 671 M
 (Appendix A.  Example Server Configuration) s
 5 649 M
@@ -2517,7 +2519,7 @@ _S
 5 253 M
 (   Email: cpaasch@apple.com) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 23]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 23]) s
 _R
 S
 %%Page: (24) 24
@@ -2564,7 +2566,7 @@ _S
 5 539 M
 (   Email: hawkinwh@ucmail.uc.edu) s
 5 176 M
-(Paasch, et al.          Expires 14 September 2023              [Page 24]) s
+(Paasch, et al.          Expires 17 September 2023              [Page 24]) s
 _R
 S
 %%Trailer
