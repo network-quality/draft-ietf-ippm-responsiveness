@@ -864,7 +864,7 @@ Special thanks go to Jeroen Schickendantz for his tireless
 enthousiasm around the project and his contributions to this I-D and the development
 of the Go responsiveness measurement tool.
 We would also like to thank Rich Brown for his editorial pass over this I-D.
-We also thank Erik Auerswald, Matt Matthis and Omer Shapira for their constructive feedback on the I-D.
+We also thank Erik Auerswald, Matt Mathis and Omer Shapira for their constructive feedback on the I-D.
 
 --- back
 
