@@ -395,7 +395,7 @@ The only means to further increase throughput is by
 adding more TCP connections to the pool of load-generating connections.
 If new connections leave the throughput the same,
 full link utilization has been reached.
-At this point, adding ore connections will allow to achieve full buffer occupancy.
+At this point, adding more connections will allow to achieve full buffer occupancy.
 Responsiveness will gradually decrease from now on, until the buffers
 are entirely full and reach stability of the responsiveness as well.
 
@@ -578,7 +578,7 @@ We define "High" confidence if the algorithm was able to fully reach stability
 based on the defined standard deviation tolerance.
 
 It must be noted that depending on the chosen standard deviation tolerance or
-other paramenters of the methodology and the network-environment it may be that a
+other parameters of the methodology and the network-environment it may be that a
 measurement never converges to a stable point.
 This is expected and part of the dynamic nature of networking and the accompanying
 measurement inaccuracies. Which is why the importance of imposing a time-limit
@@ -861,10 +861,10 @@ for advertising and discovery of Responsiveness Test Server instances.
 # Acknowledgments
 
 Special thanks go to Jeroen Schickendantz for his tireless
-enthousiasm around the project and his contributions to this I-D and the development
+enthusiasm around the project and his contributions to this I-D and the development
 of the Go responsiveness measurement tool.
 We would also like to thank Rich Brown for his editorial pass over this I-D.
-We also thank Erik Auerswald, Matt Matthis and Omer Shapira for their constructive feedback on the I-D.
+We also thank Erik Auerswald, Matt and Omer Shapira for their constructive feedback on the I-D.
 
 --- back
 
