@@ -1,0 +1,44 @@
+name: build_ietf_artifacts
+on:
+  workflow_call:
+    inputs:
+      spec_filename:
+        description: 'Name of the file containing the spec (in markdown format, with no extension).'
+        required: true
+        type: string
+jobs:
+  build:
+    runs-on: macOS-13
+    steps:
+      - run: echo "TMPDIR=${TMPDIR}" >> $GITHUB_ENV
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+      - run: gem install kramdown-rfc2629
+      - run: pip install xml2rfc
+      - run: brew install enscript
+      - uses: actions/checkout@v2.3.4 
+      - run: kramdown-rfc2629 ${{ inputs.spec_filename }}.md > ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.xml
+      - run: xml2rfc ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.xml > ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.txt
+      - run: xml2rfc --html ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.xml > ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.html
+      - run: enscript -B -o ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.ps ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.txt
+      - run: pstopdf ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.ps
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Publication
+          path: ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.xml
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Publication
+          path: ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Publication
+          path: ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.pdf
+      - uses: actions/upload-artifact@v3
+        with:
+          name: Publication
+          path: ${{ env.TMPDIR }}/${{ inputs.spec_filename }}.html

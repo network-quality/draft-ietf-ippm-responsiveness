@@ -1,0 +1,7 @@
+name: Publish
+on: [workflow_dispatch]
+jobs:
+  publish:
+    uses: ./.github/workflows/publish.yml
+    with:
+      spec_filename: 'draft-ietf-ippm-responsiveness'
