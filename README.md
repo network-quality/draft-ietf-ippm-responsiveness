@@ -22,8 +22,9 @@ Install with `pip install xml2rfc`
 * **enscript** - Convert a text file to a Postscript file.
 Install with `brew install enscript`
 
-* **ps2pdf** - Convert a Postscript file to a PDF file.
-(May be preinstalled on macOS)
+* **pstopdf** - Convert a Postscript file to a PDF file.
+(May be preinstalled on macOS) If you are building on a non-macOS machine,
+`ps2pdf` is a drop-in replacement.
 
 * **markdownlint-cli** - Run a 'lint' process over the Markdown file
 Install with `brew install markdownlint-cli`

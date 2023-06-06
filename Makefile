@@ -22,6 +22,7 @@ all: $(drafts)
 %.pdf: %.txt
 	@echo "Converting TXT to PDF"
 	enscript -B -o $(patsubst %.txt,%.ps,$<) $<
+# Note: You may need to change to ps2pdf if you are using a non-macOS machine.
 	pstopdf $(patsubst %.txt,%.ps,$<)
 
 test: all
