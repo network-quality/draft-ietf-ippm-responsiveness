@@ -542,10 +542,10 @@ the steps of the algorithm are:
 
 - Create a load-generating connection.
 - At each interval:
-  - Create an additional load-generating connection.
   - If goodput has not saturated:
     - Compute the moving average aggregate goodput at interval i as current_average.
     - If the standard deviation of the past MAD average goodput values is less than SDT of the current_average, declare saturation and move on to probe responsiveness.
+    - Otherwise, create a load-generating connection.
   - If goodput has saturated:
     - Compute the responsiveness at interval i as current_responsiveness.
     - If the standard deviation of the past MAD responsiveness values is less than SDT of the current_responsiveness, declare saturation and report current_responsiveness.
