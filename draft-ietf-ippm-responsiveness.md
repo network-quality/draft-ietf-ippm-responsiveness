@@ -63,6 +63,7 @@ informative:
     seriesinfo: Internet Engineering Task Force
   RFC0793:
   RFC1034:
+  RFC5785:
   RFC6335:
   RFC6762:
   RFC6763:
@@ -170,7 +171,7 @@ the difficulty of attaining appropriate measurement conditions,
 diurnal traffic patterns,
 and changing routes.
 
-In order to minimize the effects of these challenges, 
+In order to minimize the effects of these challenges,
 it's best to keep the test duration relatively short.
 
 TCP and UDP traffic, or traffic on ports 80 and 443, may take
@@ -178,7 +179,7 @@ significantly different paths over the network between source and destination
 and be subject to entirely different Quality of Service (QoS) treatment.
 A good test will use standard transport-layer traffic -- typical
 for people's use of the network --
-that is subject to the transport layer's congestion control algorithms 
+that is subject to the transport layer's congestion control algorithms
 that might reduce the traffic's rate and thus its buffering in the network.
 
 Traditionally, one thinks of bufferbloat happening in the network, i.e., on
@@ -290,7 +291,7 @@ measuring endpoints is utilized at its end-to-end capacity and the queue at the 
 is at (or beyond) its maximum occupancy. Under these conditions, the network connection's responsiveness
 will be at its worst.
 
-The Responsiveness Test algorithm for reaching working conditions combines 
+The Responsiveness Test algorithm for reaching working conditions combines
 multiple standard HTTP transactions with very large data objects according to realistic traffic patterns
 to create these conditions.
 
@@ -323,7 +324,7 @@ bottleneck's buffer to achieve maximum working conditions.
 
 Even if a single TCP connection would be able to fill the bottleneck's buffer,
 it may take some time for a single TCP connection to ramp
-up to full speed. One of the goals of the Responsiveness Test is to help the user 
+up to full speed. One of the goals of the Responsiveness Test is to help the user
 quickly measure their network. As a result, the test must load the network, take its measurements, and then finish
 as fast as possible.
 
@@ -754,7 +755,7 @@ for the latency measurements.
 
 It makes sense for a service provider (either an application service provider like a video conferencing service
 or a network access provider like an ISP) to host Responsiveness Test Server instances on their
-network so customers can determine what to expect about the quality of their connection to 
+network so customers can determine what to expect about the quality of their connection to
 the service offered by that provider.
 However, when a user performs a Responsiveness Test and determines
 that they are suffering from poor responsiveness during the connection to that service,
@@ -785,7 +786,7 @@ or somewhere outside the home.
 ## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
 
 Any organization that wishes to host their own instance of a Responsiveness Test Server can advertise that capability
-by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the 
+by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the
 following criteria:
 
 ~~~
@@ -823,7 +824,7 @@ wishing to host their own instances of the Test Server MAY advertise their avail
 DNS-Based Service Discovery {{RFC6763}} using conventional, unicast DNS {{RFC1034}} or multicast DNS {{RFC6762}}
 on the organization network's local link(s).
 
-The Responsiveness Test Service instances should advertise using the service type {{RFC6335}} 
+The Responsiveness Test Service instances should advertise using the service type {{RFC6335}}
 "_nq._tcp".  Population of the appropriate DNS zone with the
 relevant unicast discovery records can be performed
 automatically using a Discovery Proxy {{RFC8766}},
@@ -854,9 +855,26 @@ TBD
 
 # IANA Considerations
 
-IANA has been requested to record the service type
-“_nq._tcp” (Network Quality)
-for advertising and discovery of Responsiveness Test Server instances.
+## Well-Known URI
+
+This specification registers the "nq" well-known URI in the
+"Well-Known URIs" registry as defined by [RFC5785].
+
+URI suffix: nq
+
+
+## Service Name
+
+IANA has added the following value to the "Service Name and Transport
+Protocol Port Number Registry" in the System Range.  The registry for
+that range requires IETF Review or IESG Approval [RFC6335].
+
+Service Name: nq
+Transport Protocol: TCP
+Assignee: {{{Stuart Cheshire}}}
+Contact: {{{Stuart Cheshire}}}
+Description: Network Quality test server endpoint
+
 
 # Acknowledgments
 
