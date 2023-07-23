@@ -188,11 +188,11 @@ the same way as in-network bufferbloat.
 
 Finally, it is crucial to recognize that significant
 queueing only happens on entry to the lowest-capacity
-(or “bottleneck”) hop on a network path.
+(or "bottleneck") hop on a network path.
 For any flow of data between two endpoints
 there is always one hop along the path where the capacity
 available to that flow at that hop is the lowest among
-all the hops of that flow’s path at that moment in time.
+all the hops of that flow's path at that moment in time.
 It is important to understand that the existence of a
 lowest-capacity hop on a network path and a buffer to smooth bursts
 of data is not itself a problem.
@@ -201,9 +201,9 @@ inevitable that there must necessarily be some hop
 along the path with the lowest capacity for that path.
 If that hop were to be improved, then some other hop would
 become the new lowest-capacity hop for that path.
-In this context a “bottleneck” should not be seen as a problem to
-be fixed, because any attempt to “fix” the bottleneck is futile --
-such a “fix” can never remove the existence of a bottleneck
+In this context a "bottleneck" should not be seen as a problem to
+be fixed, because any attempt to "fix" the bottleneck is futile --
+such a "fix" can never remove the existence of a bottleneck
 on a path; it just moves the bottleneck somewhere else.
 Arguably, this heterogeneity of the Internet is one of its greatest strengths.
 Allowing individual technologies to evolve and improve at their
@@ -218,19 +218,19 @@ Gb/s home Internet service and Gb/s wireless connectivity today.
 Note that in a shared datagram network, conditions do not remain static.
 The hop that is the current bottleneck may change from moment to moment.
 For example, changes in simultaneous traffic may result in changes
-to a flow’s share of a given hop. A user moving around
+to a flow's share of a given hop. A user moving around
 may cause the Wi-Fi transmission rate to vary widely,
 from a few Mb/s when far from the Access Point,
 all the way up to Gb/s or more when close to the Access Point.
 
-Consequently, if we wish to enjoy the benefits of the Internet’s great
+Consequently, if we wish to enjoy the benefits of the Internet's great
 flexibility, we need software that embraces and celebrates this
 diversity and adapts intelligently to the varying conditions it encounters.
 
 Because significant queueing only happens on entry to the bottleneck
 hop, the queue management at this critical hop of the path almost
 entirely determines the responsiveness of the entire flow.
-If the bottleneck hop’s queue management algorithm allows an
+If the bottleneck hop's queue management algorithm allows an
 excessively large queue to form, this results in excessively large
 delays for packets sitting in that queue awaiting transmission,
 significantly degrading overall user experience.
@@ -295,7 +295,7 @@ This allows to create a stable state of working conditions during which the
 bottleneck of the path between client and server has its buffer filled
 up entirely, without generating DoS-like traffic
 patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
-representative of what a typical user’s network experiences in normal operation.
+representative of what a typical user's network experiences in normal operation.
 
 Finally, as end-user usage of the network evolves to newer protocols and congestion
 control algorithms, it is important that the working conditions also can evolve
@@ -424,7 +424,7 @@ There are two types of probe requests:
 
 1. An HTTP GET request on a separate connection ("foreign probes").
    This test mimics the time it takes for a web browser to connect to a new
-   web server and request the first element of a web page (e.g., “index.html”),
+   web server and request the first element of a web page (e.g., "index.html"),
    or the startup time for a video streaming client to launch and begin fetching media.
 
 
@@ -677,7 +677,7 @@ probing connections in the same way.
 
 The responsiveness measurement is built upon a foundation of standard protocols:
 IP, TCP, TLS, HTTP/2.
-On top of this foundation, a minimal amount of new “protocol” is defined,
+On top of this foundation, a minimal amount of new "protocol" is defined,
 merely specifying the URLs that used for GET and PUT in the process of
 executing the test.
 
@@ -757,11 +757,11 @@ However, when a user performs a Responsiveness Test and determines
 that they are suffering from poor responsiveness during the connection to that service,
 the logical next questions might be,
 
-1. "What’s causing my poor performance?"
+1. "What's causing my poor performance?"
 1. "Is it poor buffer management by my ISP?"
 1. "Is it poor buffer management in my home Wi-Fi Access point?"
 1. "Something to do with the service provider?"
-1. "Something else entirely?”
+1. "Something else entirely?"
 
 To help an end user answer these questions, it will be useful for test clients
 to be able to easily discover Responsiveness Test Server instances running in various
@@ -870,7 +870,6 @@ Transport Protocol: TCP
 Assignee: {{{Stuart Cheshire}}}
 Contact: {{{Stuart Cheshire}}}
 Description: Network Quality test server endpoint
-
 
 # Acknowledgments
 
