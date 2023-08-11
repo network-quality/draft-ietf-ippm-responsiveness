@@ -425,13 +425,13 @@ It requires a sufficiently large sample-size to have confidence in the results.
 The measurement of the responsiveness happens by sending probe-requests.
 There are two types of probe requests:
 
-1. A HTTP GET request on a separate connection ("foreign probes").
+1. An HTTP GET request on a separate connection ("foreign probes").
    This test mimics the time it takes for a web browser to connect to a new
    web server and request the first element of a web page (e.g., “index.html”),
    or the startup time for a video streaming client to launch and begin fetching media.
 
 
-2. A HTTP GET request multiplexed on the load-generating connections ("self probes").
+2. An HTTP GET request multiplexed on the load-generating connections ("self probes").
    This test mimics the time it takes for a video streaming client
    to skip ahead to a different chapter in the same video stream,
    or for a navigation client to react and fetch new map tiles
