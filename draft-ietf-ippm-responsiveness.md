@@ -56,11 +56,6 @@ informative:
      - ins: K. Nichols
     title: "Bufferbloat: Dark Buffers in the Internet"
     seriesinfo: Communications of the ACM, Volume 55, Number 1 (2012)
-  draft-ietf-tcpm-rfc793bis:
-    author:
-     - ins: W. Eddy
-    title: "Transmission Control Protocol (TCP) Specification"
-    seriesinfo: Internet Engineering Task Force
   RFC0793:
   RFC1034:
   RFC6335:
@@ -71,6 +66,7 @@ informative:
   RFC8290:
   RFC8033:
   RFC8259:
+  RFC9293:
   RFC9330:
 
 --- abstract
@@ -616,7 +612,7 @@ layers below the transport stack (e.g., NIC firmware).
 
 Each of these queue build-ups may cause latency and thus low responsiveness.
 A well designed networking stack would ensure that queue-buildup in the TCP layer
-is kept at a bare minimum with solutions like TCP_NOTSENT_LOWAT {{draft-ietf-tcpm-rfc793bis}}.
+is kept at a bare minimum with solutions like TCP_NOTSENT_LOWAT {{RFC9293}}.
 At the HTTP/2 layer it is important that the load-generating data is not interfering
 with the latency-measuring probes. For example, the different streams should not
 be stacked one after the other but rather be allowed to be multiplexed for
