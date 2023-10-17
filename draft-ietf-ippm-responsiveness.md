@@ -246,8 +246,8 @@ A poorly managed bottleneck queue will not.
 
 # Goals
 
-The algorithm described here defines a Responsiveness Test that serves as a good
-proxy for user experience. Therefore:
+The algorithm described here defines the Responsiveness Test that serves as a means of
+quantifying user experience of latency in their network connection. Therefore:
 
 1. Because today's Internet traffic primarily uses HTTP/2 over TLS, the test's
 algorithm should use that protocol.
@@ -331,10 +331,10 @@ queueing within the network, making it harder to determine the
 depth of the bottleneck queue reliably.
 
 The purpose of the Responsiveness Test is not to productively move data
-across the network in a useful way, the way a normal application does.
-The purpose of the Responsiveness Test is, as quickly as possible, to simulate
+across the network, the way a normal application does.
+The purpose of the Responsiveness Test is to, as quickly as possible, simulate
 a representative traffic load as if real applications were doing
-sustained data transfers, measure the resulting round-trip time
+sustained data transfers and measure the resulting round-trip time
 occurring under those realistic conditions.
 Because of this, using multiple simultaneous parallel connections
 allows the Responsiveness Test to complete its task more quickly, in a way that
@@ -342,8 +342,8 @@ overall is less disruptive and less wasteful of network capacity
 than a test using a single TCP connection that would take longer
 to bring the bottleneck hop to a stable saturated state.
 
-In this document, we impose an upper bound on the number of parallel load-generating
-connections to 16.
+One of the configuration parameters for the test is an upper bound on the number of parallel load-generating
+connections. We recommend a default value for this parameter of 16.
 
 
 ### Parallel vs Sequential Uplink and Downlink
@@ -399,10 +399,11 @@ are entirely full and reach stability of the responsiveness as well.
 
 ## Test parameters
 
-A number of parameters serve as input to the test methodology. The following lists
-their acronyms and default values. Hereafter the detailed description of the
-methodology will explain how these parameters are being used. Experience has shown
-that these parameters allow for a low runtime and accurate results among a wide range of environments.
+A number of parameters can be used to configure the test methodology. The following list
+contains the names of those parameters and their default values. The detailed description of the
+methodology that follows will explain how these parameters are being used. Experience has shown
+that the default values for these parameters allow for a low runtime for the test and produce
+accurate results in a wide range of environments.
 
 | Name | Explanation | Default Value |
 | ---- | ----------- | ------------- |
@@ -416,28 +417,28 @@ that these parameters allow for a low runtime and accurate results among a wide 
 
 ## Measuring Responsiveness
 
-Measuring responsiveness while achieving working conditions is a process of continuous measurement.
-It requires a sufficiently large sample-size to have confidence in the results.
+Measuring responsiveness while achieving working conditions is an iterative process.
+Moreover, it requires a sufficiently large sample of measurements to have confidence in the results.
 
 The measurement of the responsiveness happens by sending probe-requests.
 There are two types of probe requests:
 
-1. An HTTP GET request on a separate connection ("foreign probes").
-   This test mimics the time it takes for a web browser to connect to a new
+1. An HTTP GET request on a connection separate from the load-generating connections ("foreign probes").
+   This probe type mimics the time it takes for a web browser to connect to a new
    web server and request the first element of a web page (e.g., "index.html"),
    or the startup time for a video streaming client to launch and begin fetching media.
 
 
 2. An HTTP GET request multiplexed on the load-generating connections ("self probes").
-   This test mimics the time it takes for a video streaming client
+   This probe type mimics the time it takes for a video streaming client
    to skip ahead to a different chapter in the same video stream,
-   or for a navigation client to react and fetch new map tiles
+   or for a navigation mapping application to react and fetch new map tiles
    when the user scrolls the map to view a different area.
-   In a well functioning system fetching new data
+   In a well functioning system, fetching new data
    over an existing connection should take less time than
    creating a brand new TLS connection from scratch to do the same thing.
 
-Foreign probes will provide 3 sets of data-points. First, the duration of the TCP-handshake
+Foreign probes will provide three (3) sets of data-points: First, the duration of the TCP-handshake
 (noted hereafter as `tcp_f`).
 Second, the TLS round-trip-time (noted `tls_f`). For this, it is important to note that different TLS versions
 have a different number of round-trips. Thus, the TLS establishment time needs to be
@@ -445,8 +446,8 @@ normalized to the number of round-trips the TLS handshake takes until the connec
 is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
 request for a 1-byte object and receiving the entire response (noted `http_f`).
 
-Self probes will provide a single data-point for the duration of time between
-when the HTTP GET request for the 1-byte object is issued on the load-generating connection and the
+Self probes will provide a single data-point that measures the duration of time between
+when the HTTP GET request for the 1-byte object is issued on the load-generating connection and when the
 full HTTP response has been received (noted `http_s`).
 
 `tcp_f`, `tls_f`, `http_f` and `http_s` are all measured in milliseconds.
@@ -455,43 +456,42 @@ The more probes that are sent, the more data available for calculation. In order
 as much data as possible, the Responsiveness Test specifies that a client issue these probes regularly.
 There is, however, a risk that on low-capacity networks the responsiveness probes
 themselves will consume a significant amount of the capacity. Because the test mandates
-first saturating capacity before probing for responsiveness, we are able to
-accurately estimate how much of the capacity the responsiveness probes will consume and never
+first saturating capacity before starting to probe for responsiveness, the test will have an
+accurate estimate of how much of the capacity the responsiveness probes will consume and never
 send more probes than the network can handle.
 
 Limiting the data used by probes can be done by providing an estimate of the number of bytes exchanged for a
-responsiveness probe. Taking TCP and TLS overheads into account, we can estimate
-the amount of data exchanged for a probe on a foreign connection to be around 5000 bytes.
-On load-generating connections we can expect an overhead of no more than 1000 bytes.
+each of the probe types. Taking TCP and TLS overheads into account, we can estimate
+the amount of data exchanged for a foreign probe to be around 5000 bytes.
+For self probes we can expect an overhead of no more than 1000 bytes.
 
-Given this information, we recommend that each responsiveness probing interval does
-not send more than MPS (Maximum responsiveness Probes per Second - default to 100) probes per second.
-The probes should be spread out equally over the duration of the interval with an
-equal split between foreign and different load-generating connections. For the probes on
-load-generating connections, the connection should be selected randomly for each probe.
+Given this information, we recommend that a test client does
+not send more than `MPS` (Maximum responsiveness Probes per Second - default to 100) probes per `ID`.
+The probes should be spread out equally over the duration of the interval. The test client
+should uniformly and randomly select from the active load-generating connections on which to send self probes.
 
-This would result in a total amount of data per second of 300 KB or 2400Kb, meaning
+According to the default parameter values, the probes will consume 300 KB (or 2400Kb) of data per second, meaning
 a total capacity utilization of 2400 Kbps for the probing.
 
-On high-speed networks, this will provide a significant amount of samples, while at
+On high-speed networks, these default parameter values will provide a significant amount of samples, while at
 the same time minimizing the probing overhead.
 However, on severely capacity-constrained networks the probing traffic could consume
 a significant portion of the available capacity. The Responsiveness Test must
 adjust its probing frequency in such a way that the probing traffic does not consume
-more than PTC (Percentage of Total Capacity - default to 5%) of the available capacity.
+more than `PTC` (Percentage of Total Capacity - default to 5%) of the available capacity.
 
 ### Aggregating the Measurements
 
 The algorithm produces sets of 4 times for each probe, namely:
-tcp_f, tls_f, http_f, http_l (from the previous section).
-The responsiveness evolves over time as buffers gradually reach saturation. Once
-the buffers are saturated responsiveness is stable over time. Thus, the aggregation
-of the measurements considers the last MAD (Moving Average Distance - default to 4) intervals worth of completed responsiveness probes.
+`tcp_f`, `tls_f`, `http_f`, `http_l` (from the previous section).
+The responsiveness of the network connection being tested evolves over time as buffers gradually reach saturation. Once
+the buffers are saturated, responsiveness will stabilize. Thus, the final calculation of network responsiveness
+considers the last MAD (Moving Average Distance - default to 4) intervals worth of completed responsiveness probes.
 
-Over the timeframe of these intervals a potentially large number of samples has been collected.
+Over that period of time, a large number of samples will have been collected.
 These may be affected by noise in the measurements, and outliers. Thus, to aggregate these
-we suggest to use a trimmed mean at the TMP (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
-TM(tcp_f), TM(tls_f), TM(http_f), TM(http_l).
+we suggest using a trimmed mean at the `TMP` (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
+`TM(tcp_f)`, `TM(tls_f)`, `TM(http_f)`, `TM(http_l)`.
 
 The responsiveness is then calculated as the weighted mean:
 
@@ -505,19 +505,20 @@ This responsiveness value presents round-trips per minute (RPM).
 
 ## Final Algorithm
 
-Considering the previous two sections, where we explain what the meaning of
-working conditions is and the definition of responsiveness, we can design the
-final algorithm. In order to measure the worst-case latency we need to transmit
+Considering the previous two sections, where we explained the meaning of
+working conditions and the definition of responsiveness, we can now describe
+the design of final algorithm. In order to measure the worst-case latency, we need to transmit
 traffic at the full capacity of the path as well as ensure the buffers are filled
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
-in a ID (Interval duration - default to 1 second) interval. This will ensure that we quickly reach capacity and full
+in an ID (Interval duration - default to 1 second) interval. This technique ensures that we quickly reach full capacity full
 buffer occupancy. First, the algorithm reaches stability for the goodput. Once
-goodput stability has been achieved, responsiveness probes are being transmitted
+goodput stability has been achieved, responsiveness probes will be transmitted
 until responsiveness stability is reached.
 
-We consider both, goodput and responsiveness to be stable, when the standard deviation
-of the past MAD intervals is within SDT (Standard Deviation Tolerance - default to 5%) of the last of the moving averages.
+We consider both goodput and responsiveness to be stable when the standard deviation
+of the moving averages of the responsiveness calculated in the most-recent MAD intervals is within SDT 
+(Standard Deviation Tolerance - default to 5%) of the moving average calculated in the most-recent ID.
 
 The following algorithm reaches working conditions of a network
 by using HTTP/2 upload (POST) or download (GET) requests of infinitely large
@@ -529,10 +530,10 @@ the interval is defined as one second.
 
 Where
 
-- i: The index of the current interval. The variable i is initialized to 0 when the algorithm begins and
+- `i`: The index of the current interval. The variable `i` is initialized to `0` when the algorithm begins and
   increases by one for each interval.
 - moving average aggregate goodput at interval p: The number of total bytes of data transferred within
-  interval p and the MAD - 1 immediately preceding intervals, divided by MAD times the interval duration.
+  interval `p` and the `MAD - 1` immediately preceding intervals, divided by `MAD` times `ID`.
 
 
 the steps of the algorithm are:
@@ -541,11 +542,12 @@ the steps of the algorithm are:
 - At each interval:
   - Create an additional load-generating connection.
   - If goodput has not saturated:
-    - Compute the moving average aggregate goodput at interval i as current_average.
-    - If the standard deviation of the past MAD average goodput values is less than SDT of the current_average, declare saturation and move on to probe responsiveness.
-  - If goodput has saturated:
-    - Compute the responsiveness at interval i as current_responsiveness.
-    - If the standard deviation of the past MAD responsiveness values is less than SDT of the current_responsiveness, declare saturation and report current_responsiveness.
+    - Compute the moving average aggregate goodput at interval `i` as `current_average`.
+    - If the standard deviation of the past `MAD` average goodput values is less than SDT of the `current_average`, declare goodput saturation and move on to probe responsiveness.
+  - If goodput saturation has been declared:
+    - Compute the responsiveness at interval `i` as `current_responsiveness`.
+    - If the standard deviation of the past MAD responsiveness values is less than SDT of the `current_responsiveness`, declare responsiveness saturation and report `current_responsiveness`
+    as the final test result.
 
 In {{goals}}, it is mentioned that one of the goals is that the test finishes within
 20 seconds. It is left to the implementation what to do when stability is not reached
