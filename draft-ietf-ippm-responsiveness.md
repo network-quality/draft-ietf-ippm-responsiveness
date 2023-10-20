@@ -58,6 +58,8 @@ informative:
     seriesinfo: Communications of the ACM, Volume 55, Number 1 (2012)
   RFC0793:
   RFC1034:
+  RFC4656:
+  RFC5357:
   RFC5785:
   RFC6335:
   RFC6762:
@@ -849,7 +851,12 @@ host on port 443 at the .well-known/nq well-known URI to begin the test.
 
 # Security Considerations
 
-TBD
+The security considerations that apply to any Active
+Measurement of live paths are relevant here. See [RFC4656] and [RFC5357].
+
+If server-side resources are a concern, a server can choose to not reply or delay
+its response to the initial request for the configuration information through the
+.well-known URL.
 
 # IANA Considerations
 
