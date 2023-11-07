@@ -519,7 +519,7 @@ goodput stability has been achieved, responsiveness probes will be transmitted
 until responsiveness stability is reached.
 
 We consider both goodput and responsiveness to be stable when the standard deviation
-of the moving averages of the responsiveness calculated in the most-recent MAD intervals is within SDT 
+of the moving averages of the responsiveness calculated in the most-recent MAD intervals is within SDT
 (Standard Deviation Tolerance - default to 5%) of the moving average calculated in the most-recent ID.
 
 The following algorithm reaches working conditions of a network
@@ -721,23 +721,23 @@ require the test to run for much longer to deliver the same results.
 The server MUST respond to 4 URLs:
 
 1. A "small" URL/response:
-The server must respond with a status code of 200 and 1 byte in the body.
+The server must respond with a status code of 200 and 1 byte of content.
 The actual message content is irrelevant.
 The server SHOULD specify the content-type as application/octet-stream.
 The server SHOULD minimize the size, in bytes, of the response fields that are encoded and sent on the wire.
 
 2. A "large" URL/response:
-The server must respond with a status code of 200 and a body size of at least 8GB.
+The server must respond with a status code of 200 and content size of at least 8GB.
 The server SHOULD specify the content-type as application/octet-stream.
-The body can be bigger, and may need to grow as network speeds increases over time.
+The content can be larger, and may need to grow as network speeds increases over time.
 The actual message content is irrelevant.
 The client will probably never completely download the object,
 but will instead close the connection after reaching working condition
 and making its measurements.
 
 3. An "upload" URL/response:
-The server must handle a POST request with an arbitrary body size.
-The server should discard the payload.
+The server must handle a POST request with an arbitrary content size.
+The server should discard the content.
 The actual POST message content is irrelevant.
 The client will probably never completely upload the object,
 but will instead close the connection after reaching working condition
