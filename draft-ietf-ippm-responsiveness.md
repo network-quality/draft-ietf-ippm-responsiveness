@@ -723,12 +723,12 @@ The server MUST respond to 4 URLs:
 1. A "small" URL/response:
 The server must respond with a status code of 200 (OK) and 1 byte of content.
 The actual message content is irrelevant.
-The server SHOULD specify the content-type as application/octet-stream.
+The server SHOULD specify the Content-Type header field with the media type "application/octet-stream".
 The server SHOULD minimize the size, in bytes, of the response fields that are encoded and sent on the wire.
 
 2. A "large" URL/response:
 The server must respond with a status code of 200 (OK) and content size of at least 8GB.
-The server SHOULD specify the content-type as application/octet-stream.
+The server SHOULD specify the Content-Type header field with the media type "application/octet-stream".
 The content can be larger, and may need to grow as network speeds increases over time.
 The actual message content is irrelevant.
 The client will probably never completely download the object,
