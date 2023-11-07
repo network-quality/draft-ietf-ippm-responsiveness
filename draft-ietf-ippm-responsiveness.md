@@ -682,14 +682,14 @@ probing connections in the same way.
 The responsiveness measurement is built upon a foundation of standard protocols:
 IP, TCP, TLS, HTTP/2.
 On top of this foundation, a minimal amount of new "protocol" is defined,
-merely specifying the URLs that used for GET and PUT in the process of
+merely specifying the URLs that used for GET and POST in the process of
 executing the test.
 
 Both the client and the server MUST support HTTP/2 over TLS.
-The client MUST be able to send a GET request and a POST.
+The client MUST be able to send a request with a GET or POST method.
 The server MUST be able to respond to both of these
 HTTP commands.
-The server MUST have the ability to provide content upon a GET request.
+The server MUST have the ability to respond to a GET request with content.
 The server MUST use a packet scheduling algorithm that minimizes internal queueing
 to avoid affecting the client's measurement.
 
