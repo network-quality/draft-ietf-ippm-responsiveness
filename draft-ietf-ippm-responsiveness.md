@@ -93,7 +93,7 @@ have solved the problem.
 
 Our network connections continue to suffer from an unacceptable amount
 of latency, not for a lack of technical solutions, but rather a lack of awareness
-of the problem and deployment of its solutions. 
+of the problem and deployment of its solutions.
 We believe that creating a tool that measures the problem and matches people's
 everyday experience will create the necessary awareness,
 and result in a demand for solutions.
@@ -406,6 +406,17 @@ At this point, adding more connections will allow to achieve full buffer occupan
 Responsiveness will gradually decrease from now on, until the buffers
 are entirely full and reach stability of the responsiveness as well.
 
+### Avoiding Test Hardware Bottlenecks
+
+The Responsiveness Test could be run from various devices which are either consumer devices
+or internet infrastructure such as routers. Many routers are cost-sensitive embedded devices
+optimised for switching packets rather than terminating TLS connections at line rate. As a
+result, they may not have sufficient processing power or memory bandwidth to saturate a
+bottleneck link in order to be a useful test client for the responsiveness test.
+
+In order to measure responsiveness from these devices, the test can be conducted without TLS
+over plain HTTP. Whenever possible, it is preferred to test using TLS to resemble typical
+internet traffic to the maximum extent.
 
 ## Test parameters
 
@@ -453,12 +464,15 @@ Foreign probes will provide three (3) sets of data-points: First, the duration o
 Second, the TLS round-trip-time (noted `tls_f`). For this, it is important to note that different TLS versions
 have a different number of round-trips. Thus, the TLS establishment time needs to be
 normalized to the number of round-trips the TLS handshake takes until the connection
-is ready to transmit data. And third, the HTTP elapsed time between issuing the GET
+is ready to transmit data. In the case that TLS is not being used, it is undefined.
+And third, the HTTP elapsed time between issuing the GET
 request for a 1-byte object and receiving the entire response (noted `http_f`).
 
 Self probes will provide a single data-point that measures the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and when the
-full HTTP response has been received (noted `http_s`).
+full HTTP response has been received (noted `http_s`). For cases where multiplexing GET requests into
+the load generation connections is not possible (e.g. due to only HTTP/1.1 being available), the TCP
+stack estimated round-trip-time can be used as a proxy or substitute value.
 
 `tcp_f`, `tls_f`, `http_f` and `http_s` are all measured in milliseconds.
 
@@ -492,6 +506,8 @@ more than `PTC` (Percentage of Total Capacity - default to 5%) of the available 
 
 ### Aggregating the Measurements
 
+#### For the TLS-Enabled Case
+
 The algorithm produces sets of 4 times for each probe, namely:
 `tcp_f`, `tls_f`, `http_f`, `http_l` (from the previous section).
 The responsiveness of the network connection being tested evolves over time as buffers gradually reach saturation. Once
@@ -511,6 +527,20 @@ Responsiveness = 60000 /
 ~~~
 
 This responsiveness value presents round-trips per minute (RPM).
+
+#### For the TCP-Only Case
+
+If there are no TLS connections being used, then the notion of a normalised round-trip time for the TLS handshake does not apply.
+Zeroes cannot be substituted for `tls_f`, as that will result in an artificially low responsiveness value.
+Instead, the same principle of giving each contribution to the foreign RTT equal weight, and then giving the foreign and self RTTs
+equal weights is applied.
+
+The TCP-only responsiveness is therefore calculated as the weighted mean:
+
+~~~
+Responsiveness = 60000 /
+(1/4*(TM(tcp_f) + TM(http_f)) + 1/2*TM(http_s))
+~~~
 
 
 ## Final Algorithm
