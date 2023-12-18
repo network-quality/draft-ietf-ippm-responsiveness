@@ -164,7 +164,7 @@ Finally, we abbreviate the unit to "RPM", a wink to the
 This document defines an algorithm for the "Responsiveness Test"
 that explicitly measures responsiveness under working conditions.
 
-This document imports terminology and concepts from {{HTTP}}, such as requests
+This document imports terminology and concepts from {{RFC9110}}, such as requests
 and response header fields and content.
 
 # Design Constraints
