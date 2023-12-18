@@ -1,1 +1,6 @@
 .refcache/
+*.html
+*.txt
+*.ps
+*.pdf
+*.xml
