@@ -91,8 +91,9 @@ However, there is no technical reason for this to be the case.
 In fact, various queue management solutions
 have solved the problem.
 
-Our networks remain unresponsive, not from a lack of technical solutions,
-but rather a lack of awareness of the problem and deployment of its solutions.
+Our network connections continue to suffer from an unacceptable amount
+of latency, not for a lack of technical solutions, but rather a lack of awareness
+of the problem and deployment of its solutions. 
 We believe that creating a tool that measures the problem and matches people's
 everyday experience will create the necessary awareness,
 and result in a demand for solutions.
