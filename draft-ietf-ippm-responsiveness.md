@@ -712,7 +712,13 @@ Localizing the source of low responsiveness involves however a set of different
 tools and methodologies.
 
 Nevertheless, the Responsiveness Test allows to gain some insight into what the
-source of the latency is. The previous section described the elements that influence
+source of the latency is. To gain this insight, implementations of the responsiveness
+test are encouraged to have an optional verbose mode that exposes the inner workings
+of the algorithm. Specifically it is useful to expose TM(tcp_f), TM(tls_f), TM(http_f) and TM(http_l)
+to enable the root-causing analysis detailed hereafter.
+
+
+The previous section described the elements that influence
 the responsiveness. From there it became apparent that the latency measured
 on the load-generating connections and the latency measured on separate connections
 may be different due to the different elements.
