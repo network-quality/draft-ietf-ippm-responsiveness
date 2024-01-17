@@ -947,11 +947,10 @@ Description: Network Quality test server endpoint
 
 # Acknowledgments
 
-Special thanks go to Jeroen Schickendantz for his tireless
-enthusiasm around the project and his contributions to this I-D and the development
-of the Go responsiveness measurement tool.
-We would also like to thank Rich Brown for his editorial pass over this I-D.
-We also thank Erik Auerswald, Matt Mathis and Omer Shapira for their constructive feedback on the I-D.
+Special thanks go to Jeroen Schickendantz and Felix Gaudin for their
+enthusiasm around the project and the development
+of the Go responsiveness measurement tool and the librespeed implementation.
+We also thank Lucas Pardue, Sebastian Moeller, Rich Brown, Erik Auerswald, Matt Mathis and Omer Shapira for their constructive feedback on the I-D.
 
 --- back
 
