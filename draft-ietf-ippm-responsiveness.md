@@ -51,7 +51,6 @@ author:
 
 normative:
   RFC9110:
-    display: HTTP
 
 informative:
   Bufferbloat:
@@ -60,6 +59,13 @@ informative:
      - ins: K. Nichols
     title: "Bufferbloat: Dark Buffers in the Internet"
     seriesinfo: Communications of the ACM, Volume 55, Number 1 (2012)
+  Cake:
+    author:
+     - ins: T. Høiland-Jørgensen
+     - ins: D. Taht
+     - ins: J. Morton
+    title: "Piece of CAKE: A Comprehensive Queue Management Solution for Home Gateways"
+    seriesinfo: 2018 IEEE International Symposium on Local and Metropolitan Area Networks (LANMAN)
   RFC0793:
   RFC1034:
   RFC4656:
@@ -102,7 +108,7 @@ This document specifies the "Responsiveness Test" for measuring responsiveness.
 It uses common protocols and mechanisms to measure user
 experience specifically when the network is under working conditions.
 The measurement is expressed as "Round-trips Per Minute" (RPM)
-and should be included with throughput (up and down) and
+and should be included with goodput (up and down) and
 idle latency as critical indicators of network quality.
 
 --- middle
@@ -112,7 +118,7 @@ idle latency as critical indicators of network quality.
 For many years, a lack of responsiveness, variously called
 lag, latency, or bufferbloat, has been recognized
 as an unfortunate, but common, symptom in today's networks {{Bufferbloat}}.
-Solutions like fq_codel {{RFC8290}}, PIE {{RFC8033}} or L4S {{RFC9330}} have been standardized
+Solutions like fq_codel {{RFC8290}}, PIE {{RFC8033}}, Cake {{Cake}} or L4S {{RFC9330}} have been standardized
 and are to some extent widely implemented.
 Nevertheless, people still suffer from bufferbloat.
 
@@ -132,7 +138,7 @@ We believe that it is necessary to create a standardized way to
 measure and express responsiveness.
 
 Including the responsiveness-under-working-conditions test
-among other measurements of network quality (e.g., throughput
+among other measurements of network quality (e.g., goodput
 and idle latency) would raise awareness of the problem and
 establish the expectation among users that their network providers deploy
 solutions.
@@ -183,7 +189,9 @@ it's best to keep the test duration relatively short.
 TCP and UDP traffic, or traffic on ports 80 and 443, may take
 significantly different paths over the network between source and destination
 and be subject to entirely different Quality of Service (QoS) treatment.
-A good test will use standard transport-layer traffic -- typical
+The traditional delay measurement tools use ICMP, which may experience even
+more drastically different behavior than TCP or UDP.
+Thus, a good test will use standard transport-layer traffic -- typical
 for people's use of the network --
 that is subject to the transport layer's congestion control algorithms
 that might reduce the traffic's rate and thus its buffering in the network.
@@ -209,7 +217,7 @@ of data is not itself a problem.
 In a heterogeneous network like the Internet it is
 inevitable that there must necessarily be some hop
 along the path with the lowest capacity for that path.
-If that hop were to be improved, then some other hop would
+If that hop were to be improved by increasing its capacity, then some other hop would
 become the new lowest-capacity hop for that path.
 In this context a "bottleneck" should not be seen as a problem to
 be fixed, because any attempt to "fix" the bottleneck is futile --
@@ -274,7 +282,9 @@ the Responsiveness Test algorithm must take into account their effect on
 TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
 
 1. Because the goal of the test is to educate end users, the results should be expressed in an intuitive, nontechnical form
-and not commit the user to spend a significant amount of their time (we target 20 seconds).
+and not commit the user to spend a significant amount of their time (we target 20 seconds,
+but it is left to the implementation to chose a suitable time-limit and we recommend for
+any implementation to allow the user to configure the duration of the test).
 
 # Measuring Responsiveness Under Working Conditions
 
@@ -392,15 +402,15 @@ measuring the responsiveness until it, too, reaches saturation.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.
 
-The algorithm notes that throughput increases rapidly until TCP
+The algorithm notes that goodput increases rapidly until TCP
 connections complete their TCP slow-start phase.
-At that point, throughput eventually stalls,
+At that point, goodput eventually stalls,
 often due to receive window limitations, particularly in cases of
 high network bandwidth, high network round-trip time,
 low receive window size, or a combination of all three.
-The only means to further increase throughput is by
+The only means to further increase goodput is by
 adding more TCP connections to the pool of load-generating connections.
-If new connections leave the throughput the same,
+If new connections leave the goodput the same,
 full link utilization has been reached.
 At this point, adding more connections will allow to achieve full buffer occupancy.
 Responsiveness will gradually decrease from now on, until the buffers
@@ -484,7 +494,7 @@ first saturating capacity before starting to probe for responsiveness, the test 
 accurate estimate of how much of the capacity the responsiveness probes will consume and never
 send more probes than the network can handle.
 
-Limiting the data used by probes can be done by providing an estimate of the number of bytes exchanged for a
+Limiting the data used by probes can be done by providing an estimate of the number of bytes exchanged for
 each of the probe types. Taking TCP and TLS overheads into account, we can estimate
 the amount of data exchanged for a foreign probe to be around 5000 bytes.
 For self probes we can expect an overhead of no more than 1000 bytes.
@@ -516,7 +526,7 @@ considers the last MAD (Moving Average Distance - default to 4) intervals worth 
 
 Over that period of time, a large number of samples will have been collected.
 These may be affected by noise in the measurements, and outliers. Thus, to aggregate these
-we suggest using a trimmed mean at the `TMP` (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
+we suggest using a single sided trimmed mean at the `TMP` (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
 `TM(tcp_f)`, `TM(tls_f)`, `TM(http_f)`, `TM(http_l)`.
 
 The responsiveness is then calculated as the weighted mean:
@@ -547,7 +557,7 @@ Responsiveness = 60000 /
 
 Considering the previous two sections, where we explained the meaning of
 working conditions and the definition of responsiveness, we can now describe
-the design of final algorithm. In order to measure the worst-case latency, we need to transmit
+the design of the final algorithm. In order to measure the worst-case latency, we need to transmit
 traffic at the full capacity of the path as well as ensure the buffers are filled
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
@@ -607,10 +617,10 @@ As the different stages may or may not reach stability, we can define a "confide
 for the different metrics (capacity and responsiveness) the methodology was able to measure.
 
 We define "Low" confidence in the result if the algorithm was not even able to
-execute 4 iterations of the specific stage. Meaning, the moving average is
+execute MAD iterations of the specific stage. Meaning, the moving average is
 not taking the full window into account.
 
-We define "Medium" confidence if the algorithm was able to execute at least 4
+We define "Medium" confidence if the algorithm was able to execute at least MAD
 iterations, but did not reach stability based on standard deviation tolerance.
 
 We define "High" confidence if the algorithm was able to fully reach stability
@@ -632,7 +642,8 @@ By executing the test with regular HTTP requests a number of elements come into
 play that will influence the result. Contrary to more traditional measurement methods
 the responsiveness metric is not only influenced by the properties of the
 network but can significantly be influenced by the properties of the client
-and the server implementations. This section describes how the different
+and the server implementations. This is fully intentioinal as the properties of the
+client and the server implementations have a direct impact on the perceived responsiveness by the user. This section describes how the different
 elements influence responsiveness and how a user may differentiate them
 when debugging a network.
 
@@ -715,6 +726,22 @@ This is because all other bottlenecks in the network that may cause a queue buil
 will be affecting the load-generating connections as well as the separate latency
 probing connections in the same way.
 
+Beyond the difference in the latency of the load-generating connections and the
+separate connections another element can provide additional information. Namely
+testing against different servers located in different places along the path will
+allow to some extent to separate the network’s path in different segments. For
+example, if the cable modem and a further away ISP server are hosting
+responsiveness measurement endpoints, some localization of the issue can be done.
+If the RPM to the cable modem is very high, it means that the network segment
+from the client endpoint to the cable modem does not have responsiveness issues,
+thus allowing the user to conclude that possible responsiveness issues are
+beyond the cable modem.
+It must be noted though that due to the high level approach to the testing
+(including HTTP), a low responsiveness to the cable modem does not necessarily
+mean that the network between client and cable modem is the problem (as
+outlined in the above previous paragraphs).
+
+
 # Responsiveness Test Server API
 
 The responsiveness measurement is built upon a foundation of standard protocols:
@@ -725,19 +752,13 @@ executing the test.
 
 Both the client and the server MUST support HTTP/2 over TLS.
 The client MUST be able to send a request with a GET or POST method.
+The client MUST send the GET without the "Accept-Encoding" header to ensure the
+server will not compress the data.
 The server MUST be able to respond to both of these
 HTTP commands.
 The server MUST have the ability to respond to a GET request with content.
-The server MUST use a packet scheduling algorithm that minimizes internal queueing
+The server SHOULD use a packet scheduling algorithm that minimizes internal queueing
 to avoid affecting the client's measurement.
-
-As clients and servers become deployed that use L4S congestion control
-(e.g., TCP Prague with ECT(1) packet marking),
-for their normal traffic when it is available, and fall back
-to traditional loss-based congestion controls (e.g., Reno or CUBIC)
-otherwise, the same strategy SHOULD be used for Responsiveness Test traffic.
-This is RECOMMENDED so that the synthetic traffic generated
-by the Responsiveness Test mimics real-world traffic for that server.
 
 Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
 SHOULD NOT be used for Responsiveness Test traffic because they take
