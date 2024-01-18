@@ -525,7 +525,7 @@ considers the last MAD (Moving Average Distance - default to 4) intervals worth 
 
 Over that period of time, a large number of samples will have been collected.
 These may be affected by noise in the measurements, and outliers. Thus, to aggregate these
-we suggest using a single sided trimmed mean at the `TMP` (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
+we suggest using a single-sided trimmed mean at the `TMP` (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
 `TM(tcp_f)`, `TM(tls_f)`, `TM(http_f)`, `TM(http_l)`.
 
 The responsiveness is then calculated as the weighted mean:
@@ -715,9 +715,12 @@ tools and methodologies.
 Nevertheless, the Responsiveness Test allows to gain some insight into what the
 source of the latency is. To gain this insight, implementations of the responsiveness
 test are encouraged to have an optional verbose mode that exposes the inner workings
-of the algorithm. Specifically it is useful to expose TM(tcp_f), TM(tls_f), TM(http_f) and TM(http_l)
-to enable the root-causing analysis detailed hereafter.
-
+of the algorithm as well as statistics from the lower layers.
+The following is a non-exhaustive list of additional information that can be exposed
+in the verbose mode: Idle-latency (measured at the beginning from the initial connections),
+achieved capacity on load-generating connections,TM(tcp_f), TM(tls_f), TM(http_f) and TM(http_l)
+(and even their raw values), HTTP-protocol, transport protocol, congestion-control
+algorithm used on the client-side, ECN or L4S statistics, IP version, ... and many more.
 
 The previous section described the elements that influence
 the responsiveness. From there it became apparent that the latency measured
@@ -734,16 +737,16 @@ will be affecting the load-generating connections as well as the separate latenc
 probing connections in the same way.
 
 Beyond the difference in the latency of the load-generating connections and the
-separate connections another element can provide additional information. Namely
+separate connections, another element can provide additional information: Namely
 testing against different servers located in different places along the path will
-allow to some extent to separate the network’s path in different segments. For
-example, if the cable modem and a further away ISP server are hosting
+allow, to some extent, the opportunity to separate the network’s path in different segments. For
+example, if the cable modem and a more distant ISP server are hosting
 responsiveness measurement endpoints, some localization of the issue can be done.
 If the RPM to the cable modem is very high, it means that the network segment
 from the client endpoint to the cable modem does not have responsiveness issues,
 thus allowing the user to conclude that possible responsiveness issues are
 beyond the cable modem.
-It must be noted though that due to the high level approach to the testing
+It must be noted, though, that due to the high level approach to the testing
 (including HTTP), a low responsiveness to the cable modem does not necessarily
 mean that the network between client and cable modem is the problem (as
 outlined in the above previous paragraphs).
@@ -764,25 +767,6 @@ server will not compress the data.
 The server MUST be able to respond to both of these
 HTTP commands.
 The server MUST have the ability to respond to a GET request with content.
-The server SHOULD use a packet scheduling algorithm that minimizes internal queueing
-to avoid affecting the client's measurement.
-
-Delay-based congestion-control algorithms (e.g., Vegas, FAST, BBR)
-SHOULD NOT be used for Responsiveness Test traffic because they take
-much longer to discover the depth of the bottleneck buffers.
-Delay-based congestion-control algorithms seek to mitigate the
-effects of bufferbloat, by detecting and responding to early signs
-of increasing round-trip delay, and reducing the amount of data they
-have in flight before the bottleneck buffer fills up and overflows.
-In a world where bufferbloat is common, this is a pragmatic
-mitigation to allow software to work better in that environment.
-However, that approach does not fix the underlying problem of bufferbloat;
-it merely avoids it in some cases,
-and allows the problem in the network to persist.
-For a diagnostic tool made to identify symptoms of bufferbloat in the
-network so that they can be fixed, using a transport protocol explicitly
-designed to mask those symptoms would be a poor choice, and would
-require the test to run for much longer to deliver the same results.
 
 The server MUST respond to 4 URLs:
 
