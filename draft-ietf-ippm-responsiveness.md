@@ -282,8 +282,7 @@ the Responsiveness Test algorithm must take into account their effect on
 TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
 
 1. Because the goal of the test is to educate end users, the results should be expressed in an intuitive, nontechnical form
-and not commit the user to spend a significant amount of their time (we target 20 seconds,
-but it is left to the implementation to chose a suitable time-limit and we recommend for
+and not commit the user to spend a significant amount of their time (it is left to the implementation to chose a suitable time-limit and we recommend for
 any implementation to allow the user to configure the duration of the test).
 
 # Measuring Responsiveness Under Working Conditions
@@ -599,8 +598,9 @@ the steps of the algorithm are:
     - If the standard deviation of the past MAD responsiveness values is less than SDT of the `current_responsiveness`, declare responsiveness saturation and report `current_responsiveness`
     as the final test result.
 
-In {{goals}}, it is mentioned that one of the goals is that the test finishes within
-20 seconds. It is left to the implementation what to do when stability is not reached
+In {{goals}}, it is mentioned that implementations may chose to implement a time-limit
+on the duration of the test.
+It is left to the implementation what to do when stability is not reached
 within that time-frame. For example, an implementation might gather a provisional
 responsiveness measurement or let the test run for longer.
 
@@ -632,7 +632,8 @@ measurement never converges to a stable point.
 This is expected and part of the dynamic nature of networking and the accompanying
 measurement inaccuracies. Which is why the importance of imposing a time-limit
 is so crucial, together with an accurate depiction of the "confidence" the methodology
-was able to generate.
+was able to generate. The confidence score should be reported to the user as part of
+the main results.
 
 
 # Interpreting responsiveness results
