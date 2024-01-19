@@ -762,7 +762,7 @@ executing the test.
 
 Both the client and the server MUST support HTTP/2 over TLS.
 The client MUST be able to send a request with a GET or POST method.
-The client MUST send the GET without the "Accept-Encoding" header to ensure the
+The client MUST send the GET with the "Accept-Encoding" header set to "identity" to ensure the
 server will not compress the data.
 The server MUST be able to respond to both of these
 HTTP commands.
