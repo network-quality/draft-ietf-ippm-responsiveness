@@ -572,7 +572,7 @@ Where
 
 - `i`: The index of the current interval. The variable `i` is initialized to `0` when the algorithm begins and
   increases by one for each interval.
-- moving average aggregate goodput at interval p: The number of total bytes of data transferred within
+- moving average aggregate goodput at interval `p`: The number of total bytes of data transferred within
   interval `p` and the `MAD - 1` immediately preceding intervals, divided by `MAD` times `ID`.
 
 
