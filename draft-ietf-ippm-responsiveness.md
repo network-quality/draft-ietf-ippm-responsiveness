@@ -170,7 +170,7 @@ Finally, we abbreviate the unit to "RPM", a wink to the
 This document defines an algorithm for the "Responsiveness Test"
 that explicitly measures responsiveness under working conditions.
 
-This document imports terminology and concepts from {{RFC9110}}, such as requests
+This document imports terminology and concepts from {{RFC9110}}, such as request
 and response header fields and content.
 
 # Design Constraints
@@ -718,9 +718,9 @@ test are encouraged to have an optional verbose mode that exposes the inner work
 of the algorithm as well as statistics from the lower layers.
 The following is a non-exhaustive list of additional information that can be exposed
 in the verbose mode: Idle-latency (measured at the beginning from the initial connections),
-achieved capacity on load-generating connections,TM(tcp_f), TM(tls_f), TM(http_f) and TM(http_l)
-(and even their raw values), HTTP-protocol, transport protocol, congestion-control
-algorithm used on the client-side, ECN or L4S statistics, IP version, ... and many more.
+achieved capacity on load-generating connections, TM(tcp_f), TM(tls_f), TM(http_f) and TM(http_l)
+(and even their raw values), HTTP-protocol (HTTP/1.1, HTTP/2, HTTP/3), transport protocol (TCP, QUIC, ...), congestion-control
+algorithm (Cubic, BBR, ...) used on the client-side, ECN or L4S statistics, IP version, ... and many more.
 
 The previous section described the elements that influence
 the responsiveness. From there it became apparent that the latency measured
