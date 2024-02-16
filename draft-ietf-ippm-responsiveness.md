@@ -215,7 +215,7 @@ It is important to understand that the existence of a
 lowest-capacity hop on a network path and a buffer to smooth bursts
 of data is not itself a problem.
 In a heterogeneous network like the Internet it is
-inevitable that there must necessarily be some hop
+inevitable that there is some hop
 along the path with the lowest capacity for that path.
 If that hop were to be improved by increasing its capacity, then some other hop would
 become the new lowest-capacity hop for that path.
@@ -223,15 +223,6 @@ In this context a "bottleneck" should not be seen as a problem to
 be fixed, because any attempt to "fix" the bottleneck is futile --
 such a "fix" can never remove the existence of a bottleneck
 on a path; it just moves the bottleneck somewhere else.
-Arguably, this heterogeneity of the Internet is one of its greatest strengths.
-Allowing individual technologies to evolve and improve at their
-own pace, without requiring the entire Internet to change in
-lock-step, has enabled enormous improvements over the years
-in technologies like DSL, cable modems, Ethernet, and Wi-Fi,
-each advancing independently as new developments became ready.
-As a result of this flexibility we have moved incrementally,
-one step at a time, from 56kb/s dial-up modems in the 1990s to
-Gb/s home Internet service and Gb/s wireless connectivity today.
 
 Note that in a shared datagram network, conditions do not remain static.
 The hop that is the current bottleneck may change from moment to moment.
@@ -245,7 +236,7 @@ Consequently, if we wish to enjoy the benefits of the Internet's great
 flexibility, we need software that embraces and celebrates this
 diversity and adapts intelligently to the varying conditions it encounters.
 
-Because significant queueing only happens on entry to the bottleneck
+Because significant queueing in the network only happens on entry to the bottleneck
 hop, the queue management at this critical hop of the path almost
 entirely determines the responsiveness of the entire flow.
 If the bottleneck hop's queue management algorithm allows an
@@ -311,8 +302,8 @@ multiple standard HTTP transactions with very large data objects according to re
 to create these conditions.
 
 This allows to create a stable state of working conditions during which the
-bottleneck of the path between client and server has its buffer filled
-up entirely, without generating DoS-like traffic
+bottleneck of the path between client and server is fully utilized at its capacity
+and the buffer or the AQM are also used at their maximum, without generating DoS-like traffic
 patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
 representative of what a typical user's network experiences in normal operation.
 
@@ -323,6 +314,12 @@ to continuously represent a realistic traffic pattern.
 
 ### Single-flow vs multi-flow
 
+The purpose of the Responsiveness Test is not to productively move data
+across the network, the way a normal application does.
+The purpose of the Responsiveness Test is to, as quickly as possible, simulate
+a representative traffic load as if real applications were doing
+sustained data transfers and measure the resulting round-trip time
+occurring under those realistic conditions.
 A single TCP connection may not be sufficient
 to reach the capacity and full buffer occupancy of a path quickly.
 Using a 4MB receive window, over a network with a 32 ms round-trip time,
@@ -332,10 +329,6 @@ significantly larger than 4MB.
 TCP allows larger receive window sizes, up to 1GB. However, most transport stacks
 aggressively limit the size of the receive window to avoid consuming too much
 memory.
-
-Thus, the only way to achieve full capacity and full buffer occupancy on those
-networks is by creating multiple connections, allowing to actively fill the
-bottleneck's buffer to achieve maximum working conditions.
 
 Even if a single TCP connection would be able to fill the bottleneck's buffer,
 it may take some time for a single TCP connection to ramp
@@ -349,13 +342,7 @@ This reaction (intended by the protocol design) decreases the
 queueing within the network, making it harder to determine the
 depth of the bottleneck queue reliably.
 
-The purpose of the Responsiveness Test is not to productively move data
-across the network, the way a normal application does.
-The purpose of the Responsiveness Test is to, as quickly as possible, simulate
-a representative traffic load as if real applications were doing
-sustained data transfers and measure the resulting round-trip time
-occurring under those realistic conditions.
-Because of this, using multiple simultaneous parallel connections
+For all these reasons, using multiple simultaneous parallel connections
 allows the Responsiveness Test to complete its task more quickly, in a way that
 overall is less disruptive and less wasteful of network capacity
 than a test using a single TCP connection that would take longer
@@ -383,7 +370,7 @@ However, a number of caveats come with measuring in parallel:
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
 This restriction means the test might not reach the path's capacity in both directions at once and thus not expose
 all the potential sources of low responsiveness.
-- Debuggability of the results becomes harder:
+- Debugging the results becomes harder:
 During parallel measurement it is impossible to differentiate whether
 the observed latency happens in the uplink or the downlink direction.
 
@@ -395,13 +382,16 @@ is considered a future extension.
 The Responsiveness Test gradually increases the number of TCP connections (known as load-generating connections)
 and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
 continuously.
-By definition, once goodput is maximized, buffers will start filling up, creating the
-"standing queue" that is characteristic of bufferbloat. At this moment the test starts
-measuring the responsiveness until it, too, reaches saturation.
+By definition - once goodput is maximized - if the transport protocol emits more
+traffic into the network than is needed, the additional traffic will either
+get dropped or be buffered and thus create a "standing queue" that is characteristic
+of bufferbloat.
+At this moment the test starts
+measuring the responsiveness until that metric reaches saturation.
 At this point we are creating the worst-case scenario within the limits of the
 realistic traffic pattern.
 
-The algorithm notes that goodput increases rapidly until TCP
+The algorithm presumes that goodput increases rapidly until TCP
 connections complete their TCP slow-start phase.
 At that point, goodput eventually stalls,
 often due to receive window limitations, particularly in cases of
@@ -409,11 +399,11 @@ high network bandwidth, high network round-trip time,
 low receive window size, or a combination of all three.
 The only means to further increase goodput is by
 adding more TCP connections to the pool of load-generating connections.
-If new connections leave the goodput the same,
+If new connections don't result in an increase in goodput,
 full link utilization has been reached.
 At this point, adding more connections will allow to achieve full buffer occupancy.
-Responsiveness will gradually decrease from now on, until the buffers
-are entirely full and reach stability of the responsiveness as well.
+Responsiveness will decrease from now on, until the buffers
+are entirely full and stability is reached.
 
 ### Avoiding Test Hardware Bottlenecks
 
@@ -441,6 +431,8 @@ accurate results in a wide range of environments.
 | ID   | Interval duration at which the algorithm reevaluates stability | 1 second |
 | TMP  | Trimmed Mean Percentage to be trimmed | 95% |
 | SDT  | Standard Deviation Tolerance for stability detection | 5% |
+| INP  | Initial number of concurrent transport connections at the start of the test | 1 |
+| INC  | Number of transport connections to add to the pool of load-generating connections at each interval | 1 |
 | MNP  | Maximum number of parallel transport-layer connections | 16 |
 | MPS  | Maximum responsiveness probes per second | 100 |
 | PTC  | Percentage of Total Capacity the probes are allowed to consume | 5% |
@@ -479,11 +471,11 @@ request for a 1-byte object and receiving the entire response (noted `http_f`).
 
 Self probes will provide a single data-point that measures the duration of time between
 when the HTTP GET request for the 1-byte object is issued on the load-generating connection and when the
-full HTTP response has been received (noted `http_s`). For cases where multiplexing GET requests into
+full HTTP response has been received (noted `http_l`). For cases where multiplexing GET requests into
 the load generation connections is not possible (e.g. due to only HTTP/1.1 being available), the TCP
 stack estimated round-trip-time can be used as a proxy or substitute value.
 
-`tcp_f`, `tls_f`, `http_f` and `http_s` are all measured in milliseconds.
+`tcp_f`, `tls_f`, `http_f` and `http_l` are all measured in milliseconds.
 
 The more probes that are sent, the more data available for calculation. In order to generate
 as much data as possible, the Responsiveness Test specifies that a client issue these probes regularly.
@@ -500,7 +492,10 @@ For self probes we can expect an overhead of no more than 1000 bytes.
 
 Given this information, we recommend that a test client does
 not send more than `MPS` (Maximum responsiveness Probes per Second - default to 100) probes per `ID`.
-The probes should be spread out equally over the duration of the interval. The test client
+The same amount of probes should be sent on load-generating as well as on separate connections.
+The probes should be spread out equally over the duration of the interval, with the two types
+of probes interleaving with each other.
+The test client
 should uniformly and randomly select from the active load-generating connections on which to send self probes.
 
 According to the default parameter values, the probes will consume 300 KB (or 2400Kb) of data per second, meaning
@@ -528,11 +523,13 @@ These may be affected by noise in the measurements, and outliers. Thus, to aggre
 we suggest using a single-sided trimmed mean at the `TMP` (Trimmed Mean Percentage - default to 95%) percentile, thus providing the following numbers:
 `TM(tcp_f)`, `TM(tls_f)`, `TM(http_f)`, `TM(http_l)`.
 
-The responsiveness is then calculated as the weighted mean:
+The responsiveness is then calculated as the average of the "foreign responsiveness"
+on separate connections and the responsiveness on load-generating connections.
 
 ~~~
-Responsiveness = 60000 /
-(1/6*(TM(tcp_f) + TM(tls_f) + TM(http_f)) + 1/2*TM(http_s))
+Foreign_Responsiveness = 60000 / ((TM(tcp_f) + TM(tls_f) + TM(http_f)) / 3)
+Loaded_Responsiveness = 60000 / TM(http_l)
+Responsiveness = (Foreign_Responsiveness + Loaded_Responsiveness) / 2
 ~~~
 
 This responsiveness value presents round-trips per minute (RPM).
@@ -544,11 +541,12 @@ Zeroes cannot be substituted for `tls_f`, as that will result in an artificially
 Instead, the same principle of giving each contribution to the foreign RTT equal weight, and then giving the foreign and self RTTs
 equal weights is applied.
 
-The TCP-only responsiveness is therefore calculated as the weighted mean:
+The TCP-only responsiveness is therefore calculated in the folowing way:
 
 ~~~
-Responsiveness = 60000 /
-(1/4*(TM(tcp_f) + TM(http_f)) + 1/2*TM(http_s))
+Foreign_Responsiveness = 60000 / ((TM(tcp_f) + TM(http_f)) / 2)
+Loaded_Responsiveness = 60000 / TM(http_l)
+Responsiveness = (Foreign_Responsiveness + Loaded_Responsiveness) / 2
 ~~~
 
 
@@ -560,13 +558,15 @@ the design of the final algorithm. In order to measure the worst-case latency, w
 traffic at the full capacity of the path as well as ensure the buffers are filled
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
-in an ID (Interval duration - default to 1 second) interval. This technique ensures that we quickly reach full capacity full
-buffer occupancy. First, the algorithm reaches stability for the goodput. Once
-goodput stability has been achieved, responsiveness probes will be transmitted
-until responsiveness stability is reached.
+in an ID (Interval duration - default to 1 second) interval. This technique
+ensures that we quickly reach full capacity.
+In parallel of this process we send responsiveness probes.
+First, the algorithm reaches stability for the goodput. Once
+goodput stability has been achieved, the responsiveness stability is being tracked
+until it is shown to be stable at which point the final measurement can be computed.
 
 We consider both goodput and responsiveness to be stable when the standard deviation
-of the moving averages of the responsiveness calculated in the most-recent MAD intervals is within SDT
+of the moving averages of the responsiveness calculated in the immediately preceding MAD intervals is within SDT
 (Standard Deviation Tolerance - default to 5%) of the moving average calculated in the most-recent ID.
 
 The following algorithm reaches working conditions of a network
@@ -587,9 +587,9 @@ Where
 
 the steps of the algorithm are:
 
-- Create a load-generating connection.
+- Create INP load-generating connections (INP defaults to 1, but can be increased if one has prior knowledge on the capacity of the link).
 - At each interval:
-  - Create an additional load-generating connection.
+  - Create INC additional load-generating connections (INC defaults to 1, but can be increased for a more aggressive ramp-up phase).
   - If goodput has not saturated:
     - Compute the moving average aggregate goodput at interval `i` as `current_average`.
     - If the standard deviation of the past `MAD` average goodput values is less than SDT of the `current_average`, declare goodput saturation and move on to probe responsiveness.
@@ -600,9 +600,9 @@ the steps of the algorithm are:
 
 In {{goals}}, it is mentioned that implementations may chose to implement a time-limit
 on the duration of the test.
-It is left to the implementation what to do when stability is not reached
-within that time-frame. For example, an implementation might gather a provisional
-responsiveness measurement or let the test run for longer.
+If stability is not reached within the time-frame, the implementation can report
+the current results with a indication of confidence in the result as described in
+the following section.
 
 Finally, if at any point one of these connections terminates with an error, the test should be aborted.
 
@@ -618,7 +618,8 @@ for the different metrics (capacity and responsiveness) the methodology was able
 
 We define "Low" confidence in the result if the algorithm was not even able to
 execute MAD iterations of the specific stage. Meaning, the moving average is
-not taking the full window into account.
+not taking the full window into account. This can happen if the time-limit of the
+test has been reached before MAD intervals could execute.
 
 We define "Medium" confidence if the algorithm was able to execute at least MAD
 iterations, but did not reach stability based on standard deviation tolerance.
@@ -687,12 +688,13 @@ The network obviously is a large driver for the responsiveness result.
 Propagation delay from the client to the server as well as queuing in the
 bottleneck node will cause latency. Beyond these traditional sources of latency,
 other factors may influence the results as well. Many networks deploy transparent
-TCP Proxies, firewalls doing deep packet-inspection, HTTP "accelerators",...
+TCP Proxies, firewalls doing deep packet-inspection, HTTP "accelerators" and similar
+middleboxes.
 As the methodology relies on the use of HTTP/2, the responsiveness metric will
 be influenced by such devices as well.
 
 The network will influence both kinds of latency probes that the responsiveness
-tests sends out. Depending on the network's use of Smart Queue Management and whether
+tests sends out. Depending on the network's use of Active Queue Management and whether
 this includes flow-queuing or not, the latency probes on the load-generating
 connections may be influenced differently than the probes on the separate
 connections.
@@ -702,6 +704,11 @@ connections.
 Finally, the server-side introduces the same kind of influence on the responsiveness
 as the client-side, with the difference that the responsiveness will be impacted
 during the downlink load generation.
+
+Beyond the server's networking stack influence, the server selection impacts the
+result as well. First, the network-path chosen between client and server is influenced
+by the server-selection. Second, the network-stack deployed on the selected server
+may not be representative for workloads that are relevant to the user running the test.
 
 ## Root-causing Responsiveness
 
@@ -793,7 +800,7 @@ The client will probably never completely upload the object,
 but will instead close the connection after reaching working condition
 and making its measurements.
 
-4. A .well-known URL {{RFC8615}} which contains configuration information for
+4. A .well-known URL {{RFC8615}} which contains JSON configuration information for
 the client to run the test (See {{discovery}}, below.)
 
 The client begins the responsiveness measurement by querying for the JSON {{RFC8259}} configuration.
@@ -836,8 +843,8 @@ or somewhere outside the home.
 ## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
 
 Any organization that wishes to host their own instance of a Responsiveness Test Server can advertise that capability
-by hosting at the network quality well-known URI a resource whose content type is application/json and contains a valid JSON object meeting the
-following criteria:
+by hosting at the network quality well-known URIthat contains a valid JSON object
+meeting the following criteria:
 
 ~~~
 {
@@ -851,20 +858,21 @@ following criteria:
 }
 ~~~
 
-The server SHALL specify the content-type of the resource at the well-known URI as application/json.
-
 The content of the "version" field SHALL be "1". Integer values greater than "1" are reserved
 for future versions of this protocol.
 The content of the "large_download_url", "small_download_url", and "upload_url" SHALL
 all be validly formatted "http" or "https" URLs. See above for the semantics of the fields.
 All of the fields in the sample configuration are required except "test\_endpoint".
-If the test server provider can pin all of the requests for a test run to a specific
+If the test server provider requires to pin all of the requests for a test run to a specific
 host in the service (for a particular run), they can specify that host name in the
-"test\_endpoint" field.
+"test\_endpoint" field. The client is then expected to use "test\_endpoint" when
+resolving the hostname for the URLs
 
-For purposes of registration of the well-known URI {{RFC8615}}, the application name is "nq". The media type
-of the resource at the well-known URI is "application/json" and the format of the resource is as specified
-above. The URI scheme is "https". No additional path components, query strings or fragments are valid
+For purposes of registration of the well-known URI {{RFC8615}}, the application
+name is "nq" (e.g., https://nq.example.com/.well-known/nq).
+The media type of the resource at the well-known URI is "application/json" and
+the format of the resource is as specified above. The URI scheme is "https".
+No additional path components, query strings or fragments are valid
 for this well-known URI.
 
 ## DNS-Based Service Discovery for Test Server Discovery
