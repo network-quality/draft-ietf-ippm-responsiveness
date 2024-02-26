@@ -303,7 +303,7 @@ to create these conditions.
 
 This allows to create a stable state of working conditions during which the
 bottleneck of the path between client and server is fully utilized at its capacity
-and the buffer or the AQM are also used at their maximum, without generating DoS-like traffic
+and the buffer or the Active Queue Management (AQM) are also used at their maximum, without generating DoS-like traffic
 patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
 representative of what a typical user's network experiences in normal operation.
 
@@ -588,6 +588,10 @@ Where
 the steps of the algorithm are:
 
 - Create INP load-generating connections (INP defaults to 1, but can be increased if one has prior knowledge on the capacity of the link).
+- Launch a new foreign and self probe (according to the specification set forth
+  above) every 1/`MPS` seconds until `MPS`*`ID` pairs of probes have been launched
+  or the end of the interval is reached, whichever comes first.
+probes to not exceed the percentage of total capacity (PTC).
 - At each interval:
   - Create INC additional load-generating connections (INC defaults to 1, but can be increased for a more aggressive ramp-up phase).
   - If goodput has not saturated:
@@ -694,7 +698,7 @@ As the methodology relies on the use of HTTP/2, the responsiveness metric will
 be influenced by such devices as well.
 
 The network will influence both kinds of latency probes that the responsiveness
-tests sends out. Depending on the network's use of Active Queue Management and whether
+tests sends out. Depending on the network's use of AQM and whether
 this includes flow-queuing or not, the latency probes on the load-generating
 connections may be influenced differently than the probes on the separate
 connections.
