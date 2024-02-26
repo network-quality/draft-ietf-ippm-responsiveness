@@ -706,7 +706,7 @@ as the client-side, with the difference that the responsiveness will be impacted
 during the downlink load generation.
 
 Beyond the server's networking stack influence, the server selection impacts the
-result as well. First, the network-path chosen between client and server is influenced
+result as well. First, the network path chosen between client and server is influenced
 by the server-selection. Second, the network-stack deployed on the selected server
 may not be representative for workloads that are relevant to the user running the test.
 
