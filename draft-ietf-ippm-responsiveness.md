@@ -843,7 +843,7 @@ or somewhere outside the home.
 ## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
 
 Any organization that wishes to host their own instance of a Responsiveness Test Server can advertise that capability
-by hosting at the network quality well-known URIthat contains a valid JSON object
+by hosting at the network quality well-known URI that contains a valid JSON object
 meeting the following criteria:
 
 ~~~
