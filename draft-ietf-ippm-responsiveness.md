@@ -562,7 +562,7 @@ in an ID (Interval duration - default to 1 second) interval. This technique
 ensures that we quickly reach full capacity.
 In parallel of this process we send responsiveness probes.
 First, the algorithm reaches stability for the goodput. Once
-goodput stability has been achieved, the responsiveness stability is being tracked
+goodput stability has been achieved, the responsiveness stability is tracked
 until it is shown to be stable at which point the final measurement can be computed.
 
 We consider both goodput and responsiveness to be stable when the standard deviation
