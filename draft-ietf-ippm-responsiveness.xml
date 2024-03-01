@@ -12,7 +12,7 @@
 ]>
 
 
-<rfc ipr="trust200902" docName="draft-ietf-ippm-responsiveness-03" category="std" consensus="true" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true">
+<rfc ipr="trust200902" docName="draft-ietf-ippm-responsiveness-04" category="std" consensus="true" submissionType="IETF" tocInclude="true" sortRefs="true" symRefs="true">
   <front>
     <title abbrev="Responsiveness under Working Conditions">Responsiveness under Working Conditions</title>
 
@@ -1324,10 +1324,10 @@ map https://nq.example.com/api/v1/upload \
   </back>
 
 <!-- ##markdown-source:
-H4sIAGBY4mUAA9V96XIjR5Lm/3yKWPSOiewFUGRdUnFNNkNVlSS26qCK1Mh2
+H4sIADtZ4mUAA9V96XIjR5Lm/3yKWPSOiewFUGRdUnFNNkNVlSS26qCK1Mh2
 Z9pUCSAIZFciE8rIJAqtVtu8xr7J/J832SdZ/9w9jkyAVLXN2Nhsz9EsABkZ
 4eHh/vkZk8kka4u2tGfmnXWbunLFra2sc6arFrYxP9bNh6Jamud1tSjagr7P
-8tmssbef/vtFPa/yNb1g0eQ37aSw7c2k2GzWk6Y3wOTkUbbIW3uWzen/L+tm
+8tmssbef/vtFPa/yNb1g0eQ37aSw7c2k2GzWk6Y3wOTkcbbIW3uWzen/L+tm
 d2Zcu8gy183WhXM01vVuQ8NcvLz+OpvXC3rNmelosC+yYtOcmbbpXPvw5OTZ
 ycMsb2x+Zq6bvKJXNG22pWktm7rb0OOX5tI2N3Wzzqu5Na9t7rrGrm3VZh/s
 jn64oN9UrW0q205eYMo0hTavFj/lZV3R+3fWZZvizPxTW8/HxtHwjb1x9Ndu
@@ -1692,7 +1692,7 @@ DFInfTg6OPJqmFZ7KHNH8O75Bn1IcIK4x5zMihT/oY9j03E6HmplmmfT0+mJ
 zzcYBnxyt5cHrtF9rv0Jhwuk0hBK3cSEBmww8SCSqTpSHj7QLjSg5eSbwfvQ
 fEvcZ4VX9/jR/f4DGcL8Mzsg8FP6JSNPEPOBfv4PMoUvw5ymxHD+K+4A8OVk
 gtdPoHK+lDHTt03ZjzN8Yo1SeSDRL4fGU/YJM5e6nDsmPscOPvjiyRfPnj16
-/OTZw+FKAr1pJZ/yMolJ3fuy03/vOzSs+Wlb0RscW/3/AHGzk3UvuAAA
+/OTZw+FKAr1pJZ/yMolJ3fuy03/vOzSs+Wlb0RscW/3/AEh5KvIvuAAA
 
 -->
 
