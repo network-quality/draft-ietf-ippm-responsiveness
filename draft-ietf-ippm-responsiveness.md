@@ -66,7 +66,6 @@ informative:
      - ins: J. Morton
     title: "Piece of CAKE: A Comprehensive Queue Management Solution for Home Gateways"
     seriesinfo: 2018 IEEE International Symposium on Local and Metropolitan Area Networks (LANMAN)
-  RFC0793:
   RFC1034:
   RFC4656:
   RFC5357:
@@ -270,7 +269,7 @@ these could also be measured separately.
 1. Because the Internet is marked by the deployment of countless middleboxes like
 transparent TCP proxies or traffic prioritization for certain types of traffic,
 the Responsiveness Test algorithm must take into account their effect on
-TCP-handshake {{RFC0793}}, TLS-handshake, and request/response.
+TCP-handshake {{RFC9293}}, TLS-handshake, and request/response.
 
 1. Because the goal of the test is to educate end users, the results should be expressed in an intuitive, nontechnical form
 and not commit the user to spend a significant amount of their time (it is left to the implementation to chose a suitable time-limit and we recommend for
