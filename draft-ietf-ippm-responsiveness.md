@@ -79,6 +79,7 @@ informative:
   RFC8033:
   RFC8259:
   RFC9293:
+  RFC8305:
   RFC9330:
 
 --- abstract
@@ -814,7 +815,7 @@ for the latency measurements.
 # Responsiveness Test Server Discovery {#discovery}
 
 It makes sense for a service provider (either an application service provider like a video conferencing service
-or a network access provider like an ISP) to host Responsiveness Test Server instances on their
+or a network access provider like an ISP) to host Responsiveness Test Servers on their
 network so customers can determine what to expect about the quality of their connection to
 the service offered by that provider.
 However, when a user performs a Responsiveness Test and determines
@@ -828,7 +829,7 @@ the logical next questions might be,
 1. "Something else entirely?"
 
 To help an end user answer these questions, it will be useful for test clients
-to be able to easily discover Responsiveness Test Server instances running in various
+to be able to easily discover Responsiveness Test Servers running in various
 places in the network (e.g., their home router, their Wi-Fi access point, their ISP's
 head-end equipment, etc).
 
@@ -837,7 +838,7 @@ service offering 100 Mb/s download speed, connected via
 gigabit Ethernet to one or more Wi-Fi access points in their home,
 which then offer service to Wi-Fi client devices at different rates
 depending on distance, interference from other traffic, etc.
-By having the cable modem itself host a Responsiveness Test Server instance,
+By having the cable modem itself host a Responsiveness Test Server,
 the user can then run a test between the cable modem and their computer
 or smartphone, to help isolate whether bufferbloat they are experiencing
 is occurring in equipment inside the home (like their Wi-Fi access points)
@@ -845,58 +846,86 @@ or somewhere outside the home.
 
 ## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
 
-Any organization that wishes to host their own instance of a Responsiveness Test Server can advertise that capability
-by hosting at the network quality well-known URI that contains a valid JSON object
-meeting the following criteria:
+Any organization that wishes to host a Responsiveness Test Server
+advertises that service using the network quality well-known URI {{RFC8615}}.
+The URI scheme is "https" and the application name is "nq"
+(e.g., https://example.com/.well-known/nq).
+No additional path components, query strings or fragments are valid
+for this well-known URI.
+The media type of the resource at the well-known URI is "application/json" and
+the format of the resource is as specified below:
 
 ~~~
 {
   "version": 1,
   "urls": {
-    "large_download_url":"https://nq.example.com/api/v1/large",
-    "small_download_url":"https://nq.example.com/api/v1/small",
-    "upload_url":        "https://nq.example.com/api/v1/upload"
+    "large_download_url": "<URL for bulk download>",
+    "small_download_url": "<URL for small download>",
+    "upload_url":         "<URL for small upload>"
   }
-  "test_endpoint": "hostname123.provider.com"
+  "test_endpoint":        "<hostname for server to use for testing>"
 }
 ~~~
 
-The content of the "version" field SHALL be "1". Integer values greater than "1" are reserved
-for future versions of this protocol.
-The content of the "large_download_url", "small_download_url", and "upload_url" SHALL
-all be validly formatted "http" or "https" URLs. See above for the semantics of the fields.
-All of the fields in the sample configuration are required except "test\_endpoint".
-If the test server provider requires to pin all of the requests for a test run to a specific
-host in the service (for a particular run), they can specify that host name in the
-"test\_endpoint" field. The client is then expected to use "test\_endpoint" when
-resolving the hostname for the URLs
+The fields can appear in any order.
 
-For purposes of registration of the well-known URI {{RFC8615}}, the application
-name is "nq" (e.g., https://nq.example.com/.well-known/nq).
-The media type of the resource at the well-known URI is "application/json" and
-the format of the resource is as specified above. The URI scheme is "https".
-No additional path components, query strings or fragments are valid
-for this well-known URI.
+The content of the "version" field SHALL be "1".
+Integer values greater than "1" are reserved for future versions of this protocol.
+
+The content of the "large\_download\_url", "small\_download\_url", and "upload_url"
+SHALL all be validly formatted "http" or "https" URLs.
+All three URLs MUST all contain the same \<host\> part so that they are
+eligible to be multiplexed onto the same TCP or QUIC connection.
+
+The "version" field and the three URLs are REQUIRED.
+
+The "test\_endpoint" field is OPTIONAL.
+If present, then for the purpose of determining the IP address to which it should
+connect the test client MUST ignore the \<host\> part in the URLs and instead
+connect to one of the IP addresses indicated by the "test\_endpoint" field,
+as determined by the test client’s address resolution policy
+(e.g., Happy Eyeballs {{RFC8305}}).
+The test client then sends HTTP GET and POST requests
+(as determined by the test procedure)
+to the host indicated by the "test\_endpoint" field,
+forming its HTTP requests using the \<host\> and \<path\> from the specified URLs.
+In other words, the test client operates as if it were simply
+using the specified URLs directly, except that it behaves
+as if it had a local (e.g., “/etc/hosts”) entry overriding the
+IP address(es) of the \<host\> given in the URLs to be the
+IP address(es) of the "test\_endpoint" hostname instead.
+In the case of a large web site served by multiple load-balanced
+servers, this gives the administrator more precise control over
+which of those servers are used for responsiveness testing.
+In a situation where some of a site’s servers have been configured
+to deliver low-delay HTTP responses and some have not,
+it can be useful to be able to measure the responsiveness of different
+servers with different configurations to see how they compare
+when handling identical HTTP GET and POST requests.
 
 ## DNS-Based Service Discovery for Test Server Discovery
 
-To further aid the test client in discovering instances of the Responsiveness Test Server, organizations
-wishing to host their own instances of the Test Server MAY advertise their availability using
-DNS-Based Service Discovery {{RFC6763}} using conventional, unicast DNS {{RFC1034}} or multicast DNS {{RFC6762}}
-on the organization network's local link(s).
+To further aid the test client in discovering Responsiveness Test Servers,
+organizations or devices offering Responsiveness Test Servers
+MAY advertise their availability using DNS-Based Service Discovery {{RFC6763}}
+over Multicast DNS {{RFC6762}} or conventional unicast DNS {{RFC1034}}.
 
-The Responsiveness Test Service instances should advertise using the service type {{RFC6335}}
-"_nq._tcp".  Population of the appropriate DNS zone with the
-relevant unicast discovery records can be performed
-automatically using a Discovery Proxy {{RFC8766}},
-or in some scenarios simply by having a human
-administrator manually enter the required records.
+The Responsiveness Test Service instances should advertise
+using the service type {{RFC6335}} "_nq._tcp".
 
-### Example
+When advertising over Multicast DNS, typically the device offering
+the test service also advertises its own Multicast DNS records.
+
+When advertising over unicast DNS, population of the appropriate
+DNS zone with the relevant unicast discovery records can be performed
+by having a human administrator manually enter the required records,
+or automatically using a Discovery Proxy {{RFC8766}}.
+
+### Unicast DNS-SD Example
 
 An obscure service provider hosting a Responsiveness Test Server instance for their
 organization (obs.cr) on the "rpm.obs.cr" host would return the following answers
-to PTR and SRV conventional DNS queries:
+to conventional PTR and SRV DNS queries:
 
 ~~~
 $ nslookup -q=ptr _nq._tcp.obs.cr.
@@ -924,7 +953,7 @@ its response to the initial request for the configuration information through th
 ## Well-Known URI
 
 This specification registers the "nq" well-known URI in the
-"Well-Known URIs" registry as defined by [RFC5785].
+"Well-Known URIs" registry [RFC5785].
 
 URI suffix: nq
 
@@ -950,34 +979,92 @@ We also thank Greg White, Lucas Pardue, Sebastian Moeller, Rich Brown, Erik Auer
 
 --- back
 
-# Example Server Configuration
-
-This section shows fragments of sample server configurations to host an responsiveness
-measurement endpoint.
-
-## Apache Traffic Server
+# Apache Traffic Server Example Configurations
 
 Apache Traffic Server starting at version 9.1.0 supports configuration as a responsiveness
 server. It requires the generator and the statichit plugin.
 
+This section shows fragments of sample server configurations to host a responsiveness
+measurement endpoint.
+
+## Single Server Configuration
+
+Given a local file “config.example.com.json” with the following content:
+
+~~~
+{
+  "version": 1,
+  "urls": {
+    "large_download_url":"https://www.example.com/large",
+    "small_download_url":"https://www.example.com/small",
+    "upload_url":        "https://www.example.com/upload"
+  }
+}
+~~~
+
 The sample remap configuration file then is:
 
 ~~~
-map https://nq.example.com/api/v1/config \
+map https://www.example.com/.well-known/nq \
     http://localhost/ \
     @plugin=statichit.so \
     @pparam=--file-path=config.example.com.json \
     @pparam=--mime-type=application/json
 
-map https://nq.example.com/api/v1/large \
+map https://www.example.com/large \
     http://localhost/cache/8589934592/ \
     @plugin=generator.so
 
-map https://nq.example.com/api/v1/small \
+map https://www.example.com/small \
     http://localhost/cache/1/ \
     @plugin=generator.so
 
-map https://nq.example.com/api/v1/upload \
+map https://www.example.com/upload \
+    http://localhost/ \
+    @plugin=generator.so
+~~~
+
+## Alternate Server Configuration
+
+If a separate test_endpoint server is desired, then on the main www.example.com server(s)
+a JSON configuration file like the one shown below is used:
+
+~~~
+{
+  "version": 1,
+  "urls": {
+    "large_download_url":"https://www.example.com/large",
+    "small_download_url":"https://www.example.com/small",
+    "upload_url":        "https://www.example.com/upload"
+  }
+  "test_endpoint": "nq-test-server.example.com"
+}
+~~~
+
+On the main www.example.com server(s) a remap configuration file like the
+one shown below is used, to serve the JSON configuration file to clients:
+
+~~~
+map https://www.example.com/.well-known/nq \
+    http://localhost/ \
+    @plugin=statichit.so \
+    @pparam=--file-path=config.example.com.json \
+    @pparam=--mime-type=application/json
+~~~
+
+On nq-test-server.example.com a remap configuration file like the
+one shown below is used, to handle the test downloads and uploads:
+
+~~~
+map https://www.example.com/large \
+    http://localhost/cache/8589934592/ \
+    @plugin=generator.so
+
+map https://www.example.com/small \
+    http://localhost/cache/1/ \
+    @plugin=generator.so
+
+map https://www.example.com/upload \
     http://localhost/ \
     @plugin=generator.so
 ~~~
