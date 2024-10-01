@@ -526,7 +526,7 @@ The responsiveness is then calculated as the average of the "foreign responsiven
 on separate connections and the responsiveness on load-generating connections.
 
 ~~~
-Foreign_Responsiveness = 60000 / ((TM(tcp_f) + TM(tls_f) + TM(http_f)) / 3)
+Foreign_Responsiveness = 60000 / ((TM(tcp_f)+TM(tls_f)+TM(http_f))/3)
 Loaded_Responsiveness = 60000 / TM(http_l)
 Responsiveness = (Foreign_Responsiveness + Loaded_Responsiveness) / 2
 ~~~
