@@ -870,7 +870,8 @@ the format of the resource is as specified below:
 The fields can appear in any order.
 
 The content of the "version" field SHALL be "1".
-Integer values greater than "1" are reserved for future versions of this protocol.
+Integer values greater than "1" are reserved
+for possible use in future updates to this protocol.
 
 The content of the "large\_download\_url", "small\_download\_url", and "upload_url"
 SHALL all be validly formatted "http" or "https" URLs.
@@ -902,6 +903,18 @@ to deliver low-delay HTTP responses and some have not,
 it can be useful to be able to measure the responsiveness of different
 servers with different configurations to see how they compare
 when handling identical HTTP GET and POST requests.
+
+Servers implementing the current version of this specification
+SHOULD NOT include any keys in the JSON configuration information
+other than those documented here.
+Future updates to this specification may define additional keys
+in the JSON configuration information.
+To allow for these future backwards-compatible updates,
+clients implementing the current version of this specification
+MUST silently ignore any unrecognized keys in the
+JSON configuration information they receive,
+and MUST process the required keys as documented here,
+behaving as if the unrecognized keys were not present.
 
 ## DNS-Based Service Discovery for Test Server Discovery
 
