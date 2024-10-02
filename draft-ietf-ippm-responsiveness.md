@@ -763,7 +763,7 @@ mean that the network between client and cable modem is the problem (as
 outlined in the above previous paragraphs).
 
 
-# Responsiveness Test Server API
+# Responsiveness Test Server
 
 The responsiveness measurement is built upon a foundation of standard protocols:
 IP, TCP, TLS, HTTP/2.
@@ -793,7 +793,7 @@ The server SHOULD specify the Content-Type header field with the media type "app
 The content can be larger, and may need to grow as network speeds increases over time.
 The actual message content is irrelevant.
 The client will probably never completely download the object,
-but will instead close the connection after reaching working condition
+but will instead close the connection after reaching working conditions
 and making its measurements.
 
 3. An "upload" URL/response:
@@ -801,10 +801,11 @@ The server must handle a POST request with an arbitrary content size.
 The server should discard the content.
 The actual POST message content is irrelevant.
 The client will probably never completely upload the object,
-but will instead close the connection after reaching working condition
+but will instead close the connection after reaching working conditions
 and making its measurements.
 
-4. A .well-known URL {{RFC8615}} which contains JSON configuration information for
+4. A .well-known URL {{RFC8615}} which serves a JSON object providing
+the three test URLs described above and other configuration information for
 the client to run the test (See {{discovery}}, below.)
 
 The client begins the responsiveness measurement by querying for the JSON {{RFC8259}} configuration.
@@ -846,7 +847,7 @@ or somewhere outside the home.
 
 ## Well-Known Uniform Resource Identifier (URI) For Test Server Discovery
 
-Any organization that wishes to host a Responsiveness Test Server
+An organization or device that hosts a Responsiveness Test Server
 advertises that service using the network quality well-known URI {{RFC8615}}.
 The URI scheme is "https" and the application name is "nq"
 (e.g., https://example.com/.well-known/nq).
@@ -882,6 +883,12 @@ The "version" field and the three URLs are mandatory
 and each MUST appear exactly once in the JSON object.
 If any of these fields are missing or appear more than once,
 the configuration information is invalid and the entire JSON object MUST be ignored.
+If a client implementing the current version of this specification encounters
+a JSON configuration information object where the "version" field is not "1",
+then the client should assume that it is unable
+to safely parse the configuration information object
+(that’s what incrementing the version field indicates)
+and the client MUST ignore the entire JSON object.
 
 The "test\_endpoint" field is OPTIONAL,
 and if present MUST appear exactly once in the JSON object.
@@ -952,7 +959,7 @@ Non-authoritative answer:
 rpm._nq._tcp.obs.crservice = 0 0 443 rpm.obs.cr.
 ~~~
 
-Given those conventional DNS query responses, the client would proceed to access the rpm.obs.cr
+Given those DNS query responses, the client would proceed to access the rpm.obs.cr
 host on port 443 at the .well-known/nq well-known URI to begin the test.
 
 # Security Considerations
@@ -977,14 +984,13 @@ URI suffix: nq
 ## Service Name
 
 IANA has added the following value to the "Service Name and Transport
-Protocol Port Number Registry" in the System Range.  The registry for
-that range requires IETF Review or IESG Approval [RFC6335].
+Protocol Port Number Registry".
 
-Service Name: nq
-Transport Protocol: TCP
-Assignee: {{{Stuart Cheshire}}}
-Contact: {{{Stuart Cheshire}}}
-Description: Network Quality test server endpoint
+Service Name:       nq  
+Transport Protocol: TCP  
+Assignee:           {{{Stuart Cheshire}}}  
+Contact:            {{{Stuart Cheshire}}}  
+Description:        Network Quality test server endpoint
 
 # Acknowledgments
 
@@ -998,7 +1004,7 @@ We also thank Greg White, Lucas Pardue, Sebastian Moeller, Rich Brown, Erik Auer
 # Apache Traffic Server Example Configurations
 
 Apache Traffic Server starting at version 9.1.0 supports configuration as a
-Responsiveness Test Server. It requires the generator and the statichit plugin.
+Responsiveness Test Server, using the generator and the statichit plugin.
 
 This section shows fragments of sample server configurations to host a
 Responsiveness Test Server.
