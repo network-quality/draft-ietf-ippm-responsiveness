@@ -853,7 +853,7 @@ The URI scheme is "https" and the application name is "nq"
 No additional path components, query strings or fragments are valid
 for this well-known URI.
 The media type of the resource at the well-known URI is "application/json" and
-the format of the resource is as specified below:
+the format of the resource is a valid JSON object as specified below:
 
 ~~~
 {
@@ -878,9 +878,13 @@ SHALL all be validly formatted "http" or "https" URLs.
 All three URLs MUST all contain the same \<host\> part so that they are
 eligible to be multiplexed onto the same TCP or QUIC connection.
 
-The "version" field and the three URLs are REQUIRED.
+The "version" field and the three URLs are mandatory
+and each MUST appear exactly once in the JSON object.
+If any of these fields are missing or appear more than once,
+the configuration information is invalid and the entire JSON object MUST be ignored.
 
-The "test\_endpoint" field is OPTIONAL.
+The "test\_endpoint" field is OPTIONAL,
+and if present MUST appear exactly once in the JSON object.
 If present, then for the purpose of determining the IP address to which it should
 connect the test client MUST ignore the \<host\> part in the URLs and instead
 connect to one of the IP addresses indicated by the "test\_endpoint" field,
@@ -890,13 +894,14 @@ The test client then sends HTTP GET and POST requests
 (as determined by the test procedure)
 to the host indicated by the "test\_endpoint" field,
 forming its HTTP requests using the \<host\> and \<path\> from the specified URLs.
-In other words, the test client operates as if it were simply
+In other words, when the "test\_endpoint" field is present
+the test client operates as if it were simply
 using the specified URLs directly, except that it behaves
 as if it had a local (e.g., “/etc/hosts”) entry overriding the
 IP address(es) of the \<host\> given in the URLs to be the
 IP address(es) of the "test\_endpoint" hostname instead.
 In the case of a large web site served by multiple load-balanced
-servers, this gives the administrator more precise control over
+servers, this feature gives the administrator more precise control over
 which of those servers are used for responsiveness testing.
 In a situation where some of a site’s servers have been configured
 to deliver low-delay HTTP responses and some have not,
@@ -905,29 +910,27 @@ servers with different configurations to see how they compare
 when handling identical HTTP GET and POST requests.
 
 Servers implementing the current version of this specification
-SHOULD NOT include any keys in the JSON configuration information
+SHOULD NOT include any names in the JSON configuration information
 other than those documented here.
-Future updates to this specification may define additional keys
+Future updates to this specification may define additional names
 in the JSON configuration information.
 To allow for these future backwards-compatible updates,
 clients implementing the current version of this specification
-MUST silently ignore any unrecognized keys in the
+MUST silently ignore any unrecognized names in the
 JSON configuration information they receive,
-and MUST process the required keys as documented here,
-behaving as if the unrecognized keys were not present.
+and MUST process the required names as documented here,
+behaving as if the unrecognized names were not present.
 
 ## DNS-Based Service Discovery for Test Server Discovery
 
 To further aid the test client in discovering Responsiveness Test Servers,
 organizations or devices offering Responsiveness Test Servers
 MAY advertise their availability using DNS-Based Service Discovery {{RFC6763}}
-over Multicast DNS {{RFC6762}} or conventional unicast DNS {{RFC1034}}.
-
-The Responsiveness Test Service instances should advertise
+over Multicast DNS {{RFC6762}} or conventional unicast DNS {{RFC1034}},
 using the service type {{RFC6335}} "_nq._tcp".
 
 When advertising over Multicast DNS, typically the device offering
-the test service also advertises its own Multicast DNS records.
+the test service generally advertises its own Multicast DNS records.
 
 When advertising over unicast DNS, population of the appropriate
 DNS zone with the relevant unicast discovery records can be performed
@@ -994,11 +997,11 @@ We also thank Greg White, Lucas Pardue, Sebastian Moeller, Rich Brown, Erik Auer
 
 # Apache Traffic Server Example Configurations
 
-Apache Traffic Server starting at version 9.1.0 supports configuration as a responsiveness
-server. It requires the generator and the statichit plugin.
+Apache Traffic Server starting at version 9.1.0 supports configuration as a
+Responsiveness Test Server. It requires the generator and the statichit plugin.
 
-This section shows fragments of sample server configurations to host a responsiveness
-measurement endpoint.
+This section shows fragments of sample server configurations to host a
+Responsiveness Test Server.
 
 ## Single Server Configuration
 
