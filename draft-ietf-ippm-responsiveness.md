@@ -124,7 +124,7 @@ lag, latency, or bufferbloat, has been recognized
 as an unfortunate, but common, symptom in today's networks {{Bufferbloat}}.
 Solutions like fq_codel {{RFC8290}}, PIE {{RFC8033}}, Cake {{Cake}}
 and L4S {{RFC9330}} have been standardized
-and are to some extent implemented.
+and implemented, and are, to some extent, deployed.
 Nevertheless, poor network responsiveness,
 resulting from bufferbloat and other causes,
 continues to affect many services and the people who use them.
@@ -309,7 +309,8 @@ The Responsiveness Test defines working conditions as the condition
 where the path between the measuring endpoints is fully utilized at
 its end-to-end capacity, and consequently,
 if the sending rate increases even a little, a queue will begin to build
-up at the entry to the bottleneck link. How the bottleneck device
+up at the ingress to the bottleneck hop.
+How the device at the ingress to the bottleneck hop
 manages and limits the growth of that queue will influence the network
 connection's responsiveness.
 
@@ -658,7 +659,7 @@ the main results.
 # Interpreting responsiveness results
 
 The described methodology uses a high-level approach to measure responsiveness.
-By executing the test with normal HTTP requests a number of elements come into
+By executing the test with normal HTTP requests, a number of elements come into
 play that will influence the result. Contrary to more traditional measurement methods,
 the responsiveness metric is not only influenced by the properties of the
 network, but can significantly be influenced by the properties of the client
@@ -730,7 +731,7 @@ may not be representative for workloads that are relevant to the user running th
 
 ## Investigating Poor Responsiveness
 
-Once a responsiveness result has been generated one might be motivated to try to localize
+Once a responsiveness result has been generated, one might be motivated to try to localize
 the source of a low responsiveness. The responsiveness measurement
 is however aimed at providing a quick, top-level view of the responsiveness
 under working conditions the way end-users experience it.
