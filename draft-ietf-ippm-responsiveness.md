@@ -559,7 +559,7 @@ Zeroes cannot be substituted for `tls_f`, as that will result in an artificially
 Instead, the same principle of giving each contribution to the foreign RTT equal weight, and then giving the foreign and self RTTs
 equal weights is applied.
 
-The TCP-only responsiveness is therefore calculated in the folowing way:
+The TCP-only responsiveness is therefore calculated in the following way:
 
 ~~~
 Foreign_Responsiveness = 60000 / ((TM(tcp_f) + TM(http_f)) / 2)
@@ -1001,10 +1001,10 @@ URI suffix: nq
 IANA has added the following value to the "Service Name and Transport
 Protocol Port Number Registry".
 
-Service Name:       nq  
-Transport Protocol: TCP  
-Assignee:           {{{Stuart Cheshire}}}  
-Contact:            {{{Stuart Cheshire}}}  
+Service Name:       nq
+Transport Protocol: TCP
+Assignee:           {{{Stuart Cheshire}}}
+Contact:            {{{Stuart Cheshire}}}
 Description:        Network Quality test server endpoint
 
 # Acknowledgments
