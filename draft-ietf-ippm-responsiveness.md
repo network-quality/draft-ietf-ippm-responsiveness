@@ -559,7 +559,7 @@ Zeroes cannot be substituted for `tls_f`, as that will result in an artificially
 Instead, the same principle of giving each contribution to the foreign RTT equal weight, and then giving the foreign and self RTTs
 equal weights is applied.
 
-The TCP-only responsiveness is therefore calculated in the folowing way:
+The TCP-only responsiveness is therefore calculated in the following way:
 
 ~~~
 Foreign_Responsiveness = 60000 / ((TM(tcp_f) + TM(http_f)) / 2)
@@ -663,7 +663,7 @@ By executing the test with normal HTTP requests, a number of elements come into
 play that will influence the result. Contrary to more traditional measurement methods,
 the responsiveness metric is not only influenced by the properties of the
 network, but can significantly be influenced by the properties of the client
-and the server implementations. This is fully intentioinal as the properties of the
+and the server implementations. This is fully intentional as the properties of the
 client and the server implementations have a direct impact on the perceived responsiveness by the user. This section describes how the different
 elements influence responsiveness and how a user may differentiate them
 when debugging a network.
