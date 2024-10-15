@@ -196,9 +196,6 @@ the difficulty of attaining appropriate measurement conditions,
 diurnal traffic patterns,
 and changing routes.
 
-In order to minimize the effects of these challenges,
-it's best to keep the test duration relatively short.
-
 TCP and UDP traffic, or traffic on ports 80 and 443, may take
 significantly different paths over the network between source and destination
 and be subject to entirely different Quality of Service (QoS) treatment.
