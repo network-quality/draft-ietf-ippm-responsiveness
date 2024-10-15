@@ -55,6 +55,12 @@ normative:
   RFC9110:
 
 informative:
+  BITAG:
+    title: "Latency Explained"
+    author:
+     - org: Broadband Internet Technical Advisory Group
+    date: 2022
+    target: https://www.bitag.org/latency-explained.php
   Bufferbloat:
     author:
      - ins: J. Gettys
@@ -704,8 +710,12 @@ separate connections will be negligible.
 ### Network influence
 
 The network obviously is a large driver for the responsiveness result.
-Propagation delay from the client to the server as well as queuing in the
-bottleneck node will cause latency. Beyond these traditional sources of latency,
+Propagation delay from the client to the server,
+waiting to access a shared resource like radio spectrum,
+queuing in the bottleneck node,
+and other sources of delay
+all add to latency {{BITAG}}.
+Beyond these traditional sources of latency,
 other factors may influence the results as well. Many networks deploy “transparent”
 TCP Proxies, firewalls doing deep packet-inspection, HTTP "accelerators" and similar
 middleboxes.
