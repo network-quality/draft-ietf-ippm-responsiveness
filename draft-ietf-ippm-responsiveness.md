@@ -209,16 +209,7 @@ for people's use of the network --
 that is subject to the transport layer's congestion control algorithms
 that might reduce the traffic's rate and thus its buffering in the network.
 
-Traditionally, one thinks of bufferbloat happening in the network, i.e., on
-routers and switches of the Internet.
-However, the networking stacks of the clients and servers can
-have huge buffers.
-Data sitting in TCP sockets or waiting for the application
-to send or read causes artificial latency, and affects user experience
-the same way as in-network bufferbloat.
-
-Finally, it is crucial to recognize that significant
-queueing only happens on entry to the lowest-capacity
+Significant queueing in the network only happens on entry to the lowest-capacity
 (or "bottleneck") hop on a network path.
 For any flow of data between two endpoints
 there is always one hop along the path where the capacity
@@ -265,6 +256,32 @@ A well-managed bottleneck queue keeps its occupancy
 under control, resulting in consistently low round-trip times
 and consistently good responsiveness.
 A poorly managed bottleneck queue will not.
+
+This section discusses bufferbloat in terms of a problem
+that occurs in a network, i.e., in routers and switches.
+However, there are some other system components that can also add delay.
+
+In some cases the lowest capacity hop on a path is the first hop.
+In this case bufferbloat in the network is not usually a significant
+concern because the source device is simply unable to transmit data fast
+enough to build up a significant queue anywhere else in the network.
+However, in this case excessive queuing in the device’s own network
+interface can result in excessive delays for it outgoing traffic.
+
+The job of the rate adaptation (congestion control) algorithm of
+the sender’s transport protocol is to determine this flow’s share of the
+bottleneck hop on the path, and to restrain its own transmission rate
+so as not to exceed that bottleneck rate. If the transport protocol
+does not generate appropriate backpressure to the application
+(e.g., using TCP\_NOTSENT\_LOWAT {{RFC9293}}) then the transport
+protocol itself can cause significant delay by buffering an
+excessive amount of application data that has not even been sent yet.
+
+Finally, an application can make delay even worse by maintaining its own queue
+of data that it hasn’t even given to the transport protocol for sending yet.
+Any time data spends sitting in this application queue adds to
+the delay it experiences while waiting to be set out of the network interface and
+the delay it experiences while in transit traversing the network.
 
 # Goals
 
