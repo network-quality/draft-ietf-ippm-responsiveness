@@ -158,11 +158,10 @@ solutions.
 
 ## Terminology
 
-A word about the term "bufferbloat" -- the undesirable latency
-that comes from a router or other network equipment
-buffering too much data.
-This document uses the term as a general description of bad latency,
-using more precise wording where warranted.
+The term "bufferbloat" describes the situation where a network device
+is prone to buffering an excessive number of packets in transit through
+that device, causing a backlog of packets waiting to go out and resulting in those
+packets experiencing excessive delay.
 
 "Latency" is a poor way to report responsiveness,
 because it can be hard for the general public to understand.
