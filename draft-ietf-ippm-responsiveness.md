@@ -135,26 +135,42 @@ Nevertheless, poor network responsiveness,
 resulting from bufferbloat and other causes,
 continues to affect many services and the people who use them.
 
-Although significant, the impact on user experience can be transitory --
-that is, its effect is not always visible to the user.
-Whenever a network is actively being used at its full capacity,
-buffers can fill up and create latency for traffic.
-The duration of those full buffers may be brief:
-a medium-sized file transfer, like an email attachment
-or uploading photos,
-can create bursts of latency spikes.
-An example of this is lag occurring during a videoconference,
-where a connection is briefly shown as unstable.
+Whenever a network path is actively being used at its full capacity,
+if the bottleneck link has poor buffer management
+then it may allow an overly large queue to build up,
+resulting in high latency for the traffic in that queue.
+Although bufferbloat significantly degrades user experience,
+the impact can be transitory.
+On a network that is generally underutilized
+except for occasional medium-sized data transfers,
+like sending an email with an attachment, or uploading a photo,
+the user-experience disruptions can be intermittent and brief,
+making them hard to diagnose.
+The user may notice that the network seems sluggish for a few seconds,
+or a videoconferencing application may briefly
+show a message saying that the connection is “unstable”,
+but before the user has a chance to run any
+diagnostic tools to investigate, the problem has disappeared.
+People have come to accept that the Internet will have “glitches”
+from time to time, and it has almost become considered normal.
+Upgrading to an Internet connection with higher
+capacity does not elimiate these disruptions,
+but it can shorten their duration,
+ironically making the problem harder to diagnose
+without actually fixing the underlying cause.
 
-These short-lived disruptions make it hard to narrow down the cause.
-We believe that it is necessary to create a standardized way to
-measure and express responsiveness.
+To help engineers work on eliminating these glitches
+it is useful to have a tool that reliably recreates
+the conditions that cause these latency spikes, and
+quantifies the magnitude of the resulting latency spikes.
+This helps engineers identify where these problems exist.
+After design changes are made, it helps engineers quantify
+how much their changes have improved the situation.
 
-Including the responsiveness-under-working-conditions test
-among other measurements of network quality (e.g., goodput
-and idle latency) would raise awareness of the problem and
-establish the expectation among users that their network providers deploy
-solutions.
+Including the responsiveness-under-working-conditions
+test among other measurements of network quality
+(e.g., goodput and idle latency) helps customers make
+informed choices about the Internet service they buy.
 
 ## Terminology
 
