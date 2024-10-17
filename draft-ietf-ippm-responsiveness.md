@@ -154,7 +154,7 @@ diagnostic tools to investigate, the problem has disappeared.
 People have come to accept that the Internet will have “glitches”
 from time to time, and it has almost become considered normal.
 Upgrading to an Internet connection with higher
-capacity does not elimiate these disruptions,
+capacity does not eliminate these disruptions,
 but it can shorten their duration,
 ironically making the problem harder to diagnose
 without actually fixing the underlying cause.
