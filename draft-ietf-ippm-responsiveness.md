@@ -229,30 +229,31 @@ that might reduce the traffic's rate and thus its buffering in the network.
 
 Significant queueing in the network only happens on entry to the lowest-capacity
 (or "bottleneck") hop on a network path.
-For any flow of data between two endpoints
+For any flow of data between two endpoints,
 there is always one hop along the path where the capacity
 available to that flow at that hop is the lowest among
 all the hops of that flow's path at that moment in time.
 It is important to understand that the existence of a
 lowest-capacity hop on a network path, and a buffer to smooth bursts
 of data, is not itself a problem.
-In a heterogeneous network like the Internet it is
+In a heterogeneous network like the Internet, it is
 inevitable that there is some hop
-along the path with the lowest capacity for that path.
+along a network path between two hosts with the lowest capacity for that path.
 If that hop were to be improved by increasing its capacity, then some other hop would
 become the new lowest-capacity hop for that path.
-In this context a "bottleneck" should not be seen as a problem to
+In this context, a "bottleneck" should not be seen as a problem to
 be fixed, because any attempt to "fix" the bottleneck is futile --
 such a "fix" can never remove the existence of a bottleneck
 on a path; it just moves the bottleneck somewhere else.
 
 Note that in a shared datagram network, conditions do not remain static.
 The hop that is the current bottleneck may change from moment to moment.
-For example, changes in simultaneous traffic may result in changes
-to a flow's share of a given hop. A user moving around
-may cause the Wi-Fi transmission rate to vary widely,
-from a few Mb/s when far from the Access Point,
-all the way up to Gb/s or more when close to the Access Point.
+For example, simultaneous transmission rates of data by hosts communicating
+over the same hop may result in changes
+to the share of bandwidth allocated to each flow. A user who physically moves around
+may cause the Wi-Fi transmission rate to vary widely, fluctuating between
+a few Mb/s when they are far from the Access Point,
+and Gb/s or more when close to the Access Point.
 
 Consequently, if we wish to enjoy the benefits of the Internet's great
 flexibility, we need software that embraces and celebrates this
