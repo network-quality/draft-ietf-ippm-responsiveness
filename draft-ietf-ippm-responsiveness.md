@@ -210,7 +210,7 @@ capitals, as shown here.
 
 # Overview
 
-In the last few decades the networking industry has made enormous
+In the last few decades, the networking industry has made enormous
 advances in terms of the quantity of data our wired and wireless
 links can transfer. Rates have gone from kilobits per second, to
 megabits, to gigabits, and continue to increase.
