@@ -734,12 +734,22 @@ be stacked one after the other but rather be allowed to be multiplexed for
 optimal latency. The queue-buildup at these layers would only influence latency
 on the probes that are sent on the load-generating connections.
 
-Below the transport layer many places have a potential queue build-up. It is
-important to keep these queues at reasonable sizes or that they implement techniques
-like FQ-Codel. Depending on the techniques used at these layers, the queue build-up
+Below the transport layer many places have a potential queue build-up.
+It is important to keep these queues at reasonable sizes.
+
+Flow-queueing techniques like FQ-Codel are valuable for insulating
+well behaved flows from badly behaved flows,
+but flow-queueing alone without intelligent queue management
+cannot insulate a flow from its own capacity-seeking behavior.
+
+Depending on the techniques used at these layers, the queue build-up
 can influence latency on probes sent on load-generating connections as well as
 separate connections. If flow-queuing is used at these layers, the impact on
 separate connections will be negligible.
+This is why the Responsiveness Test performs probes
+on load-generating connections, to detect and report
+the responsiveness experienced by capacity-seeking flows,
+not only the responsiveness experienced by low-rate flows.
 
 ### Network influence
 
