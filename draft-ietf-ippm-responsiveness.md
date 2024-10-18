@@ -248,6 +248,19 @@ because we feel it is a particularly pressing issue at this time.
 Future companion documents could address how to measure and report
 other aspects of network quality that affect user experience.
 
+## Correlation with User Experience
+
+The most important property of this test tool is that its
+results should be a good predictor of user experience.
+High scores on the Responsiveness Test should
+correlate with good user experience, and low
+scores should correlate with poor user experience.
+This allows network engineers to experiment with code changes
+and use the Responsiveness Test to evaluate whether the changes
+are beneficial, instead of having to judge the effects subjectively,
+for example, by conducting a video conference and trying to assess
+whether it seems to be working better or worse.
+
 ## Interaction with End Systems
 
 Network delays that occur when traffic is flowing are not purely
