@@ -349,7 +349,7 @@ the message syntax, or the byte values used, are not important.
 
 HTTP has the additional convenience that it is very widely
 deployed in today’s world, and it is fairly easy to configure many
-modern web servers to operate as responsiveness test servers.
+modern web servers to operate as Responsiveness Test servers.
 
 If a network is able to deliver consistent low latency for a bulk
 data transfer over HTTP, then it is reasonable to assume that this
