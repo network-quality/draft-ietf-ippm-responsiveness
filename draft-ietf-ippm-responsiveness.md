@@ -74,6 +74,7 @@ informative:
      - ins: J. Morton
     title: "Piece of CAKE: A Comprehensive Queue Management Solution for Home Gateways"
     seriesinfo: 2018 IEEE International Symposium on Local and Metropolitan Area Networks (LANMAN)
+  Prague: I-D.draft-briscoe-iccrg-prague-congestion-control
   RFC1034:
   RFC1889:
   RFC4656:
@@ -206,6 +207,176 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "OPTIONAL" in this document are to be interpreted as described in BCP
 14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all
 capitals, as shown here.
+
+# Overview
+
+In the last few decades the networking industry has made enormous
+advances in terms of the quantity of data our wired and wireless
+links can transfer. Rates have gone from kilobits per second, to
+megabits, to gigabits, and continue to increase.
+We also have broad industry agreement on the units for measuring
+network capacity -- bits per second.
+We have a wide array of tools available for measuring capacity
+in these units, and these tools generally produce results that
+are consistent and comparable between different tools.
+
+In contrast to our remarkable improvements in throughput, we have
+not done a good job developing networks that deliver consistently
+low delay in all normal operating conditions. In fact, many people
+may have unconsciously assumed that it would not be possible to
+achieve such a capability. Correspondingly, we have not had
+industry agreement on what constitutes reasonable fair working
+conditions under which to measure a network’s round-trip delay,
+and consequently for a long time we have measured and reported
+only the idle round-trip time for a network. The actual round-trip
+times observed when traffic is flowing have generally been so much
+worse than the idle round-trip time (often by a factor of 100 or
+more) that it seemed almost impolite to draw attention to them.
+
+And so, by measuring and reporting throughput and idle round-trip
+time, we have motivated vendors and operators to focus on those
+aspects of performance, and to neglect other factors that also
+impact the quality of user experience.
+
+Measurements of idle round-trip time can be informative, but users
+also care about how well their network performs when they are
+using it, not only how well it performs when no-one is using it.
+In this document we specify how to measure network round-trip time
+under reasonable representative operating conditions.
+This document focusses on this specific aspect of network quality,
+because we feel it is a particularly pressing issue at this time.
+Future companion documents could address how to measure and report
+other aspects of network quality that affect user experience.
+
+## Interaction with End Systems
+
+Network delays that occur when traffic is flowing are not purely
+a property of the network. How traffic flows results from the
+interaction between the behavior of the network and the behavior
+of the end systems generating and receiving the traffic.
+Consequently, if we are to obtain useful measurements pertaining
+to the network itself, uncontaminated by noise or bias introduced
+by the test endpoints, we need to ensure that the test endpoints
+are of the highest quality and are not responsible for introducing
+significant delays (or delay variation) themselves.
+This means that the test endpoints should be using techniques like
+TCP\_NOTSENT\_LOWAT {{RFC9293}} to keep the backlog of unsent data
+limited to a reasonable amount, in conjunction with the current
+best-in-class rate adaptation algorithms
+(such as the Prague congestion controller
+{{Prague}})
+and the current best-in-class network signalling (such as L4S {{RFC9330}}).
+These techniques allow the network to signal when the source
+is sending too fast and a queue is starting to build up, so
+that the source can adjust its sending rate accordingly.
+We believe that having the network signal when the source is sending
+more data than the network can carry (rather than just letting the
+situation worsen until a queue overflows and packets are lost) is
+vital for creating networks that deliver consistent low latency.
+If this is true, we expect the test results to reflect that networks
+with this signalling yield lower delays than networks without it.
+In any case, if the sending and receiving test endpoints are not
+able to make use of L4S signalling, then the test will be unable
+to measure and report the effect of L4S support (or its absence)
+in the network’s bottleneck links.
+
+## Purpose of Test Tool
+
+The primary purpose of this test tool is to evaluate network
+behavior, and that is the main focus of this document.
+
+However, a secondary use can be to evaluate client and server software.
+
+If a particular test client, over a particular network path,
+produces good responsiveness scores when communicating with a
+known-good test server, but poor results when using another test
+server, that suggests problems with the other test server.
+We have already had cases where we used an existing HTTP server
+as a test endpoint, got worse-than-expected responsiveness scores,
+and as a result realized that the HTTP server had some poor
+configuration settings, which were also causing unnecessary
+slowness for the other user-facing traffic it was serving. Tuning
+these configuration settings for higher responsiveness lowered
+delays across the board for all traffic delivered from that server.
+
+Similarly, if a new test client, connecting to a known-good test
+server over a particular network path, produces worse results than
+an existing known-good test client, then this suggests problems
+with the new test client, possibly in the new test client’s code,
+or in it’s operating system’s networking implementation.
+These insights can lead to enhancements in the networking code that
+improve responsiveness for all software running on that operating system.
+
+## Use of HTTP
+
+The test specified in this document is based on HTTP/2 and HTTP/3.
+HTTP was selected because it is representative of a broad class of
+commonly used request/response protocols, and protocols that do
+bulk data transfer, adapting their sending rate to match the
+available network capacity.
+
+Many protocols share the property that over a single communication channel a client:
+
+(a) may read small or large data objects from the server, \\
+(b) may write small or large data objects to the server, \\
+(c) may have multiple operations executing concurrently, and \\
+(d) may choose to cancel outstanding operations if
+circumstances change and the operation is no longer needed.
+
+If a client reads a very large data object from a server and then
+a small data object, it is preferable if the small data object
+doesn’t have to wait until after the very large data object has
+been received in its entirety.
+
+HTTP supports reads, writes, concurrent operations, cancellation
+of outstanding operations, and interleaving of data from
+concurrent operations. This makes HTTP a representative proxy for
+virtually any request/response protocol. The specific details of
+the message syntax, or the byte values used, are not important.
+
+HTTP has the additional convenience that it is very widely
+deployed in today’s world, it it is fairly easy to configure many
+modern web servers to operate as responsiveness test servers.
+
+If a network is able to deliver consistent low latency for a bulk
+data transfer over HTTP, then it is reasonable to assume that this
+network will deliver consistent low latency for all IP traffic,
+including interactive audio and video telephony traffic,
+which can be regarded as a kind of sender-limited bulk transfer.
+
+## Resisting Cheating
+
+A desired property of the test was that it should resist cheating,
+both intentional and accidental.
+
+Suppose we were to measure network round-trip delay using ICMP
+Echo Request packets. A network engineer given the task of
+improving a vendor score on this metric might choose to simply
+prioritize ICMP Echo Request packets so that they always go
+directly to the front of the transmission queue.
+Or, while exploring various options, the engineer might innocently
+make a code change that inadvertently has this effect.
+A quick run of the test tool would show that the engineer had
+achieved the assigned goal -- on busy networks the tool reports
+that the round trip time is now lower. Unfortunately, this change
+would in no way improve actual user experience, because normal
+data transfer is not performed using ICMP Echo Request packets.
+
+To avoid that pitfall, the Responsiveness Test was designed to
+obtain its measurements using normal client operations over HTTP.
+These are representative of the kinds of operations a normal
+client might do if rapidly fetching map tiles while a user scrolls
+and zooms a map to view an area of interest on their smartphone,
+or fetching new video data when a viewer skips ahead to a
+different place in a streaming video.
+Ultimately, application-layer responsiveness is what affects
+user experience, not lower-layer performance metrics.
+
+If a creative engineer does find a way to “cheat”
+the Responsiveness Test to get a better score,
+then it is almost certain that such a “cheat” would have
+the effect of making real-world operations faster too.
+This is a kind of “cheating” we are happy to tolerate.
 
 # Design Constraints
 
