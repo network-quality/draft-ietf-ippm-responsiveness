@@ -255,7 +255,7 @@ results should be a good predictor of user experience.
 High scores on the Responsiveness Test should
 correlate with good user experience, and low
 scores should correlate with poor user experience.
-This allows network engineers to experiment with code changes
+A test with this predictive power would give network engineers a way to experiment with code changes
 and use the Responsiveness Test to evaluate whether the changes
 are beneficial, instead of having to judge the effects subjectively,
 for example, by conducting a video conference and trying to assess
