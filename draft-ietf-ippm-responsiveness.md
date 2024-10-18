@@ -247,8 +247,12 @@ such a "fix" can never remove the existence of a bottleneck
 on a path; it just moves the bottleneck somewhere else.
 
 Note that in a shared datagram network, conditions do not remain static.
-The hop that is the current bottleneck may change from moment to moment.
-For example, simultaneous transmission rates of data by hosts communicating
+The properties of the hop that is the current bottleneck
+for a particular flow may change from moment to moment,
+including changes to the amount of other traffic sharing that bottleneck,
+and variations in the underlying capacity of that hop itself,
+sometimes resulting in a different hop becoming the new bottleneck for that flow.
+For example, simultaneous transmission of data flows by hosts communicating
 over the same hop may result in changes
 to the share of bandwidth allocated to each flow. A user who physically moves around
 may cause the Wi-Fi transmission rate to vary widely, fluctuating between
