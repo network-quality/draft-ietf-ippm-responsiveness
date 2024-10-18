@@ -228,7 +228,7 @@ achieve such a capability. Correspondingly, we have not had
 industry agreement on what constitutes reasonable fair working
 conditions under which to measure a network’s round-trip delay,
 and, consequently, for a long time we have measured and reported
-only the idle round-trip time for a network. The actual round-trip
+the round-trip time on an idle network as the only metric . The actual round-trip
 times observed when traffic is flowing have generally been so much
 worse than the idle round-trip time (often by a factor of 100 or
 more) that it seemed almost impolite to draw attention to them.
