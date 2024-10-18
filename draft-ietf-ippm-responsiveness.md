@@ -345,6 +345,15 @@ connection is used? There is no one true answer to this question. It is a
 tradeoff between using realistic traffic patterns and pushing the network to
 its limits.
 
+Current capacity-seeking transport protocols, like TCP and QUIC,
+seek to achieve the highest throughput that the network will allow,
+by increasing their sending rate until the network signals that
+the transport protocol has reached the optimal throughput and
+should not increase further.
+That signal from the network can take the form of
+packet loss (when a bottleneck queue overflows)
+or ECN signals (prior to queue overflow).
+
 The Responsiveness Test defines working conditions as the condition
 where the path between the measuring endpoints is fully utilized at
 its end-to-end capacity, and consequently,
