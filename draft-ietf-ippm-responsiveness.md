@@ -228,7 +228,8 @@ achieve such a capability. Correspondingly, we have not had
 industry agreement on what constitutes reasonable fair working
 conditions under which to measure a network’s round-trip delay,
 and, consequently, for a long time we have measured and reported
-the round-trip time on an idle network as the only metric . The actual round-trip
+the round-trip time on an idle network as the only metric.
+The actual round-trip
 times observed when traffic is flowing have generally been so much
 worse than the idle round-trip time (often by a factor of 100 or
 more) that it seemed almost impolite to draw attention to them.
@@ -255,7 +256,8 @@ results should be a good predictor of user experience.
 High scores on the Responsiveness Test should
 correlate with good user experience, and low
 scores should correlate with poor user experience.
-A test with this predictive power would give network engineers a way to experiment with code changes
+A test with this predictive power would give network engineers
+a way to experiment with code changes
 and use the Responsiveness Test to evaluate whether the changes
 are beneficial, instead of having to judge the effects subjectively,
 for example, by conducting a video conference and trying to assess
@@ -286,8 +288,8 @@ We believe that having the network signal when the source is sending
 more data than the network can carry (rather than just letting the
 situation worsen until a queue overflows and packets are lost) is
 vital for creating networks that deliver consistent low latency.
-If this is true, we expect the test results to reflect that networks
-with this signalling yield lower delays than networks without it.
+If our belief is correct, we expect the test results to reflect that
+networks with this signalling yield lower delays than networks without it.
 In any case, if the sending and receiving test endpoints are not
 able to make use of L4S signalling, then the test will be unable
 to measure and report the effect of L4S support (or its absence)
