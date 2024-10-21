@@ -241,7 +241,7 @@ impact the quality of user experience.
 
 Measurements of idle round-trip time can be informative, but users
 care about how well their network performs when they are
-using it, not only how well it performs when no-one is using it.
+using it, not only how well it performs when no one is using it.
 In this document we specify how to measure network round-trip time
 under reasonable representative operating conditions.
 This document focusses on this specific aspect of network quality,
@@ -452,7 +452,7 @@ The amount of other traffic sharing that bottleneck may change,
 or the underlying capacity of that hop itself may vary.
 If the available capacity on that hop increases,
 then a different hop may become the bottleneck for that flow.
-For example, simultaneous transmission of data flows by hosts communicating
+For example, changes in the simultaneous transmission of data flows by hosts communicating
 over the same hop may result in changes
 to the share of bandwidth allocated to each flow. A user who physically moves around
 may cause the Wi-Fi transmission rate to vary widely, fluctuating between
@@ -475,7 +475,7 @@ In order to discover the depth of the buffer at the bottleneck hop,
 the Responsiveness Test mimics normal network operations and data transfers,
 with the goal of filling the bottleneck link to capacity, and then
 measures the resulting end-to-end latency under these so-called working conditions.
-A well-managed bottleneck queue keeps its occupancy
+A well managed bottleneck queue keeps its buffer occupancy
 under control, resulting in consistently low round-trip times
 and consistently good responsiveness.
 A poorly managed bottleneck queue will not.
@@ -651,15 +651,17 @@ is considered a future extension.
 The Responsiveness Test gradually increases the number of TCP connections (known as load-generating connections)
 and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
 continuously.
-By definition - once goodput is maximized - if the transport protocol emits more
+By definition -- once goodput is maximized -- if the transport protocol emits more
 traffic into the network than is needed, the additional traffic will either
-get dropped or be buffered and thus create a "standing queue" that is characteristic
+get dropped, or be buffered and thus create a "standing queue" that is characteristic
 of bufferbloat.
 At this moment the test starts
 measuring the responsiveness until that metric reaches saturation.
-At this point we are creating the worst-case scenario within the limits of the
-realistic traffic pattern. Well designed network equipment handles this
-worst-case scenario without creating excessive delay.
+At this point we are creating the worst-case scenario
+(best-case for throughput, worst-case for latency)
+within the limits of the
+realistic traffic pattern. Well designed network equipment
+handles this scenario without creating excessive delay.
 
 The algorithm presumes that goodput increases rapidly until TCP
 connections complete their TCP slow-start phase.
@@ -1160,7 +1162,7 @@ for possible use in future updates to this protocol.
 
 The content of the "large\_download\_url", "small\_download\_url", and "upload_url"
 SHALL all be validly formatted "http" or "https" URLs.
-All three URLs MUST all contain the same \<host\> part so that they are
+All three URLs MUST contain the same \<host\> part so that they are
 eligible to be multiplexed onto the same TCP or QUIC connection.
 
 The "version" field and the three URLs are mandatory
@@ -1176,6 +1178,8 @@ and the client MUST ignore the entire JSON object.
 
 The "test\_endpoint" field is OPTIONAL,
 and if present MUST appear exactly once in the JSON object.
+If the "test\_endpoint" field appears more than once,
+the configuration information is invalid and the entire JSON object MUST be ignored.
 If present, then for the purpose of determining the IP address to which it should
 connect the test client MUST ignore the \<host\> part in the URLs and instead
 connect to one of the IP addresses indicated by the "test\_endpoint" field,
@@ -1275,6 +1279,24 @@ which is more or less the opposite of the current Responsiveness Test.
 While repeatability and convenience are both valuable properties of the test,
 we need to ensure that we have not sacrificed relevance in the pursuit
 of these two other goals.
+
+If we cannot achieve all three goals in a single test,
+we may need to have two versions of the test:
+a “quick” version that runs in about ten seconds and gives an
+approximate “ball park” result, suitable for a user to determine
+quickly whether their Internet connection is good or terrible, and
+a “precise” version that runs for longer and gives highly accurate and
+repeatable results, suitable for an equipment vendor or network operator
+to use when advertising the quality of their offerings.
+
+The current specification of the Responsiveness Test
+includes a number of configurable parameters.
+If we want the Responsiveness Test to produce a score that can be compared
+meaningfully between different hardware and different network operators,
+we need to specify required values for these configurable parameters.
+For engineering diagnostic purposes different parameter values may be useful,
+but for comparisons between vendors or operators we need IETF consensus
+on fixed standardized test parameters that everyone uses.
 
 # IANA Considerations
 
