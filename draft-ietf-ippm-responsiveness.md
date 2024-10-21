@@ -240,7 +240,7 @@ aspects of performance, and to neglect other factors that also
 impact the quality of user experience.
 
 Measurements of idle round-trip time can be informative, but users
-also care about how well their network performs when they are
+care about how well their network performs when they are
 using it, not only how well it performs when no-one is using it.
 In this document we specify how to measure network round-trip time
 under reasonable representative operating conditions.
@@ -249,24 +249,37 @@ because we feel it is a particularly pressing issue at this time.
 Future companion documents could address how to measure and report
 other aspects of network quality that affect user experience.
 
-## Correlation with User Experience
+## Relevance
 
 The most important property of this test tool is that its
 results should be a good predictor of user experience.
 High scores on the Responsiveness Test should
 correlate with good user experience, and low
 scores should correlate with poor user experience.
-A test with this predictive power would give network engineers
+A test with this predictive power gives network engineers
 a way to experiment with code changes
-and use the Responsiveness Test to evaluate whether the changes
+and then use the test to evaluate whether the changes
 are beneficial, instead of having to judge the effects subjectively,
 for example, by conducting a video conference and trying to assess
 whether it seems to be working better or worse.
 
+## Repeatability
+
+For the test to be useful, it has to produce consistent results.
+If results vary wildly from run to run, then an engineer doesn’t
+know whether a different result from the test is a result of a
+software change or just an artifact of randomness in the test.
+
+## Convenience
+
+The test should complete as quickly as possible,
+ideally with ten seconds, but only if this can be achieved
+without sacrificing relevance and repeatability.
+
 ## Interaction with End Systems
 
 Network delays that occur when traffic is flowing are not purely
-a property of the network. How traffic flows results from the
+a property of the network. How traffic flows is a result of the
 interaction between the behavior of the network and the behavior
 of the end systems generating and receiving the traffic.
 Consequently, if we are to obtain useful measurements pertaining
@@ -434,10 +447,11 @@ on a path; it just moves the bottleneck somewhere else.
 
 Note that in a shared datagram network, conditions do not remain static.
 The properties of the hop that is the current bottleneck
-for a particular flow may change from moment to moment,
-including changes to the amount of other traffic sharing that bottleneck,
-and variations in the underlying capacity of that hop itself,
-sometimes resulting in a different hop becoming the new bottleneck for that flow.
+for a particular flow may change from moment to moment.
+The amount of other traffic sharing that bottleneck may change,
+or the underlying capacity of that hop itself may vary.
+If the available capacity on that hop increases,
+then a different hop may become the bottleneck for that flow.
 For example, simultaneous transmission of data flows by hosts communicating
 over the same hop may result in changes
 to the share of bandwidth allocated to each flow. A user who physically moves around
@@ -459,7 +473,7 @@ significantly degrading overall user experience.
 
 In order to discover the depth of the buffer at the bottleneck hop,
 the Responsiveness Test mimics normal network operations and data transfers,
-with the goal of filling the bottleneck buffer to capacity, and then
+with the goal of filling the bottleneck link to capacity, and then
 measures the resulting end-to-end latency under these so-called working conditions.
 A well-managed bottleneck queue keeps its occupancy
 under control, resulting in consistently low round-trip times
@@ -532,7 +546,7 @@ tradeoff between using realistic traffic patterns and pushing the network to
 its limits.
 
 Current capacity-seeking transport protocols, like TCP and QUIC,
-seek to achieve the highest throughput that the network will allow,
+seek to achieve the highest throughput that the network can carry,
 by increasing their sending rate until the network signals that
 the transport protocol has reached the optimal throughput and
 should not increase further.
@@ -542,8 +556,8 @@ or ECN signals (prior to queue overflow).
 
 The Responsiveness Test defines working conditions as the condition
 where the path between the measuring endpoints is fully utilized at
-its end-to-end capacity, and consequently,
-if the sending rate increases even a little, a queue will begin to build
+its end-to-end capacity, and senders are sending a little faster
+to discover if more capacity is available, causing a queue to build
 up at the ingress to the bottleneck hop.
 How the device at the ingress to the bottleneck hop
 manages and limits the growth of that queue will influence the network
@@ -554,8 +568,9 @@ multiple standard HTTP transactions with very large data objects according to re
 to create these conditions.
 
 This creates a stable state of working conditions during which the
-bottleneck of the path between client and server is fully utilized at its capacity
-and the buffer or the Active Queue Management (AQM) are also used at their maximum, without generating DoS-like traffic
+bottleneck of the path between client and server is fully utilized at its capacity,
+revealing the behavior of its buffer management or Active Queue Management (AQM),
+without generating DoS-like traffic
 patterns (e.g., intentional UDP flooding). This creates a realistic traffic mix
 representative of what a typical user's network experiences in normal operation.
 
@@ -631,7 +646,7 @@ the observed latency happens in the uplink or the downlink direction.
 Thus, we recommend testing uplink and downlink sequentially. Parallel testing
 is considered a future extension.
 
-### Achieving Full Buffer Utilization
+### Achieving Steady-State Buffer Utilization
 
 The Responsiveness Test gradually increases the number of TCP connections (known as load-generating connections)
 and measures "goodput" (the sum of actual data transferred across all connections in a unit of time)
@@ -643,7 +658,8 @@ of bufferbloat.
 At this moment the test starts
 measuring the responsiveness until that metric reaches saturation.
 At this point we are creating the worst-case scenario within the limits of the
-realistic traffic pattern.
+realistic traffic pattern. Well designed network equipment handles this
+worst-case scenario without creating excessive delay.
 
 The algorithm presumes that goodput increases rapidly until TCP
 connections complete their TCP slow-start phase.
@@ -655,21 +671,24 @@ The only means to further increase goodput is by
 adding more TCP connections to the pool of load-generating connections.
 If new connections don't result in an increase in goodput,
 full link utilization has been reached.
-At this point, adding more connections will allow to achieve full buffer occupancy.
-Responsiveness will decrease from now on, until the buffers
-are entirely full and stability is reached.
+At this point, adding more connections will reveal the extent to which
+the network is willing to buffer excess packets, with a resulting increase
+in round-trip delay (decrease in responsiveness).
+When the bottleneck queue signals the sender(s) to slow down
+(either via packet drop or via ECN marking)
+then the round-trip delay will stabilize.
 
 ### Avoiding Test Hardware Bottlenecks
 
 The Responsiveness Test could be run from various devices that are either consumer devices
-or internet infrastructure such as routers. Many routers are cost-sensitive embedded devices
+or Internet infrastructure such as routers. Many home routers are cost-sensitive embedded devices
 optimised for switching packets rather than terminating TLS connections at line rate. As a
 result, they may not have sufficient processing power or memory bandwidth to saturate a
 bottleneck link in order to be a useful test client for the responsiveness test.
 
 In order to measure responsiveness from these devices, the test can be conducted without TLS
 over plain HTTP. Whenever possible, it is preferred to test using TLS to resemble typical
-internet traffic to the maximum extent.
+Internet traffic to the maximum extent.
 
 ## Test parameters
 
@@ -921,7 +940,7 @@ if the network's bottleneck is on the first hop, queue-buildup can happen at the
 layers below the transport stack (e.g., in the outgoing network interface).
 
 Each of these queue build-ups may cause latency and thus low responsiveness.
-A well designed networking stack would ensure that queue-buildup in the TCP layer
+A well designed networking stack ensures that queue-buildup in the TCP layer
 is kept at a bare minimum with solutions like TCP\_NOTSENT\_LOWAT {{RFC9293}}.
 At the HTTP/2 layer it is important that the load-generating data is not interfering
 with the latency-measuring probes. For example, the different streams should not
