@@ -1236,6 +1236,27 @@ If server-side resource consumption is a concern, a server can choose to not rep
 its response to the initial request for the configuration information through the
 .well-known URL.
 
+# DISCUSSION
+
+We seek feedback from designers of delay-sensitive applications,
+such as on-line games and videoconferencing applications, about
+whether this test accurately predicts their real-world user experience.
+
+As this document as evolved through multiple revisions, it has
+arrived at an algorithm that discards the worst 5% of round-trip measurements,
+and reports the arithmetic mean of the the best 95%, because this enabled
+the algorithm to generate results that are both quick to produce and consistent
+from one run to the next.
+
+However, the BITAG “Latency Explained” report {{BITAG}} states that the 95th,
+98th, or 99th percentile round-trip time is indicative of the behaviour
+of videoconferencing applications,
+which is more or less the opposite of the current Responsiveness Test.
+
+While repeatability and convenience are both valuable properties of the test,
+we need to ensure that we have not sacrificed relevance in the pursuit
+of these two other goals.
+
 # IANA Considerations
 
 ## Well-Known URI
