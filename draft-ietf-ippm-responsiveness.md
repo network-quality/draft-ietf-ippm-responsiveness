@@ -345,9 +345,9 @@ available network capacity.
 
 Many protocols share the property that over a single communication channel a client:
 
-(a) may read small or large data objects from the server, \\
-(b) may write small or large data objects to the server, \\
-(c) may have multiple operations executing concurrently, and \\
+(a) may read small or large data objects from the server,\\
+(b) may write small or large data objects to the server,\\
+(c) may have multiple operations executing concurrently, and\\
 (d) may choose to cancel outstanding operations if
 circumstances change and the operation is no longer needed.
 
@@ -1315,11 +1315,13 @@ URI suffix: nq
 IANA has added the following value to the "Service Name and Transport
 Protocol Port Number Registry".
 
-Service Name:       nq  
-Transport Protocol: TCP  
-Assignee:           {{{Stuart Cheshire}}}  
-Contact:            {{{Stuart Cheshire}}}  
+~~~
+Service Name:       nq
+Transport Protocol: TCP
+Assignee:           Stuart Cheshire
+Contact:            Stuart Cheshire
 Description:        Network Quality test server endpoint
+~~~
 
 # Acknowledgments
 
