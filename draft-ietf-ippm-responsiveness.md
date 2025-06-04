@@ -1164,6 +1164,9 @@ The content of the "large\_download\_url", "small\_download\_url", and "upload_u
 SHALL all be validly formatted "http" or "https" URLs.
 All three URLs MUST contain the same \<host\> part so that they are
 eligible to be multiplexed onto the same TCP or QUIC connection.
+If the three URLs do not contain the same \<host\> part
+then the JSON configuration information object is invalid
+and the client MUST ignore the entire JSON object.
 
 The "version" field and the three URLs are mandatory
 and each MUST appear exactly once in the JSON object.
