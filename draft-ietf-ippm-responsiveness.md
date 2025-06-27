@@ -19,11 +19,7 @@ author:
   -
     ins: C. Paasch
     name: Christoph Paasch
-    org: Apple Inc.
-    street: One Apple Park Way
-    city: Cupertino, California 95014
-    country: United States of America
-    email: cpaasch@apple.com
+    email: christoph.paasch+ietf@gmail.com
 
   -
     ins: R. Meyer
