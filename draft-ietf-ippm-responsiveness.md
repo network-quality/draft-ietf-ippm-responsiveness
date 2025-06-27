@@ -1,7 +1,7 @@
 ---
 title: Responsiveness under Working Conditions
 abbrev: Responsiveness under Working Conditions
-docname: draft-ietf-ippm-responsiveness-05
+docname: draft-ietf-ippm-responsiveness-06
 date:
 category: std
 
@@ -75,6 +75,7 @@ informative:
     title: "Piece of CAKE: A Comprehensive Queue Management Solution for Home Gateways"
     seriesinfo: 2018 IEEE International Symposium on Local and Metropolitan Area Networks (LANMAN)
   Prague: I-D.draft-briscoe-iccrg-prague-congestion-control
+  SBM: I-D.draft-cheshire-sbm
   RFC1034:
   RFC1889:
   RFC4656:
@@ -109,7 +110,7 @@ In fact, various queue management solutions
 have solved the problem.
 
 Our network connections continue to suffer from an unacceptable amount
-of latency, not for a lack of technical solutions, but rather a lack of awareness
+of delay, not for a lack of technical solutions, but rather a lack of awareness
 of the problem and deployment of its solutions.
 We believe that creating a tool that measures the problem and matches people's
 everyday experience will create the necessary awareness,
@@ -139,7 +140,7 @@ continues to affect many services and the people who use them.
 Whenever a network path is actively being used at its full capacity,
 if the bottleneck link has poor buffer management
 then it may allow an overly large queue to build up,
-resulting in high latency for the traffic in that queue.
+resulting in high delay for the traffic in that queue.
 Although bufferbloat significantly degrades user experience,
 the impact can be transitory.
 On a network that is generally underutilized
@@ -156,17 +157,38 @@ People have come to accept that the Internet will have “glitches”
 from time to time, and it has almost become considered normal.
 Upgrading to an Internet connection with higher
 capacity does not eliminate these disruptions,
-but it can shorten their duration,
-ironically making the problem harder to diagnose
-without actually fixing the underlying cause.
+but it can shorten their duration.
+Ironically, this has the effect of making the problem even
+harder to diagnose, so instead of fixing the true problem,
+this “upgrade” creates a situation where the actual
+underlying problem is even more likely to remain unsolved.
+Instead of eliminating Internet glitches,
+it just makes them a little more elusive and harder to investigate.
 
 To help engineers work on eliminating these glitches
-it is useful to have a tool that reliably recreates
-the conditions that cause these latency spikes, and
-quantifies the magnitude of the resulting latency spikes.
+it is useful to have a tool that
+(a) reliably recreates the conditions that cause systems with
+poor buffer management to exhibit latency spikes, and
+(b) quantifies the magnitude of the resulting latency spikes.
 This helps engineers identify where these problems exist.
 After design changes are made, it helps engineers quantify
 how much their changes have improved the situation.
+
+Note that this document does not advocate
+for entirely eliminating queues from networking,
+or even for mandating shallow queues of some arbitrary fixed size.
+Packet-switched network traffic tends to be bursty,
+to varying degrees depending on the technology,
+and queuing performs the essential function of
+smoothing out those bursts to avoid packet loss.
+What this document recommends is that (a) network queues should
+be large enough to perform their essential smoothing function,
+without being so large that they add additional unnecessary delay,
+and (b) that when a persistent standing queue begins to form
+(therefore exceeding the amount of queueing needed for smoothing)
+network queues should communicate feedback
+back to the sender, telling to to reduce its
+sending rate to allow the standing queue to drain.
 
 Including the responsiveness-under-working-conditions
 test among other measurements of network quality
@@ -177,8 +199,8 @@ informed choices about the Internet service they buy.
 
 The term "bufferbloat" describes the situation where a network device
 is prone to buffering an excessive number of packets in transit through
-that device, causing a backlog of packets waiting to go out and resulting in those
-packets experiencing excessive delay.
+that device, causing a backlog of packets waiting to go out,
+resulting in those waiting packets experiencing excessive delay.
 
 "Latency" is a poor way to report responsiveness,
 because it can be hard for the general public to understand.
@@ -191,10 +213,25 @@ to make it clear that we are measuring all, not just idle, conditions,
 and use "round-trips per minute" as the unit.
 The advantage of using round-trips per minute as the unit are two-fold: First, it allows for a unit
 that is "the higher the better". This kind of unit is often more intuitive for end-users.
-Second, the range of the values tends to be around the 4-digit integer range, which
+Second, the range of the values tends to be around the four-digit integer range, which
 is also a value easy to compare and read, again allowing for a more intuitive use.
 Finally, we abbreviate the unit to "RPM", a wink to the
 "revolutions per minute" that we use for car engines.
+
+Some readers have complained that they don’t understand what "RPM" means,
+and that it is just an arbitrary number with no way to judge
+what should be considered a bad RPM rating or a good RPM rating.
+We counter that argument by saying that round-trip times expressed
+in milliseconds are equally arbitrary, and people similarly judge
+whether a certain number of milliseconds is “good” or “bad”
+from their personal experience and in relation to the range of
+round trip times that are observed across a range of technologies.
+In the same way, the RPM of a car engine is also interpreted
+relative to the range of values that people have learned to expect.
+We have learned that 8000 RPM is high for a car engine,
+and anything below 1000 RPM is low.
+By happy coincidence, the range of values observed for network
+responsiveness happen to fall into this familiar range.
 
 This document defines an algorithm for the "Responsiveness Test"
 that explicitly measures responsiveness under working conditions.
@@ -287,8 +324,9 @@ to the network itself, uncontaminated by noise or bias introduced
 by the test endpoints, we need to ensure that the test endpoints
 are of the highest quality and are not responsible for introducing
 significant delays (or delay variation) themselves.
-This means that the test endpoints should be using techniques like
-TCP\_NOTSENT\_LOWAT {{RFC9293}} to keep the backlog of unsent data
+This means that the test endpoints should be using source buffer management
+techniques like TCP\_NOTSENT\_LOWAT {{RFC9293}}{{SBM}}
+to keep the backlog of unsent data
 limited to a reasonable amount, in conjunction with the current
 best-in-class rate adaptation algorithms
 (such as the Prague congestion controller
@@ -300,7 +338,7 @@ that the source can adjust its sending rate accordingly.
 We believe that having the network signal when the source is sending
 more data than the network can carry (rather than just letting the
 situation worsen until a queue overflows and packets are lost) is
-vital for creating networks that deliver consistent low latency.
+vital for creating networks that deliver consistent low delay.
 If our belief is correct, we expect the test results to reflect that
 networks with this signalling yield lower delays than networks without it.
 In any case, if the sending and receiving test endpoints are not
@@ -366,8 +404,9 @@ HTTP has the additional convenience that it is very widely
 deployed in today’s world, and it is fairly easy to configure many
 modern web servers to operate as Responsiveness Test servers.
 
-If a network is able to deliver consistent low latency for a bulk
-data transfer over HTTP, then it is reasonable to assume that this
+If a network is able to deliver consistent low latency
+even for the challenging case of a bulk data transfer over HTTP,
+then it is reasonable to assume that this
 network will deliver consistent low latency for all IP traffic,
 including interactive audio and video telephony traffic,
 which can be regarded as a kind of sender-limited bulk transfer.
@@ -474,7 +513,7 @@ significantly degrading overall user experience.
 In order to discover the depth of the buffer at the bottleneck hop,
 the Responsiveness Test mimics normal network operations and data transfers,
 with the goal of filling the bottleneck link to capacity, and then
-measures the resulting end-to-end latency under these so-called working conditions.
+measures the resulting end-to-end delay under these so-called working conditions.
 A well managed bottleneck queue keeps its buffer occupancy
 under control, resulting in consistently low round-trip times
 and consistently good responsiveness.
@@ -485,18 +524,20 @@ that occurs in a network, i.e., in routers and switches.
 However, there are some other system components that can also add delay.
 
 In some cases the lowest capacity hop on a path is the first hop.
-In this case bufferbloat in the network is not usually a significant
+In this case network bufferbloat is not usually a significant
 concern because the source device is simply unable to transmit data fast
 enough to build up a significant queue anywhere else in the network.
-However, in this case excessive queuing in the device’s own network
-interface can result in excessive delays for it outgoing traffic.
+However, in this case source-device bufferbloat
+(excessive queuing in the device’s own outgoing network interface)
+can result in excessive self-induced delays
+for the traffic it is sending {{SBM}}.
 
 The job of the rate adaptation (congestion control) algorithm of
 the sender’s transport protocol is to determine this flow’s share of the
 bottleneck hop on the path, and to restrain its own transmission rate
 so as not to exceed that bottleneck rate. If the transport protocol
 does not generate appropriate backpressure to the application
-(e.g., using TCP\_NOTSENT\_LOWAT {{RFC9293}}) then the transport
+(e.g., using TCP\_NOTSENT\_LOWAT {{RFC9293}}{{SBM}}) then the transport
 protocol itself can cause significant delay by buffering an
 excessive amount of application data that has not even been sent yet.
 
@@ -621,9 +662,9 @@ to bring the bottleneck hop to a stable saturated state.
 One of the configuration parameters for the test is an upper bound on the number of parallel load-generating
 connections. We recommend a default value for this parameter of 16.
 
-### Parallel vs Sequential Uplink and Downlink
+### Concurrent vs Sequential Uplink and Downlink
 
-Poor responsiveness can be caused by queues in either (or both)
+Poor responsiveness can be caused by bloated queues in either (or both)
 the upstream and the downstream direction.
 Furthermore, both paths may differ significantly due to access link
 conditions (e.g., 5G downstream and LTE upstream) or routing changes
@@ -631,20 +672,62 @@ within the ISPs.
 To measure responsiveness under working conditions,
 the algorithm must explore both directions.
 
-One approach could be to measure responsiveness in the uplink and downlink
-in parallel. It would allow for a shorter test run-time.
+Most of today’s widely used network benchmark tools
+measure the throughput in one direction at a time.
+In a real sense this is very much a “softball” test,
+contrived to let the network perform at its absolute best
+so it can produce the most impressive-looking benchmark results.
 
-However, a number of caveats come with measuring in parallel:
+In the 1950s we had analog telephone lines,
+with the property that only one person at a time could
+make a telephone call.
+In the 1990s we had dial-up services like AOL,
+with the property that only one person at a time could
+use the telephone line to connect to AOL.
+Two people in a home could not share a single
+telephone line and both connect to AOL at the same time.
+
+But, in contrast, by the 1990s we had packet switching,
+as embodied in the Internet, Ethernet, Wi-Fi,
+and similar connectionless datagram technologies.
+The huge benefit of these connectionless datagram technologies
+is that an arbitrary number of people and devices can
+share a network and use it for different purposes
+at the same time, in stark contrast to a telephone line
+that can only support one telephone call at a time.
+Indeed, it is common today for a home network to have
+dozens of devices sharing a user’s network --
+home security cameras streaming video,
+adults working from home via videoconferencing,
+children watching streaming video or playing video games, etc.
+
+Given that today’s home networks are frequently used
+by multiple people and devices at the same time,
+(and given that this is arguably the whole reason
+connectionless datagram networking was invented in the first place)
+it makes sense for a network benchmark tool to evaluate how
+well the network performs when it is being used this way,
+rather than using only a carefully contrived artificial scenario,
+intentionally doing only one thing at a time so as
+to show the network in the best possible light.
+
+For this reason, the Apple “networkQuality” tool currently
+performs the upload and download tests simultaneously,
+to properly reflect how well a network performs when it is used this way.
+
+However, a number of caveats come with measuring concurrently:
 
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
 This restriction means the test might not reach the path's capacity in both directions at once and thus not expose
 all the potential sources of low responsiveness.
 - Debugging the results becomes harder:
-During parallel measurement it is impossible to differentiate whether
-the observed latency happens in the uplink or the downlink direction.
+During concurrent measurement it is impossible to differentiate whether
+the observed delay happens in the uplink or the downlink direction.
 
-Thus, we recommend testing uplink and downlink sequentially. Parallel testing
-is considered a future extension.
+For this reason, a test tool should also offer the option
+of performing the upload and download tests sequentially,
+to help engineers diagnose whether the source of excessive delay
+is in the upstream direction, downstream direction, or both.
 
 ### Achieving Steady-State Buffer Utilization
 
@@ -827,13 +910,13 @@ Responsiveness = (Foreign_Responsiveness + Loaded_Responsiveness) / 2
 
 Considering the previous two sections, where we explained the meaning of
 working conditions and the definition of responsiveness, we can now describe
-the design of the final algorithm. In order to measure the worst-case latency, we need to transmit
+the design of the final algorithm. In order to measure the worst-case delay, we need to transmit
 traffic at the full capacity of the path as well as ensure the buffers are filled
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
 in an ID (Interval duration - default to 1 second) interval. This technique
 ensures that we quickly reach full capacity.
-In parallel of this process we send responsiveness probes.
+In parallel with this process we send responsiveness probes.
 First, the algorithm reaches stability for the goodput. Once
 goodput stability has been achieved, the responsiveness stability is tracked
 until it is shown to be stable at which point the final measurement can be computed.
@@ -941,9 +1024,9 @@ cause queue-buildup in the transport layer as well as the HTTP layer. Additional
 if the network's bottleneck is on the first hop, queue-buildup can happen at the
 layers below the transport stack (e.g., in the outgoing network interface).
 
-Each of these queue build-ups may cause latency and thus low responsiveness.
+Each of these queue build-ups may cause delay and thus low responsiveness.
 A well designed networking stack ensures that queue-buildup in the TCP layer
-is kept at a bare minimum with solutions like TCP\_NOTSENT\_LOWAT {{RFC9293}}.
+is kept at a bare minimum with solutions like TCP\_NOTSENT\_LOWAT {{RFC9293}}{{SBM}}.
 At the HTTP/2 layer it is important that the load-generating data is not interfering
 with the latency-measuring probes. For example, the different streams should not
 be stacked one after the other but rather be allowed to be multiplexed for
@@ -1008,31 +1091,32 @@ under working conditions the way end-users experience it.
 Localizing the source of low responsiveness involves however a set of different
 tools and methodologies.
 
-Nevertheless, the Responsiveness Test allows users to gain some insight into what the
-source of the latency is. To gain this insight, implementations of the responsiveness
+Nevertheless, the Responsiveness Test allows users to gain
+some insight into what is responsible for excessive delay.
+To gain this insight, implementations of the responsiveness
 test are encouraged to have an optional verbose mode that exposes the inner workings
 of the algorithm as well as statistics from the lower layers.
 The following is a non-exhaustive list of additional information that can be exposed
-in the verbose mode: Idle-latency (measured at the beginning from the initial connections),
+in the verbose mode: Idle latency (measured at the beginning from the initial connections),
 achieved capacity on load-generating connections, TM(tcp_f), TM(tls_f), TM(http_f) and TM(http_l)
 (and even their raw values), HTTP-protocol (HTTP/1.1, HTTP/2, HTTP/3), transport protocol (TCP, QUIC, ...), congestion-control
 algorithm (Cubic, BBR, ...) used on the client-side, ECN or L4S statistics, IP version, ... and many more.
 
 The previous section described the elements that influence
-responsiveness. It is apparent that the latency measured
-on the load-generating connections and the latency measured on separate connections
+responsiveness. It is apparent that the delay measured
+on the load-generating connections and the delay measured on separate connections
 may be different due to the different elements.
 
-For example, if the latency measured on separate connections is much less than the
-latency measured on the load-generating connections, it is possible to narrow
-down the source of the additional latency on the load-generating connections.
+For example, if the delay measured on separate connections is much less than the
+delay measured on the load-generating connections, it is possible to narrow
+down the source of the additional delay on the load-generating connections.
 As long as the other elements of the network don't do flow-queueing, the additional
-latency must come from the queue build-up at the HTTP and TCP layer.
+delay must come from the queue build-up at the HTTP and TCP layer.
 This is because all other bottlenecks in the network that may cause a queue build-up
-will be affecting the load-generating connections as well as the separate latency
-probing connections in the same way.
+will be affecting the load-generating connections as well as the separate
+latency-probing connections in the same way.
 
-Beyond the difference in the latency of the load-generating connections and the
+Beyond the difference in the delay of the load-generating connections and the
 separate connections, another element can provide additional information: Namely,
 testing against different servers located in different places along the path will
 allow, to some extent, the opportunity to separate the network’s path
@@ -1109,11 +1193,13 @@ However, when a user performs a Responsiveness Test and determines
 that they are suffering from poor responsiveness during the connection to that service,
 the logical next questions might be,
 
+<?rfc subcompact="yes" ?>
 1. "What's causing my poor performance?"
 1. "Something to do with my home Wi-Fi Access point?"
 1. "Something to do with my home gateway?"
 1. "Something to do with my service provider?"
 1. "Something else entirely?"
+<?rfc subcompact="no" ?>
 
 To help an end user answer these questions, it will be useful for test clients
 to be able to easily discover Responsiveness Test Servers running in various
