@@ -70,6 +70,12 @@ informative:
      - ins: J. Morton
     title: "Piece of CAKE: A Comprehensive Queue Management Solution for Home Gateways"
     seriesinfo: 2018 IEEE International Symposium on Local and Metropolitan Area Networks (LANMAN)
+  L96:
+    title: "It’s the Latency, Stupid"
+    author:
+     - ins: S. Cheshire
+    date: 1996
+    target: http://stuartcheshire.org/rants/Latency.html
   Prague: I-D.draft-briscoe-iccrg-prague-congestion-control
   SBM: I-D.draft-cheshire-sbm
   RFC1034:
@@ -193,24 +199,51 @@ informed choices about the Internet service they buy.
 
 ## Terminology
 
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in BCP
+14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all
+capitals, as shown here.
+
+This document uses terminology and concepts from HTTP {{RFC9110}},
+such as request and response header fields and content.
+
 The term "bufferbloat" describes the situation where a network device
 is prone to buffering an excessive number of packets in transit through
 that device, causing a backlog of packets waiting to go out,
-resulting in those waiting packets experiencing excessive delay.
+resulting in those waiting packets experiencing
+excessive unnecessary delay {{Bufferbloat}}.
 
-"Latency" is a poor way to report responsiveness,
-because it can be hard for the general public to understand.
-The units are unfamiliar to many ("what is a millisecond?") and
-can be counterintuitive ("100 msec -- that sounds good --
-it's only a tenth of a second!").
+## Round-Trips per Minute (RPM)
 
-Instead, we define the term "responsiveness under working conditions"
-to make it clear that we are measuring all, not just idle, conditions,
-and use "round-trips per minute" as the unit.
-The advantage of using round-trips per minute as the unit are two-fold: First, it allows for a unit
-that is "the higher the better". This kind of unit is often more intuitive for end-users.
-Second, the range of the values tends to be around the four-digit integer range, which
-is also a value easy to compare and read, again allowing for a more intuitive use.
+Although engineers are comfortable thinking about
+and discussing latency in terms of milliseconds,
+this is a poor way to report responsiveness to end users,
+because it is not intuitive to the general public.
+The units are unfamiliar to many ("what is a millisecond?")
+and even when the units are understood in principle,
+they can still be misleading to many
+("100 ms -- that sounds good -- it's only a tenth of a second!").
+
+In addition, most current “latency” tests report the round-trip
+time when the network is otherwise idle, which not a good predictor of how
+a network will behave when it is actively being used for normal data transfer.
+
+Instead, this document defines an algorithm for the "Responsiveness Test"
+that explicitly measures responsiveness under working conditions,
+not only in idle conditions.
+
+The results are presented as "round-trips per minute" (RPM),
+which is calculated by dividing 60 by the round-trip time in seconds
+(or 60,000 divided by the round-trip time in milliseconds).
+
+The advantages of expressing working latency
+in round-trips per minute (RPM) are two-fold:
+First, it allows for a unit that where "higher is better".
+This kind of unit is often more familiar to end-users.
+Second, the range of the values tends to be around
+the four-digit integer range, which is a value easy to
+compare and read, again allowing for a more intuitive use.
 Finally, we abbreviate the unit to "RPM", a wink to the
 "revolutions per minute" that we use for car engines.
 
@@ -224,22 +257,99 @@ from their personal experience and in relation to the range of
 round trip times that are observed across a range of technologies.
 In the same way, the RPM of a car engine is also interpreted
 relative to the range of values that people have learned to expect.
-We have learned that 8000 RPM is high for a car engine,
+We have learned that 8000 is a high operating RPM for a car engine,
 and anything below 1000 RPM is low.
 By happy coincidence, the range of values observed for network
 responsiveness happen to fall into this familiar range.
 
-This document defines an algorithm for the "Responsiveness Test"
-that explicitly measures responsiveness under working conditions.
+At the present time this document classifies responsiveness scores
+into four broad categories:
 
-This document imports terminology and concepts from HTTP {{RFC9110}},
-such as request and response header fields and content.
+<?rfc subcompact="yes" ?>
+- Below 300 RPM: Poor responsiveness (200 ms or higher)
+- 300 – 1000 RPM: Fair responsiveness (60 - 200 ms)
+- 1000 - 6000 RPM: Good responsiveness (10 - 60 ms)
+- Above 6000 RPM: Excellent responsiveness (under 10 ms)
+<?rfc subcompact="no" ?>
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-"OPTIONAL" in this document are to be interpreted as described in BCP
-14 {{RFC2119}} {{RFC8174}} when, and only when, they appear in all
-capitals, as shown here.
+The reasoning for these classifications is two-fold.
+Partly they are rooted in the unchangeable laws of physics,
+and partly they are determined by human factors.
+
+We know that we can never beat the speed-of-light propagation delay.
+To pick one representative example, the coast-to-coast
+distance across the USA (Stanford to MIT) is about 4,500 km.
+That makes the round-trip distance 9,000 km.
+The speed of light is 300,000 km/s,
+so the Stanford-MIT round-trip time has to be at least 30 ms.
+But light in fiber-optic cables travels at just 200,000 km/s
+(the propagation rate for electrical signals in copper wire is
+about the same) making the round-trip time at least 45 ms {{L96}}
+for these kinds of fiber-optic or electrical Internet circuits.
+Of course, software overhead, queuing effects, and other delays
+will add to that round-trip time.
+If our actual measured working round-trip time
+is at most 2x the 45 ms theoretical minimum,
+then we feel the network is operating well.
+If our actual measured round-trip time is 10x the 45 ms minimum or worse,
+then we feel we have considerable opportunity for improvement.
+That 45 ms time is for communications coast-to-coast across a continent,
+and not everyone is communicating over such long distances.
+In fact, modern content delivery networks (CNDs) have
+data centers in many locations around the world, partly
+to keep data closer to the user and reduce round-trip times.
+For communication over a shorter distance,
+within a single state or within a city, we should be striving
+to achieve consistent reliable round-trip times below 10 ms.
+This is why, in the context of the public Internet,
+we consider that only working-latency values
+below 10 ms (6000 RPM or better)
+deserve to be classified as “excellent”.
+
+Human factors influence latency requirements, and by lucky
+coincidence the speed of light and the size of our planet are such
+that physics allows us to meet those requirements on planet Earth.
+
+For example, decades of research in the telephone community has
+concluded that when mouth-to-ear round-trip times exceed 250 ms,
+the quality of conversation begins to degrade.
+For example, when the person talking pauses briefly, the listener can
+mistakenly think that the speaker has finished and is waiting for
+a reply, and then inadvertently talk over their next sentence.
+A long round-trip delay means that the person interrupting speaks
+longer before realizing their mistake, and these repeated interruptions
+mean that the conversation becomes stilted and awkward.
+Given that various other components of Internet audio
+(digitizing audio from a microphone, compressing that audio,
+quantizing it into discreet packets, decompressing the received audio,
+and playing the audio through a speaker) also require time,
+we believe it is reasonable to allow 200 ms for packet transmission
+over the network, and 50 ms for other elements of the process.
+Accordingly, we consider that working-latency values
+above 200 ms (300 RPM or worse) deserve to be classified as “poor”.
+
+For another example, consider that Virtual Reality (VR) systems
+typically refresh their screens at 90Hz (11 ms per frame) or higher.
+Similarly, Apple recently increased the refresh rate
+of iPhone screens from 60Hz (16 ms) to 120Hz (8 ms),
+because human users can tell the difference,
+and appreciate the improved responsiveness
+provided by a lower screen-refresh delay.
+
+Consequently, while we consider the minumum for an
+acceptable telephone call to be around 300 RPM (200 ms),
+we acknowledge that better responsiveness (1000 RPM or 60 ms RTT)
+can deliver a telephone call that is considered “good”
+rather than just “fair”.
+
+Looking to the future, we feel that the networking community should
+be able to achieve consistent working round-trip delays on par with
+current screen refresh times, which is why we set 6000 RPM (10 ms)
+as our threshhold for a network to be considered “excellent.”
+
+The BITAG “Latency Explained” report {{BITAG}}
+has excellent detailed information on the causes of network latency,
+and the human factors that influence latency requirements.
 
 # Overview
 
