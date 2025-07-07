@@ -951,6 +951,32 @@ full HTTP response has been received (noted `http_l`). For cases where multiplex
 the load generation connections is not possible (e.g. due to only HTTP/1.1 being available), the TCP
 stack estimated round-trip-time can be used as a proxy or substitute value.
 
+Note that self-probe requests MUST NOT use HTTP priorities or
+similar techniques in pursuit of an artificially inflated RPM score.
+The purpose of self-probe requests is to imitate the activity
+of a real application requesting new data elements
+(like new video segments, or new map tiles)
+while an existing data transfer is already proceeding,
+and to evaluate how rapidly these new data elements are delivered.
+For example, in a real map application, using a higher HTTP priority
+every time a user scrolls the map would lead to an escalating
+ladder of ever-higher priorities where every new operation
+is more important than everything that went before it.
+Priorities are a solution to the problem of having too much data
+already in flight, buffered in the network at a bottleneck queue,
+or prematurely committed to the sending machine’s transport
+protocol (e.g., TCP or QUIC) {{SBM}},
+by creating a mechanism for
+new data to bypass the backlog of stale data.
+We believe that the best way to avoid delays caused
+by having an excessive backlog of stale data is the simplest:
+avoid having a backlog of stale data in the first place,
+rather than assuming that a large backlog of stale data
+is inevitable, and then using complicated mechanisms
+like priorities to work around that problem.
+When the backlog of stale data is minimized, all traffic
+achieves low delay, not just a privileged minority of “priority” traffic.
+
 `tcp_f`, `tls_f`, `http_f` and `http_l` are all measured in milliseconds.
 
 The more probes that are sent, the more data available for calculation. In order to generate
