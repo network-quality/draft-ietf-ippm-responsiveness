@@ -259,7 +259,7 @@ In the same way, the RPM of a car engine is also interpreted
 relative to the range of values that people have learned to expect.
 We have learned that 8000 is a high operating RPM for a car engine,
 and anything below 1000 RPM is low.
-By happy coincidence, the range of values observed for network
+Interestingly, the range of values observed for network
 responsiveness happen to fall into this familiar range.
 
 At the present time this document classifies responsiveness scores
@@ -318,7 +318,7 @@ mistakenly think that the speaker has finished and is waiting for
 a reply, and then inadvertently talk over their next sentence.
 A long round-trip delay means that the person interrupting speaks
 longer before realizing their mistake, and these repeated interruptions
-mean that the conversation becomes stilted and awkward.
+makes the conversation become stilted and awkward.
 Given that various other components of Internet audio
 (digitizing audio from a microphone, compressing that audio,
 quantizing it into discreet packets, decompressing the received audio,
@@ -346,6 +346,19 @@ Looking to the future, we feel that the networking community should
 be able to achieve consistent working round-trip delays on par with
 current screen refresh times, which is why we set 6000 RPM (10 ms)
 as our threshhold for a network to be considered “excellent.”
+
+At this end of the performance spectrum,
+we note that the speed of sound (in air) is roughly 350 m/s
+(a million times slower than the speed of light).
+This is 35 cm per millisecond, or roughly a foot per millisecond.
+This gives us a parameter to evaluate what constitues
+a “reasonable” goal for network latency.
+While lower latency may always be better for certain computer
+interactions, pursuing ever-lower network latencies, down to
+one millisecond or lower, may not be necessary for human audio.
+A one millisecond difference in network delay is
+equivalent to a change of listener position, relative
+to the loudspeaker playing the audio, of just one foot.
 
 The BITAG “Latency Explained” report {{BITAG}}
 has excellent detailed information on the causes of network latency,
