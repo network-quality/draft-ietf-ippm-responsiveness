@@ -262,15 +262,15 @@ and anything below 1000 RPM is low.
 Interestingly, the range of values observed for network
 responsiveness happen to fall into this familiar range.
 
-At the present time this document classifies responsiveness scores
-into four broad categories:
+This document classifies responsiveness scores into four broad categories:
 
-<?rfc subcompact="yes" ?>
-- Below 300 RPM: Poor responsiveness (200 ms or higher)
-- 300 – 1000 RPM: Fair responsiveness (60 - 200 ms)
-- 1000 - 6000 RPM: Good responsiveness (10 - 60 ms)
-- Above 6000 RPM: Excellent responsiveness (under 10 ms)
-<?rfc subcompact="no" ?>
+                            Poor responsiveness
+               300 RPM ------------------------------ 200 ms RTT
+                            Fair responsiveness
+              1000 RPM ------------------------------ 60 ms RTT
+                            Good responsiveness
+              6000 RPM ------------------------------ 10 ms RTT
+                          Excellent responsiveness
 
 The reasoning for these classifications is two-fold.
 Partly they are rooted in the unchangeable laws of physics,
