@@ -738,7 +738,7 @@ Finally, as end-user usage of the network evolves to newer protocols and congest
 control algorithms, it is important that the working conditions also can evolve
 to continuously represent a realistic traffic pattern.
 
-### Single-flow vs multi-flow
+### Single-Flow vs Multi-Flow
 
 The purpose of the Responsiveness Test is not to productively move data
 across the network, the way a normal application does.
@@ -894,7 +894,7 @@ In order to measure responsiveness from these devices, the test can be conducted
 over plain HTTP. Whenever possible, it is preferred to test using TLS to resemble typical
 Internet traffic to the maximum extent.
 
-## Test parameters
+## Test Parameters
 
 A number of parameters can be used to configure the test methodology. The following list
 contains the names of those parameters and their default values. The detailed description of the
@@ -1084,7 +1084,7 @@ the following section.
 
 Finally, if at any point one of these connections terminates with an error, the test should be aborted.
 
-### Confidence of test-results
+### Confidence of Test-Results
 
 As described above, a tool running the algorithm typically defines a time-limit for
 the execution of each of the stages. For example, if the tool allocates a total
@@ -1114,7 +1114,7 @@ is so crucial, together with an accurate depiction of the "confidence" the metho
 was able to generate. The confidence score should be reported to the user as part of
 the main results.
 
-# Interpreting responsiveness results
+# Interpreting Responsiveness Results
 
 The described methodology uses a high-level approach to measure responsiveness.
 By executing the test with normal HTTP requests, a number of elements come into
@@ -1126,7 +1126,7 @@ client and the server implementations have a direct impact on the perceived resp
 elements influence responsiveness and how a user may differentiate them
 when debugging a network.
 
-## Elements influencing responsiveness
+## Elements Influencing Responsiveness
 
 Due to the HTTP-centric approach of the measurement methodology a number of
 factors come into play that influence the results. Namely, the client-side
@@ -1134,7 +1134,7 @@ networking stack (from the top of the HTTP-layer all the way down to the physica
 the network (including potential “transparent” HTTP "accelerators"), and the server-side
 networking stack. The following outlines how each of these contributes to the responsiveness.
 
-### Client side influence
+### Client-Side Influence
 
 As the driver of the measurement, the client-side networking stack can have a
 large influence on the result. The biggest influence of the client comes
@@ -1169,7 +1169,7 @@ on load-generating connections, to detect and report
 the responsiveness experienced by capacity-seeking flows,
 not only the responsiveness experienced by low-rate flows.
 
-### Network influence
+### Network Influence
 
 The network obviously is a large driver for the responsiveness result.
 Propagation delay from the client to the server,
@@ -1190,7 +1190,7 @@ this includes flow-queuing or not, the latency probes on the load-generating
 connections may be influenced differently than the probes on the separate
 connections.
 
-### Server side influence
+### Server-Side Influence
 
 Finally, the server-side introduces the same kind of influence on the responsiveness
 as the client-side, with the difference that the responsiveness will be impacted
