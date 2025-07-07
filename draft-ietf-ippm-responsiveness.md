@@ -839,6 +839,13 @@ However, a number of caveats come with measuring concurrently:
 - Half-duplex links may not permit simultaneous uplink and downlink traffic.
 This restriction means the test might not reach the path's capacity in both directions at once and thus not expose
 all the potential sources of low responsiveness.
+However, this circumstance might also yield some useful benefit.
+If a user’s Internet connection
+performs reasonably well (in terms of both capacity and responsiveness)
+when carrying predominantly uplink traffic, and
+performs reasonably well when carrying predominantly downlink traffic,
+but degrades badly when the user tries to do both upload and download at
+the same time, that is information that might be very useful to the user.
 - Debugging the results becomes harder:
 During concurrent measurement it is impossible to differentiate whether
 the observed delay happens in the uplink or the downlink direction.
@@ -847,6 +854,16 @@ For this reason, a test tool should also offer the option
 of performing the upload and download tests sequentially,
 to help engineers diagnose whether the source of excessive delay
 is in the upstream direction, downstream direction, or both.
+
+When performing a concurrent test,
+a single overall responsiveness score is reported,
+to reflect the overall experience a user can expect
+during normal unrestricted network usage.
+
+When performing uplink and downlink tests sequentially
+the two responsiveness scores are reported individually,
+to give the user visibility into whether their network
+is performing better in one direction than the other.
 
 ### Achieving Steady-State Buffer Utilization
 
