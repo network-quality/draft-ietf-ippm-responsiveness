@@ -295,7 +295,7 @@ If our actual measured round-trip time is 10x the 45 ms minimum or worse,
 then we feel we have considerable opportunity for improvement.
 That 45 ms time is for communications coast-to-coast across a continent,
 and not everyone is communicating over such long distances.
-In fact, modern content delivery networks (CNDs) have
+In fact, modern content delivery networks (CDNs) have
 data centers in many locations around the world, partly
 to keep data closer to the user and reduce round-trip times.
 For communication over a shorter distance,
@@ -1192,14 +1192,28 @@ connections.
 
 ### Server-Side Influence
 
-Finally, the server-side introduces the same kind of influence on the responsiveness
-as the client-side, with the difference that the responsiveness will be impacted
-during the downlink load generation.
+Finally, the server side introduces the same kind of influence on the responsiveness
+as the client side, with the difference that the responsiveness will be impacted
+primarily during the downlink load generation.
 
-Beyond the server's networking stack influence, the server selection impacts the
-result as well. First, the network path chosen between client and server is influenced
-by the server selection. Second, the network stack deployed on the selected server
-may not be representative for workloads that are relevant to the user running the test.
+Beyond the server's networking stack influence, the geographic location
+of the server impacts the result as well. The network path chosen
+between client and server is influenced by the server selection mechanism.
+Modern content delivery networks (CDNs) generally have
+data centers in many locations around the world, partly
+to keep data closer to the user and reduce round-trip times.
+To evaluate the real-world responsiveness of a particular CDN,
+the RPM test should use the same server selection mechanism
+clients normally use to determine which server to contact
+when accessing content from that CDN.
+For a general-purpose RPM test that is intended to
+evaluate general network conditions, ideally the provider
+of the test should have test servers available that
+are distributed around the world, like a typical CDN.
+If such geographic distribution is not possible,
+it may be useful to account for the geographic distance,
+so separate the (unavoidable) speed-of-light delay
+from other (avoidable) network delays.
 
 ## Investigating Poor Responsiveness
 
