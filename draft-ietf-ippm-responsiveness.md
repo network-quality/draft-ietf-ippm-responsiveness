@@ -1328,6 +1328,8 @@ and making its measurements.
 3. An "upload" URL/response:
 The server must handle a POST request with an arbitrary content size.
 The server should discard the content.
+The client SHOULD specify the Content-Type header field for
+the POST request with the media type "application/octet-stream".
 The actual POST message content is irrelevant.
 The client will probably never completely upload the object,
 but will instead close the connection after reaching working conditions
