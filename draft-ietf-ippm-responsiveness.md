@@ -830,6 +830,14 @@ rather than using only a carefully contrived artificial scenario,
 intentionally doing only one thing at a time so as
 to show the network in the best possible light.
 
+During the COVID pandemic when many people were working from home,
+it became a common trope to have comedy routines about
+parents yelling at their children, “Stop watching videos,
+mummy’s trying to have a work videoconference meeting.”
+When comedians are making fun of the shared datagram network we built
+because it breaks down spectacularly when two devices try to share it,
+that should be an embarrassment for our entire industry.
+
 For this reason, the Apple “networkQuality” tool currently
 performs the upload and download tests simultaneously,
 to properly reflect how well a network performs when it is used this way.
