@@ -839,7 +839,7 @@ because it breaks down spectacularly when two devices try to share it,
 that should be an embarrassment for our entire industry.
 
 For this reason, the Apple “networkQuality” tool currently
-performs the upload and download tests simultaneously,
+performs the upload and download tests concurrently,
 to properly reflect how well a network performs when it is used this way.
 
 However, a number of caveats come with measuring concurrently:
