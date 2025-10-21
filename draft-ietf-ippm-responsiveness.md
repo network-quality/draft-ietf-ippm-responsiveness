@@ -336,7 +336,7 @@ because human users can tell the difference,
 and appreciate the improved responsiveness
 provided by a lower screen-refresh delay.
 
-Consequently, while we consider the minumum for an
+Consequently, while we consider the minimum for an
 acceptable telephone call to be around 300 RPM (200 ms),
 we acknowledge that better responsiveness (1000 RPM or 60 ms RTT)
 can deliver a telephone call that is considered “good”
@@ -345,13 +345,13 @@ rather than just “fair”.
 Looking to the future, we feel that the networking community should
 be able to achieve consistent working round-trip delays on par with
 current screen refresh times, which is why we set 6000 RPM (10 ms)
-as our threshhold for a network to be considered “excellent.”
+as our threshold for a network to be considered “excellent.”
 
 At this end of the performance spectrum,
 we note that the speed of sound (in air) is roughly 350 m/s
 (a million times slower than the speed of light).
 This is 35 cm per millisecond, or roughly a foot per millisecond.
-This gives us a parameter to evaluate what constitues
+This gives us a parameter to evaluate what constitutes
 a “reasonable” goal for network latency.
 While lower latency may always be better for certain computer
 interactions, pursuing ever-lower network latencies, down to
