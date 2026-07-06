@@ -1203,6 +1203,32 @@ be stacked one after the other but rather be allowed to be multiplexed for
 optimal latency. The queue-buildup at these layers would only influence latency
 on the probes that are sent on the load-generating connections.
 
+At lower data rates, even a relatively small send buffer may contribute
+a significant amount of delay before packets even leave the sending device.
+When TCP\_REPLENISH\_TIME {{SBM}} is available, the test client SHOULD set
+TCP\_REPLENISH\_TIME to 5 ms, to avoid excessive source-induced delay.
+Similarly, test endpoints should also set TCP\_REPLENISH\_TIME to 5 ms,
+to avoid self-induced delay when generating replies to send back to
+the test client.
+Cumulatively, this results in up to 10 ms of delay at the endpoints,
+which is included in the overall application-layer round-trip time
+reported by the test.
+
+For systems without TCP\_REPLENISH\_TIME,
+the equivalent effect can be achieved by using TCP\_NOTSENT\_LOWAT,
+setting the desired buffer size explicitly before each write.
+The test client and test endpoint respectively calculate
+their current estimate of the connection throughput in bytes per second,
+and then multiply this by 5 ms to get the desired buffer size.
+For example, at a data rate of 1 Mb/s, 5 ms of buffering
+equates to just 625 bytes of unsent data waiting to go out.
+On networks capable of carrying data faster than this,
+the TCP\_NOTSENT\_LOWAT buffer size increases as the measured
+connection throughput increases.
+At 100 Mb/s, 5 ms of buffering
+equates to 62,500 bytes of unsent data waiting to go out,
+or roughly 40 Ethernet packets.
+
 Below the transport layer many places have a potential queue build-up.
 It is important to keep these queues at reasonable sizes.
 
