@@ -930,7 +930,7 @@ accurate results in a wide range of environments.
 | Name | Explanation | Default Value |
 | ---- | ----------- | ------------- |
 | MAD  | Moving Average Distance (number of intervals to take into account for the moving average) | 4 |
-| ID   | Interval duration at which the algorithm reevaluates stability | 1 second |
+| ID   | Interval duration at which the algorithm reevaluates stability | 5 seconds |
 | TMP  | Trimmed Mean Percentage to be trimmed | 95% |
 | SDT  | Standard Deviation Tolerance for stability detection | 5% |
 | INP  | Initial number of concurrent transport connections at the start of the test | 1 |
@@ -1084,7 +1084,7 @@ the design of the final algorithm. In order to measure the worst-case delay, we 
 traffic at the full capacity of the path as well as ensure the buffers are filled
 to the maximum.
 We can achieve this by continuously adding HTTP sessions to the pool of connections
-in an ID (Interval duration - default to 1 second) interval. This technique
+in an ID (Interval duration - default to 5 seconds) interval. This technique
 ensures that we quickly reach full capacity.
 In parallel with this process we send responsiveness probes.
 First, the algorithm reaches stability for the goodput. Once
@@ -1101,7 +1101,7 @@ files.
 The algorithm is the same for upload and download and uses
 the same term "load-generating connection" for each.
 The actions of the algorithm take place at regular intervals. For the current draft
-the interval is defined as one second.
+the interval is defined as 5 seconds.
 
 Where
 
